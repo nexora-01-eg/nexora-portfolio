@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رفيق — مساعدك اليومي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@500;700;800&family=Tajawal:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0F211D;
+  --bg-deep: radial-gradient(ellipse 900px 600px at 80% -10%, rgba(255,122,80,0.13), transparent 60%),
+             radial-gradient(ellipse 700px 500px at 0% 100%, rgba(111,207,151,0.08), transparent 55%),
+             #0F211D;
+  --raised:#16302B;
+  --card: rgba(255,255,255,0.045);
+  --border: rgba(255,255,255,0.09);
+  --border-strong: rgba(255,255,255,0.16);
+  --coral:#FF7A50;
+  --coral-soft: rgba(255,122,80,0.16);
+  --sand:#F4C267;
+  --sand-soft: rgba(244,194,103,0.16);
+  --mint:#6FCF97;
+  --mint-soft: rgba(111,207,151,0.16);
+  --sky:#7BB8D9;
+  --sky-soft: rgba(123,184,217,0.16);
+  --ivory:#FBF7F2;
+  --muted:#9FB8B2;
+  --faint:#5E7A75;
+  --r-sm:12px; --r-md:18px; --r-lg:26px; --r-pill:999px;
+  --ease: cubic-bezier(.22,1,.36,1);
+  --shadow: 0 20px 46px -22px rgba(0,0,0,0.55);
+  --font-display:'Cairo', sans-serif;
+  --font-body:'Tajawal', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{
+  background: var(--bg-deep);
+  color:var(--ivory);
+  font-family:var(--font-body);
+  min-height:100vh;
+  display:flex; justify-content:center;
+  padding:26px 14px 0;
+}
+::selection{ background:var(--coral-soft); color:var(--coral); }
+::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-thumb{background:rgba(255,255,255,.12); border-radius:8px;}
+a{color:inherit; text-decoration:none;}
+button{font-family:inherit; border:none; background:none; color:inherit; cursor:pointer;}
+:focus-visible{ outline:2px solid var(--coral); outline-offset:2px; border-radius:8px; }
+
+/* ---- phone frame on wide screens ---- */
+.device{
+  width:100%; max-width:430px;
+  background: linear-gradient(180deg, rgba(255,255,255,.02), transparent 200px), var(--raised);
+  border-radius:36px;
+  border:1px solid var(--border);
+  box-shadow: 0 60px 120px -40px rgba(0,0,0,.7), 0 0 0 8px rgba(255,255,255,0.02);
+  overflow:hidden;
+  min-height:calc(100vh - 26px);
+  display:flex; flex-direction:column;
+  position:relative;
+}
+@media (min-width:540px){ body{ padding-top:40px; } .device{ min-height:900px; } }
+
+.glass{
+  background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015));
+  border:1px solid var(--border);
+  border-radius:var(--r-lg);
+  box-shadow:var(--shadow);
+}
+
+/* ---- top bar ---- */
+.topbar{ display:flex; align-items:center; justify-content:space-between; padding:20px 20px 6px; }
+.hello{ display:flex; align-items:center; gap:12px; }
+.avatar{ width:44px; height:44px; border-radius:50%; background:linear-gradient(150deg, var(--coral), #b6461f); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:16px; color:var(--ivory); flex-shrink:0; }
+.hello .greet{ font-size:12.5px; color:var(--muted); }
+.hello .name{ font-family:var(--font-display); font-weight:700; font-size:16px; margin-top:1px; }
+.top-actions{ display:flex; gap:8px; }
+.icon-btn{ width:38px; height:38px; border-radius:13px; background:var(--card); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; position:relative; transition:all .18s var(--ease); }
+.icon-btn:active{ transform:scale(.94); }
+.icon-btn svg{ width:17px; height:17px; color:var(--muted); }
+.icon-btn .dot{ position:absolute; top:7px; left:7px; width:7px; height:7px; border-radius:50%; background:var(--coral); box-shadow:0 0 0 2px var(--raised); }
+
+.scroll{ flex:1; overflow-y:auto; padding:14px 20px 100px; scrollbar-width:none; }
+.scroll::-webkit-scrollbar{ display:none; }
+
+/* ---- hero pulse card (signature) ---- */
+.pulse-card{ padding:22px 20px; margin-top:6px; position:relative; overflow:hidden; }
+.pulse-card::after{ content:''; position:absolute; inset:0; background:radial-gradient(circle at 85% 0%, rgba(255,122,80,0.18), transparent 55%); pointer-events:none; }
+.pulse-top{ display:flex; justify-content:space-between; align-items:flex-start; position:relative; z-index:1;}
+.pulse-eyebrow{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; color:var(--coral); text-transform:uppercase; }
+.pulse-date{ font-size:11px; color:var(--muted); margin-top:4px; }
+.pulse-title{ font-family:var(--font-display); font-weight:800; font-size:23px; margin-top:14px; line-height:1.35; position:relative; z-index:1; }
+.pulse-title span{ color:var(--coral); }
+.pulse-wave{ width:100%; height:54px; margin-top:14px; position:relative; z-index:1; }
+.pulse-stats{ display:flex; gap:10px; margin-top:16px; position:relative; z-index:1; }
+.pulse-stat{ flex:1; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:14px; padding:10px 12px; text-align:center; }
+.pulse-stat b{ display:block; font-family:var(--font-display); font-size:18px; font-weight:800; }
+.pulse-stat span{ font-size:10px; color:var(--muted); }
+
+/* ---- quick actions ---- */
+.qa-row{ display:flex; gap:10px; margin-top:18px; overflow-x:auto; padding-bottom:2px; }
+.qa-pill{ flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:7px; width:72px; }
+.qa-ic{ width:52px; height:52px; border-radius:18px; display:flex; align-items:center; justify-content:center; transition:transform .18s var(--ease); }
+.qa-pill:active .qa-ic{ transform:scale(.92); }
+.qa-ic svg{ width:21px; height:21px; }
+.qa-pill span{ font-size:10.5px; color:var(--muted); text-align:center; line-height:1.3; }
+
+/* ---- section head ---- */
+.sec-head{ display:flex; align-items:baseline; justify-content:space-between; margin:26px 0 12px; }
+.sec-head h2{ font-family:var(--font-display); font-weight:700; font-size:15.5px; }
+.sec-head .more{ font-size:11px; color:var(--coral); }
+
+/* ---- appointment cards ---- */
+.appt-card{ display:flex; align-items:center; gap:12px; padding:13px 14px; border-radius:18px; margin-bottom:9px; transition: transform .18s var(--ease); }
+.appt-card:active{ transform:scale(.98); }
+.appt-time{ display:flex; flex-direction:column; align-items:center; justify-content:center; width:46px; flex-shrink:0; }
+.appt-time b{ font-family:var(--font-mono); font-size:13px; }
+.appt-time span{ font-size:9px; color:var(--faint); }
+.appt-line{ width:1px; align-self:stretch; background:var(--border); }
+.appt-info{ flex:1; min-width:0; }
+.appt-info .pname{ font-weight:700; font-size:13px; }
+.appt-info .ptype{ font-size:11px; color:var(--muted); margin-top:2px; }
+.appt-actions{ display:flex; gap:6px; }
+.mini-btn{ width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.mini-btn svg{ width:14px; height:14px; }
+.mini-btn.wa{ background:var(--mint-soft); color:var(--mint); }
+.mini-btn.call{ background:var(--sky-soft); color:var(--sky); }
+
+/* ---- self-time signature card ---- */
+.self-card{ display:flex; align-items:center; gap:12px; padding:14px; border-radius:18px; margin-bottom:9px; background:linear-gradient(120deg, var(--sand-soft), transparent); border:1px dashed rgba(244,194,103,0.4); }
+.self-card .ic{ width:40px; height:40px; border-radius:13px; background:var(--sand-soft); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.self-card .ic svg{ width:18px; height:18px; color:var(--sand); }
+.self-card b{ font-size:13px; display:block; }
+.self-card span{ font-size:11px; color:var(--muted); }
+
+/* ---- growth card ---- */
+.growth-card{ padding:18px; margin-top:4px; }
+.growth-top{ display:flex; justify-content:space-between; align-items:center; }
+.growth-top h3{ font-family:var(--font-display); font-size:14px; font-weight:700; }
+.growth-badge{ font-family:var(--font-mono); font-size:10.5px; color:var(--mint); background:var(--mint-soft); padding:3px 9px; border-radius:20px; }
+.growth-num{ font-family:var(--font-display); font-weight:800; font-size:25px; margin-top:8px; }
+.growth-num small{ font-size:11px; color:var(--muted); font-weight:400; font-family:var(--font-body); }
+
+/* ---- patient row ---- */
+.patient-row{ display:flex; align-items:center; gap:11px; padding:10px 0; border-top:1px solid var(--border); }
+.patient-row:first-child{ border-top:none; padding-top:0; }
+.p-avatar{ width:36px; height:36px; border-radius:50%; background:var(--card); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:12px; font-weight:700; flex-shrink:0; }
+.patient-row .info{ flex:1; min-width:0; }
+.patient-row .pn{ font-size:12.5px; font-weight:700; }
+.patient-row .pm{ font-size:10.5px; color:var(--muted); margin-top:1px; }
+.pay-badge{ font-family:var(--font-mono); font-size:9.5px; padding:3px 8px; border-radius:20px; }
+.pay-badge.paid{ background:var(--mint-soft); color:var(--mint); }
+.pay-badge.due{ background:var(--coral-soft); color:var(--coral); }
+
+/* ---- FAB ---- */
+.fab{ position:absolute; left:20px; bottom:92px; width:54px; height:54px; border-radius:50%; background:linear-gradient(150deg, var(--coral), #d8582e); display:flex; align-items:center; justify-content:center; box-shadow:0 14px 28px -8px rgba(255,122,80,0.55); z-index:20; transition:transform .18s var(--ease); }
+.fab:active{ transform:scale(.92); }
+.fab svg{ width:22px; height:22px; color:#1b0d07; }
+
+/* ---- bottom tabs ---- */
+.tabbar{ position:absolute; bottom:0; left:0; right:0; display:flex; justify-content:space-around; padding:12px 10px calc(12px + env(safe-area-inset-bottom)); background:rgba(15,33,29,0.85); backdrop-filter:blur(14px); border-top:1px solid var(--border); z-index:15; }
+.tab{ display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--faint); font-size:9.5px; transition:color .18s; }
+.tab svg{ width:19px; height:19px; }
+.tab.active{ color:var(--coral); }
+
+@media (prefers-reduced-motion: reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+
+<div class="device">
+
+  <!-- TOP BAR -->
+  <div class="topbar">
+    <div class="hello">
+      <div class="avatar">يس</div>
+      <div>
+        <div class="greet">صباح الفل يا دكتور</div>
+        <div class="name">د. يوسف سامي</div>
+      </div>
+    </div>
+    <div class="top-actions">
+      <button class="icon-btn"><span class="dot"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></button>
+      <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.34 1.87l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.7 1.7 0 00-1.87-.34 1.7 1.7 0 00-1 1.55V21a2 2 0 01-4 0v-.09A1.7 1.7 0 008.6 19.4a1.7 1.7 0 00-1.87.34l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.7 1.7 0 00.34-1.87 1.7 1.7 0 00-1.55-1H2.5a2 2 0 010-4h.09A1.7 1.7 0 004.6 8.6a1.7 1.7 0 00-.34-1.87l-.06-.06a2 2 0 112.83-2.83l.06.06a1.7 1.7 0 001.87.34H9a1.7 1.7 0 001-1.55V2.5a2 2 0 014 0v.09a1.7 1.7 0 001 1.55 1.7 1.7 0 001.87-.34l.06-.06a2 2 0 112.83 2.83l-.06.06a1.7 1.7 0 00-.34 1.87V9c.14.6.6 1.13 1.55 1H21a2 2 0 010 4h-.09a1.7 1.7 0 00-1.51 1z"/></svg></button>
+    </div>
+  </div>
+
+  <div class="scroll">
+
+    <!-- SIGNATURE PULSE CARD -->
+    <div class="glass pulse-card">
+      <div class="pulse-top">
+        <div>
+          <div class="pulse-eyebrow">نبضة يومك</div>
+          <div class="pulse-date">الجمعة، ١٠ يوليو</div>
+        </div>
+      </div>
+      <div class="pulse-title">عندك <span>٩ مواعيد</span> النهاردة<br>وكله ماشي تمام 👌</div>
+      <svg class="pulse-wave" id="pulseWave" viewBox="0 0 380 54"></svg>
+      <div class="pulse-stats">
+        <div class="pulse-stat"><b id="statAppts">0</b><span>مواعيد</span></div>
+        <div class="pulse-stat"><b id="statPatients">0</b><span>مرضى جدد</span></div>
+        <div class="pulse-stat"><b id="statRevenue">0</b><span>تحصيل ج.م</span></div>
+      </div>
+    </div>
+
+    <!-- QUICK ACTIONS -->
+    <div class="qa-row">
+      <div class="qa-pill"><div class="qa-ic" style="background:var(--coral-soft); color:var(--coral);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg></div><span>موعد جديد</span></div>
+      <div class="qa-pill"><div class="qa-ic" style="background:var(--sky-soft); color:var(--sky);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.2"/><path d="M4 20c1.6-4 4.6-6 8-6s6.4 2 8 6"/></svg></div><span>مريض جديد</span></div>
+      <div class="qa-pill"><div class="qa-ic" style="background:var(--mint-soft); color:var(--mint);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.5 14c.4 1.1.5 2.2.3 3.2-.7.3-1.9.2-3-.4-2.6-1.4-4.8-3.6-6.2-6.2-.6-1.1-.7-2.3-.4-3 1-.2 2.1-.1 3.2.3"/><circle cx="12" cy="12" r="9"/></svg></div><span>واتساب</span></div>
+      <div class="qa-pill"><div class="qa-ic" style="background:var(--sand-soft); color:var(--sand);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div><span>تحصيل فلوس</span></div>
+    </div>
+
+    <!-- APPOINTMENTS -->
+    <div class="sec-head"><h2>مواعيد النهاردة</h2><span class="more">كل المواعيد</span></div>
+    <div id="apptList"></div>
+
+    <!-- GROWTH -->
+    <div class="sec-head"><h2>نمو العيادة</h2></div>
+    <div class="glass growth-card">
+      <div class="growth-top"><h3>عدد المرضى أسبوعيًا</h3><span class="growth-badge">▲ ١٤٪</span></div>
+      <div class="growth-num">٢١٨ <small>مريض في آخر ٧ أيام</small></div>
+      <svg id="growthSpark" viewBox="0 0 340 70" style="width:100%; height:70px; margin-top:10px;"></svg>
+    </div>
+
+    <!-- RECENT PATIENTS -->
+    <div class="sec-head"><h2>أحدث المرضى</h2><span class="more">الكل</span></div>
+    <div class="glass" style="padding:6px 14px;" id="patientList"></div>
+
+  </div>
+
+  <!-- FAB -->
+  <button class="fab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></button>
+
+  <!-- BOTTOM TABS -->
+  <div class="tabbar">
+    <div class="tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>الرئيسية</div>
+    <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>المواعيد</div>
+    <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.2"/><path d="M4 20c1.6-4 4.6-6 8-6s6.4 2 8 6"/></svg>المرضى</div>
+    <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>حسابي</div>
+  </div>
+
+</div>
+
+<script>
+/* ---- counters ---- */
+function animateCount(el, target, dur=1000, arabicDigits=false){
+  const start = performance.now();
+  function frame(t){
+    const p = Math.min(1,(t-start)/dur);
+    const eased = 1-Math.pow(1-p,3);
+    const val = Math.round(target*eased);
+    el.textContent = val.toLocaleString('ar-EG');
+    if(p<1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+setTimeout(()=>{
+  animateCount(document.getElementById('statAppts'), 9);
+  animateCount(document.getElementById('statPatients'), 4);
+  animateCount(document.getElementById('statRevenue'), 3200);
+}, 300);
+
+/* ---- pulse (heartbeat) wave ---- */
+(function(){
+  const svg = document.getElementById('pulseWave');
+  const d = "M0,27 L40,27 L52,10 L64,44 L76,27 L110,27 L122,16 L134,38 L146,27 L200,27 L212,8 L224,46 L236,27 L280,27 L292,14 L304,40 L316,27 L380,27";
+  svg.innerHTML = `<path d="${d}" fill="none" stroke="var(--coral)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"
+    style="stroke-dasharray:900; stroke-dashoffset:900; animation:drawPulse 1.8s var(--ease) forwards;"/>
+    <style>@keyframes drawPulse{ to{ stroke-dashoffset:0; } }</style>`;
+})();
+
+/* ---- appointments (with self-time card woven in) ---- */
+const appts = [
+  {time:'٩:٠٠', period:'ص', name:'منى عبد الله', type:'كشف متابعة', init:'من'},
+  {time:'٩:٤٥', period:'ص', name:'كريم فتحي', type:'كشف أول', init:'كف'},
+  {time:'١١:٠٠', period:'ص', name:'سارة الشريف', type:'أشعة وتحاليل', init:'سش'},
+  {self:true, time:'١:٠٠', period:'م', title:'وقت الغدا مع البيت', sub:'ساعة لنفسك — استلق شوية 💛'},
+  {time:'٣:٣٠', period:'م', name:'أحمد جمال', type:'كشف متابعة', init:'أج'},
+  {time:'٥:١٥', period:'م', name:'هبة توفيق', type:'استشارة', init:'هت'},
+];
+document.getElementById('apptList').innerHTML = appts.map(a=>{
+  if(a.self){
+    return `<div class="self-card">
+      <div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20.8 8.6c0 5-8.8 10-8.8 10s-8.8-5-8.8-10a4.4 4.4 0 018.8-2 4.4 4.4 0 018.8 2z"/></svg></div>
+      <div style="flex:1;"><b>${a.title}</b><span>${a.sub}</span></div>
+      <div style="font-family:var(--font-mono); font-size:11px; color:var(--sand);">${a.time} ${a.period}</div>
+    </div>`;
+  }
+  return `<div class="glass appt-card">
+    <div class="appt-time"><b>${a.time}</b><span>${a.period}</span></div>
+    <div class="appt-line"></div>
+    <div class="appt-info"><div class="pname">${a.name}</div><div class="ptype">${a.type}</div></div>
+    <div class="appt-actions">
+      <button class="mini-btn wa"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.5 14c.4 1.1.5 2.2.3 3.2-.7.3-1.9.2-3-.4-2.6-1.4-4.8-3.6-6.2-6.2-.6-1.1-.7-2.3-.4-3 1-.2 2.1-.1 3.2.3"/><circle cx="12" cy="12" r="9"/></svg></button>
+      <button class="mini-btn call"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 8a4 4 0 014 4M15 4a8 8 0 018 8M4.5 3h3l1.5 5-2 1.5a13 13 0 006 6l1.5-2 5 1.5v3a2 2 0 01-2.2 2A17 17 0 013 5.2 2 2 0 014.5 3z"/></svg></button>
+    </div>
+  </div>`;
+}).join('');
+
+/* ---- growth sparkline ---- */
+(function(){
+  const svg = document.getElementById('growthSpark');
+  const vals = [22,26,24,30,28,34,38];
+  const W=340,H=70,pad=4,max=42;
+  const stepX=(W-pad*2)/(vals.length-1);
+  let d=`M ${pad} ${H-pad-(vals[0]/max)*(H-pad*2)}`;
+  vals.forEach((v,i)=>{ if(i===0) return; d+=` L ${pad+i*stepX} ${H-pad-(v/max)*(H-pad*2)}`; });
+  const fillD = d + ` L ${pad+(vals.length-1)*stepX} ${H-pad} L ${pad} ${H-pad} Z`;
+  svg.innerHTML = `<defs><linearGradient id="gspark" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="var(--mint)" stop-opacity="0.3"/><stop offset="100%" stop-color="var(--mint)" stop-opacity="0"/>
+    </linearGradient></defs>
+    <path d="${fillD}" fill="url(#gspark)" stroke="none"/>
+    <path d="${d}" fill="none" stroke="var(--mint)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`;
+})();
+
+/* ---- recent patients ---- */
+const patients = [
+  {name:'منى عبد الله', meta:'كشف متابعة · النهاردة', init:'من', pay:'paid'},
+  {name:'كريم فتحي', meta:'كشف أول · النهاردة', init:'كف', pay:'due'},
+  {name:'ياسمين علاء', meta:'أشعة · إمبارح', init:'يع', pay:'paid'},
+  {name:'عمر حجازي', meta:'متابعة · إمبارح', init:'عح', pay:'paid'},
+];
+document.getElementById('patientList').innerHTML = patients.map(p=>`
+  <div class="patient-row">
+    <div class="p-avatar">${p.init}</div>
+    <div class="info"><div class="pn">${p.name}</div><div class="pm">${p.meta}</div></div>
+    <span class="pay-badge ${p.pay}">${p.pay==='paid'?'اتحصّل':'لسه'}</span>
+  </div>`).join('');
+</script>
+</body>
+</html>

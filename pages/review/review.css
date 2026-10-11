@@ -1,0 +1,64 @@
+/* ============================================================
+   NEXORA — Review Portal (page-specific)
+   Layout only — Card, Badge, and Button are the real components,
+   linked in index.html. This just defines the iframe preview
+   frame and the large-card grid rhythm.
+   ============================================================ */
+
+.rv-grid {
+  gap: var(--nx-space-6);
+}
+
+.rv-card {
+  display: flex;
+  flex-direction: column;
+}
+
+.rv-card__frame {
+  display: block;
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--nx-bg-elevated-2);
+  border-bottom: 1px solid var(--nx-border-subtle);
+}
+
+.rv-card__frame iframe {
+  /* Rendered at desktop width, then scaled down to fit the frame —
+     this is what makes the preview show real layout instead of a
+     squished mobile view. Non-interactive: pointer-events disabled,
+     and tabindex="-1" keeps it out of the tab order (the visible
+     "Open" link/button is the real, keyboard-reachable action). */
+  width: 1400px;
+  height: 875px;
+  border: none;
+  transform: scale(0.325);
+  transform-origin: top left;
+  pointer-events: none;
+}
+
+.rv-card__body {
+  padding: var(--nx-space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nx-space-3);
+  flex: 1;
+}
+
+.rv-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nx-space-3);
+}
+
+.rv-card__body .nx-btn {
+  align-self: flex-start;
+  margin-top: auto;
+}
+
+@media (max-width: 768px) {
+  .rv-card__frame iframe {
+    transform: scale(0.24);
+  }
+}

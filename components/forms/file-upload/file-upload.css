@@ -1,0 +1,74 @@
+/* ============================================================
+   NEXORA — File Upload
+   Dropzone + native file input (visually hidden, still fully
+   operable via keyboard/AT since it's linked by <label for>).
+   ============================================================ */
+
+.nx-file-upload__input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+
+.nx-file-upload__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--nx-space-2);
+  text-align: center;
+  padding: var(--nx-space-8) var(--nx-space-5);
+  border: 2px dashed var(--nx-border-subtle);
+  border-radius: var(--nx-radius-lg);
+  cursor: pointer;
+  transition: var(--nx-transition-base);
+}
+
+.nx-file-upload__dropzone:hover,
+.nx-file-upload__input:focus-visible + .nx-file-upload__dropzone {
+  border-color: var(--nx-accent-primary);
+  background: var(--nx-accent-muted);
+}
+
+.nx-file-upload--dragover .nx-file-upload__dropzone {
+  border-color: var(--nx-accent-primary);
+  background: var(--nx-accent-muted);
+}
+
+.nx-file-upload__icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--nx-fs-500);
+  border-radius: var(--nx-radius-full);
+  background: var(--nx-bg-elevated-2);
+  color: var(--nx-text-muted);
+}
+
+.nx-file-upload__list {
+  margin-top: var(--nx-space-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--nx-space-2);
+}
+
+.nx-file-upload__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nx-space-3);
+  padding: var(--nx-space-3) var(--nx-space-4);
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+  font-size: var(--nx-fs-200);
+}
+
+.nx-file-upload__item-remove {
+  color: var(--nx-text-muted);
+  font-size: var(--nx-fs-400);
+  line-height: 1;
+}
+.nx-file-upload__item-remove:hover { color: var(--nx-color-danger); }

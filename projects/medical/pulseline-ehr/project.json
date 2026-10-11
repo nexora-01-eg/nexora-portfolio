@@ -1,0 +1,57 @@
+{
+  "id": "pulseline-ehr",
+  "slug": "pulseline-ehr",
+  "industry": "medical",
+  "designSystem": "medical",
+  "title": "Pulseline EHR",
+  "tagline": "Electronic health records for outpatient clinics.",
+  "description": "A streamlined electronic health records system for outpatient clinics, with scheduling and secure messaging.",
+  "version": "1.6.2",
+  "status": "live",
+  "tier": "enterprise",
+  "difficulty": "advanced",
+  "service": "Internal Company Systems",
+  "tags": [
+    "medical",
+    "records",
+    "compliance"
+  ],
+  "technologies": [
+    "React",
+    "Node.js",
+    "PostgreSQL"
+  ],
+  "componentsUsed": [
+    "table",
+    "form",
+    "modal"
+  ],
+  "features": [
+    "Patient records with visit history",
+    "Secure clinician messaging",
+    "Appointment scheduling"
+  ],
+  "timeline": [
+    {
+      "date": "2026-01-18",
+      "label": "Project started",
+      "description": "Compliance requirements gathered."
+    },
+    {
+      "date": "2026-04-22",
+      "label": "v1.5.0 released",
+      "description": "Secure messaging module added."
+    },
+    {
+      "date": "2026-07-01",
+      "label": "v1.6.2 released",
+      "description": "Scheduling improvements."
+    }
+  ],
+  "relatedProjects": [],
+  "views": 940,
+  "featured": true,
+  "popular": true,
+  "createdAt": "2026-01-18",
+  "updatedAt": "2026-07-01"
+}

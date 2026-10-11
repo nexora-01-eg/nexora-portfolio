@@ -1,0 +1,29 @@
+/* ============================================================
+   NEXORA — Card (base)
+   Every specialized card (KPI, Stats, Pricing, Project, etc.)
+   extends .nx-card for its shell — padding, border, radius,
+   background, and hover lift live here ONCE.
+   ============================================================ */
+
+.nx-card {
+  display: block;
+  padding: var(--nx-space-6);
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-lg);
+  transition: var(--nx-transition-base);
+  transition-property: border-color, transform, box-shadow;
+}
+
+.nx-card--interactive {
+  cursor: pointer;
+  color: inherit;
+}
+.nx-card--interactive:hover,
+.nx-card--interactive:focus-visible {
+  border-color: var(--nx-border-strong);
+  transform: translateY(-2px);
+  box-shadow: var(--nx-shadow-md);
+}
+
+.nx-card--flush { padding: 0; overflow: hidden; }

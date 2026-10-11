@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حركة — علاجك الطبيعي في بيتك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=Tajawal:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#16233A;
+  --bg-deep: radial-gradient(ellipse 900px 600px at 90% -10%, rgba(255,107,91,0.18), transparent 60%),
+             radial-gradient(ellipse 700px 500px at 0% 100%, rgba(255,209,102,0.10), transparent 55%),
+             #16233A;
+  --raised:#1D2F4C;
+  --card: rgba(255,255,255,0.045);
+  --border: rgba(255,255,255,0.09);
+  --coral:#FF6B5B;
+  --coral-soft: rgba(255,107,91,0.17);
+  --amber:#FFD166;
+  --amber-soft: rgba(255,209,102,0.17);
+  --mint:#5FCFB0;
+  --mint-soft: rgba(95,207,176,0.16);
+  --sky:#6FB4E0;
+  --sky-soft: rgba(111,180,224,0.16);
+  --cream:#F3F0E8;
+  --muted:#9FADC7;
+  --faint:#5A688A;
+  --r-lg:26px;
+  --ease: cubic-bezier(.22,1,.36,1);
+  --shadow: 0 20px 46px -22px rgba(0,0,0,0.55);
+  --font-display:'Lalezar', sans-serif;
+  --font-body:'Tajawal', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{ background:var(--bg-deep); color:var(--cream); font-family:var(--font-body); min-height:100vh; display:flex; justify-content:center; padding:26px 14px 0; }
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; color:inherit; cursor:pointer;}
+:focus-visible{ outline:2px solid var(--coral); outline-offset:2px; border-radius:8px; }
+.device{ width:100%; max-width:430px; background:linear-gradient(180deg, rgba(255,255,255,.02), transparent 200px), var(--raised); border-radius:34px; border:1px solid var(--border); box-shadow:0 60px 120px -40px rgba(0,0,0,.7); overflow:hidden; min-height:calc(100vh - 26px); display:flex; flex-direction:column; position:relative; }
+@media (min-width:540px){ body{padding-top:40px;} .device{min-height:900px;} }
+.glass{ background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.015)); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow); }
+
+.topbar{ display:flex; align-items:center; justify-content:space-between; padding:20px 20px 6px; }
+.hello{ display:flex; align-items:center; gap:12px; }
+.avatar{ width:44px; height:44px; border-radius:14px; background:linear-gradient(150deg, var(--coral), #a8362a); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:400; font-size:19px; color:#16233A; flex-shrink:0; }
+.hello .greet{ font-size:12.5px; color:var(--muted); }
+.hello .name{ font-family:var(--font-display); font-weight:400; font-size:19px; margin-top:1px; letter-spacing:.01em; }
+.icon-btn{ width:38px; height:38px; border-radius:13px; background:var(--card); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; position:relative; }
+.icon-btn svg{ width:17px; height:17px; color:var(--muted); }
+.icon-btn .dot{ position:absolute; top:7px; left:7px; width:7px; height:7px; border-radius:50%; background:var(--amber); box-shadow:0 0 0 2px var(--raised); }
+.scroll{ flex:1; overflow-y:auto; padding:14px 20px 100px; scrollbar-width:none; }
+.scroll::-webkit-scrollbar{ display:none; }
+
+/* ===== hero: route/steps motif ===== */
+.hero-card{ padding:22px 20px; margin-top:6px; position:relative; overflow:hidden; }
+.hero-card::after{ content:''; position:absolute; inset:0; background:radial-gradient(circle at 85% 0%, rgba(255,107,91,0.22), transparent 55%); pointer-events:none; }
+.hero-eyebrow{ font-family:var(--font-mono); font-size:10.5px; letter-spacing:.06em; color:var(--coral); text-transform:uppercase; position:relative; z-index:1;}
+.hero-title{ font-family:var(--font-display); font-weight:400; font-size:24px; margin-top:12px; line-height:1.5; position:relative; z-index:1; letter-spacing:.01em;}
+.hero-title span{ color:var(--mint); }
+.route-strip{ display:flex; align-items:center; margin-top:16px; position:relative; z-index:1; }
+.route-dot{ width:9px; height:9px; border-radius:50%; background:var(--faint); flex-shrink:0; }
+.route-dot.done{ background:var(--mint); }
+.route-dot.next{ background:var(--coral); box-shadow:0 0 0 4px var(--coral-soft); }
+.route-line{ flex:1; height:2px; background:var(--faint); }
+.route-line.done{ background:var(--mint); }
+.stat-row{ display:flex; gap:10px; margin-top:16px; position:relative; z-index:1; }
+.stat{ flex:1; background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:14px; padding:10px 12px; text-align:center; }
+.stat b{ display:block; font-family:var(--font-display); font-size:19px; font-weight:400; }
+.stat span{ font-size:10px; color:var(--muted); }
+
+.qa-row{ display:flex; gap:10px; margin-top:18px; overflow-x:auto; }
+.qa-pill{ flex-shrink:0; display:flex; flex-direction:column; align-items:center; gap:7px; width:74px; }
+.qa-ic{ width:52px; height:52px; border-radius:18px; display:flex; align-items:center; justify-content:center; }
+.qa-ic svg{ width:21px; height:21px; }
+.qa-pill span{ font-size:10.5px; color:var(--muted); text-align:center; line-height:1.3; }
+
+.sec-head{ display:flex; align-items:baseline; justify-content:space-between; margin:26px 0 12px; }
+.sec-head h2{ font-family:var(--font-display); font-weight:400; font-size:19px; letter-spacing:.01em; }
+.sec-head .more{ font-size:11px; color:var(--coral); }
+
+.appt-card{ display:flex; align-items:center; gap:12px; padding:13px 14px; border-radius:18px; margin-bottom:9px; }
+.appt-time{ display:flex; flex-direction:column; align-items:center; justify-content:center; width:46px; flex-shrink:0; }
+.appt-time b{ font-family:var(--font-mono); font-size:13px; } .appt-time span{ font-size:9px; color:var(--faint); }
+.appt-line{ width:1px; align-self:stretch; background:var(--border); }
+.appt-info{ flex:1; min-width:0; } .appt-info .pname{ font-weight:700; font-size:13px; } .appt-info .ptype{ font-size:11px; color:var(--muted); margin-top:2px; }
+.session-badge{ font-family:var(--font-mono); font-size:9.5px; padding:3px 9px; border-radius:20px; }
+.session-badge.spine{ background:var(--sky-soft); color:var(--sky); }
+.session-badge.knee{ background:var(--amber-soft); color:var(--amber); }
+.session-badge.stroke{ background:var(--coral-soft); color:var(--coral); }
+
+/* self-care nudge */
+.self-card{ display:flex; align-items:center; gap:12px; padding:14px; border-radius:18px; margin-bottom:9px; background:linear-gradient(120deg, var(--mint-soft), transparent); border:1px dashed rgba(95,207,176,0.4); }
+.self-card .ic{ width:40px; height:40px; border-radius:13px; background:var(--mint-soft); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.self-card .ic svg{ width:18px; height:18px; color:var(--mint); }
+.self-card b{ font-size:12.5px; display:block; } .self-card span{ font-size:11px; color:var(--muted); }
+
+.chart-card{ padding:18px; margin-top:4px; }
+.chart-top{ display:flex; justify-content:space-between; align-items:center; }
+.chart-top h3{ font-family:var(--font-display); font-size:16px; font-weight:400; letter-spacing:.01em; }
+.chart-badge{ font-family:var(--font-mono); font-size:10.5px; color:var(--mint); background:var(--mint-soft); padding:3px 9px; border-radius:20px; }
+.chart-num{ font-family:var(--font-display); font-weight:400; font-size:25px; margin-top:8px; }
+.chart-num small{ font-size:11px; color:var(--muted); font-weight:400; font-family:var(--font-body); }
+
+.client-row{ display:flex; align-items:center; gap:11px; padding:10px 0; border-top:1px solid var(--border); }
+.client-row:first-child{ border-top:none; padding-top:0; }
+.c-avatar{ width:36px; height:36px; border-radius:11px; background:var(--card); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:14px; font-weight:400; flex-shrink:0; }
+.client-row .info{ flex:1; min-width:0; } .client-row .cn{ font-size:12.5px; font-weight:700; } .client-row .cm{ font-size:10.5px; color:var(--muted); margin-top:1px; }
+.streak-badge{ font-family:var(--font-mono); font-size:9.5px; padding:3px 8px; border-radius:20px; background:var(--amber-soft); color:var(--amber); }
+
+.fab{ position:absolute; left:20px; bottom:92px; width:54px; height:54px; border-radius:50%; background:linear-gradient(150deg, var(--coral), #a8362a); display:flex; align-items:center; justify-content:center; box-shadow:0 14px 28px -8px rgba(255,107,91,0.5); z-index:20; }
+.fab svg{ width:22px; height:22px; color:#16233A; }
+
+.tabbar{ position:absolute; bottom:0; left:0; right:0; display:flex; justify-content:space-around; padding:12px 10px calc(12px + env(safe-area-inset-bottom)); background:rgba(22,35,58,0.88); backdrop-filter:blur(14px); border-top:1px solid var(--border); z-index:15; }
+.tab{ display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--faint); font-size:9.5px; }
+.tab svg{ width:19px; height:19px; }
+.tab.active{ color:var(--coral); }
+</style>
+</head>
+<body>
+<div class="device">
+  <div class="topbar">
+    <div class="hello">
+      <div class="avatar">رن</div>
+      <div><div class="greet">صباح الخير يا دكتور</div><div class="name">د. رامي نصر</div></div>
+    </div>
+    <button class="icon-btn"><span class="dot"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/></svg></button>
+  </div>
+
+  <div class="scroll">
+    <div class="glass hero-card">
+      <span class="hero-eyebrow">جولة الزيارات</span>
+      <div class="hero-title">عندك <span>٥ زيارات</span> منزلية<br>النهاردة في ٣ أحياء</div>
+      <div class="route-strip">
+        <div class="route-dot done"></div><div class="route-line done"></div>
+        <div class="route-dot done"></div><div class="route-line"></div>
+        <div class="route-dot next"></div><div class="route-line"></div>
+        <div class="route-dot"></div><div class="route-line"></div>
+        <div class="route-dot"></div>
+      </div>
+      <div class="stat-row">
+        <div class="stat"><b id="s1">0</b><span>زيارات</span></div>
+        <div class="stat"><b id="s2">0</b><span>مرضى جدد</span></div>
+        <div class="stat"><b id="s3">0</b><span>تحصيل ج.م</span></div>
+      </div>
+    </div>
+
+    <div class="qa-row">
+      <div class="qa-pill"><div class="qa-ic" style="background:var(--coral-soft); color:var(--coral);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg></div><span>زيارة جديدة</span></div>
+      <div class="qa-pill"><div class="qa-ic" style="background:var(--sky-soft); color:var(--sky);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.2"/><path d="M4 20c1.6-4 4.6-6 8-6s6.4 2 8 6"/></svg></div><span>مريض جديد</span></div>
+      <div class="qa-pill"><div class="qa-ic" style="background:var(--mint-soft); color:var(--mint);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17.5 14c.4 1.1.5 2.2.3 3.2-.7.3-1.9.2-3-.4-2.6-1.4-4.8-3.6-6.2-6.2-.6-1.1-.7-2.3-.4-3 1-.2 2.1-.1 3.2.3"/><circle cx="12" cy="12" r="9"/></svg></div><span>واتساب</span></div>
+      <div class="qa-pill"><div class="qa-ic" style="background:var(--amber-soft); color:var(--amber);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M3 10h18M7 15h4"/></svg></div><span>تحصيل</span></div>
+    </div>
+
+    <div class="sec-head"><h2>جدول الزيارات</h2><span class="more">الكل</span></div>
+    <div id="apptList"></div>
+
+    <div class="sec-head"><h2>نمو العيادة</h2></div>
+    <div class="glass chart-card">
+      <div class="chart-top"><h3>زيارات أسبوعيًا</h3><span class="chart-badge">▲ ١١٪</span></div>
+      <div class="chart-num">٢٨ <small>زيارة في آخر ٧ أيام</small></div>
+      <svg id="spark" viewBox="0 0 340 70" style="width:100%; height:70px; margin-top:10px;"></svg>
+    </div>
+
+    <div class="sec-head"><h2>مرضى في متابعة</h2><span class="more">الكل</span></div>
+    <div class="glass" style="padding:6px 14px;" id="clientList"></div>
+  </div>
+
+  <button class="fab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></button>
+
+  <div class="tabbar">
+    <div class="tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>الرئيسية</div>
+    <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="10" r="3"/><path d="M12 21s7-6.5 7-11a7 7 0 10-14 0c0 4.5 7 11 7 11z"/></svg>الزيارات</div>
+    <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="8" r="3.2"/><path d="M4 20c1.6-4 4.6-6 8-6s6.4 2 8 6"/></svg>المرضى</div>
+    <div class="tab"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg>حسابي</div>
+  </div>
+</div>
+
+<script>
+function animateCount(el,target,dur=1000){ const start=performance.now();
+  function frame(t){ const p=Math.min(1,(t-start)/dur); const e=1-Math.pow(1-p,3); el.textContent=Math.round(target*e).toLocaleString('ar-EG'); if(p<1) requestAnimationFrame(frame); }
+  requestAnimationFrame(frame); }
+setTimeout(()=>{ animateCount(document.getElementById('s1'),5); animateCount(document.getElementById('s2'),2); animateCount(document.getElementById('s3'),3400); },300);
+
+const appts=[
+  {time:'٩:٠٠', period:'ص', name:'أ. سامية رفعت', type:'تأهيل بعد جلطة — جلسة ٨', tag:'stroke', done:true},
+  {time:'١٠:٣٠', period:'ص', name:'م. عادل حبيب', type:'إصابة ركبة — جلسة ٤', tag:'knee', done:true},
+  {note:true, title:'اركن العربية وامشي شوية', sub:'قبل الزيارة الجاية — ١٠ دقايق تكفي'},
+  {time:'١٢:٠٠', period:'م', name:'أ. منى الجابري', type:'آلام أسفل الظهر — جلسة ٦', tag:'spine', done:false},
+  {time:'٢:٣٠', period:'م', name:'م. طارق سيد', type:'إصابة ركبة — جلسة أولى', tag:'knee', done:false},
+];
+document.getElementById('apptList').innerHTML = appts.map(a=>{
+  if(a.note){
+    return `<div class="self-card"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M13 4v6l4 2"/><circle cx="12" cy="12" r="9"/></svg></div><div><b>${a.title}</b><span>${a.sub}</span></div></div>`;
+  }
+  const labels={spine:'ظهر', knee:'ركبة', stroke:'تأهيل'};
+  return `<div class="glass appt-card" style="${a.done?'opacity:.55;':''}">
+    <div class="appt-time"><b>${a.time}</b><span>${a.period}</span></div>
+    <div class="appt-line"></div>
+    <div class="appt-info"><div class="pname">${a.name}</div><div class="ptype">${a.type}</div></div>
+    <span class="session-badge ${a.tag}">${labels[a.tag]}</span>
+  </div>`;
+}).join('');
+
+(function(){ const svg=document.getElementById('spark'); const vals=[16,20,18,24,22,26,28]; const W=340,H=70,pad=4,max=32;
+  const stepX=(W-pad*2)/(vals.length-1); let d=`M ${pad} ${H-pad-(vals[0]/max)*(H-pad*2)}`;
+  vals.forEach((v,i)=>{ if(i===0) return; d+=` L ${pad+i*stepX} ${H-pad-(v/max)*(H-pad*2)}`; });
+  const fillD=d+` L ${pad+(vals.length-1)*stepX} ${H-pad} L ${pad} ${H-pad} Z`;
+  svg.innerHTML=`<defs><linearGradient id="g8" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--mint)" stop-opacity="0.32"/><stop offset="100%" stop-color="var(--mint)" stop-opacity="0"/></linearGradient></defs>
+  <path d="${fillD}" fill="url(#g8)" stroke="none"/><path d="${d}" fill="none" stroke="var(--mint)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`; })();
+
+const patients=[
+  {name:'سامية رفعت', meta:'تأهيل بعد جلطة', init:'سر', streak:'٨ جلسات متتالية'},
+  {name:'عادل حبيب', meta:'إصابة ركبة', init:'عح', streak:'٤ جلسات متتالية'},
+  {name:'منى الجابري', meta:'آلام أسفل الظهر', init:'مج', streak:'٦ جلسات متتالية'},
+];
+document.getElementById('clientList').innerHTML = patients.map(p=>`
+  <div class="client-row"><div class="c-avatar">${p.init}</div>
+    <div class="info"><div class="cn">${p.name}</div><div class="cm">${p.meta}</div></div>
+    <span class="streak-badge">🔥 ${p.streak}</span>
+  </div>`).join('');
+</script>
+</body>
+</html>

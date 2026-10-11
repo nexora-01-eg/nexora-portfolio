@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tijara Global — نظام إدارة شركات الاستيراد والتصدير</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0B2E4E; --navy-dark:#071F37; --navy-soft:#E7EEF5;
+  --gold:#C9A227; --gold-soft:#FAF3DC;
+  --bg:#F6F8FA; --surface:#FFFFFF;
+  --text:#151E28; --text-secondary:#3B4753; --muted:#84939F; --faint:#C9D5DE;
+  --border:#E5ECF1; --border-strong:#CFDCE5;
+  --success:#16A34A; --success-soft:#E9F9EF;
+  --warning:#D97706; --warning-soft:#FDF1DF;
+  --danger:#DC2626; --danger-soft:#FCEAEA;
+  --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:24px;
+  --shadow-sm:0 2px 10px rgba(11,46,78,0.08);
+  --shadow-md:0 12px 30px rgba(11,46,78,0.10);
+  --shadow-lg:0 26px 56px rgba(11,46,78,0.20);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;font-weight:900;margin:0;color:var(--navy);letter-spacing:-.01em;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 260px;min-height:100vh;}
+.sidebar{background:var(--navy);color:#fff;padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:28px;}
+.brand-mark{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#E0C468);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.brand-name{font-weight:900;font-size:17px;color:var(--gold);}
+.brand-sub{font-size:10.5px;color:rgba(255,255,255,0.6);}
+.nav-sec{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.07em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:10px;color:rgba(255,255,255,0.78);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.nav-item.active{background:var(--gold);color:var(--navy-dark);}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:#fff;color:var(--navy);font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.15);}
+.foot-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:10px;background:rgba(255,255,255,0.07);}
+.foot-card img{width:36px;height:36px;border-radius:9px;object-fit:cover;}
+.foot-card .name{font-size:12.5px;font-weight:800;} .foot-card .role{font-size:10.5px;color:rgba(255,255,255,0.55);}
+
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(246,248,250,0.88);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:10px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15.5px;}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-weight:800;font-size:13px;border:1px solid transparent;}
+.btn-primary{background:var(--navy);color:#fff;}
+.btn-primary:hover{background:var(--navy-dark);}
+.btn-gold{background:var(--gold);color:var(--navy-dark);}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--navy-soft);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.transit{background:var(--warning-soft);color:var(--warning);}
+.badge.customs{background:#EFEAFB;color:#6D4FC4;}
+.badge.warehouse{background:var(--navy-soft);color:var(--navy);}
+.badge.delivered{background:var(--success-soft);color:var(--success);}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;}
+.stat .value{font-size:24px;font-weight:900;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--success);margin-top:6px;display:inline-block;}
+
+/* Shipment tracking timeline (signature) */
+.ship-track{display:flex;justify-content:space-between;position:relative;margin:20px 0 8px;}
+.ship-track::before{content:'';position:absolute;top:16px;right:5%;left:5%;height:3px;background:var(--border);z-index:0;}
+.ship-track-fill{position:absolute;top:16px;right:5%;height:3px;background:var(--gold);z-index:1;transition:width 1s var(--ease);}
+.ship-node{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:6px;flex:1;}
+.ship-node .dot{width:34px;height:34px;border-radius:50%;background:#fff;border:3px solid var(--border-strong);display:flex;align-items:center;justify-content:center;font-size:15px;}
+.ship-node.done .dot{background:var(--success);border-color:var(--success);color:#fff;}
+.ship-node.active .dot{background:var(--gold);border-color:var(--gold);color:#fff;}
+.ship-node .lbl{font-size:10.5px;font-weight:700;text-align:center;color:var(--text-secondary);}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--navy-soft);}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--navy-dark);color:#fff;padding:11px 17px;border-radius:10px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);}
+
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 78px;} .brand-name,.brand-sub,.nav-item span:not(.ic),.nav-sec,.foot-card .name,.foot-card .role,.nav-badge{display:none;} .ship-track{flex-wrap:wrap;} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">Tijara Global — استيراد وتصدير</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-gold" onclick="switchView('v-shipments')">+ شحنة جديدة</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-shipments"></section>
+      <section class="view" id="v-suppliers"></section>
+      <section class="view" id="v-clients"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🚢</div>
+      <div><div class="brand-name">Tijara Global</div><div class="brand-sub">استيراد وتصدير</div></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-shipments"><span class="ic">🚢</span><span>الشحنات</span><span class="nav-badge">5</span></div>
+      <div class="nav-sec">الشركاء</div>
+      <div class="nav-item" data-view="v-suppliers"><span class="ic">🏭</span><span>الموردين</span></div>
+      <div class="nav-item" data-view="v-clients"><span class="ic">🤝</span><span>العملاء</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="foot-card"><img src="https://i.pravatar.cc/72?img=51"><div><div class="name">أ. شريف الديب</div><div class="role">مدير الشركة</div></div></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const shipments = [
+  {id:"#TG-8801", cargo:"أثاث مكتبي — من الصين", stage:1, value:1200000, eta:"20 يوليو 2026"},
+  {id:"#TG-8802", cargo:"أقمشة قطنية — إلى ألمانيا", stage:2, value:850000, eta:"18 يوليو 2026"},
+  {id:"#TG-8803", cargo:"أجهزة إلكترونية — من كوريا", stage:0, value:2100000, eta:"5 أغسطس 2026"},
+  {id:"#TG-8804", cargo:"منتجات غذائية — إلى السعودية", stage:3, value:640000, eta:"تم التسليم"},
+  {id:"#TG-8805", cargo:"مواد بناء — من تركيا", stage:1, value:1450000, eta:"22 يوليو 2026"},
+];
+const stages = ['في عرض البحر','في الجمارك','بالمستودع','تم التسليم'];
+const suppliers = [
+  {name:"Guangzhou Furniture Co.", country:"الصين", orders:18, lastOrder:"منذ 5 أيام"},
+  {name:"Istanbul Textiles Group", country:"تركيا", orders:12, lastOrder:"منذ أسبوعين"},
+  {name:"Seoul Electronics Ltd.", country:"كوريا الجنوبية", orders:9, lastOrder:"منذ 3 أيام"},
+];
+const clients = [
+  {name:"مجموعة الرياض التجارية", country:"السعودية", orders:14, spent:8400000, img:79},
+  {name:"شركة برلين للاستيراد", country:"ألمانيا", orders:8, spent:5200000, img:80},
+  {name:"مؤسسة دبي للتوريدات", country:"الإمارات", orders:11, spent:6900000, img:82},
+];
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','Tijara Global — استيراد وتصدير'],
+    'v-shipments':['الشحنات', shipments.length+' شحنة'],
+    'v-suppliers':['الموردين', suppliers.length+' مورد'],
+    'v-clients':['العملاء', clients.length+' عميل'],
+    'v-settings':['الإعدادات','بيانات الشركة'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+const stageClass = ['transit','customs','warehouse','delivered'];
+
+function shipTrack(stageIdx){
+  const pct = stageIdx/(stages.length-1)*90;
+  return `<div style="position:relative">
+    <div class="ship-track">
+      <div class="ship-track-fill" style="width:${pct}%"></div>
+      ${stages.map((s,i)=>`
+        <div class="ship-node ${i<stageIdx?'done':i===stageIdx?'active':''}">
+          <div class="dot">${i<stageIdx?'✓':i+1}</div>
+          <div class="lbl">${s}</div>
+        </div>`).join('')}
+    </div>
+  </div>`;
+}
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>أهلاً، أستاذ شريف 🚢</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦</p></div>
+      <button class="btn btn-outline" onclick="switchView('v-shipments')">عرض كل الشحنات</button></div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('شحنات نشطة',shipments.filter(s=>s.stage<3).length+' شحنة','🚢','var(--navy)','عبر 3 قارات')}
+      ${stat('قيمة الشحنات الإجمالية','٦٬٢٤٠٬٠٠٠ ج.م','💰','var(--gold)','+14%')}
+      ${stat('موردين نشطين',suppliers.length+' مورد','🏭','var(--success)','عبر 3 دول')}
+      ${stat('شحنات بالجمارك',shipments.filter(s=>s.stage===1).length+' شحنة','📋','var(--warning)','بحاجة لمتابعة الإفراج')}
+    </div>
+    <div class="card card-pad">
+      <div class="card-title" style="margin-bottom:16px">أحدث الشحنات</div>
+      ${shipments.map(s=>`
+        <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+          <div><b style="font-size:13px">${s.id}</b><div class="muted" style="font-size:11px">${s.cargo}</div></div>
+          <span class="badge ${stageClass[s.stage]}">${stages[s.stage]}</span>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderShipments(){
+  const el = document.getElementById('v-shipments');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>الشحنات</h1><p class="sub">${shipments.length} شحنة</p></div>
+      <button class="btn btn-gold">+ شحنة جديدة</button></div>
+    <div class="grid g2">
+      ${shipments.map(s=>`
+        <div class="card card-pad">
+          <div class="flex justify-between items-center" style="margin-bottom:6px">
+            <b style="font-size:13.5px">${s.id}</b>
+            <span class="badge ${stageClass[s.stage]}">${stages[s.stage]}</span>
+          </div>
+          <div class="muted" style="font-size:12px;margin-bottom:6px">${s.cargo}</div>
+          <div class="flex justify-between" style="font-size:11.5px;margin-bottom:8px">
+            <span class="muted">القيمة: <b style="color:var(--text)">${s.value.toLocaleString('ar-EG')} ج.م</b></span>
+            <span class="muted">الوصول المتوقع: <b style="color:var(--text)">${s.eta}</b></span>
+          </div>
+          ${shipTrack(s.stage)}
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderSuppliers(){
+  const el = document.getElementById('v-suppliers');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>الموردين</h1><p class="sub">${suppliers.length} مورد</p></div>
+      <button class="btn btn-primary">+ إضافة مورد</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>اسم المورد</th><th>الدولة</th><th>عدد الطلبات</th><th>آخر طلب</th></tr></thead>
+      <tbody>${suppliers.map(s=>`<tr><td><b>${s.name}</b></td><td>${s.country}</td><td>${s.orders} طلب</td><td class="muted">${s.lastOrder}</td></tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderClients(){
+  const el = document.getElementById('v-clients');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>العملاء</h1><p class="sub">${clients.length} عميل</p></div>
+      <button class="btn btn-primary">+ إضافة عميل</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>العميل</th><th>الدولة</th><th>عدد الطلبات</th><th>إجمالي التعاملات</th></tr></thead>
+      <tbody>${clients.map(c=>`
+        <tr><td><div class="cell-name"><img src="https://i.pravatar.cc/64?img=${c.img}" width="32" height="32" style="border-radius:50%">${c.name}</div></td>
+        <td>${c.country}</td><td>${c.orders} طلب</td><td><b>${c.spent.toLocaleString('ar-EG')} ج.م</b></td></tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1>الإعدادات</h1><p class="sub">بيانات الشركة</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات اسم الشركة، الموانئ المعتمدة، وشركات الشحن الشريكة.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderShipments(); renderSuppliers(); renderClients(); renderSettings();
+</script>
+</body>
+</html>

@@ -1,0 +1,19 @@
+/* ============================================================
+   NEXORA — Construction Design System (isolated token overrides)
+   Phase 3.5. Inherits every token from core/css/tokens.css
+   unchanged except the three overridden below — no component
+   CSS is duplicated here; every component still reads its
+   styles from the shared /components/ files, just resolving
+   --nx-accent-* to this system's color under the scope selector.
+
+   NOT YET LINKED into any live page — this is architecture only,
+   per Phase 3.5 scope ("do not redesign the UI"). To activate
+   for a real page, add [data-design-system="construction"] to a
+   container and link this file after core/css/tokens.css.
+   ============================================================ */
+
+[data-design-system="construction"] {
+  --nx-accent-primary: #c9812c;
+  --nx-accent-hover: #d99a4e;
+  --nx-accent-muted: #f7e8d3;
+}

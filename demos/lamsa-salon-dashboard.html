@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>لمسة — منصة إدارة الصالون</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&family=Aref+Ruqaa:wght@700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBF4F1; --surface:#FFFFFF; --surface-2:#F6EAE5; --surface-3:#EFDCD3;
+  --ink:#3A2A2C; --ink-soft:#8A6F6E; --ink-faint:#BFA6A2;
+  --line:#F0DFD8; --line-soft:#F7ECE6;
+  --rose:#B76E79; --rose-deep:#94505C; --rose-pale:#F7E5E7;
+  --gold:#C6A15B; --gold-deep:#9E7E3C; --gold-pale:#F6EDD9;
+  --plum:#6B4959; --plum-pale:#EFE2E6;
+  --sage:#8CA093; --sage-pale:#E9EFE9;
+  --success:#6B9A73;
+  --shadow-sm: 0 1px 2px rgba(58,42,44,0.06);
+  --shadow-md: 0 8px 24px rgba(58,42,44,0.09);
+  --shadow-lg: 0 20px 50px rgba(58,42,44,0.20);
+  --radius-md:18px; --radius-lg:24px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ background:var(--paper); color:var(--ink); font-family:'Cairo', sans-serif; -webkit-font-smoothing:antialiased; overflow:hidden; }
+::selection{ background:var(--rose); color:#fff; }
+::-webkit-scrollbar{ width:8px; height:8px; }
+::-webkit-scrollbar-thumb{ background:var(--surface-3); border-radius:8px; }
+.mono{ font-family:'IBM Plex Mono', monospace; direction:ltr; display:inline-block; }
+.disp{ font-family:'Aref Ruqaa', serif; }
+button{ font-family:inherit; cursor:pointer; }
+a{ color:inherit; text-decoration:none; }
+
+.shell{ display:grid; grid-template-columns:256px 1fr; height:100vh; }
+
+.sidebar{ background:var(--surface); border-left:1px solid var(--line); display:flex; flex-direction:column; padding:26px 18px; position:relative;}
+.brand{ display:flex; align-items:center; gap:12px; padding:6px 6px 28px;}
+.brand-mark{ width:42px; height:42px; flex-shrink:0; }
+.brand-name{ font-family:'Aref Ruqaa', serif; font-weight:700; font-size:26px; color:var(--plum); line-height:1;}
+.brand-sub{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:9px; letter-spacing:2px; color:var(--gold-deep); text-transform:uppercase; margin-top:4px; font-weight:600;}
+
+.nav-group-label{ font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-faint); padding:16px 10px 7px; font-weight:700;}
+.nav-item{ display:flex; align-items:center; gap:11px; padding:11px 14px; border-radius:14px; color:var(--ink-soft); font-size:14.5px; font-weight:600; transition:all .18s ease; margin-bottom:2px;}
+.nav-item svg{ width:18px; height:18px; flex-shrink:0; opacity:.8; }
+.nav-item:hover{ background:var(--surface-2); color:var(--ink); }
+.nav-item.active{ background:linear-gradient(90deg, var(--rose-pale), transparent); color:var(--rose-deep); }
+.nav-item.active svg{ opacity:1; color:var(--rose); }
+.sidebar-foot{ margin-top:auto; padding-top:14px; border-top:1px solid var(--line-soft);}
+
+.header{ height:78px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 30px; background:var(--paper); flex-shrink:0;}
+.header-title h1{ font-weight:800; font-size:22px; }
+.header-title span{ font-size:12.5px; color:var(--ink-faint); font-weight:500; }
+.header-right{ display:flex; align-items:center; gap:14px; }
+.search-box{ display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:15px; padding:10px 16px; width:270px; }
+.search-box:focus-within{ border-color:var(--rose); box-shadow:0 0 0 3px var(--rose-pale); }
+.search-box svg{ width:16px; height:16px; color:var(--ink-faint); flex-shrink:0; }
+.search-box input{ border:none; outline:none; font-size:13.5px; width:100%; background:transparent; color:var(--ink); font-family:inherit; }
+.icon-btn{ width:40px; height:40px; border-radius:14px; border:1px solid var(--line); background:var(--surface); display:flex; align-items:center; justify-content:center; position:relative; transition:all .15s ease;}
+.icon-btn:hover{ background:var(--surface-2); }
+.icon-btn svg{ width:17px; height:17px; color:var(--ink-soft); }
+.dot-badge{ position:absolute; top:8px; left:9px; width:7px; height:7px; border-radius:50%; background:var(--rose); border:1.5px solid var(--surface); }
+.profile-chip{ display:flex; align-items:center; gap:10px; padding:5px 12px 5px 5px; border-radius:16px; border:1px solid var(--line); background:var(--surface); }
+.avatar{ width:34px; height:34px; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; color:#fff; flex-shrink:0;}
+.profile-chip .name{ font-size:13px; font-weight:700; }
+.profile-chip .role{ font-size:11px; color:var(--ink-faint); }
+
+.main{ display:flex; flex-direction:column; overflow:hidden; }
+.content{ flex:1; overflow-y:auto; padding:26px 30px 60px; }
+.view{ display:none; animation:fadeUp .4s cubic-bezier(.2,.7,.3,1); }
+.view.active{ display:block; }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+.section-title{ display:flex; align-items:center; gap:10px; margin:32px 0 16px; }
+.section-title h2{ font-weight:800; font-size:17.5px; }
+.section-title:first-child{ margin-top:0; }
+.count-pill{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:11px; background:var(--surface-2); color:var(--ink-soft); padding:3px 10px; border-radius:20px; }
+
+.grid{ display:grid; gap:16px; }
+.grid-4{ grid-template-columns:repeat(4,1fr); }
+.grid-3{ grid-template-columns:repeat(3,1fr); }
+.grid-2{ grid-template-columns:repeat(2,1fr); }
+
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:20px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden; transition:all .2s ease; }
+.card.hoverable:hover{ box-shadow:var(--shadow-md); transform:translateY(-2px); border-color:var(--rose); }
+
+.kpi-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.kpi-icon{ width:40px; height:40px; border-radius:14px; display:flex; align-items:center; justify-content:center; }
+.kpi-icon svg{ width:19px; height:19px; }
+.kpi-trend{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:20px; }
+.trend-up{ color:var(--success); background:var(--sage-pale); }
+.trend-down{ color:var(--rose-deep); background:var(--rose-pale); }
+.kpi-value{ font-weight:800; font-size:28px; letter-spacing:-.5px; }
+.kpi-label{ font-size:12.5px; color:var(--ink-soft); margin-top:4px; font-weight:600;}
+
+.btn{ display:inline-flex; align-items:center; gap:7px; padding:11px 18px; border-radius:14px; font-size:13.5px; font-weight:700; border:1px solid transparent; transition:all .16s ease; }
+.btn svg{ width:15px; height:15px; }
+.btn-primary{ background:var(--rose); color:#fff; }
+.btn-primary:hover{ background:var(--rose-deep); box-shadow:var(--shadow-md); }
+.btn-gold{ background:var(--gold); color:#3A2A05; }
+.btn-gold:hover{ background:var(--gold-deep); color:#fff; }
+.btn-ghost{ background:var(--surface); border-color:var(--line); color:var(--ink); }
+.btn-ghost:hover{ background:var(--surface-2); }
+
+.tabs{ display:flex; gap:4px; background:var(--surface-2); padding:4px; border-radius:15px; width:fit-content; }
+.tab{ padding:8px 16px; border-radius:11px; font-size:13px; font-weight:700; color:var(--ink-soft); border:none; background:transparent; transition:all .15s ease; }
+.tab.active{ background:var(--surface); color:var(--rose-deep); box-shadow:var(--shadow-sm); }
+
+.table-wrap{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); }
+table{ width:100%; border-collapse:collapse; }
+thead th{ text-align:right; font-size:11.5px; letter-spacing:.3px; color:var(--ink-faint); font-weight:700; padding:14px 18px; border-bottom:1px solid var(--line); background:var(--surface-2); }
+tbody td{ padding:14px 18px; font-size:13.5px; border-bottom:1px solid var(--line-soft); font-weight:500;}
+tbody tr{ transition:background .15s ease; cursor:pointer; }
+tbody tr:hover{ background:var(--surface-2); }
+tbody tr:last-child td{ border-bottom:none; }
+
+.chip{ display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:20px; font-size:11.5px; font-weight:700; }
+.chip::before{ content:''; width:6px; height:6px; border-radius:50%; }
+.chip-ok{ background:var(--sage-pale); color:var(--sage); } .chip-ok::before{ background:var(--sage); }
+.chip-warn{ background:var(--gold-pale); color:var(--gold-deep); } .chip-warn::before{ background:var(--gold); }
+.chip-danger{ background:var(--rose-pale); color:var(--rose-deep); } .chip-danger::before{ background:var(--rose); }
+.chip-plum{ background:var(--plum-pale); color:var(--plum); } .chip-plum::before{ background:var(--plum); }
+
+.pat-cell{ display:flex; align-items:center; gap:10px; }
+.pat-cell .avatar{ width:32px; height:32px; font-size:11.5px; }
+.pat-name{ font-weight:700; font-size:13.5px; }
+.pat-sub{ font-size:11.5px; color:var(--ink-faint); }
+
+.pbar{ width:100%; height:7px; background:var(--surface-2); border-radius:20px; overflow:hidden; }
+.pbar-fill{ height:100%; border-radius:20px; background:linear-gradient(90deg, var(--rose), var(--gold)); transition:width 1s cubic-bezier(.2,.8,.3,1); }
+
+.timeline{ position:relative; padding-right:22px; }
+.timeline::before{ content:''; position:absolute; right:5px; top:4px; bottom:4px; width:2px; background:var(--line); }
+.t-item{ position:relative; padding-bottom:20px; }
+.t-item:last-child{ padding-bottom:0; }
+.t-dot{ position:absolute; right:-22px; top:2px; width:12px; height:12px; border-radius:50%; background:var(--surface); border:2.5px solid var(--gold); }
+.t-dot.muted{ border-color:var(--ink-faint); }
+.t-time{ font-family:'IBM Plex Mono', monospace; direction:ltr; text-align:right; font-size:10.5px; color:var(--ink-faint); }
+.t-text{ font-size:13px; margin-top:2px; }
+.t-text b{ font-weight:800; }
+
+.qa-btn{ display:flex; flex-direction:column; gap:11px; align-items:flex-start; padding:17px; border-radius:17px; border:1px solid var(--line); background:var(--surface); transition:all .18s ease; }
+.qa-btn:hover{ border-color:var(--rose); box-shadow:var(--shadow-md); transform:translateY(-2px); }
+.qa-icon{ width:36px; height:36px; border-radius:13px; display:flex; align-items:center; justify-content:center; }
+.qa-icon svg{ width:17px; height:17px; }
+.qa-label{ font-size:12.5px; font-weight:800; }
+
+.empty-state{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:54px 20px; color:var(--ink-faint); }
+.empty-state svg{ width:46px; height:46px; margin-bottom:14px; opacity:.5; }
+.empty-state h3{ font-size:15px; color:var(--ink); margin-bottom:4px; font-weight:800; }
+.empty-state p{ font-size:12.5px; max-width:280px; }
+
+.overlay{ position:fixed; inset:0; background:rgba(58,42,44,0.45); backdrop-filter:blur(2px); z-index:100; opacity:0; pointer-events:none; transition:opacity .22s ease; }
+.overlay.active{ opacity:1; pointer-events:all; }
+.drawer{ position:fixed; top:0; left:-440px; width:440px; max-width:92vw; height:100%; background:var(--surface); box-shadow:var(--shadow-lg); z-index:101; transition:left .3s cubic-bezier(.2,.8,.3,1); padding:26px; overflow-y:auto; }
+.drawer.active{ left:0; }
+.modal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+.modal-head h3{ font-weight:800; font-size:19px; }
+.close-x{ width:32px; height:32px; border-radius:11px; display:flex; align-items:center; justify-content:center; background:var(--surface-2); flex-shrink:0; }
+.close-x svg{ width:15px; height:15px; }
+
+.field-label{ font-size:12.5px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; display:block; }
+.field-input{ width:100%; padding:11px 14px; border-radius:12px; border:1px solid var(--line); font-size:13.5px; font-family:inherit; background:var(--paper); outline:none; }
+.field-input:focus{ border-color:var(--rose); }
+.field-row{ margin-bottom:14px; }
+
+.settings-row{ display:flex; align-items:center; justify-content:space-between; padding:15px 0; border-bottom:1px solid var(--line-soft); }
+.settings-row:last-child{ border-bottom:none; }
+.settings-row .lab{ font-size:13.5px; font-weight:700; }
+.settings-row .sub{ font-size:11.5px; color:var(--ink-faint); margin-top:2px; }
+.switch{ width:42px; height:24px; border-radius:20px; background:var(--surface-2); position:relative; border:1px solid var(--line); transition:background .2s ease; flex-shrink:0; }
+.switch.on{ background:var(--rose); border-color:var(--rose); }
+.switch::after{ content:''; position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%; background:#fff; transition:right .2s ease; box-shadow:0 1px 3px rgba(0,0,0,.15);}
+.switch.on::after{ right:20px; }
+
+.toast-wrap{ position:fixed; bottom:24px; left:24px; z-index:200; display:flex; flex-direction:column; gap:10px; }
+.toast{ display:flex; align-items:center; gap:10px; background:var(--plum); color:#fff; padding:14px 19px; border-radius:16px; box-shadow:var(--shadow-lg); font-size:13px; font-weight:600; transform:translateY(12px); opacity:0; transition:all .3s cubic-bezier(.2,.8,.3,1); }
+.toast.show{ transform:translateY(0); opacity:1; }
+.toast svg{ width:16px; height:16px; color:var(--gold); flex-shrink:0; }
+
+/* Booking calendar strip */
+.day-strip{ display:flex; gap:8px; overflow-x:auto; padding-bottom:4px; }
+.day-chip{ flex-shrink:0; width:64px; padding:12px 0; border-radius:16px; text-align:center; border:1px solid var(--line); background:var(--surface); cursor:pointer; transition:all .15s ease;}
+.day-chip.active{ background:var(--rose); border-color:var(--rose); color:#fff; }
+.day-chip .dname{ font-size:10.5px; opacity:.75; }
+.day-chip .dnum{ font-size:16px; font-weight:800; margin-top:3px; }
+
+.service-icon{ width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+
+@media (max-width:1100px){ .grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 44 44" fill="none">
+        <circle cx="22" cy="22" r="20" fill="var(--rose-pale)"/>
+        <path d="M14 26c2-8 6-13 8-13s6 5 8 13c-3 3-13 3-16 0z" fill="#B76E79" opacity="0.85"/>
+        <circle cx="22" cy="16" r="2" fill="#C6A15B"/>
+      </svg>
+      <div><div class="brand-name">لمسة</div><div class="brand-sub">SALON OS</div></div>
+    </div>
+
+    <div class="nav-group-label">نظرة عامة</div>
+    <div class="nav-item active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+      لوحة التحكم
+    </div>
+
+    <div class="nav-group-label">الصالون</div>
+    <div class="nav-item" data-view="bookings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+      الحجوزات
+    </div>
+    <div class="nav-item" data-view="clients">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.4"/><path d="M3 21c0-4.4 2.7-7 6-7s6 2.6 6 7"/><circle cx="17.5" cy="8.5" r="2.4"/><path d="M15.5 12.2c2.7.3 4.5 2.6 4.5 5.8"/></svg>
+      العميلات
+    </div>
+    <div class="nav-item" data-view="services">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 3c-3 3-3 5-1 7-3 0-5 2-5 5 0 3.5 2.7 6 6 6s6-2.5 6-6c0-3-2-5-5-5 2-2 2-4-1-7z"/></svg>
+      الخدمات
+    </div>
+    <div class="nav-item" data-view="staff">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3v5a3 3 0 0 0 6 0V3"/><path d="M12 13v3a5 5 0 0 0 10 0v-2"/><circle cx="4" cy="17" r="3"/></svg>
+      الموظفات
+    </div>
+
+    <div class="nav-group-label">الإدارة</div>
+    <div class="nav-item" data-view="reports">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+      التقارير
+    </div>
+    <div class="nav-item" data-view="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2.1-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2.1 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2.1 1.2L10 21h4l.5-2.6a7 7 0 0 0 2.1-1.2l2.3.9 2-3.4-2-1.5c.067-.396.1-.797.1-1.2z"/></svg>
+      الإعدادات
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="nav-item" style="color:var(--ink-faint);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        تسجيل الخروج
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="header-title" id="headerTitle">
+        <h1>صباح الفل يا أستاذة نور 🌸</h1>
+        <span>الثلاثاء، ١٤ يوليو · فرع الزمالك</span>
+      </div>
+      <div class="header-right">
+        <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input type="text" placeholder="دوّري على عميلة، خدمة، أو حجز…" oninput="handleSearch(this.value)"></div>
+        <button class="icon-btn" onclick="toggleNotif()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot-badge"></span></button>
+        <div class="profile-chip"><div class="avatar" style="background:linear-gradient(135deg,#B76E79,#C6A15B);">نس</div><div><div class="name">نور الشربيني</div><div class="role">مديرة الصالون</div></div></div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <section class="view active" id="view-dashboard">
+        <div class="grid grid-4" id="kpiGrid"></div>
+
+        <div class="section-title"><h2>إيرادات الأسبوع</h2></div>
+        <div class="grid" style="grid-template-columns:1.6fr 1fr;">
+          <div class="card">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700;">إجمالي الإيرادات</div><div style="font-size:22px; font-weight:800; margin-top:2px;">٣١,٤٠٠ ج.م <span class="mono" style="font-size:12px; color:var(--success); font-weight:600;">+١١٪</span></div></div>
+              <div class="tabs"><button class="tab active">أسبوع</button><button class="tab">شهر</button></div>
+            </div>
+            <div id="revChart" style="margin-top:14px;"></div>
+          </div>
+          <div class="card">
+            <div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:14px;">أكثر الخدمات طلبًا</div>
+            <div id="topServices"></div>
+          </div>
+        </div>
+
+        <div class="section-title"><h2>حجوزات اليوم</h2><span class="count-pill" id="bookCount"></span></div>
+        <div class="grid grid-3" id="todayBookings"></div>
+
+        <div class="section-title"><h2>متابعات</h2></div>
+        <div class="grid" style="grid-template-columns:1.4fr 1fr;">
+          <div class="card"><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:12px;">عميلات مميزات لم يزُرن مؤخرًا</div><div id="dormantClients"></div></div>
+          <div class="card"><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:12px;">آخر الحركات</div><div class="timeline" id="activityTimeline"></div></div>
+        </div>
+
+        <div class="section-title"><h2>إجراءات سريعة</h2></div>
+        <div class="grid grid-4">
+          <button class="qa-btn" onclick="switchView('bookings'); showToast('تم إنشاء حجز جديد')"><div class="qa-icon" style="background:var(--rose-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#B76E79" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div><span class="qa-label">حجز جديد</span></button>
+          <button class="qa-btn" onclick="switchView('clients'); showToast('تم تسجيل عميلة جديدة')"><div class="qa-icon" style="background:var(--gold-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#9E7E3C" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg></div><span class="qa-label">عميلة جديدة</span></button>
+          <button class="qa-btn" onclick="switchView('services')"><div class="qa-icon" style="background:var(--sage-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#6B9A73" stroke-width="2"><path d="M12 3c-3 3-3 5-1 7-3 0-5 2-5 5 0 3.5 2.7 6 6 6s6-2.5 6-6c0-3-2-5-5-5 2-2 2-4-1-7z"/></svg></div><span class="qa-label">إدارة الخدمات</span></button>
+          <button class="qa-btn" onclick="switchView('reports')"><div class="qa-icon" style="background:var(--plum-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#6B4959" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></div><span class="qa-label">عرض التقارير</span></button>
+        </div>
+      </section>
+
+      <section class="view" id="view-bookings">
+        <div class="day-strip" id="dayStrip"></div>
+        <div class="grid grid-3" id="bookingsGrid" style="margin-top:18px;"></div>
+      </section>
+
+      <section class="view" id="view-clients">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+          <div class="tabs" id="clientFilterTabs"><button class="tab active" data-filter="all">الكل</button><button class="tab" data-filter="vip">VIP</button><button class="tab" data-filter="regular">دائمة</button><button class="tab" data-filter="new">جديدة</button></div>
+          <button class="btn btn-primary" onclick="showToast('تم تسجيل عميلة جديدة')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>عميلة جديدة</button>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>العميلة</th><th>آخر خدمة</th><th>عدد الزيارات</th><th>آخر زيارة</th><th>الفئة</th></tr></thead><tbody id="clientsTableBody"></tbody></table></div>
+      </section>
+
+      <section class="view" id="view-services">
+        <div class="grid grid-3" id="servicesGrid"></div>
+      </section>
+
+      <section class="view" id="view-staff">
+        <div class="grid grid-3" id="staffGrid"></div>
+      </section>
+
+      <section class="view" id="view-reports">
+        <div class="grid grid-2">
+          <div class="card"><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:6px;">نمو الإيرادات الشهري</div><div id="growthChart"></div></div>
+          <div class="card"><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:6px;">توزيع الخدمات</div><div id="donutChart" style="display:flex; align-items:center; gap:22px;"></div></div>
+        </div>
+        <div class="section-title"><h2>أداء عام</h2></div>
+        <div class="grid grid-4" id="perfGrid"></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="grid grid-2">
+          <div class="card"><div style="font-weight:800; font-size:16px; margin-bottom:12px;">بيانات الصالون</div>
+            <div class="field-row"><label class="field-label">اسم الصالون</label><input class="field-input" value="لمسة — فرع الزمالك"></div>
+            <div class="field-row"><label class="field-label">العنوان</label><input class="field-input" value="شارع ٢٦ يوليو، الزمالك، القاهرة"></div>
+            <button class="btn btn-primary" onclick="showToast('تم حفظ البيانات')">حفظ التعديلات</button>
+          </div>
+          <div class="card"><div style="font-weight:800; font-size:16px; margin-bottom:6px;">التفضيلات</div>
+            <div class="settings-row"><div><div class="lab">تذكير الحجز</div><div class="sub">رسالة واتساب قبل الموعد بساعتين</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="settings-row"><div><div class="lab">برنامج الولاء</div><div class="sub">نقاط مكافأة تلقائية لكل زيارة</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="settings-row"><div><div class="lab">حجز أونلاين</div><div class="sub">السماح للعميلات بالحجز من الموقع</div></div><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="overlay" id="notifOverlay" onclick="toggleNotif()"></div>
+<div class="drawer" id="notifDrawer">
+  <div class="modal-head"><h3>الإشعارات</h3><div class="close-x" onclick="toggleNotif()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div></div>
+  <div class="timeline" id="notifList"></div>
+</div>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+function avatar(name,color){ const initials=name.split(' ').slice(0,2).map(w=>w[0]).join(''); return `<div class="avatar" style="background:${color||'linear-gradient(135deg,#B76E79,#C6A15B)'}">${initials}</div>`; }
+
+const clients = [
+  {name:'ياسمين فؤاد', service:'صبغة وقصة', visits:24, last:'٣ يوليو', tier:'vip'},
+  {name:'مريم عادل', service:'مانيكير وباديكير', visits:11, last:'٨ يوليو', tier:'regular'},
+  {name:'هدير سامح', service:'تسريحة سهرة', visits:3, last:'١ يوليو', tier:'new'},
+  {name:'رنا وجدي', service:'حمام كريم', visits:31, last:'١٠ يوليو', tier:'vip'},
+  {name:'ندى إبراهيم', service:'مكياج سهرة', visits:8, last:'٢٥ يونيو', tier:'regular'},
+  {name:'جنى محمود', service:'تنظيف بشرة', visits:2, last:'٥ يوليو', tier:'new'},
+];
+const tierChip = {vip:'<span class="chip chip-warn">VIP</span>', regular:'<span class="chip chip-ok">دائمة</span>', new:'<span class="chip chip-plum">جديدة</span>'};
+
+const bookings = [
+  {time:'١٠:٠٠ ص', client:'ياسمين فؤاد', service:'صبغة وقصة', staff:'أستاذة منى'},
+  {time:'١١:٣٠ ص', client:'مريم عادل', service:'مانيكير وباديكير', staff:'أستاذة ريهام'},
+  {time:'١:٠٠ م', client:'هدير سامح', service:'تسريحة سهرة', staff:'أستاذة نور'},
+  {time:'٣:٠٠ م', client:'رنا وجدي', service:'حمام كريم', staff:'أستاذة منى'},
+  {time:'٤:٣٠ م', client:'ندى إبراهيم', service:'مكياج سهرة', staff:'أستاذة نور'},
+  {time:'٦:٠٠ م', client:'جنى محمود', service:'تنظيف بشرة', staff:'أستاذة ريهام'},
+];
+
+const services = [
+  {name:'قصة وتصفيف', price:'٣٥٠ ج.م', dur:'٤٥ دقيقة', color:'var(--rose-pale)', ic:'#B76E79'},
+  {name:'صبغة كاملة', price:'٩٥٠ ج.م', dur:'٢ ساعة', color:'var(--gold-pale)', ic:'#9E7E3C'},
+  {name:'مانيكير وباديكير', price:'٢٨٠ ج.م', dur:'٦٠ دقيقة', color:'var(--sage-pale)', ic:'#6B9A73'},
+  {name:'مكياج سهرة', price:'٦٥٠ ج.م', dur:'٧٥ دقيقة', color:'var(--plum-pale)', ic:'#6B4959'},
+  {name:'حمام كريم وبروتين', price:'٧٥٠ ج.م', dur:'٩٠ دقيقة', color:'var(--rose-pale)', ic:'#B76E79'},
+  {name:'تنظيف بشرة عميق', price:'٤٥٠ ج.م', dur:'٥٠ دقيقة', color:'var(--gold-pale)', ic:'#9E7E3C'},
+];
+
+const staff = [
+  {name:'أستاذة منى جلال', spec:'الصبغة والقصات', clients:210, rating:4.9, color:'#B76E79'},
+  {name:'أستاذة ريهام فتحي', spec:'العناية بالأظافر', clients:165, rating:4.8, color:'#C6A15B'},
+  {name:'أستاذة نور الشربيني', spec:'مكياج وتسريحات', clients:188, rating:5.0, color:'#6B4959'},
+];
+
+document.querySelectorAll('.nav-item[data-view]').forEach(item=> item.addEventListener('click', ()=> switchView(item.dataset.view)));
+const headerCopy = {
+  dashboard:['صباح الفل يا أستاذة نور 🌸','الثلاثاء، ١٤ يوليو · فرع الزمالك'],
+  bookings:['الحجوزات','٦ حجوزات اليوم'],
+  clients:['العميلات','٣٤٠ عميلة مسجّلة'],
+  services:['الخدمات','١٢ خدمة متاحة'],
+  staff:['الموظفات','٣ موظفات نشطات'],
+  reports:['التقارير','أداء الصالون خلال آخر ٦ أشهر'],
+  settings:['الإعدادات','بيانات الصالون والتفضيلات'],
+};
+function switchView(id){
+  document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  const [h,s]=headerCopy[id]; document.getElementById('headerTitle').innerHTML=`<h1>${h}</h1><span>${s}</span>`;
+}
+
+function renderKPIs(){
+  const kpis=[
+    {label:'إيرادات هذا الأسبوع', value:31400, suffix:' ج.م', trend:'+١١٪', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#B76E79" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`, bg:'var(--rose-pale)'},
+    {label:'حجوزات اليوم', value:6, trend:'+٢', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#9E7E3C" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/></svg>`, bg:'var(--gold-pale)'},
+    {label:'عميلات جدد هذا الأسبوع', value:9, trend:'+٤', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#6B4959" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>`, bg:'var(--plum-pale)'},
+    {label:'معدل رضا العميلات', value:98, suffix:'٪', trend:'+١٪', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#6B9A73" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M8 13s1.5 3 4 3 4-3 4-3"/></svg>`, bg:'var(--sage-pale)'},
+  ];
+  document.getElementById('kpiGrid').innerHTML = kpis.map(k=>`<div class="card hoverable"><div class="kpi-top"><div class="kpi-icon" style="background:${k.bg}">${k.icon}</div><div class="kpi-trend ${k.up?'trend-up':'trend-down'}">${k.trend}</div></div><div class="kpi-value" data-count="${k.value}" data-suffix="${k.suffix||''}">0${k.suffix||''}</div><div class="kpi-label">${k.label}</div></div>`).join('');
+  animateCounters();
+}
+function animateCounters(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target=parseFloat(el.dataset.count); const suffix=el.dataset.suffix||''; const start=performance.now(); const dur=900;
+    function tick(now){ const p=Math.min(1,(now-start)/dur); const eased=1-Math.pow(1-p,3); el.textContent=Math.round(target*eased).toLocaleString('en-US')+suffix; if(p<1) requestAnimationFrame(tick); }
+    requestAnimationFrame(tick);
+  });
+}
+function renderRevChart(){
+  const data=[3800,4200,3600,5100,5800,4300,4600];
+  const w=460,h=150,pad=10; const max=Math.max(...data)*1.15;
+  const pts=data.map((v,i)=>{ const x=pad+i*((w-2*pad)/(data.length-1)); const y=h-pad-(v/max)*(h-2*pad); return [x,y]; });
+  const line=pts.map((p,i)=>(i===0?'M':'L')+p[0]+','+p[1]).join(' ');
+  const area=line+` L${pts[pts.length-1][0]},${h-pad} L${pts[0][0]},${h-pad} Z`;
+  const days=['سبت','أحد','إثن','ثلا','أرب','خمي','جمعة'];
+  const dots=pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#B76E79" stroke="#fff" stroke-width="1.5"/>`).join('');
+  const labels=pts.map((p,i)=>`<text x="${p[0]}" y="${h+14}" font-size="10" fill="var(--ink-faint)" text-anchor="middle">${days[i]}</text>`).join('');
+  document.getElementById('revChart').innerHTML = `<svg viewBox="0 0 ${w} ${h+24}" width="100%" height="200"><defs><linearGradient id="rg2" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#B76E79" stop-opacity="0.3"/><stop offset="100%" stop-color="#B76E79" stop-opacity="0"/></linearGradient></defs><path d="${area}" fill="url(#rg2)"/><path d="${line}" fill="none" stroke="#B76E79" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
+}
+function renderTopServices(){
+  const data=[{n:'صبغة كاملة',pct:78},{n:'مانيكير وباديكير',pct:66},{n:'مكياج سهرة',pct:52}];
+  document.getElementById('topServices').innerHTML = data.map((d,i)=>`<div style="margin-bottom:${i<2?'14px':'0'};"><div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:6px;"><span style="font-weight:700;">${d.n}</span><span class="mono" style="color:var(--ink-faint);">${d.pct}%</span></div><div class="pbar"><div class="pbar-fill" style="width:0%" data-w="${d.pct}"></div></div></div>`).join('');
+  setTimeout(()=> document.querySelectorAll('#topServices .pbar-fill').forEach(el=>el.style.width=el.dataset.w+'%'),100);
+}
+function renderTodayBookings(){
+  document.getElementById('bookCount').textContent = bookings.length+' حجز';
+  document.getElementById('todayBookings').innerHTML = bookings.slice(0,3).map(b=>`<div class="card hoverable"><div style="display:flex; justify-content:space-between; align-items:center;"><span class="mono" style="font-size:12px; color:var(--rose-deep); font-weight:700;">${b.time}</span><span class="chip chip-plum">${b.staff}</span></div><div style="display:flex; align-items:center; gap:10px; margin-top:12px;">${avatar(b.client)}<div><div class="pat-name">${b.client}</div><div class="pat-sub">${b.service}</div></div></div></div>`).join('');
+}
+function renderDormant(){
+  document.getElementById('dormantClients').innerHTML = clients.filter(c=>c.tier==='vip').map(c=>`<div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--line-soft);">${avatar(c.name)}<div style="flex:1;"><div class="pat-name">${c.name}</div><div class="pat-sub">آخر زيارة: ${c.last}</div></div><span class="chip chip-warn">VIP</span></div>`).join('');
+}
+function renderActivityTimeline(){
+  const items=[{time:'٩:٣٠ ص', text:'<b>ياسمين فؤاد</b> عملت تشيك-إن لموعدها'},{time:'١٠:٤٥ ص', text:'حجز جديد من <b>جنى محمود</b> — تنظيف بشرة'},{time:'١١:٣٠ ص', text:'دفعة ٩٥٠ ج.م من <b>رنا وجدي</b>'},{time:'١٢:١٥ م', text:'<b>أستاذة نور</b> أضافت خدمة جديدة للمنيو'}];
+  document.getElementById('activityTimeline').innerHTML = items.map((it,i)=>`<div class="t-item"><div class="t-dot ${i>1?'muted':''}"></div><div class="t-time">${it.time}</div><div class="t-text">${it.text}</div></div>`).join('');
+}
+
+function renderDayStrip(){
+  const days=[{d:'سبت',n:11},{d:'أحد',n:12},{d:'إثن',n:13},{d:'ثلا',n:14,active:true},{d:'أرب',n:15},{d:'خمي',n:16},{d:'جمعة',n:17}];
+  document.getElementById('dayStrip').innerHTML = days.map(d=>`<div class="day-chip ${d.active?'active':''}"><div class="dname">${d.d}</div><div class="dnum">${d.n}</div></div>`).join('');
+}
+function renderBookingsGrid(){
+  document.getElementById('bookingsGrid').innerHTML = bookings.map(b=>`<div class="card hoverable"><div style="display:flex; justify-content:space-between; align-items:center;"><span class="mono" style="font-size:12px; color:var(--rose-deep); font-weight:700;">${b.time}</span><span class="chip chip-plum">${b.staff}</span></div><div style="display:flex; align-items:center; gap:10px; margin-top:12px;">${avatar(b.client)}<div><div class="pat-name">${b.client}</div><div class="pat-sub">${b.service}</div></div></div></div>`).join('');
+}
+
+function renderClients(filter='all'){
+  const rows = clients.filter(c=> filter==='all'||c.tier===filter);
+  document.getElementById('clientsTableBody').innerHTML = rows.length ? rows.map(c=>`<tr><td><div class="pat-cell">${avatar(c.name)}<span class="pat-name">${c.name}</span></div></td><td>${c.service}</td><td class="mono">${c.visits}</td><td class="mono">${c.last}</td><td>${tierChip[c.tier]}</td></tr>`).join('') : `<tr><td colspan="5"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></svg><h3>لا يوجد عميلات مطابقات</h3><p>جرّبي فلتر مختلف.</p></div></td></tr>`;
+}
+document.querySelectorAll('#clientFilterTabs .tab').forEach(t=> t.addEventListener('click', ()=>{ document.querySelectorAll('#clientFilterTabs .tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderClients(t.dataset.filter); }));
+
+function renderServices(){
+  document.getElementById('servicesGrid').innerHTML = services.map(s=>`<div class="card hoverable"><div style="display:flex; align-items:center; gap:12px;"><div class="service-icon" style="background:${s.color}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="${s.ic}" stroke-width="2"><path d="M12 3c-3 3-3 5-1 7-3 0-5 2-5 5 0 3.5 2.7 6 6 6s6-2.5 6-6c0-3-2-5-5-5 2-2 2-4-1-7z"/></svg></div><div><div class="pat-name">${s.name}</div><div class="pat-sub">${s.dur}</div></div></div><div class="mono" style="font-weight:800; font-size:15px; margin-top:14px; color:var(--rose-deep);">${s.price}</div></div>`).join('');
+}
+
+function renderStaff(){
+  document.getElementById('staffGrid').innerHTML = staff.map(s=>{
+    const pct = Math.round(s.rating/5*100); const r=24,circ=2*Math.PI*r; const dash=pct/100*circ;
+    return `<div class="card hoverable"><div style="display:flex; align-items:center; gap:14px;"><svg width="56" height="56" viewBox="0 0 56 56" style="transform:rotate(-90deg);"><circle cx="28" cy="28" r="${r}" fill="none" stroke="var(--surface-2)" stroke-width="5"/><circle cx="28" cy="28" r="${r}" fill="none" stroke="${s.color}" stroke-width="5" stroke-dasharray="${dash} ${circ-dash}" stroke-linecap="round"/></svg><div><div class="pat-name" style="font-size:14.5px;">${s.name}</div><div class="pat-sub">${s.spec}</div></div></div>
+    <div style="display:flex; justify-content:space-between; margin-top:16px; padding-top:14px; border-top:1px solid var(--line-soft);"><div><div class="mono" style="font-weight:800;">${s.clients}</div><div style="font-size:10.5px; color:var(--ink-faint);">عميلة</div></div><div><div class="mono" style="font-weight:800;">${s.rating}</div><div style="font-size:10.5px; color:var(--ink-faint);">تقييم</div></div></div></div>`;
+  }).join('');
+}
+
+function renderGrowthChart(){
+  const data=[22.1,24.8,26.3,28.9,29.7,31.4];
+  const w=380,h=140,pad=10; const max=Math.max(...data)*1.1; const barW=(w-2*pad)/data.length-8;
+  const bars=data.map((v,i)=>{ const x=pad+i*((w-2*pad)/data.length); const bh=(v/max)*(h-2*pad); const y=h-pad-bh; return `<rect x="${x}" y="${y}" width="${barW}" height="${bh}" rx="6" fill="${i===data.length-1?'#B76E79':'#F0DCE0'}"/>`; }).join('');
+  const months=['فبر','مار','أبر','ماي','يون','يول'];
+  const labels=data.map((v,i)=>{ const x=pad+i*((w-2*pad)/data.length)+barW/2; return `<text x="${x}" y="${h+13}" font-size="10" fill="var(--ink-faint)" text-anchor="middle">${months[i]}</text>`; }).join('');
+  document.getElementById('growthChart').innerHTML = `<svg viewBox="0 0 ${w} ${h+22}" width="100%" height="180">${bars}${labels}</svg><div style="font-weight:800; font-size:20px; margin-top:6px;">٣١,٤٠٠ ج.م <span class="mono" style="font-size:12px; color:var(--success); font-weight:600;">+٥.٧٪ عن الشهر السابق</span></div>`;
+}
+function renderDonutChart(){
+  const data=[{l:'صبغة وقصات',v:34,c:'#B76E79'},{l:'أظافر',v:22,c:'#C6A15B'},{l:'مكياج',v:20,c:'#6B4959'},{l:'عناية بالبشرة',v:14,c:'#8CA093'},{l:'أخرى',v:10,c:'#94505C'}];
+  const total=data.reduce((s,d)=>s+d.v,0); let acc=0; const r=52,cx=60,cy=60,circ=2*Math.PI*r;
+  const arcs=data.map(d=>{ const frac=d.v/total; const dash=frac*circ; const el=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${d.c}" stroke-width="16" stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="${-acc}" transform="rotate(-90 ${cx} ${cy})"/>`; acc+=dash; return el; }).join('');
+  document.getElementById('donutChart').innerHTML = `<svg viewBox="0 0 120 120" width="150" height="150">${arcs}</svg><div style="display:flex; flex-direction:column; gap:9px;">${data.map(d=>`<div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink-soft);"><span style="width:8px;height:8px;border-radius:50%;background:${d.c}"></span>${d.l} <span class="mono" style="color:var(--ink-faint);">${d.v}%</span></div>`).join('')}</div>`;
+}
+function renderPerf(){
+  const data=[{l:'معدل إعادة الحجز',v:'٧٢٪',t:'+٦٪',up:true},{l:'متوسط قيمة الفاتورة',v:'٤٨٠ ج.م',t:'+٩٪',up:true},{l:'عميلات جدد',v:'٩',t:'+٤٪',up:true},{l:'إلغاء الحجوزات',v:'٣٪',t:'-١٪',up:true}];
+  document.getElementById('perfGrid').innerHTML = data.map(m=>`<div class="card"><div class="kpi-label">${m.l}</div><div class="kpi-value" style="font-size:21px; margin-top:6px;">${m.v}</div><div class="kpi-trend trend-up" style="margin-top:10px; width:fit-content;">${m.t}</div></div>`).join('');
+}
+
+function toggleNotif(){ document.getElementById('notifDrawer').classList.toggle('active'); document.getElementById('notifOverlay').classList.toggle('active'); }
+function renderNotifList(){
+  const items=[{time:'منذ ٥ دقايق', text:'حجز جديد من <b>جنى محمود</b>'},{time:'منذ ٣٠ دقيقة', text:'<b>رنا وجدي</b> سددت فاتورتها'},{time:'منذ ساعة', text:'تذكير: <b>هدير سامح</b> موعدها الساعة ١ الظهر'},{time:'أمس', text:'<b>أستاذة منى</b> حققت أعلى تقييم هذا الأسبوع'}];
+  document.getElementById('notifList').innerHTML = items.map((it,i)=>`<div class="t-item"><div class="t-dot ${i>1?'muted':''}"></div><div class="t-time">${it.time}</div><div class="t-text">${it.text}</div></div>`).join('');
+}
+function showToast(msg){
+  const wrap=document.getElementById('toastWrap'); const t=document.createElement('div'); t.className='toast';
+  t.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>${msg}`;
+  wrap.appendChild(t); requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },3200);
+}
+function handleSearch(q){
+  if(q.length>1){ switchView('clients'); const results=clients.filter(c=>c.name.includes(q));
+    document.getElementById('clientsTableBody').innerHTML = results.length ? results.map(c=>`<tr><td><div class="pat-cell">${avatar(c.name)}<span class="pat-name">${c.name}</span></div></td><td>${c.service}</td><td class="mono">${c.visits}</td><td class="mono">${c.last}</td><td>${tierChip[c.tier]}</td></tr>`).join('') : `<tr><td colspan="5"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><h3>لا نتائج لـ"${q}"</h3><p>جرّبي اسم مختلف.</p></div></td></tr>`;
+  } else if(q.length===0){ renderClients('all'); }
+}
+
+renderKPIs(); renderRevChart(); renderTopServices(); renderTodayBookings(); renderDormant(); renderActivityTimeline();
+renderDayStrip(); renderBookingsGrid(); renderClients(); renderServices(); renderStaff();
+renderGrowthChart(); renderDonutChart(); renderPerf(); renderNotifList();
+setTimeout(()=> showToast('أهلاً بيكي — عندك ٦ حجوزات النهاردة'), 700);
+</script>
+</body>
+</html>

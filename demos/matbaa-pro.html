@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Matbaa Pro — نظام إدارة المطابع والدعاية والإعلان</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#1A3E8C; --ink-dark:#122A63; --ink-soft:#E7EDFB;
+  --magenta:#D6266F; --magenta-soft:#FCE7F0;
+  --cyan:#0EA5C4; --cyan-soft:#E1F6FA;
+  --yellow:#F2C230;
+  --bg:#F7F8FC; --surface:#FFFFFF;
+  --text:#171D2E; --text-secondary:#3D465C; --muted:#838BA0; --faint:#CBD1E4;
+  --border:#E6E9F5; --border-strong:#D2D8ED;
+  --success:#16A34A; --success-soft:#E9F9EF;
+  --warning:#D97706; --warning-soft:#FDF1DF;
+  --danger:#DC2626; --danger-soft:#FCEAEA;
+  --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:24px;
+  --shadow-sm:0 2px 10px rgba(26,62,140,0.07);
+  --shadow-md:0 12px 30px rgba(26,62,140,0.10);
+  --shadow-lg:0 26px 56px rgba(26,62,140,0.18);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;font-weight:900;margin:0;color:var(--text);letter-spacing:-.01em;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 258px;min-height:100vh;}
+.sidebar{background:var(--ink-dark);color:#fff;padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;border-left:4px solid var(--magenta);}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:28px;}
+.brand-mark{width:42px;height:42px;border-radius:10px;background:linear-gradient(135deg,var(--magenta),var(--cyan));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.brand-name{font-weight:900;font-size:17px;}
+.brand-sub{font-size:10.5px;color:rgba(255,255,255,0.55);}
+.nav-sec{font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.07em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:9px;color:rgba(255,255,255,0.75);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:#fff;}
+.nav-item.active{background:var(--magenta);color:#fff;}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:var(--yellow);color:#3A2A00;font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.1);}
+.foot-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.foot-card img{width:36px;height:36px;border-radius:9px;object-fit:cover;}
+.foot-card .name{font-size:12.5px;font-weight:800;} .foot-card .role{font-size:10.5px;color:rgba(255,255,255,0.5);}
+
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(247,248,252,0.88);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:10px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15.5px;}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:var(--ink);color:#fff;}
+.btn-primary:hover{background:var(--ink-dark);}
+.btn-magenta{background:var(--magenta);color:#fff;}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--ink-soft);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.design{background:var(--warning-soft);color:var(--warning);}
+.badge.proof{background:var(--magenta-soft);color:var(--magenta);}
+.badge.printing{background:var(--cyan-soft);color:var(--cyan);}
+.badge.ready{background:var(--success-soft);color:var(--success);}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;}
+.stat .value{font-size:24px;font-weight:900;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--success);margin-top:6px;display:inline-block;}
+
+/* Print job board */
+.job-board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.job-col-head{display:flex;align-items:center;gap:7px;margin-bottom:10px;font-weight:800;font-size:12px;}
+.job-card{background:#fff;border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:10px;box-shadow:var(--shadow-sm);cursor:grab;}
+.job-proof{height:70px;background:repeating-linear-gradient(45deg,var(--magenta) 0 10px,var(--cyan) 10px 20px,var(--yellow) 20px 30px,var(--ink) 30px 40px);opacity:0.85;}
+.job-body{padding:11px;}
+.job-body .title{font-weight:700;font-size:12.5px;} .job-body .client{font-size:11px;color:var(--muted);margin-top:3px;}
+.job-body .foot{display:flex;justify-content:space-between;align-items:center;margin-top:9px;}
+.job-drop{min-height:60px;border-radius:12px;transition:background .15s;}
+.job-drop.drag-over{background:var(--ink-soft);outline:2px dashed var(--ink);}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--ink-soft);}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;}
+
+.price-card{border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;background:#fff;text-align:center;}
+.price-emoji{font-size:28px;margin-bottom:8px;}
+.price-val{font-size:16px;font-weight:800;color:var(--ink);margin-top:6px;}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--ink-dark);color:#fff;padding:11px 17px;border-radius:12px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);}
+
+@media (max-width:1250px){ .job-board{grid-template-columns:repeat(4,220px);overflow-x:auto;} }
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 76px;} .brand-name,.brand-sub,.nav-item span:not(.ic),.nav-sec,.foot-card .name,.foot-card .role,.nav-badge{display:none;} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">Matbaa Pro — دعاية وإعلان وطباعة</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-magenta" onclick="switchView('v-jobs')">+ طلب طباعة جديد</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-jobs"></section>
+      <section class="view" id="v-clients"></section>
+      <section class="view" id="v-pricing"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🖨️</div>
+      <div><div class="brand-name">Matbaa Pro</div><div class="brand-sub">دعاية وإعلان وطباعة</div></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-jobs"><span class="ic">🖨️</span><span>طلبات الطباعة</span><span class="nav-badge">6</span></div>
+      <div class="nav-sec">الإدارة</div>
+      <div class="nav-item" data-view="v-clients"><span class="ic">👥</span><span>العملاء</span></div>
+      <div class="nav-item" data-view="v-pricing"><span class="ic">💵</span><span>قائمة الأسعار</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="foot-card"><img src="https://i.pravatar.cc/72?img=15"><div><div class="name">م. عادل حمدي</div><div class="role">مدير المطبعة</div></div></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const jobsData = {
+  design: [
+    {title:"بروشور تعريفي — شركة نوفا", client:"شركة نوفا", qty:"2000 نسخة"},
+    {title:"كتالوج منتجات", client:"لمسة ديكور", qty:"500 نسخة"},
+  ],
+  proof: [
+    {title:"بانر خارجي 3×2 متر", client:"مطعم تيرا", qty:"3 قطع"},
+    {title:"كروت شخصية فاخرة", client:"د. كريم عاطف", qty:"1000 نسخة"},
+  ],
+  printing: [
+    {title:"فلايرز ترويجية", client:"صالون لوتس", qty:"5000 نسخة"},
+    {title:"أكياس ورقية مطبوعة", client:"متجر لمسة أناقة", qty:"3000 كيس"},
+  ],
+  ready: [
+    {title:"لافتة محل نيون", client:"كافيه المحطة", qty:"1 قطعة"},
+    {title:"دفاتر فواتير مرقمة", client:"مكتبة الأمل", qty:"20 دفتر"},
+  ],
+};
+const jobCols = [['design','التصميم'],['proof','مراجعة البروفة'],['printing','قيد الطباعة'],['ready','جاهز للتسليم']];
+const clients = [
+  {name:"شركة نوفا", jobs:8, spent:42000, img:66},
+  {name:"لمسة ديكور", jobs:5, spent:26000, img:67},
+  {name:"مطعم تيرا", jobs:12, spent:38000, img:68},
+  {name:"صالون لوتس", jobs:6, spent:19000, img:69},
+];
+const pricing = [
+  {item:"بروشور A4 ملون", price:2.5, emoji:"📄"},
+  {item:"كروت شخصية (100 قطعة)", price:120, emoji:"💳"},
+  {item:"بانر خارجي (م²)", price:180, emoji:"🖼️"},
+  {item:"فلاير A5 ملون", price:1.2, emoji:"📃"},
+  {item:"استيكر لاصق (م²)", price:95, emoji:"🏷️"},
+  {item:"دفتر فواتير مرقم", price:35, emoji:"📒"},
+];
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','Matbaa Pro — دعاية وإعلان وطباعة'],
+    'v-jobs':['طلبات الطباعة','اسحبي وأفلتي لتحديث مرحلة كل طلب'],
+    'v-clients':['العملاء', clients.length+' عميل'],
+    'v-pricing':['قائمة الأسعار', pricing.length+' صنف'],
+    'v-settings':['الإعدادات','بيانات المطبعة وماكينات الطباعة'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  const total = Object.values(jobsData).reduce((s,a)=>s+a.length,0);
+  el.innerHTML = `
+    <div class="view-head"><div><h1>أهلاً، مهندس عادل 🖨️</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦</p></div>
+      <button class="btn btn-outline" onclick="switchView('v-jobs')">فتح لوحة الطلبات</button></div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('طلبات قيد التنفيذ', total+' طلب','🖨️','var(--ink)','+3 اليوم')}
+      ${stat('بروفات بانتظار الموافقة',jobsData.proof.length+' طلب','🎨','var(--magenta)','بحاجة لتأكيد العميل')}
+      ${stat('إيراد الشهر','١٩٢٬٤٠٠ ج.م','💰','var(--success)','+8%')}
+      ${stat('طلبات جاهزة للتسليم',jobsData.ready.length+' طلب','📦','var(--warning)','بانتظار الاستلام')}
+    </div>
+    <div class="card card-pad">
+      <div class="card-title" style="margin-bottom:16px">آخر الطلبات</div>
+      ${Object.entries(jobsData).flatMap(([k,arr])=>arr.map(o=>({...o,stage:k}))).map(o=>`
+        <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+          <div><b style="font-size:13px">${o.title}</b><div class="muted" style="font-size:11px">${o.client} — ${o.qty}</div></div>
+          <span class="badge ${o.stage}">${jobCols.find(c=>c[0]===o.stage)[1]}</span>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderJobs(){
+  const el = document.getElementById('v-jobs');
+  el.innerHTML = `<div class="view-head"><div><h1>طلبات الطباعة</h1><p class="sub">اسحبي وأفلتي لتحديث مرحلة كل طلب</p></div>
+    <button class="btn btn-magenta">+ طلب جديد</button></div>
+    <div class="job-board">
+      ${jobCols.map(([key,title])=>`
+        <div>
+          <div class="job-col-head">${title} <span class="muted" style="font-weight:600">(${jobsData[key].length})</span></div>
+          <div class="job-drop" data-col="${key}">
+            ${jobsData[key].map(j=>`
+              <div class="job-card" draggable="true">
+                <div class="job-proof"></div>
+                <div class="job-body">
+                  <div class="title">${j.title}</div>
+                  <div class="client">${j.client}</div>
+                  <div class="foot"><span class="muted" style="font-size:10.5px">${j.qty}</span></div>
+                </div>
+              </div>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>
+  `;
+  initDnD();
+}
+function initDnD(){
+  let dragEl=null;
+  document.querySelectorAll('.job-card').forEach(c=>{
+    c.addEventListener('dragstart',()=>{dragEl=c; c.style.opacity='0.4';});
+    c.addEventListener('dragend',()=>{c.style.opacity='1'; dragEl=null;});
+  });
+  document.querySelectorAll('.job-drop').forEach(z=>{
+    z.addEventListener('dragover', e=>{e.preventDefault(); z.classList.add('drag-over');});
+    z.addEventListener('dragleave', ()=>z.classList.remove('drag-over'));
+    z.addEventListener('drop', e=>{
+      e.preventDefault(); z.classList.remove('drag-over');
+      if(dragEl){ z.appendChild(dragEl); UI.toast('تم تحديث حالة الطلب'); }
+    });
+  });
+}
+
+function renderClients(){
+  const el = document.getElementById('v-clients');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>العملاء</h1><p class="sub">${clients.length} عميل</p></div>
+      <button class="btn btn-primary">+ عميل جديد</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>العميل</th><th>عدد الطلبات</th><th>إجمالي الإنفاق</th></tr></thead>
+      <tbody>${clients.map(c=>`
+        <tr><td><div class="cell-name"><img src="https://i.pravatar.cc/64?img=${c.img}" width="32" height="32" style="border-radius:50%">${c.name}</div></td>
+        <td>${c.jobs} طلب</td><td><b>${c.spent.toLocaleString('ar-EG')} ج.م</b></td></tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderPricing(){
+  const el = document.getElementById('v-pricing');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>قائمة الأسعار</h1><p class="sub">${pricing.length} صنف</p></div>
+      <button class="btn btn-primary">+ إضافة صنف</button></div>
+    <div class="grid g4">
+      ${pricing.map(p=>`
+        <div class="price-card">
+          <div class="price-emoji">${p.emoji}</div>
+          <b style="font-size:12.5px">${p.item}</b>
+          <div class="price-val">${p.price} ج.م</div>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1>الإعدادات</h1><p class="sub">بيانات المطبعة وماكينات الطباعة</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات اسم المطبعة، أنواع الطباعة المتاحة (أوفست/ديجيتال)، ومواصفات الورق.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderJobs(); renderClients(); renderPricing(); renderSettings();
+</script>
+</body>
+</html>

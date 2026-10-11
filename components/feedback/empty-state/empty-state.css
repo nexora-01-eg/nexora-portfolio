@@ -1,0 +1,46 @@
+/* ============================================================
+   NEXORA — Empty State
+   Shown when a list/search/filter has zero results, or a
+   section has no content yet. Variant for error states.
+   ============================================================ */
+
+.nx-empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--nx-space-3);
+  padding: var(--nx-space-9) var(--nx-space-5);
+  max-width: 360px;
+  margin-inline: auto;
+}
+
+/* Without this, toggling the hidden attribute via JS (el.hidden = true)
+   has no visual effect: this class's own unconditional `display: flex`
+   is an author-stylesheet rule, which the CSS cascade always lets win
+   over the browser's UA-stylesheet `[hidden] { display: none }` rule,
+   regardless of specificity — the same reason Modal, Drawer, Tabs, and
+   Accordion each reinforce [hidden] explicitly in their own CSS. */
+.nx-empty-state[hidden] {
+  display: none;
+}
+
+.nx-empty-state__icon {
+  width: 56px;
+  height: 56px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--nx-fs-500);
+  border-radius: var(--nx-radius-full);
+  background: var(--nx-bg-elevated);
+  color: var(--nx-text-muted);
+  margin-bottom: var(--nx-space-2);
+}
+
+.nx-empty-state--error .nx-empty-state__icon {
+  color: var(--nx-color-danger);
+  background: rgba(179, 69, 63, 0.12);
+}
+
+.nx-empty-state .nx-btn { margin-top: var(--nx-space-2); }

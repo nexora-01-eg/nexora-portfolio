@@ -1,0 +1,41 @@
+/* ============================================================
+   NEXORA — Table
+   Static data table. See Data Table for sortable/interactive
+   version built on top of this same markup/style.
+   ============================================================ */
+
+.nx-table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+}
+
+.nx-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--nx-fs-200);
+}
+
+.nx-table thead th {
+  text-align: left;
+  padding: var(--nx-space-3) var(--nx-space-4);
+  font-weight: var(--nx-fw-medium);
+  color: var(--nx-text-muted);
+  font-size: var(--nx-fs-100);
+  text-transform: uppercase;
+  letter-spacing: var(--nx-ls-wide);
+  background: var(--nx-bg-elevated);
+  border-bottom: 1px solid var(--nx-border-subtle);
+  white-space: nowrap;
+}
+
+.nx-table tbody td {
+  padding: var(--nx-space-4);
+  color: var(--nx-text-primary);
+  border-bottom: 1px solid var(--nx-border-subtle);
+  white-space: nowrap;
+}
+
+.nx-table tbody tr:last-child td { border-bottom: none; }
+.nx-table tbody tr:hover { background: var(--nx-bg-elevated); }

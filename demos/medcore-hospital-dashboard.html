@@ -1,0 +1,642 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MedCore — Hospital Management Dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* ============================= TOKENS ============================= */
+:root{
+  --primary:#0F766E;
+  --primary-soft: rgba(15,118,110,0.1);
+  --secondary:#14B8A6;
+  --secondary-soft: rgba(20,184,166,0.12);
+  --accent:#06B6D4;
+  --accent-soft: rgba(6,182,212,0.12);
+  --success:#22C55E; --success-soft: rgba(34,197,94,0.12);
+  --warning:#F59E0B; --warning-soft: rgba(245,158,11,0.12);
+  --danger:#EF4444; --danger-soft: rgba(239,68,68,0.12);
+
+  --bg:#F8FAFC;
+  --sidebar:#FFFFFF;
+  --card:#FFFFFF;
+  --border:#E5E7EB;
+  --text:#0F172A;
+  --muted:#64748B;
+  --faint:#94A3B8;
+
+  --radius-sm:10px; --radius-md:16px; --radius-lg:20px; --radius-pill:999px;
+  --shadow-card: 0 1px 2px rgba(15,23,42,0.04), 0 12px 28px -14px rgba(15,23,42,0.12);
+  --shadow-float: 0 24px 48px -18px rgba(15,23,42,0.18);
+  --ease: cubic-bezier(.22,1,.36,1);
+  --dur-fast:160ms; --dur-med:340ms;
+
+  --font-display:'Manrope', sans-serif;
+  --font-body:'Inter', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+  --sidebar-w:260px; --topbar-h:72px;
+}
+html.dark{
+  --bg:#0B1220;
+  --sidebar:#101827;
+  --card:#121C2E;
+  --border:#22304A;
+  --text:#F1F5F9;
+  --muted:#94A3B8;
+  --faint:#5B6B85;
+  --primary-soft: rgba(20,184,166,0.16);
+  --secondary-soft: rgba(20,184,166,0.14);
+  --accent-soft: rgba(6,182,212,0.16);
+  --success-soft: rgba(34,197,94,0.16);
+  --warning-soft: rgba(245,158,11,0.16);
+  --danger-soft: rgba(239,68,68,0.16);
+  --shadow-card: 0 1px 0 rgba(255,255,255,0.03) inset, 0 20px 40px -20px rgba(0,0,0,0.6);
+  --shadow-float: 0 24px 60px -20px rgba(0,0,0,0.7);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{ background:var(--bg); color:var(--text); font-family:var(--font-body); min-height:100vh; transition:background var(--dur-med), color var(--dur-med); }
+::-webkit-scrollbar{width:8px; height:8px;} ::-webkit-scrollbar-thumb{background:var(--border); border-radius:10px;}
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; color:inherit; cursor:pointer;}
+:focus-visible{ outline:2px solid var(--secondary); outline-offset:2px; border-radius:6px; }
+.mono{ font-family:var(--font-mono); }
+
+.card{ background:var(--card); border:1px solid var(--border); border-radius:var(--radius-lg); box-shadow:var(--shadow-card); transition: box-shadow var(--dur-med) var(--ease), transform var(--dur-med) var(--ease), border-color var(--dur-med); }
+.card:hover{ box-shadow:var(--shadow-float); transform:translateY(-2px); }
+
+/* ============================= SHELL ============================= */
+.app{ display:flex; min-height:100vh; }
+
+/* Sidebar */
+.sidebar{ width:var(--sidebar-w); flex-shrink:0; position:fixed; top:0; bottom:0; right:0; background:var(--sidebar); border-left:1px solid var(--border); display:flex; flex-direction:column; padding:22px 16px; z-index:100; transition: transform var(--dur-med) var(--ease), background var(--dur-med); }
+.brand{ display:flex; align-items:center; gap:11px; padding:0 6px 22px; }
+.brand-mark{ width:36px; height:36px; border-radius:11px; background:linear-gradient(150deg, var(--secondary), var(--primary)); display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:16px; }
+.brand-name{ font-family:var(--font-display); font-weight:800; font-size:16.5px; }
+.brand-sub{ font-size:10px; color:var(--faint); font-family:var(--font-mono); letter-spacing:.06em; text-transform:uppercase; }
+
+.nav-group-label{ font-size:10px; font-family:var(--font-mono); letter-spacing:.1em; text-transform:uppercase; color:var(--faint); padding:14px 10px 6px; }
+.nav-list{ list-style:none; display:flex; flex-direction:column; gap:1px; }
+.nav-item{ display:flex; align-items:center; gap:11px; padding:9px 10px; border-radius:10px; color:var(--muted); font-size:13px; font-weight:500; transition:all var(--dur-fast); cursor:pointer; }
+.nav-item svg{ width:17px; height:17px; flex-shrink:0; }
+.nav-item:hover{ background:var(--bg); color:var(--text); }
+.nav-item.active{ background:var(--primary); color:#fff; }
+.nav-item .badge-n{ margin-right:auto; font-family:var(--font-mono); font-size:9.5px; background:var(--danger); color:#fff; padding:1px 6px; border-radius:20px; }
+.sidebar-scroll{ overflow-y:auto; flex:1; scrollbar-width:none; } .sidebar-scroll::-webkit-scrollbar{display:none;}
+
+.sidebar-foot{ padding-top:12px; border-top:1px solid var(--border); }
+.status-card{ padding:12px; border-radius:14px; background:var(--success-soft); display:flex; align-items:center; gap:10px; }
+.status-dot{ width:8px; height:8px; border-radius:50%; background:var(--success); box-shadow:0 0 0 3px rgba(34,197,94,0.2); animation:pulse 2s infinite; }
+@keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.4;} }
+.status-card div p{ font-size:11.5px; font-weight:600; }
+.status-card div span{ font-size:10px; color:var(--muted); }
+
+/* Main */
+.main{ flex:1; margin-right:var(--sidebar-w); min-width:0; }
+
+/* Topbar */
+.topbar{ height:var(--topbar-h); position:sticky; top:0; z-index:90; display:flex; align-items:center; justify-content:space-between; padding:0 28px; background:rgba(248,250,252,0.78); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); transition:background var(--dur-med); }
+html.dark .topbar{ background:rgba(11,18,32,0.78); }
+.topbar-left h1{ font-family:var(--font-display); font-weight:800; font-size:19px; }
+.topbar-left .sub{ font-size:11.5px; color:var(--muted); margin-top:1px; display:flex; align-items:center; gap:6px; }
+.topbar-right{ display:flex; align-items:center; gap:12px; }
+.search-box{ display:flex; align-items:center; gap:8px; padding:9px 13px; border-radius:var(--radius-pill); background:var(--bg); border:1px solid var(--border); width:250px; cursor:pointer; transition:all var(--dur-fast); }
+.search-box:hover{ border-color:var(--secondary); }
+.search-box svg{ width:15px; height:15px; color:var(--faint); flex-shrink:0; }
+.search-box span{ font-size:12.5px; color:var(--faint); flex:1; }
+.kbd{ font-family:var(--font-mono); font-size:9.5px; background:var(--card); border:1px solid var(--border); padding:2px 5px; border-radius:5px; color:var(--muted); }
+
+.icon-btn{ width:38px; height:38px; border-radius:12px; display:flex; align-items:center; justify-content:center; background:var(--bg); border:1px solid var(--border); position:relative; transition:all var(--dur-fast); }
+.icon-btn:hover{ border-color:var(--secondary); transform:translateY(-1px); }
+.icon-btn svg{ width:17px; height:17px; color:var(--muted); }
+.icon-btn .ping{ position:absolute; top:7px; left:7px; width:7px; height:7px; border-radius:50%; background:var(--danger); box-shadow:0 0 0 2px var(--card); }
+
+.profile-chip{ display:flex; align-items:center; gap:9px; padding:5px 12px 5px 5px; border-radius:var(--radius-pill); background:var(--bg); border:1px solid var(--border); }
+.avatar{ width:30px; height:30px; border-radius:50%; background:linear-gradient(150deg, var(--secondary), var(--primary)); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:11px; color:#fff; }
+.profile-chip .pname{ font-size:12px; font-weight:700; line-height:1.2; }
+.profile-chip .prole{ font-size:10px; color:var(--muted); }
+
+.content{ padding:26px 28px 80px; max-width:1680px; }
+.section{ margin-bottom:32px; opacity:0; transform:translateY(12px); animation:reveal var(--dur-med) var(--ease) forwards; }
+.section:nth-of-type(1){animation-delay:.02s;} .section:nth-of-type(2){animation-delay:.06s;} .section:nth-of-type(3){animation-delay:.1s;} .section:nth-of-type(4){animation-delay:.14s;} .section:nth-of-type(5){animation-delay:.18s;}
+@keyframes reveal{ to{ opacity:1; transform:none; } }
+.section-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:14px; }
+.section-head h2{ font-family:var(--font-display); font-weight:800; font-size:17px; }
+.section-head .see-all{ font-size:12px; color:var(--secondary); font-weight:600; }
+
+/* ============================= KPI ============================= */
+.kpi-grid{ display:grid; grid-template-columns:repeat(6,1fr); gap:14px; }
+.kpi-card{ padding:18px 16px; }
+.kpi-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.kpi-icon{ width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.kpi-icon svg{ width:16px; height:16px; }
+.kpi-trend{ font-family:var(--font-mono); font-size:10.5px; padding:3px 7px; border-radius:20px; display:flex; align-items:center; gap:3px; }
+.kpi-trend.up{ color:var(--success); background:var(--success-soft); }
+.kpi-trend.down{ color:var(--danger); background:var(--danger-soft); }
+.kpi-value{ font-family:var(--font-display); font-size:24px; font-weight:800; letter-spacing:-.01em; }
+.kpi-label{ font-size:11.5px; color:var(--muted); margin-top:3px; }
+
+/* ============================= ROW2 ============================= */
+.row2{ display:grid; grid-template-columns:1.6fr 1fr; gap:16px; }
+.chart-card{ padding:22px; }
+.chart-head{ display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:4px; }
+.chart-head h3{ font-family:var(--font-display); font-size:15.5px; font-weight:800; }
+.chart-head .sub{ font-size:11px; color:var(--muted); margin-top:2px; }
+.chart-tabs{ display:flex; gap:3px; background:var(--bg); padding:3px; border-radius:10px; border:1px solid var(--border); }
+.chart-tab{ font-size:11px; padding:5px 10px; border-radius:7px; color:var(--muted); transition:all var(--dur-fast); }
+.chart-tab.active{ background:var(--primary); color:#fff; }
+.big-number{ font-family:var(--font-display); font-size:28px; font-weight:800; margin:8px 0 2px; }
+.legend-row{ display:flex; gap:16px; margin-top:12px; }
+.legend-item{ display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--muted); }
+.legend-dot{ width:8px; height:8px; border-radius:50%; }
+
+.side-stack{ display:flex; flex-direction:column; gap:16px; }
+.emerg-card{ padding:20px; background:linear-gradient(155deg, var(--danger), #b91c1c); color:#fff; border:none; }
+.emerg-top{ display:flex; justify-content:space-between; align-items:center; }
+.emerg-top span{ font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.06em; opacity:.85;}
+.emerg-num{ font-family:var(--font-display); font-size:32px; font-weight:800; margin-top:8px; }
+.emerg-sub{ font-size:11.5px; opacity:.85; margin-top:2px; }
+
+.bed-card{ padding:18px 20px; }
+.bed-card h3{ font-family:var(--font-display); font-size:14.5px; font-weight:800; margin-bottom:14px; }
+.bed-ring-row{ display:flex; align-items:center; gap:16px; }
+.bed-legend{ flex:1; display:flex; flex-direction:column; gap:8px; }
+.bed-legend .item{ display:flex; justify-content:space-between; font-size:11.5px; }
+.bed-legend .item .l{ display:flex; align-items:center; gap:6px; color:var(--muted); }
+.bed-legend .item .v{ font-family:var(--font-mono); }
+
+/* ============================= ROW3 — tables/cards ============================= */
+.row3{ display:grid; grid-template-columns:1.4fr .9fr .8fr; gap:16px; }
+.panel{ padding:22px; }
+.panel-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; }
+.panel-head h3{ font-family:var(--font-display); font-size:15px; font-weight:800; }
+.tag-count{ font-family:var(--font-mono); font-size:10.5px; color:var(--muted); background:var(--bg); border:1px solid var(--border); padding:3px 8px; border-radius:20px; }
+
+.table{ width:100%; border-collapse:collapse; }
+.table th{ text-align:right; font-size:9.5px; text-transform:uppercase; letter-spacing:.07em; color:var(--faint); font-family:var(--font-mono); font-weight:600; padding:0 8px 10px; }
+.table td{ padding:10px 8px; font-size:12px; border-top:1px solid var(--border); vertical-align:middle; }
+.table tbody tr{ transition:background var(--dur-fast); }
+.table tbody tr:hover{ background:var(--bg); }
+.patient-mini{ display:flex; align-items:center; gap:8px; }
+.patient-mini .avatar{ width:24px; height:24px; font-size:9.5px; }
+.badge{ font-size:10px; font-family:var(--font-mono); padding:3px 8px; border-radius:20px; display:inline-flex; align-items:center; gap:4px; }
+.badge.stable{ color:var(--success); background:var(--success-soft); }
+.badge.observation{ color:var(--warning); background:var(--warning-soft); }
+.badge.critical{ color:var(--danger); background:var(--danger-soft); }
+.badge::before{ content:''; width:5px; height:5px; border-radius:50%; background:currentColor; }
+
+.doctor-row{ display:flex; align-items:center; gap:11px; padding:9px 0; border-top:1px solid var(--border); }
+.doctor-row:first-child{ border-top:none; padding-top:0; }
+.doctor-row .avatar{ position:relative; width:34px; height:34px; font-size:11px; }
+.doctor-row .avail{ position:absolute; bottom:-1px; left:-1px; width:8px; height:8px; border-radius:50%; border:2px solid var(--card); }
+.doctor-row .avail.online{ background:var(--success); } .doctor-row .avail.busy{ background:var(--warning); }
+.doctor-row .dname{ font-size:12px; font-weight:700; } .doctor-row .dspec{ font-size:10.5px; color:var(--muted); }
+.doctor-row .dload{ margin-right:auto; text-align:left; } .doctor-row .dload b{ font-family:var(--font-mono); font-size:11.5px; color:var(--primary); } .doctor-row .dload span{ display:block; font-size:9px; color:var(--faint); }
+
+.dept-row{ padding:11px 0; border-top:1px solid var(--border); }
+.dept-row:first-child{ border-top:none; padding-top:0; }
+.dept-top{ display:flex; justify-content:space-between; font-size:12px; margin-bottom:6px; }
+.dept-top .p{ font-family:var(--font-mono); color:var(--primary); }
+.dept-track{ height:6px; border-radius:6px; background:var(--bg); overflow:hidden; }
+.dept-fill{ height:100%; border-radius:6px; background:linear-gradient(90deg, var(--secondary), var(--primary)); width:0; transition:width 1.1s var(--ease); }
+
+/* ============================= ROW4 activity/rooms ============================= */
+.row4{ display:grid; grid-template-columns:1.2fr .9fr .9fr; gap:16px; }
+.timeline{ position:relative; }
+.tl-item{ display:flex; gap:11px; padding-bottom:16px; position:relative; }
+.tl-item:last-child{ padding-bottom:0; }
+.tl-item::before{ content:''; position:absolute; right:5px; top:16px; bottom:-2px; width:1px; background:var(--border); }
+.tl-item:last-child::before{ display:none; }
+.tl-dot{ width:11px; height:11px; border-radius:50%; background:var(--card); border:2px solid var(--primary); flex-shrink:0; margin-top:2px; z-index:1; }
+.tl-body p{ font-size:12px; line-height:1.5; } .tl-body p b{ color:var(--primary); font-weight:700; }
+.tl-time{ font-size:10px; color:var(--faint); font-family:var(--font-mono); margin-top:2px; }
+
+.room-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px solid var(--border); }
+.room-row:first-child{ border-top:none; padding-top:0; }
+.room-icon{ width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.room-icon svg{ width:15px; height:15px; }
+.room-row .info{ flex:1; min-width:0; } .room-row .rn{ font-size:12px; font-weight:700; } .room-row .rm{ font-size:10.5px; color:var(--muted); }
+
+.staff-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px solid var(--border); }
+.staff-row:first-child{ border-top:none; padding-top:0; }
+
+/* ============================= BUTTONS / FAB ============================= */
+.btn{ display:inline-flex; align-items:center; gap:7px; font-size:12.5px; font-weight:700; padding:9px 15px; border-radius:11px; transition:all var(--dur-fast); }
+.btn svg{ width:14px; height:14px; }
+.btn-primary{ background:var(--primary); color:#fff; }
+.btn-primary:hover{ background:#0c5c56; transform:translateY(-1px); }
+.btn-secondary{ background:var(--card); border:1px solid var(--border); color:var(--text); }
+.btn-secondary:hover{ border-color:var(--secondary); }
+
+.fab{ position:fixed; bottom:28px; left:28px; width:56px; height:56px; border-radius:50%; background:linear-gradient(150deg, var(--secondary), var(--primary)); display:flex; align-items:center; justify-content:center; box-shadow:0 16px 32px -10px rgba(15,118,110,0.5); z-index:80; transition:transform var(--dur-fast); }
+.fab:hover{ transform:scale(1.06) rotate(90deg); }
+.fab svg{ width:22px; height:22px; color:#fff; }
+
+/* ============================= COMMAND PALETTE ============================= */
+.cmdk-overlay{ position:fixed; inset:0; background:rgba(15,23,42,0.5); backdrop-filter:blur(3px); z-index:200; display:none; align-items:flex-start; justify-content:center; padding-top:12vh; }
+.cmdk-overlay.open{ display:flex; }
+.cmdk-box{ width:560px; max-width:90vw; background:var(--card); border:1px solid var(--border); border-radius:16px; box-shadow:var(--shadow-float); overflow:hidden; }
+.cmdk-input-wrap{ display:flex; align-items:center; gap:10px; padding:14px 16px; border-bottom:1px solid var(--border); }
+.cmdk-input-wrap svg{ width:17px; height:17px; color:var(--faint); }
+.cmdk-input-wrap input{ flex:1; background:none; border:none; font-size:14px; color:var(--text); }
+.cmdk-list{ max-height:320px; overflow-y:auto; padding:8px; }
+.cmdk-item{ display:flex; align-items:center; gap:10px; padding:10px 12px; border-radius:10px; font-size:13px; color:var(--muted); }
+.cmdk-item:hover{ background:var(--bg); color:var(--text); }
+.cmdk-item svg{ width:15px; height:15px; }
+
+/* ============================= LOADING ============================= */
+#loading-overlay{ position:fixed; inset:0; z-index:999; background:var(--bg); display:flex; align-items:center; justify-content:center; transition:opacity .5s var(--ease), visibility .5s; }
+#loading-overlay.hide{ opacity:0; visibility:hidden; }
+.loader-mark{ width:52px; height:52px; border-radius:15px; background:linear-gradient(150deg, var(--secondary), var(--primary)); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:22px; color:#fff; animation:loaderPulse 1.1s ease-in-out infinite; }
+@keyframes loaderPulse{ 0%,100%{ transform:scale(1); } 50%{ transform:scale(.9); } }
+
+/* ============================= RESPONSIVE ============================= */
+.mobile-menu-btn{ display:none; width:38px; height:38px; border-radius:11px; align-items:center; justify-content:center; background:var(--bg); border:1px solid var(--border); margin-left:10px; }
+.mobile-menu-btn svg{ width:17px; height:17px; }
+.sidebar-scrim{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.4); z-index:99; }
+.sidebar-scrim.show{ display:block; }
+
+@media (max-width:1300px){ .kpi-grid{ grid-template-columns:repeat(3,1fr); } .row3{ grid-template-columns:1fr 1fr; } .row4{ grid-template-columns:1fr 1fr; } }
+@media (max-width:1000px){
+  .sidebar{ transform:translateX(100%); } .sidebar.open{ transform:translateX(0); box-shadow:-40px 0 80px rgba(0,0,0,.4); }
+  .main{ margin-right:0; } .row2{ grid-template-columns:1fr; } .kpi-grid{ grid-template-columns:repeat(2,1fr); }
+  .row3, .row4{ grid-template-columns:1fr; } .search-box{ width:160px; } .mobile-menu-btn{ display:flex !important; }
+}
+@media (max-width:560px){ .content{ padding:18px 14px 70px; } .topbar{ padding:0 14px; } .kpi-grid{ grid-template-columns:1fr 1fr; } .search-box{ display:none; } }
+@media (prefers-reduced-motion:reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+
+<div id="loading-overlay"><div class="loader-mark">M</div></div>
+<div class="cmdk-overlay" id="cmdkOverlay">
+  <div class="cmdk-box">
+    <div class="cmdk-input-wrap">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input type="text" placeholder="Search patients, doctors, rooms, invoices…" autofocus>
+      <span class="kbd">Esc</span>
+    </div>
+    <div class="cmdk-list" id="cmdkList"></div>
+  </div>
+</div>
+
+<div class="app">
+  <div class="sidebar-scrim" id="scrim"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="brand">
+      <div class="brand-mark">M</div>
+      <div><div class="brand-name">MedCore</div><div class="brand-sub">Hospital OS</div></div>
+    </div>
+
+    <div class="sidebar-scroll">
+      <div class="nav-group-label">Overview</div>
+      <ul class="nav-list">
+        <li class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>Dashboard</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="3.2"/><path d="M4 20c1.6-4 4.6-6 8-6s6.4 2 8 6"/></svg>Patients</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h9l7 7v9H4z"/><path d="M9 12h6M9 16h4"/></svg>Doctors</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Appointments</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 21V9l8-6 8 6v12"/><path d="M9 21v-6h6v6"/></svg>Departments</li>
+      </ul>
+
+      <div class="nav-group-label">Clinical</div>
+      <ul class="nav-list">
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3v4h6V3M9 12h6M9 16h4"/></svg>Rooms &amp; Beds</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2v20M17 6H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>Emergency<span class="badge-n">6</span></li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3h6v4l4 9a2 2 0 01-2 3H7a2 2 0 01-2-3l4-9z"/></svg>Laboratory</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M4.9 4.9l3 3M19.1 4.9l-3 3M4.9 19.1l3-3M19.1 19.1l-3-3"/></svg>Radiology</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg>Pharmacy</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg>Operations</li>
+      </ul>
+
+      <div class="nav-group-label">Administration</div>
+      <ul class="nav-list">
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M7 9h10M7 13h6"/></svg>Billing</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l8 4v6c0 5-3.4 8.4-8 10-4.6-1.6-8-5-8-10V6z"/></svg>Insurance</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg>Analytics</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v16H4z"/><path d="M8 4v16M4 9h4"/></svg>Reports</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="9" cy="7" r="3"/><circle cx="17" cy="7" r="2.4"/><path d="M2 21v-1a6 6 0 016-6h2a6 6 0 016 6v1M17 12.4a5 5 0 014 5.6"/></svg>Staff</li>
+        <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.34 1.87l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.7 1.7 0 00-1.87-.34 1.7 1.7 0 00-1 1.55V21a2 2 0 01-4 0v-.09A1.7 1.7 0 008.6 19.4a1.7 1.7 0 00-1.87.34l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.7 1.7 0 00.34-1.87 1.7 1.7 0 00-1.55-1H2.5a2 2 0 010-4h.09A1.7 1.7 0 004.6 8.6a1.7 1.7 0 00-.34-1.87l-.06-.06a2 2 0 112.83-2.83l.06.06a1.7 1.7 0 001.87.34H9a1.7 1.7 0 001-1.55V2.5a2 2 0 014 0v.09a1.7 1.7 0 001 1.55 1.7 1.7 0 001.87-.34l.06-.06a2 2 0 112.83 2.83l-.06.06a1.7 1.7 0 00-.34 1.87V9c.14.6.6 1.13 1.55 1H21a2 2 0 010 4h-.09a1.7 1.7 0 00-1.51 1z"/></svg>Settings</li>
+      </ul>
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="status-card"><span class="status-dot"></span><div><p>All Systems Operational</p><span>Last sync: just now</span></div></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div class="topbar-left" style="display:flex; align-items:center;">
+        <button class="mobile-menu-btn" id="menuBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+        <div>
+          <h1>St. Aurelia Medical Center</h1>
+          <div class="sub"><span class="status-dot" style="animation:none;"></span> 412 beds · 18 departments · Level-1 Trauma Center</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box" id="openCmdk"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><span>Search or run a command…</span><span class="kbd">⌘K</span></div>
+        <button class="icon-btn" id="themeToggle" title="Toggle dark mode">
+          <svg id="sunIcon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+        </button>
+        <button class="icon-btn"><span class="ping"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></button>
+        <div class="profile-chip"><div class="avatar">RA</div><div><div class="pname">Dr. Rana Aziz</div><div class="prole">Hospital Administrator</div></div></div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <!-- SECTION 1: KPI -->
+      <section class="section">
+        <div class="kpi-grid" id="kpiGrid"></div>
+      </section>
+
+      <!-- SECTION 2: charts / emergency / beds -->
+      <section class="section row2">
+        <div class="card chart-card">
+          <div class="chart-head">
+            <div><h3>Patient Admissions Trend</h3><div class="sub">Inpatient &amp; outpatient, last 12 weeks</div></div>
+            <div class="chart-tabs"><div class="chart-tab active">Weekly</div><div class="chart-tab">Monthly</div><div class="chart-tab">YTD</div></div>
+          </div>
+          <div class="big-number">3,842 <span style="font-size:12.5px; color:var(--success); font-family:var(--font-mono); font-weight:600;">▲ 9.6%</span></div>
+          <svg id="admitChart" viewBox="0 0 640 190" style="width:100%; height:190px; overflow:visible; margin-top:6px;"></svg>
+          <div class="legend-row">
+            <div class="legend-item"><span class="legend-dot" style="background:var(--primary)"></span>Inpatient</div>
+            <div class="legend-item"><span class="legend-dot" style="background:var(--accent)"></span>Outpatient</div>
+            <div class="legend-item"><span class="legend-dot" style="background:var(--secondary)"></span>Emergency</div>
+          </div>
+        </div>
+
+        <div class="side-stack">
+          <div class="card emerg-card">
+            <div class="emerg-top"><span>Emergency Status</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="opacity:.9"><path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/></svg></div>
+            <div class="emerg-num" id="emergNum">0</div>
+            <div class="emerg-sub">active cases · 2 critical, 4 stable</div>
+          </div>
+          <div class="card bed-card">
+            <h3>Bed Availability</h3>
+            <div class="bed-ring-row">
+              <svg id="bedDonut" viewBox="0 0 120 120" width="100" height="100"></svg>
+              <div class="bed-legend" id="bedLegend"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- SECTION 3: tables/cards -->
+      <section class="section row3">
+        <div class="card panel">
+          <div class="panel-head"><h3>Patients Overview</h3><span class="tag-count">248 admitted</span></div>
+          <table class="table">
+            <thead><tr><th>Patient</th><th>Dept.</th><th>Room</th><th>Status</th></tr></thead>
+            <tbody id="patientTable"></tbody>
+          </table>
+        </div>
+
+        <div class="card panel">
+          <div class="panel-head"><h3>Doctors On Duty</h3><span class="tag-count">21 active</span></div>
+          <div id="doctorList"></div>
+        </div>
+
+        <div class="card panel">
+          <div class="panel-head"><h3>Operation Rooms</h3><span class="tag-count">4 of 6 in use</span></div>
+          <div id="roomList"></div>
+        </div>
+      </section>
+
+      <!-- SECTION 4: analytics -->
+      <section class="section row3">
+        <div class="card panel">
+          <div class="panel-head"><h3>Department Performance</h3></div>
+          <div id="deptBars"></div>
+        </div>
+        <div class="card panel">
+          <div class="panel-head"><h3>Age Distribution</h3></div>
+          <svg id="ageChart" viewBox="0 0 260 120" style="width:100%; height:120px;"></svg>
+        </div>
+        <div class="card panel">
+          <div class="panel-head"><h3>Monthly Revenue</h3><span class="tag-count mono" style="color:var(--success)">+6.8%</span></div>
+          <div class="big-number" style="font-size:22px;">$1.84M</div>
+          <svg id="revSpark" viewBox="0 0 220 80" style="width:100%; height:80px; margin-top:6px;"></svg>
+        </div>
+      </section>
+
+      <!-- SECTION 5: activity / invoices / staff -->
+      <section class="section row4">
+        <div class="card panel">
+          <div class="panel-head"><h3>Hospital Activity Timeline</h3></div>
+          <div class="timeline" id="activityTimeline"></div>
+        </div>
+        <div class="card panel">
+          <div class="panel-head"><h3>Recent Invoices</h3><span class="tag-count">12 pending</span></div>
+          <table class="table">
+            <thead><tr><th>Invoice</th><th>Amount</th><th>Status</th></tr></thead>
+            <tbody id="invoiceTable"></tbody>
+          </table>
+        </div>
+        <div class="card panel">
+          <div class="panel-head"><h3>Staff on Shift</h3></div>
+          <div id="staffList"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<button class="fab" id="fabBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4"><path d="M12 5v14M5 12h14"/></svg></button>
+
+<script>
+/* ===================== LOADING ===================== */
+window.addEventListener('load', ()=>{ setTimeout(()=>document.getElementById('loading-overlay').classList.add('hide'), 500); });
+
+/* ===================== THEME TOGGLE ===================== */
+const root = document.documentElement;
+document.getElementById('themeToggle').addEventListener('click', ()=>{ root.classList.toggle('dark'); });
+
+/* ===================== SIDEBAR / MOBILE ===================== */
+const sidebar = document.getElementById('sidebar'), scrim = document.getElementById('scrim');
+document.getElementById('menuBtn').addEventListener('click', ()=>{ sidebar.classList.add('open'); scrim.classList.add('show'); });
+scrim.addEventListener('click', ()=>{ sidebar.classList.remove('open'); scrim.classList.remove('show'); });
+document.querySelectorAll('.nav-item').forEach(it=>{
+  it.addEventListener('click', ()=>{ document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); it.classList.add('active'); sidebar.classList.remove('open'); scrim.classList.remove('show'); });
+});
+
+/* ===================== COMMAND PALETTE ===================== */
+const cmdk = document.getElementById('cmdkOverlay');
+const cmdkItems = [
+  {label:'Go to Patients', icon:'<circle cx="12" cy="8" r="3.2"/><path d="M4 20c1.6-4 4.6-6 8-6s6.4 2 8 6"/>'},
+  {label:'Go to Doctors', icon:'<path d="M4 4h9l7 7v9H4z"/>'},
+  {label:'New Appointment', icon:'<path d="M12 5v14M5 12h14"/>'},
+  {label:'View Emergency Cases', icon:'<path d="M12 2v20M17 6H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>'},
+  {label:'Open Billing', icon:'<rect x="3" y="4" width="18" height="16" rx="2"/>'},
+  {label:'Toggle dark mode', icon:'<circle cx="12" cy="12" r="4"/>'},
+];
+document.getElementById('cmdkList').innerHTML = cmdkItems.map(i=>`<div class="cmdk-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${i.icon}</svg>${i.label}</div>`).join('');
+function openCmdk(){ cmdk.classList.add('open'); }
+function closeCmdk(){ cmdk.classList.remove('open'); }
+document.getElementById('openCmdk').addEventListener('click', openCmdk);
+cmdk.addEventListener('click', e=>{ if(e.target===cmdk) closeCmdk(); });
+document.addEventListener('keydown', e=>{
+  if((e.metaKey||e.ctrlKey) && e.key.toLowerCase()==='k'){ e.preventDefault(); openCmdk(); }
+  if(e.key==='Escape') closeCmdk();
+});
+
+/* ===================== COUNTER ===================== */
+function animateCount(el, target, prefix='', suffix='', decimals=0, dur=1000){
+  const start = performance.now();
+  function frame(t){
+    const p = Math.min(1,(t-start)/dur); const eased = 1-Math.pow(1-p,3);
+    el.textContent = prefix + (target*eased).toLocaleString('en-US',{minimumFractionDigits:decimals, maximumFractionDigits:decimals}) + suffix;
+    if(p<1) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+}
+
+/* ===================== KPI CARDS ===================== */
+const kpis = [
+  {label:'Total Patients', value:1284, trend:'+4.2%', up:true, color:'primary', icon:'<circle cx="12" cy="8" r="3.2"/><path d="M4 20c1.6-4 4.6-6 8-6s6.4 2 8 6"/>'},
+  {label:"Today's Admissions", value:64, trend:'+11%', up:true, color:'accent', icon:'<path d="M12 5v14M5 12h14"/>'},
+  {label:'Discharges Today', value:41, trend:'-3%', up:false, color:'secondary', icon:'<path d="M9 12h6M9 8h6M9 16h4"/><rect x="4" y="4" width="16" height="16" rx="2"/>'},
+  {label:'Emergency Cases', value:6, trend:'+2', up:false, color:'danger', icon:'<path d="M12 2v20M17 6H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>'},
+  {label:"Today's Surgeries", value:9, trend:'On track', up:true, color:'primary', icon:'<circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/>'},
+  {label:'Available Beds', value:87, trend:'-6', up:false, color:'success', icon:'<rect x="3" y="10" width="18" height="8" rx="2"/><path d="M3 10V7a2 2 0 012-2h4v5M7 18v2M17 18v2"/>'},
+];
+const kpiGrid = document.getElementById('kpiGrid');
+kpis.forEach((k,i)=>{
+  const div = document.createElement('div'); div.className='card kpi-card';
+  div.innerHTML = `<div class="kpi-top"><div class="kpi-icon" style="background:var(--${k.color}-soft); color:var(--${k.color});"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">${k.icon}</svg></div>
+    <div class="kpi-trend ${k.up?'up':'down'}">${k.up?'▲':'▼'} ${k.trend}</div></div>
+    <div class="kpi-value" id="kpiVal${i}">0</div><div class="kpi-label">${k.label}</div>`;
+  kpiGrid.appendChild(div);
+  setTimeout(()=>animateCount(document.getElementById('kpiVal'+i), k.value), 200+i*70);
+});
+
+/* ===================== ADMISSIONS CHART ===================== */
+(function(){
+  const svg = document.getElementById('admitChart'); const W=640,H=190,pad=8;
+  const series = [ {color:'var(--primary)', vals:[38,44,42,50,48,58,55,64,60,70,68,78]},
+    {color:'var(--accent)', vals:[22,26,24,30,28,34,32,38,36,42,40,46]},
+    {color:'var(--secondary)', vals:[10,12,11,14,13,16,15,18,17,20,19,22]} ];
+  const max=110, n=series[0].vals.length, stepX=(W-pad*2)/(n-1);
+  function pathFor(vals, fill){ let d=`M ${pad} ${H-pad-(vals[0]/max)*(H-pad*2)}`; vals.forEach((v,i)=>{ if(i===0) return; d+=` L ${pad+i*stepX} ${H-pad-(v/max)*(H-pad*2)}`; });
+    if(fill){ d+=` L ${pad+(n-1)*stepX} ${H-pad} L ${pad} ${H-pad} Z`; } return d; }
+  let m=''; for(let g=0; g<4; g++){ const y=pad+g*(H-pad*2)/3; m+=`<line x1="${pad}" y1="${y}" x2="${W-pad}" y2="${y}" stroke="var(--border)" stroke-width="1"/>`; }
+  series.slice().reverse().forEach((s,idx)=>{
+    m += `<defs><linearGradient id="ag${idx}" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="${s.color}" stop-opacity="0.22"/><stop offset="100%" stop-color="${s.color}" stop-opacity="0"/></linearGradient></defs>`;
+    m += `<path d="${pathFor(s.vals,true)}" fill="url(#ag${idx})" stroke="none"/>`;
+    m += `<path d="${pathFor(s.vals,false)}" fill="none" stroke="${s.color}" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" style="stroke-dasharray:1200; stroke-dashoffset:1200; animation:drawA 1.5s cubic-bezier(.22,1,.36,1) forwards;"/>`;
+  });
+  svg.innerHTML = m + `<style>@keyframes drawA{ to{ stroke-dashoffset:0; } }</style>`;
+})();
+
+/* ===================== EMERGENCY COUNTER ===================== */
+setTimeout(()=>animateCount(document.getElementById('emergNum'), 6), 300);
+
+/* ===================== BED DONUT ===================== */
+(function(){
+  const data=[ {l:'Occupied', v:68, c:'var(--primary)'}, {l:'Available', v:21, c:'var(--success)'}, {l:'Cleaning', v:7, c:'var(--warning)'}, {l:'Maintenance', v:4, c:'var(--danger)'} ];
+  const r=44, cx=50, cy=50, circ=2*Math.PI*r; let offset=0, m=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="var(--border)" stroke-width="12"/>`;
+  data.forEach(d=>{ const len=circ*(d.v/100); m+=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${d.c}" stroke-width="12" stroke-dasharray="${len} ${circ-len}" stroke-dashoffset="${-offset}" stroke-linecap="round" transform="rotate(-90 ${cx} ${cy})"/>`; offset+=len; });
+  document.getElementById('bedDonut').innerHTML = m;
+  document.getElementById('bedLegend').innerHTML = data.map(d=>`<div class="item"><span class="l"><span class="legend-dot" style="background:${d.c}"></span>${d.l}</span><span class="v">${d.v}%</span></div>`).join('');
+})();
+
+/* ===================== PATIENTS TABLE ===================== */
+const patients = [
+  {name:'Youssef Adel', init:'YA', dept:'Cardiology', room:'B-204', status:'stable'},
+  {name:'Farida Nabil', init:'FN', dept:'Oncology', room:'C-118', status:'observation'},
+  {name:'Hesham Sabry', init:'HS', dept:'ICU', room:'ICU-3', status:'critical'},
+  {name:'Dalia Karim', init:'DK', dept:'Pediatrics', room:'A-311', status:'stable'},
+  {name:'Tarek Mostafa', init:'TM', dept:'Orthopedics', room:'B-108', status:'observation'},
+  {name:'Salma Reda', init:'SR', dept:'Neurology', room:'C-207', status:'stable'},
+];
+document.getElementById('patientTable').innerHTML = patients.map(p=>`
+  <tr><td><div class="patient-mini"><div class="avatar">${p.init}</div>${p.name}</div></td>
+  <td style="color:var(--muted)">${p.dept}</td><td class="mono">${p.room}</td>
+  <td><span class="badge ${p.status}">${p.status[0].toUpperCase()+p.status.slice(1)}</span></td></tr>`).join('');
+
+/* ===================== DOCTORS ===================== */
+const doctors = [
+  {name:'Dr. Omar Fathy', spec:'Cardiology', init:'OF', avail:'online', load:'78%'},
+  {name:'Dr. Layla Hassan', spec:'Neurology', init:'LH', avail:'busy', load:'92%'},
+  {name:'Dr. Karim Bishara', spec:'Orthopedics', init:'KB', avail:'online', load:'55%'},
+  {name:'Dr. Mona Zaki', spec:'Pediatrics', init:'MZ', avail:'online', load:'44%'},
+];
+document.getElementById('doctorList').innerHTML = doctors.map(d=>`
+  <div class="doctor-row"><div class="avatar">${d.init}<span class="avail ${d.avail}"></span></div>
+  <div><div class="dname">${d.name}</div><div class="dspec">${d.spec}</div></div>
+  <div class="dload"><b>${d.load}</b><span>load</span></div></div>`).join('');
+
+/* ===================== OPERATION ROOMS ===================== */
+const rooms = [
+  {name:'OR-1', meta:'Cardiac bypass · Dr. Fathy', color:'danger'},
+  {name:'OR-2', meta:'Appendectomy · Dr. Bishara', color:'warning'},
+  {name:'OR-3', meta:'Available', color:'success'},
+  {name:'OR-4', meta:'Sterilizing · ready in 20m', color:'accent'},
+];
+document.getElementById('roomList').innerHTML = rooms.map(r=>`
+  <div class="room-row"><div class="room-icon" style="background:var(--${r.color}-soft); color:var(--${r.color});"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/></svg></div>
+  <div class="info"><div class="rn">${r.name}</div><div class="rm">${r.meta}</div></div></div>`).join('');
+
+/* ===================== DEPARTMENT BARS ===================== */
+const depts = [ {n:'Cardiology', p:91}, {n:'Emergency', p:84}, {n:'Oncology', p:73}, {n:'Pediatrics', p:66}, {n:'Orthopedics', p:52} ];
+document.getElementById('deptBars').innerHTML = depts.map(d=>`
+  <div class="dept-row"><div class="dept-top"><span style="color:var(--muted)">${d.n}</span><span class="p">${d.p}%</span></div>
+  <div class="dept-track"><div class="dept-fill" data-w="${d.p}"></div></div></div>`).join('');
+setTimeout(()=>{ document.querySelectorAll('.dept-fill').forEach(el=>{ el.style.width = el.dataset.w+'%'; }); }, 300);
+
+/* ===================== AGE DISTRIBUTION (bar chart) ===================== */
+(function(){
+  const svg = document.getElementById('ageChart');
+  const data = [ {l:'0-17', v:14}, {l:'18-34', v:26}, {l:'35-50', v:31}, {l:'51-65', v:20}, {l:'65+', v:9} ];
+  const W=260,H=120,pad=6,barW=32,gap=(W-pad*2-barW*data.length)/(data.length-1);
+  let m=''; data.forEach((d,i)=>{ const h=(d.v/35)*(H-30); const x=pad+i*(barW+gap); const y=H-24-h;
+    m+=`<rect x="${x}" y="${H-24}" width="${barW}" height="${h}" rx="6" fill="var(--secondary)" opacity="0.85" style="transform-origin:${x+barW/2}px ${H-24}px; transform:scaleY(0); animation:growBar .8s cubic-bezier(.22,1,.36,1) forwards; animation-delay:${i*0.08}s;"/>`;
+    m+=`<text x="${x+barW/2}" y="${H-8}" text-anchor="middle" font-size="9" fill="var(--faint)" font-family="Inter">${d.l}</text>`;
+    m+=`<text x="${x+barW/2}" y="${y-6}" text-anchor="middle" font-size="10" fill="var(--text)" font-weight="700" font-family="Manrope">${d.v}%</text>`; });
+  svg.innerHTML = m + `<style>@keyframes growBar{ to{ transform:scaleY(1); } }</style>`;
+})();
+
+/* ===================== REVENUE SPARK ===================== */
+(function(){
+  const svg = document.getElementById('revSpark'); const vals=[120,135,128,148,140,160,155,172];
+  const W=220,H=80,pad=4,max=190,stepX=(W-pad*2)/(vals.length-1);
+  let d=`M ${pad} ${H-pad-(vals[0]/max)*(H-pad*2)}`; vals.forEach((v,i)=>{ if(i===0) return; d+=` L ${pad+i*stepX} ${H-pad-(v/max)*(H-pad*2)}`; });
+  const fillD = d + ` L ${pad+(vals.length-1)*stepX} ${H-pad} L ${pad} ${H-pad} Z`;
+  svg.innerHTML = `<defs><linearGradient id="rspark" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--primary)" stop-opacity="0.22"/><stop offset="100%" stop-color="var(--primary)" stop-opacity="0"/></linearGradient></defs>
+    <path d="${fillD}" fill="url(#rspark)" stroke="none"/><path d="${d}" fill="none" stroke="var(--primary)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`;
+})();
+
+/* ===================== TIMELINE ===================== */
+const activity = [
+  {b:'Dr. Fathy', t:'completed a cardiac bypass surgery in OR-1', time:'12 min ago'},
+  {b:'System', t:'auto-generated the daily admissions report', time:'34 min ago'},
+  {b:'ER Team', t:'stabilized 2 critical trauma cases', time:'52 min ago'},
+  {b:'Dr. Zaki', t:'updated discharge plan for Dalia Karim', time:'1 hr ago'},
+];
+document.getElementById('activityTimeline').innerHTML = activity.map(a=>`
+  <div class="tl-item"><div class="tl-dot"></div><div class="tl-body"><p><b>${a.b}</b> ${a.t}</p><div class="tl-time">${a.time}</div></div></div>`).join('');
+
+/* ===================== INVOICES ===================== */
+const invoices = [
+  {id:'INV-2291', amt:'$4,820', status:'stable', label:'Paid'},
+  {id:'INV-2292', amt:'$1,150', status:'observation', label:'Pending'},
+  {id:'INV-2293', amt:'$9,640', status:'stable', label:'Paid'},
+  {id:'INV-2294', amt:'$620', status:'critical', label:'Overdue'},
+];
+document.getElementById('invoiceTable').innerHTML = invoices.map(i=>`
+  <tr><td class="mono">${i.id}</td><td class="mono">${i.amt}</td><td><span class="badge ${i.status}">${i.label}</span></td></tr>`).join('');
+
+/* ===================== STAFF ===================== */
+const staff = [
+  {name:'Nadia Farouk', role:'Head Nurse · ICU', init:'NF'},
+  {name:'Ahmed Selim', role:'Lab Technician', init:'AS'},
+  {name:'Mariam Adly', role:'Radiology Tech', init:'MA'},
+];
+document.getElementById('staffList').innerHTML = staff.map(s=>`
+  <div class="staff-row"><div class="avatar" style="width:32px; height:32px; font-size:10.5px;">${s.init}</div>
+  <div><div class="dname">${s.name}</div><div class="dspec">${s.role}</div></div></div>`).join('');
+</script>
+</body>
+</html>

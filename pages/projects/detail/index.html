@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title id="detail-page-title">Project — NEXORA</title>
+  <meta name="description" content="Project details, gallery, tech stack, and components used." />
+
+  <link rel="stylesheet" href="../../../core/css/tokens.css" />
+  <link rel="stylesheet" href="../../../core/css/base.css" />
+  <link rel="stylesheet" href="../../../core/css/typography.css" />
+  <link rel="stylesheet" href="../../../core/css/layout.css" />
+  <link rel="stylesheet" href="../../../core/css/utilities.css" />
+  <link rel="stylesheet" href="../../../core/css/animations.css" />
+  <link rel="stylesheet" href="../../../core/css/shell.css" />
+
+  <link rel="stylesheet" href="../../../components/navigation/navbar/navbar.css" />
+  <link rel="stylesheet" href="../../../components/navigation/footer/footer.css" />
+  <link rel="stylesheet" href="../../../components/navigation/breadcrumbs/breadcrumbs.css" />
+  <link rel="stylesheet" href="../../../components/ui/button/button.css" />
+  <link rel="stylesheet" href="../../../components/ui/badge/badge.css" />
+  <link rel="stylesheet" href="../../../components/ui/tag/tag.css" />
+  <link rel="stylesheet" href="../../../components/ui/tabs/tabs.css" />
+  <link rel="stylesheet" href="../../../components/ui/timeline/timeline.css" />
+  <link rel="stylesheet" href="../../../components/ui/command-palette/command-palette.css" />
+  <link rel="stylesheet" href="../../../components/forms/search-box/search-box.css" />
+  <link rel="stylesheet" href="../../../components/cards/card/card.css" />
+  <link rel="stylesheet" href="../../../components/cards/project-card/project-card.css" />
+  <link rel="stylesheet" href="../../../components/cards/preview-card/preview-card.css" />
+  <link rel="stylesheet" href="../../../components/media/gallery-grid/gallery-grid.css" />
+  <link rel="stylesheet" href="../../../components/media/image-preview/image-preview.css" />
+  <link rel="stylesheet" href="../../../components/modals/modal/modal.css" />
+
+  <link rel="stylesheet" href="detail.css" />
+</head>
+<body>
+  <div class="nx-page-loader" aria-hidden="true"><span class="nx-page-loader__mark">NEXORA</span></div>
+  <div class="nx-scroll-progress" aria-hidden="true"></div>
+  <a class="nx-skip-link" href="#nx-main">Skip to content</a>
+
+  <header class="nx-navbar nx-navbar--glass">
+    <div class="nx-navbar__inner nx-container">
+      <a class="nx-navbar__brand" href="../../../index.html">NEXORA</a>
+      <nav class="nx-navbar__links" aria-label="Primary">
+        <a class="nx-navbar__link" href="../../../index.html">Home</a>
+        <a class="nx-navbar__link nx-navbar__link--active" href="../index.html" aria-current="page">Projects</a>
+        <a class="nx-navbar__link" href="../../industries/index.html">Industries</a>
+        <a class="nx-navbar__link" href="../../design-systems/index.html">Design Systems</a>
+        <a class="nx-navbar__link" href="../../component-explorer/index.html">Components</a>
+      </nav>
+      <div class="nx-navbar__actions">
+        <button class="nx-btn nx-btn--secondary nx-btn--sm nx-ripple-host" type="button" data-nx-command-trigger>Search <kbd class="nx-search-box__shortcut">⌘K</kbd></button>
+        <button class="nx-navbar__menu-toggle" type="button" aria-expanded="false" aria-controls="nx-navbar-mobile" aria-label="Open menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <nav class="nx-navbar__mobile" id="nx-navbar-mobile" aria-label="Primary mobile" hidden>
+      <a class="nx-navbar__link" href="../../../index.html">Home</a>
+      <a class="nx-navbar__link" href="../index.html">Projects</a>
+      <a class="nx-navbar__link" href="../../industries/index.html">Industries</a>
+      <a class="nx-navbar__link" href="../../design-systems/index.html">Design Systems</a>
+      <a class="nx-navbar__link" href="../../component-explorer/index.html">Components</a>
+    </nav>
+  </header>
+
+  <main id="nx-main" class="nx-page-transition" role="main">
+    <div class="nx-container" style="padding-top: var(--nx-space-6);">
+      <nav class="nx-breadcrumbs" aria-label="Breadcrumb" id="detail-breadcrumbs">
+        <ol class="nx-breadcrumbs__list">
+          <li><a class="nx-breadcrumbs__link" href="../../../index.html">Home</a></li>
+          <li><span class="nx-breadcrumbs__sep" aria-hidden="true">/</span><a class="nx-breadcrumbs__link" href="../index.html">Projects</a></li>
+          <li><span class="nx-breadcrumbs__sep" aria-hidden="true">/</span><span class="nx-breadcrumbs__current" aria-current="page" id="detail-breadcrumb-current">Loading…</span></li>
+        </ol>
+      </nav>
+    </div>
+
+    <!-- HERO -->
+    <section class="nx-container nx-detail-hero" id="detail-hero">
+      <div class="nx-detail-hero__meta">
+        <p class="nx-caption nx-text-accent" id="detail-industry-service">—</p>
+        <h1 class="nx-h1" id="detail-title">Loading…</h1>
+        <p class="nx-body-lg nx-text-secondary" id="detail-tagline"></p>
+        <div class="nx-row nx-gap-3" style="margin-top: var(--nx-space-5);">
+          <span class="nx-badge" id="detail-status-badge"></span>
+          <span class="nx-badge nx-badge--neutral" id="detail-version-badge"></span>
+        </div>
+        <div class="nx-tag-group" id="detail-tags" style="margin-top: var(--nx-space-4);"></div>
+        <div class="nx-row nx-gap-3" style="margin-top: var(--nx-space-6);">
+          <button class="nx-btn nx-btn--primary nx-btn--lg nx-ripple-host" type="button" id="detail-open-demo">Open Demo</button>
+          <button class="nx-btn nx-btn--secondary nx-btn--lg nx-ripple-host" type="button" id="detail-quick-preview" data-nx-modal-open="quick-preview-modal">Quick Preview</button>
+          <a class="nx-btn nx-btn--ghost nx-btn--lg nx-ripple-host" href="#detail-gallery">View Gallery</a>
+        </div>
+      </div>
+      <div class="nx-card nx-card--flush nx-detail-hero__cover">
+        <img id="detail-cover-image" alt="" loading="lazy" onerror="window.NEXORA.modules.shell.imageFallback(this, '../../../')" />
+      </div>
+    </section>
+
+    <div class="nx-container nx-detail-layout">
+      <div class="nx-detail-layout__main">
+
+        <!-- GALLERY -->
+        <section id="detail-gallery" class="nx-detail-section">
+          <h2 class="nx-h3">Gallery</h2>
+          <div class="nx-gallery-grid" id="detail-gallery-grid" role="list" aria-label="Project gallery"></div>
+        </section>
+
+        <!-- OVERVIEW / DESCRIPTION -->
+        <section class="nx-detail-section">
+          <h2 class="nx-h3">Overview</h2>
+          <p class="nx-body-lg nx-text-secondary" id="detail-description"></p>
+        </section>
+
+        <!-- FEATURES -->
+        <section class="nx-detail-section">
+          <h2 class="nx-h3">Features</h2>
+          <ul class="nx-detail-feature-list" id="detail-features"></ul>
+        </section>
+
+        <!-- TECH STACK -->
+        <section class="nx-detail-section">
+          <h2 class="nx-h3">Technology Stack</h2>
+          <div class="nx-tag-group" id="detail-tech-stack"></div>
+        </section>
+
+        <!-- COMPONENTS USED -->
+        <section class="nx-detail-section">
+          <h2 class="nx-h3">Components Used</h2>
+          <div class="nx-tag-group" id="detail-components-used"></div>
+        </section>
+
+        <!-- PROJECT TIMELINE -->
+        <section class="nx-detail-section">
+          <h2 class="nx-h3">Project Timeline</h2>
+          <ol class="nx-timeline" id="detail-timeline"></ol>
+        </section>
+
+        <!-- RELATED PROJECTS -->
+        <section class="nx-detail-section">
+          <h2 class="nx-h3">Related Projects</h2>
+          <div class="nx-grid nx-grid--3" id="detail-related-projects"></div>
+        </section>
+      </div>
+
+      <!-- STICKY SIDEBAR -->
+      <aside class="nx-detail-sidebar">
+        <div class="nx-card nx-detail-sidebar__card">
+          <dl class="nx-detail-facts">
+            <div><dt class="nx-caption">Industry</dt><dd class="nx-body" id="detail-fact-industry">—</dd></div>
+            <div><dt class="nx-caption">Service</dt><dd class="nx-body" id="detail-fact-service">—</dd></div>
+            <div><dt class="nx-caption">Design System</dt><dd class="nx-body" id="detail-fact-design-system">—</dd></div>
+            <div><dt class="nx-caption">Tier</dt><dd class="nx-body" id="detail-fact-tier">—</dd></div>
+            <div><dt class="nx-caption">Difficulty</dt><dd class="nx-body" id="detail-fact-difficulty">—</dd></div>
+            <div><dt class="nx-caption">Version</dt><dd class="nx-body" id="detail-fact-version">—</dd></div>
+            <div><dt class="nx-caption">Status</dt><dd class="nx-body" id="detail-fact-status">—</dd></div>
+            <div><dt class="nx-caption">Estimated Price</dt><dd class="nx-body" id="detail-fact-price">—</dd></div>
+            <div><dt class="nx-caption">Last Updated</dt><dd class="nx-body" id="detail-fact-updated">—</dd></div>
+          </dl>
+          <button class="nx-btn nx-btn--primary nx-btn--md nx-w-full nx-ripple-host" type="button" id="detail-sidebar-open-demo" style="margin-top: var(--nx-space-5);">Open Demo</button>
+          <button class="nx-btn nx-btn--secondary nx-btn--md nx-w-full nx-ripple-host" type="button" data-nx-modal-open="quick-preview-modal" style="margin-top: var(--nx-space-3);">Quick Preview</button>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- Quick Preview modal — renders the project's preview.html in an
+       iframe, without modifying the project in any way. -->
+  <div class="nx-modal-overlay" id="quick-preview-modal" data-nx-modal role="dialog" aria-modal="true" aria-labelledby="quick-preview-title" hidden>
+    <div class="nx-modal nx-quick-preview-modal">
+      <div class="nx-modal__header">
+        <h2 class="nx-h4" id="quick-preview-title">Quick Preview</h2>
+        <button class="nx-modal__close" type="button" aria-label="Close dialog" data-nx-modal-close>×</button>
+      </div>
+      <div class="nx-modal__body nx-quick-preview-modal__body">
+        <iframe id="quick-preview-frame" class="nx-quick-preview-frame" title="Project preview" loading="lazy"></iframe>
+      </div>
+      <div class="nx-modal__footer">
+        <button class="nx-btn nx-btn--ghost nx-btn--md" type="button" data-nx-modal-close>Close</button>
+        <a class="nx-btn nx-btn--primary nx-btn--md nx-ripple-host" id="quick-preview-new-tab" href="#" target="_blank" rel="noopener">Open in New Tab</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="nx-footer">
+    <div class="nx-container nx-footer__inner">
+      <div class="nx-footer__brand"><p class="nx-h4">NEXORA</p><p class="nx-small">Enterprise Demo Library — built to scale.</p></div>
+      <nav class="nx-footer__col" aria-label="Library"><p class="nx-caption">Library</p><a href="../index.html">Projects</a><a href="../../industries/index.html">Industries</a></nav>
+    </div>
+    <div class="nx-container nx-footer__bottom"><p class="nx-small">© 2026 NEXORA. All rights reserved.</p></div>
+  </footer>
+
+  <div class="nx-command-overlay" data-nx-command-palette role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+    <div class="nx-command">
+      <div class="nx-command__input-wrap">
+        <span aria-hidden="true">⌕</span>
+        <input class="nx-command__input" type="text" placeholder="Search…" aria-label="Search" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="nx-command-list" />
+      </div>
+      <ul class="nx-command__list" id="nx-command-list" role="listbox">
+        <!-- Populated at runtime by command-palette.js via the shared Search engine -->
+      </ul>
+    </div>
+  </div>
+
+  <script src="../../../core/js/core.js"></script>
+  <script src="../../../core/js/storage.js"></script>
+  <script src="../../../core/js/helpers.js"></script>
+  <script src="../../../core/js/theme.js"></script>
+  <script src="../../../data/fallback-data.js"></script>
+  <script src="../../../core/js/manifest.js"></script>
+  <script src="../../../core/js/search.js"></script>
+  <script src="../../../core/js/filters.js"></script>
+  <script src="../../../core/js/sort.js"></script>
+  <script src="../../../core/js/pagination.js"></script>
+  <script src="../../../core/js/favorites.js"></script>
+  <script src="../../../core/js/animations.js"></script>
+  <script src="../../../core/js/shell.js"></script>
+  <script src="../../../components/navigation/navbar/navbar.js"></script>
+  <script src="../../../components/ui/command-palette/command-palette.js"></script>
+  <script src="../../../components/modals/modal/modal.js"></script>
+  <script src="detail.js"></script>
+</body>
+</html>

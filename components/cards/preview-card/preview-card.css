@@ -1,0 +1,44 @@
+/* ============================================================
+   NEXORA — Preview Card
+   Large cover image with a centered "Live preview" CTA that
+   appears on hover — used on a project's own detail page,
+   distinct from Project Card (which is the library-grid tile).
+   Extends .nx-card (--flush).
+   ============================================================ */
+
+.nx-preview-card__frame {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: var(--nx-bg-elevated-2);
+}
+.nx-preview-card__frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.nx-preview-card__cta {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.95);
+  opacity: 0;
+  transition: var(--nx-transition-base);
+}
+
+.nx-preview-card:hover .nx-preview-card__cta,
+.nx-preview-card__cta:focus-visible {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+
+.nx-preview-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.nx-preview-card__caption {
+  padding: var(--nx-space-4) var(--nx-space-5);
+}

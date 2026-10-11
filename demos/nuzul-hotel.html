@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نُزل — نظام إدارة حجوزات الفنادق</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --navy:#0E2233; --navy-dark:#081722; --navy-soft:#E9EEF2;
+  --gold:#B08D57; --gold-dark:#8A6C3F; --gold-soft:#F4ECDD;
+  --bg:#FBF9F5; --surface:#FFFFFF; --surface-2:#F6F3EC;
+  --text:#16242E; --text-2:#3E4C58; --muted:#8090A0; --faint:#D6DEE4;
+  --border:#E6E1D4; --border-strong:#D8D0BC;
+  --danger:#9C3B2E; --danger-soft:#F7E7E3;
+  --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:22px;
+  --shadow-sm:0 1px 3px rgba(14,34,51,0.08);
+  --shadow-md:0 10px 26px rgba(14,34,51,0.10);
+  --shadow-lg:0 26px 56px rgba(14,34,51,0.20);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Amiri',serif;font-weight:700;margin:0;color:var(--navy);}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 264px;min-height:100vh;}
+.sidebar{background:var(--navy-dark);color:#fff;padding:26px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;background-image:linear-gradient(180deg,var(--navy-dark),#0A1C2A);}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:8px;padding:0 4px;}
+.brand-mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--gold),#D4B87C);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;}
+.brand-name{font-family:'Amiri';font-size:23px;color:#fff;}
+.brand-sub{font-size:10.5px;color:rgba(255,255,255,0.45);}
+.gold-rule{height:1px;background:linear-gradient(90deg,transparent,var(--gold),transparent);margin:16px 0 14px;}
+.nav-sec{font-size:10px;color:rgba(255,255,255,0.32);text-transform:uppercase;letter-spacing:.08em;margin:14px 10px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:11px;color:rgba(255,255,255,0.7);font-weight:700;font-size:13.5px;margin-bottom:3px;transition:all .15s;}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:#fff;}
+.nav-item.active{background:linear-gradient(90deg,var(--gold),#9B7C48);color:#fff;box-shadow:var(--shadow-sm);}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:var(--danger);color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:16px;border-top:1px solid rgba(255,255,255,0.1);}
+.foot-card{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;background:rgba(255,255,255,0.06);}
+.foot-card .avatar{width:38px;height:38px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#8A6C3F);display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:13px;}
+.foot-card .name{font-size:12.5px;font-weight:800;color:#fff;} .foot-card .role{font-size:10.5px;color:rgba(255,255,255,0.5);}
+
+.topbar{height:76px;display:flex;align-items:center;justify-content:space-between;padding:0 30px;position:sticky;top:0;background:rgba(251,249,245,0.88);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:22px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;font-family:'Tajawal';}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:42px;height:42px;border-radius:12px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:8px;left:9px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:28px 30px;}
+.view{display:none;} .view.active{display:block;animation:fade .35s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:22px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:29px;} .view-head .sub{color:var(--muted);font-size:13px;margin-top:5px;font-family:'Tajawal';}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:22px;}
+.card-title{font-weight:800;font-size:15.5px;font-family:'Tajawal';color:var(--navy);}
+.grid{display:grid;gap:18px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:12px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:linear-gradient(90deg,var(--navy),var(--navy-dark));color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);}
+.btn-gold{background:linear-gradient(90deg,var(--gold),#9B7C48);color:#fff;}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--navy-soft);}
+.btn-sm{padding:7px 13px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 12px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge-vacant{background:var(--navy-soft);color:var(--navy);}
+.badge-occupied{background:var(--gold-soft);color:var(--gold-dark);}
+.badge-clean{background:#E4F2E8;color:#2F7A4C;}
+.badge-dirty{background:var(--danger-soft);color:var(--danger);}
+
+.kpi{padding:20px 22px;position:relative;overflow:hidden;}
+.kpi .lbl{font-size:12px;color:var(--muted);font-weight:700;}
+.kpi .val{font-family:'Amiri';font-size:32px;color:var(--navy);margin-top:6px;}
+.kpi .delta{font-size:11.5px;font-weight:800;margin-top:6px;display:inline-flex;align-items:center;gap:4px;}
+.delta.up{color:#2F7A4C;} .delta.down{color:var(--danger);}
+.kpi .ic-corner{position:absolute;top:16px;left:16px;width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:17px;background:var(--gold-soft);}
+
+/* Room key-card */
+.room-card{border-radius:var(--r-xl);overflow:hidden;border:1px solid var(--border);background:#fff;box-shadow:var(--shadow-sm);position:relative;transition:transform .2s var(--ease);}
+.room-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+.room-card::before{content:'';position:absolute;top:0;right:0;bottom:0;width:5px;background:linear-gradient(180deg,var(--gold),var(--navy));}
+.room-top{padding:16px 18px;display:flex;justify-content:space-between;align-items:flex-start;}
+.room-num{font-family:'Amiri';font-size:24px;color:var(--navy);}
+.room-type{font-size:11px;color:var(--muted);margin-top:2px;}
+.room-body{padding:0 18px 16px;display:flex;justify-content:space-between;align-items:center;font-size:11.5px;color:var(--text-2);}
+
+table{width:100%;border-collapse:collapse;}
+th{text-align:right;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:800;padding:10px 14px;border-bottom:1px solid var(--border);}
+td{padding:13px 14px;font-size:13px;border-bottom:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+tr.row-hover:hover{background:var(--surface-2);}
+.avatar-sm{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--navy),var(--navy-dark));color:#fff;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;}
+
+/* mini calendar strip for check in/out */
+.strip{display:flex;gap:8px;overflow-x:auto;padding-bottom:6px;}
+.strip .d{flex:0 0 auto;width:64px;text-align:center;padding:10px 4px;border-radius:12px;background:var(--surface-2);border:1px solid var(--border);}
+.strip .d.today{background:var(--navy);color:#fff;border-color:var(--navy);}
+.strip .d .n{font-family:'Amiri';font-size:18px;} .strip .d .lbl{font-size:9.5px;margin-top:2px;}
+
+.request-row{display:flex;gap:12px;padding:12px 0;border-bottom:1px solid var(--border);align-items:flex-start;}
+.req-ic{width:36px;height:36px;border-radius:10px;background:var(--gold-soft);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:10px;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%;}
+.bar{width:100%;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,var(--gold),var(--navy));transition:height 1s var(--ease);}
+.bar-col .lbl{font-size:10px;color:var(--muted);font-weight:700;}
+
+.overlay{position:fixed;inset:0;background:rgba(8,23,34,0.55);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(2px);}
+.overlay.active{display:flex;}
+.modal{background:#fff;border-radius:var(--r-xl);width:440px;max-width:92vw;box-shadow:var(--shadow-lg);overflow:hidden;animation:pop .25s var(--ease);}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-head{padding:20px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.modal-body{padding:20px 22px;display:flex;flex-direction:column;gap:14px;}
+.field label{font-size:12px;font-weight:800;color:var(--text-2);margin-bottom:6px;display:block;}
+.field input,.field select{width:100%;padding:10px 12px;border:1px solid var(--border-strong);border-radius:10px;font-family:inherit;font-size:13px;background:var(--surface-2);}
+.modal-foot{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
+.close-x{width:30px;height:30px;border-radius:9px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;}
+
+.toast-wrap{position:fixed;bottom:24px;left:24px;z-index:200;display:flex;flex-direction:column;gap:10px;}
+.toast{background:var(--navy-dark);color:#fff;padding:13px 18px;border-radius:12px;font-size:12.5px;font-weight:700;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;animation:slidein .3s var(--ease);}
+@keyframes slidein{from{transform:translateX(-30px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+.demo-tag{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--navy-dark);color:rgba(255,255,255,0.7);font-size:10.5px;padding:6px 14px;border-radius:99px;z-index:150;pointer-events:none;}
+
+@media(max-width:1000px){.shell{grid-template-columns:1fr;}.sidebar{display:none;}.g4,.g3,.g2{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="main">
+    <div class="topbar">
+      <div><h2 id="pageTitle">لوحة التحكم</h2><div class="sub" id="pageSub">نظرة عامة على أداء الفندق اليوم</div></div>
+      <div class="top-actions">
+        <div class="icon-btn">🔔<span class="icon-dot"></span></div>
+        <button class="btn btn-primary btn-sm" onclick="openModal()">+ حجز جديد</button>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="view active" id="view-dashboard">
+        <div class="view-head"><div><h1>مرحبًا بعودتك، ليلى</h1><div class="sub">إشغال اليوم 82% — 6 وصول متوقع، 4 مغادرة</div></div></div>
+        <div class="grid g4" style="margin-bottom:18px;">
+          <div class="card kpi"><div class="ic-corner">🛏️</div><div class="lbl">نسبة الإشغال</div><div class="val">82%</div><div class="delta up">▲ 6%</div></div>
+          <div class="card kpi"><div class="ic-corner">🧳</div><div class="lbl">وصول اليوم</div><div class="val">6</div><div class="delta up">حسب الجدول</div></div>
+          <div class="card kpi"><div class="ic-corner">🚪</div><div class="lbl">مغادرة اليوم</div><div class="val">4</div><div class="delta up">حسب الجدول</div></div>
+          <div class="card kpi"><div class="ic-corner">💰</div><div class="lbl">إيراد الليلة</div><div class="val">86.4 ألف</div><div class="delta up">▲ 11%</div></div>
+        </div>
+        <div class="grid g3">
+          <div class="card card-pad" style="grid-column:span 2;">
+            <div class="flex justify-between items-center" style="margin-bottom:16px;"><div class="card-title">معدل الإشغال — آخر 7 أيام</div><div class="badge badge-vacant">متوسط 78%</div></div>
+            <div class="bars" id="occBars"></div>
+          </div>
+          <div class="card card-pad">
+            <div class="card-title" style="margin-bottom:14px;">طلبات الضيوف الجديدة</div>
+            <div id="dashRequests"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="view-rooms">
+        <div class="view-head"><div><h1>الغرف</h1><div class="sub">64 غرفة إجمالًا · 12 شاغرة الآن</div></div>
+          <button class="btn btn-gold" onclick="openModal()">+ حجز غرفة</button></div>
+        <div class="grid g4" id="roomsGrid"></div>
+      </div>
+
+      <div class="view" id="view-reservations">
+        <div class="view-head"><div><h1>الحجوزات</h1><div class="sub">جميع حجوزات هذا الأسبوع</div></div></div>
+        <div class="strip" id="dateStrip" style="margin-bottom:16px;"></div>
+        <div class="card">
+          <table><thead><tr><th>الضيف</th><th>الغرفة</th><th>الوصول</th><th>المغادرة</th><th>الحالة</th><th></th></tr></thead>
+          <tbody id="resBody"></tbody></table>
+        </div>
+      </div>
+
+      <div class="view" id="view-checkinout">
+        <div class="view-head"><div><h1>تسجيل الوصول والمغادرة</h1><div class="sub">إدارة حركة الضيوف اليوم</div></div></div>
+        <div class="grid g2">
+          <div class="card card-pad">
+            <div class="card-title" style="margin-bottom:14px;">قائمة الوصول</div>
+            <div id="arrivalsList"></div>
+          </div>
+          <div class="card card-pad">
+            <div class="card-title" style="margin-bottom:14px;">قائمة المغادرة</div>
+            <div id="departuresList"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="view-housekeeping">
+        <div class="view-head"><div><h1>خدمة الغرف والتدبير المنزلي</h1><div class="sub">حالة تنظيف كل غرفة</div></div></div>
+        <div class="grid g4" id="housekeepingGrid"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="brand"><div class="brand-mark">🏨</div><div><div class="brand-name">نُزل</div><div class="brand-sub">نظام إدارة الحجوزات</div></div></div>
+    <div class="gold-rule"></div>
+    <div class="nav-sec">الرئيسية</div>
+    <div class="nav-item active" data-view="dashboard"><span class="ic">📊</span> لوحة التحكم</div>
+    <div class="nav-item" data-view="rooms"><span class="ic">🛏️</span> الغرف</div>
+    <div class="nav-sec">الحجوزات</div>
+    <div class="nav-item" data-view="reservations"><span class="ic">📖</span> الحجوزات</div>
+    <div class="nav-item" data-view="checkinout"><span class="ic">🧳</span> الوصول والمغادرة</div>
+    <div class="nav-sec">التشغيل</div>
+    <div class="nav-item" data-view="housekeeping"><span class="ic">🧹</span> التدبير المنزلي <span class="nav-badge">5</span></div>
+    <div class="sidebar-foot">
+      <div class="foot-card"><div class="avatar">لي</div><div><div class="name">ليلى منصور</div><div class="role">مديرة الاستقبال</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-head"><h3 style="font-family:'Tajawal';font-size:17px;font-weight:800;">حجز جديد</h3><div class="close-x" onclick="closeModal()">✕</div></div>
+    <div class="modal-body">
+      <div class="field"><label>اسم الضيف</label><input placeholder="عبد الرحمن فتحي"></div>
+      <div class="field"><label>نوع الغرفة</label><select><option>غرفة ديلوكس</option><option>جناح جونيور</option><option>جناح رئاسي</option></select></div>
+      <div class="field"><label>تاريخ الوصول</label><input type="text" placeholder="20 يوليو 2026"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" onclick="closeModal()">إلغاء</button><button class="btn btn-primary" onclick="addBooking()">تأكيد الحجز</button></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="demo-tag">🎨 عرض تصميم تفاعلي — بيانات وهمية بالكامل، بدون نظام حقيقي</div>
+
+<script>
+const rooms = [
+  ['201','ديلوكس مطل على البحر','occupied','clean'],['202','ديلوكس','vacant','clean'],
+  ['305','جناح جونيور','occupied','dirty'],['306','ديلوكس','vacant','clean'],
+  ['401','جناح رئاسي','occupied','clean'],['402','ديلوكس مطل على البحر','vacant','dirty'],
+  ['110','ديلوكس','occupied','clean'],['112','جناح جونيور','vacant','clean'],
+];
+const roomStatus={occupied:['مشغولة','badge-occupied'],vacant:['شاغرة','badge-vacant']};
+const cleanStatus={clean:['نظيفة','badge-clean'],dirty:['تحتاج تنظيف','badge-dirty']};
+
+function renderRooms(){
+  document.getElementById('roomsGrid').innerHTML = rooms.map(r=>{
+    const [txt,cls]=roomStatus[r[2]];
+    return `<div class="room-card"><div class="room-top"><div><div class="room-num">${r[0]}</div><div class="room-type">${r[1]}</div></div><span class="badge ${cls}">${txt}</span></div><div class="room-body"><span>🌙 3 ليالٍ</span><span class="badge ${cleanStatus[r[3]][1]}">${cleanStatus[r[3]][0]}</span></div></div>`;
+  }).join('');
+}
+
+function renderHousekeeping(){
+  document.getElementById('housekeepingGrid').innerHTML = rooms.map(r=>{
+    const [ctxt,ccls]=cleanStatus[r[3]];
+    return `<div class="room-card"><div class="room-top"><div><div class="room-num">${r[0]}</div><div class="room-type">${r[1]}</div></div><span class="badge ${ccls}">${ctxt}</span></div><div class="room-body"><span>${r[3]==='dirty'?'⏳ في الانتظار':'✅ جاهزة'}</span><button class="btn btn-outline btn-sm">${r[3]==='dirty'?'بدء التنظيف':'تفاصيل'}</button></div></div>`;
+  }).join('');
+}
+
+function renderBars(){
+  const vals=[70,74,68,82,88,79,82];
+  const days=['سبت','أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة'];
+  const el=document.getElementById('occBars');
+  el.innerHTML = vals.map((v,i)=>`<div class="bar-col"><div class="bar" style="height:0%" data-h="${v}%"></div><div class="lbl">${days[i]}</div></div>`).join('');
+  setTimeout(()=>{document.querySelectorAll('.bar').forEach(b=>b.style.height=b.dataset.h);},100);
+}
+
+function renderDashRequests(){
+  const reqs=[['🧴','غرفة 305','طلب أدوات نظافة إضافية'],['🍽️','غرفة 201','خدمة الغرف — إفطار 8ص'],['🛎️','جناح رئاسي','طلب سيارة إلى المطار']];
+  document.getElementById('dashRequests').innerHTML = reqs.map(r=>`<div class="request-row"><div class="req-ic">${r[0]}</div><div><div style="font-weight:800;font-size:12.5px;">${r[1]}</div><div class="muted" style="font-size:11px;">${r[2]}</div></div></div>`).join('');
+}
+
+function renderStrip(){
+  const days=[['ج','12'],['س','13'],['أ','14'],['ن','15'],['ث','16'],['ر','17'],['خ','18']];
+  document.getElementById('dateStrip').innerHTML = days.map((d,i)=>`<div class="d ${i===4?'today':''}"><div class="n">${d[1]}</div><div class="lbl">${d[0]}</div></div>`).join('');
+}
+
+const reservations = [
+  ['عبد الرحمن فتحي','305 — جناح جونيور','16 يوليو','19 يوليو','occupied'],
+  ['منى الشريف','201 — ديلوكس بحري','17 يوليو','20 يوليو','occupied'],
+  ['كريم الديب','402 — ديلوكس بحري','18 يوليو','21 يوليو','vacant'],
+  ['هاجر توفيق','110 — ديلوكس','15 يوليو','18 يوليو','occupied'],
+];
+function renderReservations(){
+  document.getElementById('resBody').innerHTML = reservations.map(r=>{
+    const [txt,cls]=roomStatus[r[4]];
+    return `<tr class="row-hover"><td style="font-weight:800;">${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td><td><span class="badge ${cls}">${r[4]==='occupied'?'مؤكد':'قادم'}</span></td><td><button class="btn btn-outline btn-sm">تفاصيل</button></td></tr>`;
+  }).join('');
+}
+
+function renderArrDep(){
+  const arrivals=[['كريم الديب','402 — ديلوكس بحري','2:00 م'],['سلمى عادل','112 — جناح جونيور','4:30 م']];
+  const departures=[['هاجر توفيق','110 — ديلوكس','12:00 م'],['وليد سمير','306 — ديلوكس','11:00 ص']];
+  document.getElementById('arrivalsList').innerHTML = arrivals.map(a=>`<div class="member-row request-row"><div class="avatar-sm">${a[0][0]}</div><div><div style="font-weight:800;font-size:12.5px;">${a[0]}</div><div class="muted" style="font-size:11px;">${a[1]} · ${a[2]}</div></div></div>`).join('');
+  document.getElementById('departuresList').innerHTML = departures.map(a=>`<div class="member-row request-row"><div class="avatar-sm">${a[0][0]}</div><div><div style="font-weight:800;font-size:12.5px;">${a[0]}</div><div class="muted" style="font-size:11px;">${a[1]} · ${a[2]}</div></div></div>`).join('');
+}
+
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+item.dataset.view).classList.add('active');
+    const titles={dashboard:['لوحة التحكم','نظرة عامة على أداء الفندق اليوم'],rooms:['الغرف','حالة كل غرفة في الفندق'],reservations:['الحجوزات','جميع حجوزات هذا الأسبوع'],checkinout:['تسجيل الوصول والمغادرة','إدارة حركة الضيوف اليوم'],housekeeping:['خدمة الغرف والتدبير المنزلي','حالة تنظيف كل غرفة']};
+    document.getElementById('pageTitle').textContent = titles[item.dataset.view][0];
+    document.getElementById('pageSub').textContent = titles[item.dataset.view][1];
+  });
+});
+
+function openModal(){document.getElementById('overlay').classList.add('active');}
+function closeModal(){document.getElementById('overlay').classList.remove('active');}
+function addBooking(){closeModal();showToast('✅ تم تأكيد الحجز الجديد بنجاح');}
+function showToast(msg){
+  const w=document.getElementById('toastWrap');
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  w.appendChild(t); setTimeout(()=>t.remove(),3200);
+}
+
+renderRooms(); renderHousekeeping(); renderBars(); renderDashRequests(); renderStrip(); renderReservations(); renderArrDep();
+</script>
+</body>
+</html>

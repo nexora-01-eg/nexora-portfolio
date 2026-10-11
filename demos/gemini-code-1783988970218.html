@@ -1,0 +1,895 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXORA - منصة المكتبة السحابية للمشاريع الرقمية</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&family=Tajawal:wght@500;700;800&display=swap" rel="stylesheet">
+    
+    <!-- inline styling for immediate local rendering -->
+    <style>
+        :root {
+            --bg-primary: #f8fafc;
+            --bg-card: #ffffff;
+            --text-primary: #0f172a;
+            --text-secondary: #475569;
+            --text-muted: #94a3b8;
+            --color-brand: #0284c7;
+            --color-brand-hover: #0369a1;
+            --color-accent: #6366f1;
+            --border-color: #e2e8f0;
+            
+            --tier-vip: #8b5cf6;
+            --tier-enterprise: #3b82f6;
+            --tier-opensource: #10b981;
+            
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+        }
+
+        [data-theme="dark"] {
+            --bg-primary: #090d16;
+            --bg-card: #0f172a;
+            --text-primary: #f8fafc;
+            --text-secondary: #cbd5e1;
+            --text-muted: #64748b;
+            --border-color: #1e293b;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            font-family: 'Tajawal', 'Inter', sans-serif;
+            transition: var(--transition);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Style */
+        .navbar {
+            background-color: var(--bg-card);
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .logo-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            text-decoration: none;
+            color: var(--text-primary);
+        }
+
+        .logo-icon {
+            background: linear-gradient(135deg, var(--color-brand), var(--color-accent));
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 800;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+            background: linear-gradient(135deg, var(--color-brand), var(--color-accent));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-link {
+            text-decoration: none;
+            color: var(--text-secondary);
+            font-weight: 600;
+            transition: var(--transition);
+            cursor: pointer;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            color: var(--color-brand);
+        }
+
+        .nav-actions {
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .theme-btn {
+            background: none;
+            border: 1px solid var(--border-color);
+            padding: 0.5rem;
+            border-radius: 50%;
+            cursor: pointer;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            transition: var(--transition);
+        }
+
+        .theme-btn:hover {
+            background-color: var(--bg-primary);
+        }
+
+        /* Layout Hero */
+        .hero {
+            padding: 5rem 2rem;
+            text-align: center;
+            background: radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.05) 0%, transparent 80%);
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto 2.5rem auto;
+        }
+
+        /* Search & Filters Container */
+        .control-panel {
+            max-width: 1200px;
+            margin: 0 auto 3rem auto;
+            padding: 0 1.5rem;
+        }
+
+        .search-bar {
+            position: relative;
+            margin-bottom: 1.5rem;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: 1.25rem 3rem 1.25rem 1.5rem;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+            background-color: var(--bg-card);
+            color: var(--text-primary);
+            font-size: 1.1rem;
+            font-family: inherit;
+            outline: none;
+            transition: var(--transition);
+            box-shadow: var(--shadow-md);
+        }
+
+        .search-input:focus {
+            border-color: var(--color-brand);
+            box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            justify-content: center;
+        }
+
+        .filter-btn {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            padding: 0.6rem 1.25rem;
+            border-radius: var(--radius-full);
+            color: var(--text-secondary);
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--color-brand);
+            border-color: var(--color-brand);
+            color: white;
+        }
+
+        /* Grid Section */
+        .catalog-section {
+            max-width: 1200px;
+            margin: 0 auto auto auto;
+            padding: 0 1.5rem 5rem 1.5rem;
+            width: 100%;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+        }
+
+        /* Card Style */
+        .project-card {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            transition: var(--transition);
+            display: flex;
+            flex-direction: column;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1);
+        }
+
+        .card-header {
+            position: relative;
+            height: 200px;
+            background-color: #cbd5e1;
+            overflow: hidden;
+        }
+
+        .card-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+
+        .project-card:hover .card-img {
+            transform: scale(1.05);
+        }
+
+        .badge-tier {
+            position: absolute;
+            top: 1rem;
+            left: 1rem;
+            padding: 0.35rem 0.75rem;
+            border-radius: var(--radius-full);
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .tier-enterprise { background-color: var(--tier-enterprise); }
+        .tier-vip { background-color: var(--tier-vip); }
+        .tier-opensource { background-color: var(--tier-opensource); }
+
+        .card-body {
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .card-industry {
+            font-size: 0.8rem;
+            font-weight: 700;
+            color: var(--color-brand);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 0.5rem;
+        }
+
+        .card-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .card-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        .card-footer {
+            margin-top: auto;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .project-price {
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .card-meta-list {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .meta-tag {
+            background-color: var(--bg-primary);
+            color: var(--text-secondary);
+            font-size: 0.75rem;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-weight: 500;
+        }
+
+        /* Footer */
+        .footer {
+            background-color: var(--bg-card);
+            border-top: 1px solid var(--border-color);
+            padding: 3rem 2rem;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .footer p {
+            color: var(--text-muted);
+            margin-top: 1rem;
+        }
+
+        /* Preview Modal System */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(9, 13, 22, 0.85);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            padding: 2rem;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-container {
+            background-color: var(--bg-card);
+            border-radius: var(--radius-lg);
+            max-width: 900px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 1px solid var(--border-color);
+            animation: modalFade 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        @keyframes modalFade {
+            from { transform: scale(0.95); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .modal-header-hero {
+            position: relative;
+            height: 350px;
+            background-color: #1e293b;
+        }
+
+        .modal-cover {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background-color: rgba(0,0,0,0.5);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+
+        .close-modal:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
+
+        .modal-body {
+            padding: 2.5rem;
+        }
+
+        .modal-industry {
+            color: var(--color-brand);
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+        }
+
+        .modal-meta-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 0.25rem;
+        }
+
+        .meta-label {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 700;
+        }
+
+        .meta-val {
+            font-weight: 700;
+            font-size: 1rem;
+        }
+
+        .modal-desc {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+        }
+
+        .features-list {
+            margin-bottom: 2.5rem;
+        }
+
+        .features-list h4 {
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.5rem;
+            color: var(--text-secondary);
+        }
+
+        .feature-bullet {
+            color: var(--color-success);
+            font-weight: bold;
+        }
+
+        .actions-group {
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--color-brand);
+            color: white;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            cursor: pointer;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-brand-hover);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-primary);
+            padding: 1rem 2rem;
+            border-radius: var(--radius-md);
+            font-weight: 700;
+            transition: var(--transition);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-secondary:hover {
+            background-color: var(--border-color);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <header class="navbar">
+        <a href="#" class="logo-group">
+            <div class="logo-icon">NX</div>
+            <span class="logo-text">NEXORA</span>
+        </a>
+        <nav>
+            <ul class="nav-links">
+                <li><a href="#" class="nav-link active" onclick="filterCatalog('all')">المكتبة البرمجية</a></li>
+                <li><a href="#" class="nav-link" onclick="filterCatalog('Medical')">القطاع الطبي</a></li>
+                <li><a href="#" class="nav-link" onclick="filterCatalog('Construction')">قطاع الإنشاءات</a></li>
+                <li><a href="#" class="nav-link" onclick="filterCatalog('Finance')">القطاع المالي</a></li>
+            </ul>
+        </nav>
+        <div class="nav-actions">
+            <button class="theme-btn" id="themeToggle" aria-label="Toggle Theme">
+                🌓
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Area -->
+    <section class="hero">
+        <h1>مستودع NEXORA للأنظمة البرمجية الفائقة</h1>
+        <p>تصفح كتالوج حلول الـ Enterprise والـ SaaS المتكاملة المصممة خصيصاً للتوسعات الضخمة والأداء المطلق.</p>
+    </section>
+
+    <!-- Filter and Search Controls -->
+    <div class="control-panel">
+        <div class="search-bar">
+            <input type="text" id="searchInput" class="search-input" placeholder="ابحث عن نظام، ميزة، أو كلمة دلالية (مثل: Dashboard, CRM, Medical)...">
+            <span class="search-icon">🔍</span>
+        </div>
+        <div class="filter-group">
+            <button class="filter-btn active" data-filter="all">الكل</button>
+            <button class="filter-btn" data-filter="Medical">الطب والصحة</button>
+            <button class="filter-btn" data-filter="Construction">المقاولات والإنشاء</button>
+            <button class="filter-btn" data-filter="Finance">التحليلات والمصارف</button>
+            <button class="filter-btn" data-filter="Enterprise">Enterprise Tier</button>
+            <button class="filter-btn" data-filter="VIP">VIP Tier</button>
+        </div>
+    </div>
+
+    <!-- Main Dynamic Catalog Grid -->
+    <main class="catalog-section">
+        <div class="grid" id="catalogGrid">
+            <!-- Cards will be dynamically generated by mock projects.json data -->
+        </div>
+    </main>
+
+    <!-- Modal View System -->
+    <div class="modal" id="previewModal">
+        <div class="modal-container">
+            <div class="modal-header-hero">
+                <button class="close-modal" id="closeModal">✕</button>
+                <img src="" id="modalCover" class="modal-cover" alt="Project Cover">
+            </div>
+            <div class="modal-body">
+                <div class="modal-industry" id="modalIndustry"></div>
+                <h2 class="modal-title" id="modalTitle"></h2>
+                
+                <div class="modal-meta-row">
+                    <div class="meta-item">
+                        <span class="meta-label">مستوى الصعوبة</span>
+                        <span class="meta-val" id="metaDifficulty"></span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">قيمة التقييم التقريبية</span>
+                        <span class="meta-val" id="metaPrice"></span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">الإصدار الحالي</span>
+                        <span class="meta-val" id="metaVersion"></span>
+                    </div>
+                    <div class="meta-item">
+                        <span class="meta-label">الفئة التقنية</span>
+                        <span class="meta-val" id="metaTier"></span>
+                    </div>
+                </div>
+
+                <p class="modal-desc" id="modalDescription"></p>
+
+                <div class="features-list">
+                    <h4>المزايا الرئيسية للأنظمة</h4>
+                    <div id="featuresContainer"></div>
+                </div>
+
+                <div class="actions-group">
+                    <button class="btn-primary" onclick="alert('جاري التجهيز لتشغيل الديمو التجريبي السحابي!')">تفعيل الديمو المباشر</button>
+                    <button class="btn-secondary" id="closeModalBtn">الرجوع للكتالوج</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <h3>NEXORA Enterprise Solutions</h3>
+        <p>© 2026 NEXORA Platform. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <!-- Hardcoded JSON Data Database for Standalone local run without external fetch errors -->
+    <script>
+        const projectsData = [
+            {
+                "uuid": "8f3b9c2a-11e4-4d6f-87d2-45a82b9c7a10",
+                "id": "medical-clinic-dashboard",
+                "slug": "medical-clinic-dashboard",
+                "name": "NEXORA Enterprise Clinic Dashboard",
+                "industry": "Medical",
+                "service": "Dashboard",
+                "tier": "Enterprise",
+                "version": "v1.2.0",
+                "status": "Completed",
+                "difficulty": "Hard",
+                "estimatedPrice": "$2,450",
+                "theme": "Medical Blue",
+                "thumbnail": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=600&q=80",
+                "cover": "https://images.unsplash.com/photo-1584515979956-d9f6e5d09982?auto=format&fit=crop&w=1200&q=80",
+                "description": "لوحة تحكم طبية متكاملة مصممة للمستشفيات والعيادات الكبرى لإدارة الأطباء، المرضى، الحجوزات، والعمليات المالية والتحليلات الفورية مع دعم كامل للغات والوضع الداكن.",
+                "features": [
+                    "نظام جدولة مواعيد ذكي للحجوزات اليومية",
+                    "ملفات مرضى إلكترونية متكاملة تتبع التاريخ الطبي بدقة",
+                    "تقارير مالية تفاعلية مدعومة بالرسوم البيانية التوضيحية",
+                    "نظام تنبيهات فوري مدمج"
+                ],
+                "searchIndex": "medical clinic dashboard doctor booking analytics crm saas لوحة تحكم عيادة طبيب حجز مرضي تحليل مالي",
+                "tags": ["CRM", "Medical", "Doctor", "Dashboard"],
+                "featured": true,
+                "priority": 1
+            },
+            {
+                "uuid": "d4e2a9c1-58b2-4d9f-9c2b-31d8e6a0c5b7",
+                "id": "construction-erp-system",
+                "slug": "construction-erp-system",
+                "name": "Construction Site ERP Platform",
+                "industry": "Construction",
+                "service": "ERP",
+                "tier": "VIP",
+                "version": "v1.0.0",
+                "status": "Completed",
+                "difficulty": "Hard",
+                "estimatedPrice": "$4,800",
+                "theme": "Industrial Amber",
+                "thumbnail": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=600&q=80",
+                "cover": "https://images.unsplash.com/photo-1504307651254-35680f356dfd?auto=format&fit=crop&w=1200&q=80",
+                "description": "نظام ERP متكامل لإدارة المشاريع الإنشائية الضخمة والمخزون، وتتبع حركة العمالة والخرسانة المسلحة والموردين في الوقت الفعلي لضمان أعلى مستويات الكفاءة.",
+                "features": [
+                    "تتبع كامل للمواد والمعدات اللوجستية",
+                    "لوحة تحكم في سير عمليات البناء والجدولة الزمنية",
+                    "تقدير سريع للتكاليف بناءً على التقدم الفعلي",
+                    "مؤشرات الأداء الرئيسية KPIs متقدمة جداً"
+                ],
+                "searchIndex": "construction erp site project management inventory concrete مقاولات إدارة مشاريع مخازن خرسانة",
+                "tags": ["ERP", "Construction", "Projects"],
+                "featured": true,
+                "priority": 2
+            },
+            {
+                "uuid": "c3f8a2e1-48b2-4d9f-8c1b-21d7e6a0c5a2",
+                "id": "banking-portal-dashboard",
+                "slug": "banking-portal-dashboard",
+                "name": "Apex Finance Broker Portal",
+                "industry": "Finance",
+                "service": "Broker Portal",
+                "tier": "Enterprise",
+                "version": "v2.1.0",
+                "status": "Completed",
+                "difficulty": "Medium",
+                "estimatedPrice": "$3,200",
+                "theme": "Broker Dark",
+                "thumbnail": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=600&q=80",
+                "cover": "https://images.unsplash.com/photo-1611974789855-9c2a0a7236a3?auto=format&fit=crop&w=1200&q=80",
+                "description": "منصة مالية شاملة لإجراء التداول الإلكتروني والتحليلات البيانية والمصرفية الفورية، تدعم تشفير العمليات وسرعة سحب وإيداع فوري مع محاكاة الأسواق العالمية.",
+                "features": [
+                    "رسم بياني تفاعلي حي للأسعار والمؤشرات",
+                    "لوحة إدارة محفظة استثمارية للمستخدمين والوسطاء",
+                    "تقارير ضريبية وأدوات تصدير ملفات Excel تلقائية",
+                    "آمان مصرفي فائق السرية"
+                ],
+                "searchIndex": "banking crypto exchange stocks finance portal تداول بورصة بنك تحليل مالي استثمار",
+                "tags": ["Banking", "Finance", "Portal"],
+                "featured": true,
+                "priority": 3
+            }
+        ];
+
+        // Init App state
+        let currentFilter = 'all';
+        let currentSearchQuery = '';
+
+        // DOM elements
+        const gridElement = document.getElementById('catalogGrid');
+        const searchInput = document.getElementById('searchInput');
+        const themeToggle = document.getElementById('themeToggle');
+        const previewModal = document.getElementById('previewModal');
+
+        // Render projects
+        function renderCatalog() {
+            gridElement.innerHTML = '';
+            
+            const filteredProjects = projectsData.filter(project => {
+                // Filter matches
+                const matchesCategory = currentFilter === 'all' || 
+                                        project.industry === currentFilter || 
+                                        project.tier === currentFilter;
+                
+                // Search query matches
+                const matchesSearch = project.name.toLowerCase().includes(currentSearchQuery) ||
+                                      project.industry.toLowerCase().includes(currentSearchQuery) ||
+                                      project.description.toLowerCase().includes(currentSearchQuery) ||
+                                      project.searchIndex.toLowerCase().includes(currentSearchQuery);
+
+                return matchesCategory && matchesSearch;
+            });
+
+            if (filteredProjects.length === 0) {
+                gridElement.innerHTML = `<div style="grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text-secondary);">لا توجد نتائج مطابقة لبحثك الحالي.</div>`;
+                return;
+            }
+
+            filteredProjects.forEach(project => {
+                const card = document.createElement('div');
+                card.className = 'project-card';
+                card.href = '#';
+                card.onclick = (e) => {
+                    e.preventDefault();
+                    openProjectPreview(project);
+                };
+
+                card.innerHTML = `
+                    <div class="card-header">
+                        <span class="badge-tier tier-${project.tier.toLowerCase()}">${project.tier}</span>
+                        <img src="${project.thumbnail}" class="card-img" alt="${project.name}" loading="lazy">
+                    </div>
+                    <div class="card-body">
+                        <span class="card-industry">${project.industry}</span>
+                        <h3 class="card-title">${project.name}</h3>
+                        <p class="card-desc">${project.description}</p>
+                        <div class="card-footer">
+                            <span class="project-price">${project.estimatedPrice}</span>
+                            <div class="card-meta-list">
+                                <span class="meta-tag">${project.difficulty}</span>
+                                <span class="meta-tag">${project.version}</span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                gridElement.appendChild(card);
+            });
+        }
+
+        // Filter Controller
+        function filterCatalog(category) {
+            currentFilter = category;
+            
+            // Update active state on buttons
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                if (btn.getAttribute('data-filter') === category) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+
+            renderCatalog();
+        }
+
+        // Open Modal Preview
+        function openProjectPreview(project) {
+            document.getElementById('modalCover').src = project.cover;
+            document.getElementById('modalIndustry').innerText = project.industry + ' — ' + project.service;
+            document.getElementById('modalTitle').innerText = project.name;
+            document.getElementById('metaDifficulty').innerText = project.difficulty;
+            document.getElementById('metaPrice').innerText = project.estimatedPrice;
+            document.getElementById('metaVersion').innerText = project.version;
+            document.getElementById('metaTier').innerText = project.tier;
+            document.getElementById('modalDescription').innerText = project.description;
+
+            const container = document.getElementById('featuresContainer');
+            container.innerHTML = '';
+            project.features.forEach(feat => {
+                container.innerHTML += `
+                    <div class="feature-item">
+                        <span class="feature-bullet">✓</span>
+                        <span>${feat}</span>
+                    </div>
+                `;
+            });
+
+            previewModal.classList.add('active');
+        }
+
+        // Close Modal Preview
+        function closeModal() {
+            previewModal.classList.remove('active');
+        }
+
+        // Event listeners for Filters Buttons
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                filterCatalog(btn.getAttribute('data-filter'));
+            });
+        });
+
+        // Search Input handler
+        searchInput.addEventListener('input', (e) => {
+            currentSearchQuery = e.target.value.toLowerCase().trim();
+            renderCatalog();
+        });
+
+        // Theme Toggle Handler
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-theme', newTheme);
+        });
+
+        // Modal Close Actions
+        document.getElementById('closeModal').addEventListener('click', closeModal);
+        document.getElementById('closeModalBtn').addEventListener('click', closeModal);
+
+        // Click outside modal container closes it
+        previewModal.addEventListener('click', (e) => {
+            if (e.target === previewModal) {
+                closeModal();
+            }
+        });
+
+        // Initialize display
+        renderCatalog();
+    </script>
+</body>
+</html>

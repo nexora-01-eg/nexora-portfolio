@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>فاتورتي — أداة إنشاء الفواتير</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%A7%BE%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Cairo', 'ui-sans-serif', 'system-ui'] },
+      }
+    }
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root { --accent: #2EA187; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    opacity: 0;
+    animation: vip-fade-in .5s ease forwards;
+  }
+  @keyframes vip-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent; }
+  button, a, [role="button"] { transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+  button:active { transform: scale(0.97); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #root { min-height: 100vh; }
+  #vip-loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: #0a0a0a; z-index: 9999; transition: opacity .4s ease;
+  }
+  #vip-loading .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-top-color: var(--accent);
+    animation: vip-spin .8s linear infinite;
+  }
+  @keyframes vip-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="vip-loading"><div class="spinner"></div></div>
+<div id="root"></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import * as ReactDOM from "react-dom/client";
+import React, { useState, useEffect, useMemo } from "react";
+import {
+  FileText, Plus, Trash2, Download, Send, User, Briefcase, Percent,
+  Hash, Check, Copy, Palette, Code2, Sparkles,
+} from "lucide-react";
+
+/* ============================== الخطوط والهوية ============================== */
+const FONT_ID = "fatoorati-fonts";
+function useFonts() {
+  useEffect(() => {
+    if (document.getElementById(FONT_ID)) return;
+    const l = document.createElement("link");
+    l.id = FONT_ID; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap";
+    document.head.appendChild(l);
+  }, []);
+}
+
+const C = {
+  bg: "#F2F5F4",
+  panel: "#FFFFFF",
+  paper: "#FFFFFF",
+  border: "#DDE5E2",
+  ink: "#1B2421",
+  muted: "#6B7A75",
+  primary: "#0F3D3E",
+  mint: "#16B8A6",
+  mintSoft: "rgba(22,184,166,0.12)",
+  amber: "#D6972B",
+};
+const font = { display: "'Cairo', sans-serif", body: "'Cairo', sans-serif", mono: "'IBM Plex Mono', monospace" };
+const shadow = { sm: "0 1px 3px rgba(15,61,62,0.06)", md: "0 10px 26px rgba(15,61,62,0.08)", lg: "0 22px 48px rgba(15,61,62,0.14)" };
+
+const FREELANCER = { name: "أحمد سامي", role: "مصمم جرافيك ومطور واجهات مستقل", phone: "01098765432", email: "ahmed.sami@mail.com" };
+
+let uid = 4;
+const INITIAL_ITEMS = [
+  { id: 1, desc: "تصميم هوية بصرية كاملة", qty: 1, price: 4500 },
+  { id: 2, desc: "تصميم موقع لاندنج بيدج", qty: 1, price: 3200 },
+  { id: 3, desc: "جلسة استشارة UX", qty: 2, price: 400 },
+];
+
+/* ============================== عناصر أساسية ============================== */
+
+function Field({ label, children }) {
+  return (
+    <div style={{ marginBottom: 14 }}>
+      <label style={{ display: "block", fontSize: 11.5, fontFamily: font.body, color: C.muted, marginBottom: 6, fontWeight: 700 }}>{label}</label>
+      {children}
+    </div>
+  );
+}
+
+function Input({ value, onChange, placeholder, type = "text" }) {
+  return (
+    <input value={value} onChange={onChange} placeholder={placeholder} type={type} style={{
+      width: "100%", background: C.bg, border: `1px solid ${C.border}`, borderRadius: 10, padding: "10px 12px",
+      color: C.ink, fontFamily: font.body, fontSize: 13.5, outline: "none", boxSizing: "border-box", textAlign: "right",
+    }} />
+  );
+}
+
+function Button({ children, icon: Icon, onClick, variant = "primary", small, style }) {
+  const [h, setH] = useState(false);
+  const variants = {
+    primary: { background: h ? "#0C3132" : C.primary, color: "#fff", border: "none" },
+    mint: { background: h ? "#129E8F" : C.mint, color: "#04211F", border: "none" },
+    outline: { background: h ? C.mintSoft : "transparent", color: C.primary, border: `1.5px solid ${C.primary}` },
+    ghost: { background: h ? "#EAF0EE" : "transparent", color: C.ink, border: `1px solid ${C.border}` },
+  };
+  return (
+    <button onClick={onClick} onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} style={{
+      display: "inline-flex", alignItems: "center", gap: 7, fontFamily: font.body, fontWeight: 700,
+      fontSize: small ? 12.5 : 13.5, padding: small ? "8px 13px" : "10px 18px", borderRadius: 10,
+      cursor: "pointer", transition: "all 0.2s ease", whiteSpace: "nowrap", ...variants[variant], ...style,
+    }}>
+      {Icon && <Icon size={small ? 13 : 15} />}{children}
+    </button>
+  );
+}
+
+/* ============================== لوحة التحكم ============================== */
+
+function ControlPanel({ state, setState }) {
+  const { docType, client, project, items, taxOn, discount } = state;
+
+  const updateItem = (id, patch) => setState((s) => ({ ...s, items: s.items.map((it) => (it.id === id ? { ...it, ...patch } : it)) }));
+  const addItem = () => setState((s) => ({ ...s, items: [...s.items, { id: ++uid, desc: "بند جديد", qty: 1, price: 0 }] }));
+  const removeItem = (id) => setState((s) => ({ ...s, items: s.items.filter((it) => it.id !== id) }));
+
+  return (
+    <div style={{ background: C.panel, borderRadius: 20, border: `1px solid ${C.border}`, padding: 22, boxShadow: shadow.sm }}>
+      <div style={{ display: "flex", gap: 8, marginBottom: 20 }}>
+        {[{ id: "invoice", l: "فاتورة" }, { id: "quote", l: "عرض سعر" }].map((t) => (
+          <div key={t.id} onClick={() => setState((s) => ({ ...s, docType: t.id }))} style={{
+            flex: 1, textAlign: "center", padding: "10px 0", borderRadius: 10, cursor: "pointer", fontFamily: font.body, fontWeight: 700, fontSize: 13,
+            background: docType === t.id ? C.primary : C.bg, color: docType === t.id ? "#fff" : C.muted,
+          }}>{t.l}</div>
+        ))}
+      </div>
+
+      <Field label="اسم العميل"><Input value={client} onChange={(e) => setState((s) => ({ ...s, client: e.target.value }))} placeholder="مثال: شركة نايل تريد" /></Field>
+      <Field label="اسم المشروع"><Input value={project} onChange={(e) => setState((s) => ({ ...s, project: e.target.value }))} placeholder="مثال: هوية بصرية + موقع" /></Field>
+
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", margin: "18px 0 10px" }}>
+        <span style={{ fontFamily: font.display, fontWeight: 700, fontSize: 13.5, color: C.ink }}>البنود</span>
+        <Button icon={Plus} small variant="outline" onClick={addItem}>إضافة بند</Button>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 10 }}>
+        {items.map((it) => (
+          <div key={it.id} style={{ background: C.bg, borderRadius: 12, padding: 12, border: `1px solid ${C.border}` }}>
+            <input value={it.desc} onChange={(e) => updateItem(it.id, { desc: e.target.value })} placeholder="وصف البند" style={{
+              width: "100%", background: "transparent", border: "none", outline: "none", fontFamily: font.body,
+              fontSize: 13, color: C.ink, fontWeight: 600, textAlign: "right", marginBottom: 8,
+            }} />
+            <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
+              <input type="number" value={it.qty} onChange={(e) => updateItem(it.id, { qty: Number(e.target.value) || 0 })} style={{ width: 54, background: C.panel, border: `1px solid ${C.border}`, borderRadius: 8, padding: "6px 8px", fontFamily: font.mono, fontSize: 12, textAlign: "center", outline: "none" }} />
+              <span style={{ fontFamily: font.body, fontSize: 11, color: C.muted }}>×</span>
+              <input type="number" value={it.price} onChange={(e) => updateItem(it.id, { price: Number(e.target.value) || 0 })} style={{ flex: 1, background: C.panel, border: `1px solid ${C.border}`, borderRadius: 8, padding: "6px 8px", fontFamily: font.mono, fontSize: 12, textAlign: "center", outline: "none" }} />
+              <span style={{ fontFamily: font.body, fontSize: 11, color: C.muted }}>ج.م</span>
+              <div onClick={() => removeItem(it.id)} style={{ cursor: "pointer", color: "#C15B47", padding: 4 }}><Trash2 size={14} /></div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", gap: 12, marginTop: 18 }}>
+        <Field label="خصم (%)"><Input type="number" value={discount} onChange={(e) => setState((s) => ({ ...s, discount: Number(e.target.value) || 0 }))} placeholder="0" /></Field>
+        <div style={{ paddingTop: 26 }}>
+          <div onClick={() => setState((s) => ({ ...s, taxOn: !s.taxOn }))} style={{
+            display: "flex", alignItems: "center", gap: 8, padding: "10px 14px", borderRadius: 10, cursor: "pointer",
+            border: `1px solid ${taxOn ? C.mint : C.border}`, background: taxOn ? C.mintSoft : C.bg, whiteSpace: "nowrap",
+          }}>
+            <Percent size={13} color={taxOn ? C.mint : C.muted} />
+            <span style={{ fontFamily: font.body, fontSize: 12, color: taxOn ? "#0F3D3E" : C.muted, fontWeight: 600 }}>ضريبة ١٤٪</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================== المعاينة الحية ============================== */
+
+function InvoicePreview({ state }) {
+  const { docType, client, project, items, taxOn, discount } = state;
+  const subtotal = items.reduce((a, it) => a + it.qty * it.price, 0);
+  const discountAmt = (subtotal * discount) / 100;
+  const afterDiscount = subtotal - discountAmt;
+  const tax = taxOn ? afterDiscount * 0.14 : 0;
+  const total = afterDiscount + tax;
+  const number = docType === "invoice" ? "INV-2026-0142" : "QT-2026-0142";
+  const today = "11 يوليو 2026";
+
+  return (
+    <div style={{ background: C.paper, borderRadius: 20, border: `1px solid ${C.border}`, padding: 32, boxShadow: shadow.lg, minHeight: 520 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", paddingBottom: 20, borderBottom: `2px solid ${C.ink}` }}>
+        <div>
+          <div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 19, color: C.ink }}>{FREELANCER.name}</div>
+          <div style={{ fontFamily: font.body, fontSize: 11.5, color: C.muted, marginTop: 3 }}>{FREELANCER.role}</div>
+          <div style={{ fontFamily: font.mono, fontSize: 10.5, color: C.muted, marginTop: 6, direction: "ltr", textAlign: "right" }}>{FREELANCER.phone} · {FREELANCER.email}</div>
+        </div>
+        <div style={{ textAlign: "left" }}>
+          <span style={{ display: "inline-block", background: docType === "invoice" ? C.primary : C.amber, color: "#fff", fontFamily: font.body, fontWeight: 700, fontSize: 11, padding: "5px 12px", borderRadius: 999 }}>
+            {docType === "invoice" ? "فاتورة" : "عرض سعر"}
+          </span>
+          <div style={{ fontFamily: font.mono, fontSize: 11.5, color: C.muted, marginTop: 8 }}>{number}</div>
+          <div style={{ fontFamily: font.mono, fontSize: 11.5, color: C.muted, marginTop: 2 }}>{today}</div>
+        </div>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16, padding: "18px 0", borderBottom: `1px solid ${C.border}` }}>
+        <div>
+          <div style={{ fontFamily: font.body, fontSize: 10.5, color: C.muted, fontWeight: 700 }}>مقدم إلى</div>
+          <div style={{ fontFamily: font.display, fontWeight: 700, fontSize: 14.5, color: C.ink, marginTop: 4 }}>{client || "اسم العميل"}</div>
+        </div>
+        <div>
+          <div style={{ fontFamily: font.body, fontSize: 10.5, color: C.muted, fontWeight: 700 }}>المشروع</div>
+          <div style={{ fontFamily: font.body, fontSize: 13, color: C.ink, marginTop: 4 }}>{project || "اسم المشروع"}</div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 18 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "2fr 0.6fr 0.9fr 0.9fr", padding: "8px 0", borderBottom: `1px solid ${C.border}`, fontFamily: font.body, fontSize: 10.5, color: C.muted, fontWeight: 700 }}>
+          <div>البند</div><div style={{ textAlign: "center" }}>الكمية</div><div style={{ textAlign: "center" }}>السعر</div><div style={{ textAlign: "left" }}>الإجمالي</div>
+        </div>
+        {items.map((it) => (
+          <div key={it.id} style={{ display: "grid", gridTemplateColumns: "2fr 0.6fr 0.9fr 0.9fr", padding: "11px 0", borderBottom: `1px solid ${C.border}`, alignItems: "center" }}>
+            <div style={{ fontFamily: font.body, fontSize: 12.5, color: C.ink }}>{it.desc || "—"}</div>
+            <div style={{ fontFamily: font.mono, fontSize: 12, color: C.muted, textAlign: "center" }}>{it.qty}</div>
+            <div style={{ fontFamily: font.mono, fontSize: 12, color: C.muted, textAlign: "center" }}>{it.price.toLocaleString()}</div>
+            <div style={{ fontFamily: font.mono, fontSize: 12.5, color: C.ink, textAlign: "left", fontWeight: 600 }}>{(it.qty * it.price).toLocaleString()}</div>
+          </div>
+        ))}
+      </div>
+
+      <div style={{ display: "flex", justifyContent: "flex-end", marginTop: 16 }}>
+        <div style={{ width: 220 }}>
+          {[
+            { l: "الإجمالي الفرعي", v: subtotal },
+            ...(discount > 0 ? [{ l: `خصم (${discount}%)`, v: -discountAmt }] : []),
+            ...(taxOn ? [{ l: "ضريبة القيمة المضافة (14%)", v: tax }] : []),
+          ].map((r, i) => (
+            <div key={i} style={{ display: "flex", justifyContent: "space-between", padding: "5px 0", fontFamily: font.body, fontSize: 12, color: C.muted }}>
+              <span>{r.l}</span><span style={{ fontFamily: font.mono }}>{r.v.toLocaleString()} ج.م</span>
+            </div>
+          ))}
+          <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0 0", marginTop: 6, borderTop: `2px solid ${C.ink}`, fontFamily: font.display, fontWeight: 800, fontSize: 16, color: C.ink }}>
+            <span>الإجمالي</span><span style={{ color: C.mint }}>{total.toLocaleString()} ج.م</span>
+          </div>
+        </div>
+      </div>
+
+      <div style={{ marginTop: 26, paddingTop: 16, borderTop: `1px dashed ${C.border}`, fontFamily: font.body, fontSize: 10.5, color: C.muted, lineHeight: 1.8 }}>
+        {docType === "invoice" ? "يُرجى السداد خلال 7 أيام من تاريخ الفاتورة." : "هذا العرض سارٍ لمدة 14 يومًا من تاريخه."} — تم الإنشاء عبر فاتورتي (عرض تجريبي).
+      </div>
+    </div>
+  );
+}
+
+/* ============================== التطبيق ============================== */
+
+function FatoortiApp() {
+  useFonts();
+  const [state, setState] = useState({
+    docType: "invoice", client: "شركة نايل تريد", project: "هوية بصرية + موقع تعريفي",
+    items: INITIAL_ITEMS, taxOn: true, discount: 5,
+  });
+  const [copied, setCopied] = useState(false);
+  const doCopy = () => { setCopied(true); setTimeout(() => setCopied(false), 1800); };
+
+  return (
+    <div dir="rtl" style={{ background: C.bg, minHeight: "100vh", fontFamily: font.body, color: C.ink, padding: "28px 5%" }}>
+      <style>{`
+        * { box-sizing: border-box; }
+        input::placeholder { color: #9DAAA6; }
+        ::-webkit-scrollbar { width: 8px; } ::-webkit-scrollbar-thumb { background: rgba(22,184,166,0.3); border-radius: 8px; }
+      `}</style>
+      <div style={{ maxWidth: 1180, margin: "0 auto" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 24, flexWrap: "wrap", gap: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 38, height: 38, borderRadius: 11, background: "linear-gradient(135deg, #16B8A6, #0F3D3E)", display: "flex", alignItems: "center", justifyContent: "center" }}><FileText size={18} color="#fff" /></div>
+            <div>
+              <div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 18, color: C.ink }}>فاتورتي</div>
+              <div style={{ fontFamily: font.body, fontSize: 11, color: C.muted }}>فواتير وعروض أسعار احترافية في دقايق</div>
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <Button icon={copied ? Check : Copy} variant="ghost" small onClick={doCopy}>{copied ? "تم النسخ" : "نسخ رابط المشاركة"}</Button>
+            <Button icon={Download} variant="mint" small>تحميل PDF</Button>
+            <Button icon={Send} variant="primary" small>إرسال للعميل</Button>
+          </div>
+        </div>
+
+        <div style={{ display: "grid", gridTemplateColumns: "0.85fr 1.15fr", gap: 22 }}>
+          <ControlPanel state={state} setState={setState} />
+          <InvoicePreview state={state} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+root.render(<FatoortiApp />);
+const loading = document.getElementById("vip-loading");
+if (loading) { loading.style.opacity = "0"; setTimeout(() => loading.remove(), 400); }
+</script>
+</body>
+</html>

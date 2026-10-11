@@ -1,0 +1,35 @@
+/* ============================================================
+   NEXORA — Tabs
+   Follows the WAI-ARIA Tabs pattern. JS handles activation +
+   roving tabindex + arrow-key navigation.
+   ============================================================ */
+
+.nx-tabs__list {
+  display: flex;
+  gap: var(--nx-space-2);
+  border-bottom: 1px solid var(--nx-border-subtle);
+  overflow-x: auto;
+}
+
+.nx-tabs__tab {
+  padding: var(--nx-space-3) var(--nx-space-4);
+  font-size: var(--nx-fs-300);
+  color: var(--nx-text-secondary);
+  border-bottom: 2px solid transparent;
+  white-space: nowrap;
+  transition: var(--nx-transition-base);
+}
+
+.nx-tabs__tab:hover { color: var(--nx-text-primary); }
+
+.nx-tabs__tab[aria-selected="true"] {
+  color: var(--nx-text-primary);
+  border-bottom-color: var(--nx-accent-primary);
+  font-weight: var(--nx-fw-medium);
+}
+
+.nx-tabs__panel {
+  padding-block: var(--nx-space-5);
+}
+
+.nx-tabs__panel[hidden] { display: none; }

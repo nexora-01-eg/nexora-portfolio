@@ -1,0 +1,66 @@
+/* ============================================================
+   NEXORA — Radio
+   Same visually-hidden-native-input technique as Checkbox.
+   ============================================================ */
+
+.nx-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nx-space-3);
+  border: none;
+  padding: 0;
+}
+
+.nx-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nx-space-3);
+  cursor: pointer;
+  font-size: var(--nx-fs-300);
+}
+
+.nx-radio__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.nx-radio__circle {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1px solid var(--nx-border-strong);
+  border-radius: var(--nx-radius-full);
+  background: var(--nx-bg-elevated);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--nx-transition-base);
+}
+
+.nx-radio__circle::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: var(--nx-radius-full);
+  background: var(--nx-color-black);
+  transform: scale(0);
+  transition: transform var(--nx-duration-fast) var(--nx-ease-out);
+}
+
+.nx-radio__input:checked + .nx-radio__circle {
+  background: var(--nx-accent-primary);
+  border-color: var(--nx-accent-primary);
+}
+.nx-radio__input:checked + .nx-radio__circle::after { transform: scale(1); }
+
+.nx-radio__input:focus-visible + .nx-radio__circle {
+  outline: 2px solid var(--nx-accent-primary);
+  outline-offset: 2px;
+}
+
+.nx-radio__input:disabled ~ * {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

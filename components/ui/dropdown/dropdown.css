@@ -1,0 +1,48 @@
+/* ============================================================
+   NEXORA — Dropdown (menu button)
+   Follows the WAI-ARIA Menu Button pattern.
+   ============================================================ */
+
+.nx-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
+.nx-dropdown__menu {
+  position: absolute;
+  top: calc(100% + var(--nx-space-2));
+  left: 0;
+  min-width: 200px;
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+  box-shadow: var(--nx-shadow-lg);
+  padding: var(--nx-space-2);
+  z-index: var(--nx-z-overlay);
+  animation: nx-scale-in var(--nx-duration-fast) var(--nx-ease-out) both;
+}
+
+.nx-dropdown__menu[hidden] { display: none; }
+
+.nx-dropdown__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: var(--nx-space-2) var(--nx-space-3);
+  font-size: var(--nx-fs-200);
+  color: var(--nx-text-primary);
+  border-radius: var(--nx-radius-sm);
+}
+
+.nx-dropdown__item:hover,
+.nx-dropdown__item:focus-visible {
+  background: var(--nx-bg-elevated-2);
+}
+
+.nx-dropdown__item--danger { color: var(--nx-color-danger); }
+
+.nx-dropdown__divider {
+  border: none;
+  border-top: 1px solid var(--nx-border-subtle);
+  margin: var(--nx-space-2) 0;
+}

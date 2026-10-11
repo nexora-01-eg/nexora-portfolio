@@ -1,0 +1,60 @@
+{
+  "id": "vantage-erp",
+  "slug": "vantage-erp",
+  "industry": "corporate",
+  "designSystem": "corporate",
+  "title": "Vantage ERP",
+  "tagline": "Resource planning for mid-market manufacturers.",
+  "description": "A modular ERP covering inventory, procurement, and production scheduling for mid-market manufacturers.",
+  "version": "3.0.1",
+  "status": "archived",
+  "tier": "enterprise",
+  "difficulty": "advanced",
+  "service": "ERP Systems",
+  "tags": [
+    "erp",
+    "inventory",
+    "corporate",
+    "dashboard"
+  ],
+  "technologies": [
+    "Vue",
+    "FastAPI",
+    "MongoDB"
+  ],
+  "componentsUsed": [
+    "data-table",
+    "dropdown",
+    "badge"
+  ],
+  "features": [
+    "Multi-warehouse inventory tracking",
+    "Procurement approval workflows",
+    "Production scheduling board"
+  ],
+  "timeline": [
+    {
+      "date": "2025-11-14",
+      "label": "Project started",
+      "description": "ERP core modules planned."
+    },
+    {
+      "date": "2026-03-01",
+      "label": "v3.0.0 released",
+      "description": "Full production scheduling module."
+    },
+    {
+      "date": "2026-05-30",
+      "label": "Archived",
+      "description": "Superseded by a newer internal system."
+    }
+  ],
+  "relatedProjects": [
+    "aurora-crm"
+  ],
+  "views": 512,
+  "featured": false,
+  "popular": true,
+  "createdAt": "2025-11-14",
+  "updatedAt": "2026-05-30"
+}

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NEXORA — Component Explorer</title>
+  <meta name="description" content="Browse every component in the NEXORA Enterprise Component Library — live previews, variants, usage, and documentation." />
+
+  <!-- Core foundation (same load order as the platform root) -->
+  <link rel="stylesheet" href="../../core/css/tokens.css" />
+  <link rel="stylesheet" href="../../core/css/base.css" />
+  <link rel="stylesheet" href="../../core/css/typography.css" />
+  <link rel="stylesheet" href="../../core/css/layout.css" />
+  <link rel="stylesheet" href="../../core/css/utilities.css" />
+  <link rel="stylesheet" href="../../core/css/animations.css" />
+
+  <!-- Components reused directly by the explorer's own UI -->
+  <link rel="stylesheet" href="../../components/ui/button/button.css" />
+  <link rel="stylesheet" href="../../components/forms/search-box/search-box.css" />
+  <link rel="stylesheet" href="../../components/ui/badge/badge.css" />
+  <link rel="stylesheet" href="../../components/ui/tabs/tabs.css" />
+  <link rel="stylesheet" href="../../components/modals/drawer/drawer.css" />
+  <link rel="stylesheet" href="../../components/cards/card/card.css" />
+  <link rel="stylesheet" href="../../components/cards/component-card/component-card.css" />
+  <link rel="stylesheet" href="../../components/navigation/sidebar/sidebar.css" />
+  <link rel="stylesheet" href="../../components/feedback/empty-state/empty-state.css" />
+
+  <link rel="stylesheet" href="component-explorer.css" />
+</head>
+<body>
+  <a class="nx-skip-link" href="#nx-explorer-main">Skip to content</a>
+
+  <header class="nx-explorer-header">
+    <div class="nx-container nx-explorer-header__inner">
+      <a class="nx-explorer-header__brand" href="../../index.html">NEXORA</a>
+      <p class="nx-explorer-header__title">Component Explorer</p>
+      <div class="nx-search-box" role="search" style="max-width: 280px;">
+        <span class="nx-search-box__icon" aria-hidden="true">⌕</span>
+        <input class="nx-search-box__input" type="search" id="explorer-search" placeholder="Search components…" aria-label="Search components" />
+      </div>
+    </div>
+  </header>
+
+  <div class="nx-container nx-explorer-layout">
+    <aside class="nx-sidebar nx-explorer-sidebar" aria-label="Component categories">
+      <nav>
+        <ul class="nx-sidebar__list" id="explorer-category-list">
+          <li><button class="nx-sidebar__link nx-sidebar__link--active" data-category="all" type="button">All Components</button></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <main id="nx-explorer-main" class="nx-explorer-main">
+      <p class="nx-small nx-text-muted" id="explorer-count" style="margin-bottom: var(--nx-space-5);"></p>
+      <div class="nx-grid nx-grid--auto" id="explorer-grid" role="list" aria-label="Components"></div>
+      <p class="nx-empty-state-inline nx-body nx-text-secondary" id="explorer-empty" hidden>No components match your search.</p>
+    </main>
+  </div>
+
+  <!-- Detail drawer — populated by component-explorer.js -->
+  <div class="nx-drawer-overlay" id="explorer-detail" data-nx-drawer role="dialog" aria-modal="true" aria-labelledby="explorer-detail-title" hidden>
+    <div class="nx-drawer nx-drawer--right nx-explorer-detail">
+      <div class="nx-drawer__header">
+        <div>
+          <p class="nx-caption" id="explorer-detail-category"></p>
+          <h2 class="nx-h4" id="explorer-detail-title"></h2>
+        </div>
+        <button class="nx-drawer__close" type="button" aria-label="Close panel" data-nx-drawer-close>×</button>
+      </div>
+
+      <div class="nx-tabs" data-nx-tabs>
+        <div class="nx-tabs__list" role="tablist" aria-label="Component documentation">
+          <button class="nx-tabs__tab" role="tab" id="tab-preview" aria-controls="panel-preview" aria-selected="true" type="button">Preview</button>
+          <button class="nx-tabs__tab" role="tab" id="tab-usage" aria-controls="panel-usage" aria-selected="false" type="button" tabindex="-1">Usage</button>
+          <button class="nx-tabs__tab" role="tab" id="tab-docs" aria-controls="panel-docs" aria-selected="false" type="button" tabindex="-1">Documentation</button>
+        </div>
+
+        <div class="nx-tabs__panel nx-explorer-detail__body" role="tabpanel" id="panel-preview" aria-labelledby="tab-preview">
+          <iframe id="explorer-preview-frame" class="nx-explorer-preview-frame" title="Component live preview"></iframe>
+        </div>
+
+        <div class="nx-tabs__panel nx-explorer-detail__body" role="tabpanel" id="panel-usage" aria-labelledby="tab-usage" hidden>
+          <p class="nx-small nx-text-secondary" style="margin-bottom: var(--nx-space-3);">Raw markup for this component:</p>
+          <pre class="nx-explorer-code" id="explorer-usage-code"></pre>
+        </div>
+
+        <div class="nx-tabs__panel nx-explorer-detail__body" role="tabpanel" id="panel-docs" aria-labelledby="tab-docs" hidden>
+          <div id="explorer-docs-content" class="nx-explorer-docs"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Core modules — this page previously bypassed them with its own
+       fetch(); Phase 3.5 routes all data access through Manifest. -->
+  <script src="../../core/js/core.js"></script>
+  <script src="../../core/js/storage.js"></script>
+  <script src="../../core/js/helpers.js"></script>
+  <script src="../../core/js/theme.js"></script>
+  <script src="../../data/fallback-data.js"></script>
+  <script src="../../core/js/manifest.js"></script>
+  <script src="../../core/js/search.js"></script>
+  <script src="../../core/js/filters.js"></script>
+  <script src="../../core/js/sort.js"></script>
+  <script src="../../core/js/pagination.js"></script>
+  <script src="../../core/js/favorites.js"></script>
+  <script src="../../core/js/animations.js"></script>
+
+  <!-- Reused component JS -->
+  <script src="../../components/ui/tabs/tabs.js"></script>
+  <script src="../../components/modals/drawer/drawer.js"></script>
+  <script src="component-explorer.js"></script>
+</body>
+</html>

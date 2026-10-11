@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Meridian Diagnostics — Lab &amp; Radiology Platform</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F4F5F9;
+  --card:#FFFFFF;
+  --indigo:#4338CA; --indigo-soft: rgba(67,56,202,0.09);
+  --violet:#7C3AED; --violet-soft: rgba(124,58,237,0.1);
+  --cyan:#0EA5E9; --cyan-soft: rgba(14,165,233,0.1);
+  --success:#16A34A; --success-soft: rgba(22,163,74,0.1);
+  --warning:#D97706; --warning-soft: rgba(217,119,6,0.1);
+  --danger:#DC2626; --danger-soft: rgba(220,38,38,0.1);
+  --text:#181B29; --muted:#6B7080; --faint:#A0A4B4; --border:#E4E5EE;
+  --r-md:16px; --r-lg:22px; --r-pill:999px;
+  --ease: cubic-bezier(.22,1,.36,1);
+  --shadow: 0 20px 44px -24px rgba(24,27,41,0.14);
+  --font-display:'Plus Jakarta Sans', sans-serif; --font-body:'Inter', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+  --sidebar-w:250px; --topbar-h:72px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{ background:var(--bg); color:var(--text); font-family:var(--font-body); min-height:100vh; }
+::-webkit-scrollbar{width:8px;} ::-webkit-scrollbar-thumb{background:var(--border); border-radius:10px;}
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; color:inherit; cursor:pointer;}
+:focus-visible{ outline:2px solid var(--indigo); outline-offset:2px; border-radius:6px; }
+.mono{ font-family:var(--font-mono); }
+.card{ background:var(--card); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow); transition:all .25s var(--ease); }
+.card:hover{ transform:translateY(-2px); }
+
+.app{ display:flex; min-height:100vh; }
+.sidebar{ width:var(--sidebar-w); flex-shrink:0; position:fixed; top:0; bottom:0; left:0; background:var(--card); border-right:1px solid var(--border); padding:22px 16px; display:flex; flex-direction:column; z-index:100; transition:transform .3s var(--ease); }
+.brand{ display:flex; align-items:center; gap:11px; padding:0 6px 20px; }
+.brand-mark{ width:36px; height:36px; border-radius:11px; background:linear-gradient(150deg, var(--indigo), var(--violet)); display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-weight:800; font-size:16px; }
+.brand-name{ font-family:var(--font-display); font-weight:800; font-size:16.5px; }
+.brand-sub{ font-size:10px; color:var(--faint); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.06em; }
+.nav-group-label{ font-size:9.5px; font-family:var(--font-mono); letter-spacing:.09em; text-transform:uppercase; color:var(--faint); padding:14px 10px 5px; }
+.nav-list{ list-style:none; display:flex; flex-direction:column; gap:1px; }
+.nav-item{ display:flex; align-items:center; gap:10px; padding:9px 10px; border-radius:10px; color:var(--muted); font-size:12.5px; font-weight:500; cursor:pointer; transition:all .15s; }
+.nav-item svg{ width:16px; height:16px; flex-shrink:0; }
+.nav-item:hover{ background:var(--bg); color:var(--text); }
+.nav-item.active{ background:var(--indigo); color:#fff; }
+.nav-item .badge-n{ margin-right:auto; font-family:var(--font-mono); font-size:9.5px; background:var(--danger); color:#fff; padding:1px 6px; border-radius:20px; }
+.sidebar-foot{ padding-top:12px; border-top:1px solid var(--border); }
+.qc-mini{ padding:12px; border-radius:14px; background:var(--success-soft); display:flex; align-items:center; gap:10px; }
+.qc-dot{ width:8px; height:8px; border-radius:50%; background:var(--success); animation:pulse 2s infinite; }
+@keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.4;} }
+.qc-mini p{ font-size:11px; font-weight:600; } .qc-mini span{ font-size:9.5px; color:var(--muted); }
+
+.main{ flex:1; margin-left:var(--sidebar-w); min-width:0; }
+.topbar{ height:var(--topbar-h); position:sticky; top:0; z-index:90; display:flex; align-items:center; justify-content:space-between; padding:0 28px; background:rgba(244,245,249,0.82); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+.topbar-left h1{ font-family:var(--font-display); font-weight:800; font-size:19px; }
+.topbar-left .sub{ font-size:11.5px; color:var(--muted); margin-top:1px; }
+.topbar-right{ display:flex; align-items:center; gap:12px; }
+.search-box{ display:flex; align-items:center; gap:8px; padding:9px 13px; border-radius:var(--r-pill); background:var(--bg); border:1px solid var(--border); width:230px; }
+.search-box svg{ width:15px; height:15px; color:var(--faint); }
+.search-box input{ border:none; background:none; font-size:12.5px; width:100%; }
+.icon-btn{ width:38px; height:38px; border-radius:12px; background:var(--bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; position:relative; }
+.icon-btn svg{ width:17px; height:17px; color:var(--muted); }
+.icon-btn .ping{ position:absolute; top:7px; right:7px; width:7px; height:7px; border-radius:50%; background:var(--danger); box-shadow:0 0 0 2px var(--card); }
+.profile-chip{ display:flex; align-items:center; gap:9px; padding:5px 12px 5px 5px; border-radius:var(--r-pill); background:var(--bg); border:1px solid var(--border); }
+.avatar{ width:30px; height:30px; border-radius:50%; background:linear-gradient(150deg, var(--indigo), var(--violet)); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:11px; color:#fff; }
+.profile-chip .pname{ font-size:12px; font-weight:700; } .profile-chip .prole{ font-size:10px; color:var(--muted); }
+
+.content{ padding:26px 28px 80px; max-width:1640px; }
+.section{ margin-bottom:26px; opacity:0; transform:translateY(12px); animation:reveal .4s var(--ease) forwards; }
+.section:nth-of-type(1){animation-delay:.02s;} .section:nth-of-type(2){animation-delay:.06s;} .section:nth-of-type(3){animation-delay:.1s;} .section:nth-of-type(4){animation-delay:.14s;}
+@keyframes reveal{ to{ opacity:1; transform:none; } }
+.sec-head{ display:flex; align-items:baseline; justify-content:space-between; margin-bottom:13px; }
+.sec-head h2{ font-family:var(--font-display); font-weight:800; font-size:16.5px; }
+.sec-head .more{ font-size:11.5px; color:var(--indigo); font-weight:600; }
+
+.kpi-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.kpi-card{ padding:16px; }
+.kpi-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.kpi-icon{ width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; }
+.kpi-icon svg{ width:15px; height:15px; }
+.kpi-trend{ font-family:var(--font-mono); font-size:10px; padding:2px 7px; border-radius:20px; }
+.kpi-trend.up{ color:var(--success); background:var(--success-soft); } .kpi-trend.down{ color:var(--danger); background:var(--danger-soft); }
+.kpi-value{ font-family:var(--font-display); font-size:22px; font-weight:800; }
+.kpi-label{ font-size:11px; color:var(--muted); margin-top:2px; }
+
+/* ===== Imaging viewer (signature) ===== */
+.imaging-row{ display:grid; grid-template-columns:1.5fr 1fr; gap:16px; }
+.viewer-card{ padding:18px; }
+.viewer-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.viewer-head h3{ font-family:var(--font-display); font-size:14.5px; font-weight:800; }
+.viewer-tag{ font-family:var(--font-mono); font-size:10px; color:var(--violet); background:var(--violet-soft); padding:3px 9px; border-radius:20px; }
+.viewer-stage{ position:relative; aspect-ratio:4/3; border-radius:16px; overflow:hidden; background:#0B0C14; border:1px solid var(--border); }
+#scanCanvas{ width:100%; height:100%; display:block; }
+.viewer-crosshair-label{ position:absolute; top:12px; left:12px; font-family:var(--font-mono); font-size:10px; color:rgba(255,255,255,0.6); }
+.viewer-controls{ display:flex; align-items:center; justify-content:space-between; margin-top:12px; gap:14px; }
+.viewer-toolbar{ display:flex; gap:6px; }
+.tool-btn{ width:32px; height:32px; border-radius:9px; background:var(--bg); border:1px solid var(--border); display:flex; align-items:center; justify-content:center; }
+.tool-btn svg{ width:14px; height:14px; color:var(--muted); }
+.tool-btn.active{ background:var(--indigo); border-color:var(--indigo); }
+.tool-btn.active svg{ color:#fff; }
+.slider-group{ display:flex; align-items:center; gap:8px; flex:1; max-width:220px; }
+.slider-group span{ font-size:10px; color:var(--faint); font-family:var(--font-mono); width:26px; }
+.slider-group input[type=range]{ flex:1; accent-color:var(--indigo); }
+
+/* sample queue */
+.sample-row{ display:flex; align-items:center; gap:11px; padding:10px 0; border-top:1px solid var(--border); }
+.sample-row:first-child{ border-top:none; padding-top:0; }
+.sample-tube{ width:30px; height:30px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.sample-tube svg{ width:14px; height:14px; }
+.sample-row .info{ flex:1; min-width:0; } .sample-row .sn{ font-size:12px; font-weight:700; } .sample-row .sm{ font-size:10.5px; color:var(--muted); }
+.status-chip{ font-family:var(--font-mono); font-size:9.5px; padding:3px 9px; border-radius:20px; }
+.status-chip.critical{ background:var(--danger-soft); color:var(--danger); }
+.status-chip.processing{ background:var(--warning-soft); color:var(--warning); }
+.status-chip.complete{ background:var(--success-soft); color:var(--success); }
+
+/* row: catalog + reports */
+.row3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+.panel{ padding:20px; }
+.panel-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:13px; }
+.panel-head h3{ font-family:var(--font-display); font-size:14px; font-weight:800; }
+.tag-count{ font-family:var(--font-mono); font-size:10px; color:var(--muted); background:var(--bg); border:1px solid var(--border); padding:3px 8px; border-radius:20px; }
+
+.test-row{ display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-top:1px solid var(--border); font-size:12px; }
+.test-row:first-child{ border-top:none; padding-top:0; }
+.test-row .tn{ font-weight:600; } .test-row .tp{ color:var(--muted); font-family:var(--font-mono); font-size:11px; }
+
+.report-row{ display:flex; align-items:center; gap:11px; padding:10px 0; border-top:1px solid var(--border); }
+.report-row:first-child{ border-top:none; padding-top:0; }
+.report-icon{ width:32px; height:32px; border-radius:9px; background:var(--indigo-soft); color:var(--indigo); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.report-icon svg{ width:14px; height:14px; }
+.report-row .rn{ font-size:12px; font-weight:700; } .report-row .rm{ font-size:10.5px; color:var(--muted); }
+
+.turnaround-row{ display:flex; justify-content:space-between; align-items:center; padding:9px 0; border-top:1px solid var(--border); }
+.turnaround-row:first-child{ border-top:none; padding-top:0; }
+.turnaround-row .tn{ font-size:12px; color:var(--muted); }
+.turnaround-track{ width:80px; height:5px; border-radius:5px; background:var(--bg); overflow:hidden; }
+.turnaround-fill{ height:100%; border-radius:5px; background:var(--cyan); width:0; transition:width 1s var(--ease); }
+
+@media (prefers-reduced-motion:reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+.mobile-menu-btn{ display:none; width:38px; height:38px; border-radius:11px; align-items:center; justify-content:center; background:var(--bg); border:1px solid var(--border); margin-left:10px; }
+.mobile-menu-btn svg{ width:17px; height:17px; }
+.sidebar-scrim{ display:none; position:fixed; inset:0; background:rgba(0,0,0,.35); z-index:99; }
+.sidebar-scrim.show{ display:block; }
+@media (max-width:1300px){ .kpi-grid{ grid-template-columns:repeat(2,1fr); } .imaging-row{ grid-template-columns:1fr; } .row3{ grid-template-columns:1fr 1fr; } }
+@media (max-width:1000px){ .sidebar{ transform:translateX(-100%); } .sidebar.open{ transform:translateX(0); } .main{ margin-left:0; } .mobile-menu-btn{ display:flex !important; } .search-box{ width:150px; } .row3{ grid-template-columns:1fr; } }
+@media (max-width:560px){ .content{ padding:18px 14px 70px; } .topbar{ padding:0 14px; } .kpi-grid{ grid-template-columns:1fr 1fr; } .search-box{ display:none; } }
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="sidebar-scrim" id="scrim"></div>
+  <aside class="sidebar" id="sidebar">
+    <div class="brand"><div class="brand-mark">M</div><div><div class="brand-name">Meridian</div><div class="brand-sub">Diagnostics</div></div></div>
+    <div class="nav-group-label">Workflow</div>
+    <ul class="nav-list">
+      <li class="nav-item active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>Dashboard</li>
+      <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 3h6v4l4 9a2 2 0 01-2 3H7a2 2 0 01-2-3l4-9z"/></svg>Sample Queue<span class="badge-n">7</span></li>
+      <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="4"/><path d="M4.9 4.9l3 3M19.1 4.9l-3 3M4.9 19.1l3-3M19.1 19.1l-3-3"/></svg>Radiology</li>
+      <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg>Test Catalog</li>
+      <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h16v16H4z"/><path d="M8 4v16M4 9h4"/></svg>Reports</li>
+    </ul>
+    <div class="nav-group-label">Quality</div>
+    <ul class="nav-list">
+      <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Quality Control</li>
+      <li class="nav-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.34 1.87l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.7 1.7 0 00-1.87-.34 1.7 1.7 0 00-1 1.55V21a2 2 0 01-4 0v-.09A1.7 1.7 0 008.6 19.4a1.7 1.7 0 00-1.87.34l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.7 1.7 0 00.34-1.87 1.7 1.7 0 00-1.55-1H2.5a2 2 0 010-4h.09A1.7 1.7 0 004.6 8.6a1.7 1.7 0 00-.34-1.87l-.06-.06a2 2 0 112.83-2.83l.06.06a1.7 1.7 0 001.87.34H9a1.7 1.7 0 001-1.55V2.5a2 2 0 014 0v.09a1.7 1.7 0 001 1.55 1.7 1.7 0 001.87-.34l.06-.06a2 2 0 112.83 2.83l-.06.06a1.7 1.7 0 00-.34 1.87V9c.14.6.6 1.13 1.55 1H21a2 2 0 010 4h-.09a1.7 1.7 0 00-1.51 1z"/></svg>Settings</li>
+    </ul>
+    <div class="sidebar-foot">
+      <div class="qc-mini"><span class="qc-dot"></span><div><p>QC checks passed</p><span>All instruments calibrated</span></div></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="topbar">
+      <div style="display:flex; align-items:center;">
+        <button class="mobile-menu-btn" id="menuBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+        <div><h1>Central Lab · Riverside</h1><div class="sub">142 samples processed today · 7 pending review</div></div>
+      </div>
+      <div class="topbar-right">
+        <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input type="text" placeholder="Search sample ID, patient…"></div>
+        <button class="icon-btn"><span class="ping"></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M18 8a6 6 0 10-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 01-3.4 0"/></svg></button>
+        <div class="profile-chip"><div class="avatar">DA</div><div><div class="pname">Dr. Dina Amer</div><div class="prole">Lead Radiologist</div></div></div>
+      </div>
+    </header>
+
+    <div class="content">
+
+      <section class="section">
+        <div class="kpi-grid" id="kpiGrid"></div>
+      </section>
+
+      <section class="section imaging-row">
+        <div class="card viewer-card">
+          <div class="viewer-head"><h3>MRI · Lumbar Spine, Sagittal</h3><span class="viewer-tag">Patient: Hesham Sabry</span></div>
+          <div class="viewer-stage"><canvas id="scanCanvas"></canvas><div class="viewer-crosshair-label" id="coordLabel">x: 0, y: 0</div></div>
+          <div class="viewer-controls">
+            <div class="viewer-toolbar">
+              <button class="tool-btn active" title="Pan"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3v18M3 9l6-6 6 6M15 21l6-6-6-6" transform="rotate(45 12 12)"/></svg></button>
+              <button class="tool-btn" title="Zoom"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3M11 8v6M8 11h6"/></svg></button>
+              <button class="tool-btn" title="Measure"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17L17 3M6 20l14-14M3 12l9-9"/></svg></button>
+              <button class="tool-btn" title="Annotate"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 20h9M16.5 3.5a2.1 2.1 0 013 3L7 19l-4 1 1-4z"/></svg></button>
+            </div>
+            <div class="slider-group"><span>W</span><input type="range" id="windowSlider" min="0" max="100" value="55"></div>
+            <div class="slider-group"><span>L</span><input type="range" id="levelSlider" min="0" max="100" value="50"></div>
+          </div>
+        </div>
+
+        <div class="card panel">
+          <div class="panel-head"><h3>Sample &amp; Scan Queue</h3><span class="tag-count">7 pending</span></div>
+          <div id="sampleQueue"></div>
+        </div>
+      </section>
+
+      <section class="section row3">
+        <div class="card panel">
+          <div class="panel-head"><h3>Test Catalog</h3><span class="tag-count">Popular</span></div>
+          <div id="testCatalog"></div>
+        </div>
+        <div class="card panel">
+          <div class="panel-head"><h3>Recent Reports</h3><span class="tag-count">Today</span></div>
+          <div id="reportList"></div>
+        </div>
+        <div class="card panel">
+          <div class="panel-head"><h3>Avg. Turnaround Time</h3><span class="tag-count mono" style="color:var(--success)">-6%</span></div>
+          <div id="turnaroundList"></div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const sidebar=document.getElementById('sidebar'), scrim=document.getElementById('scrim');
+document.getElementById('menuBtn').addEventListener('click', ()=>{ sidebar.classList.add('open'); scrim.classList.add('show'); });
+scrim.addEventListener('click', ()=>{ sidebar.classList.remove('open'); scrim.classList.remove('show'); });
+document.querySelectorAll('.nav-item').forEach(it=>{ it.addEventListener('click', ()=>{ document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active')); it.classList.add('active'); }); });
+document.querySelectorAll('.tool-btn').forEach(it=>{ it.addEventListener('click', ()=>{ document.querySelectorAll('.tool-btn').forEach(n=>n.classList.remove('active')); it.classList.add('active'); }); });
+
+function animateCount(el,target,dur=900,decimals=0){ const start=performance.now();
+  function frame(t){ const p=Math.min(1,(t-start)/dur); const e=1-Math.pow(1-p,3); el.textContent=(target*e).toLocaleString('en-US',{minimumFractionDigits:decimals,maximumFractionDigits:decimals}); if(p<1) requestAnimationFrame(frame); }
+  requestAnimationFrame(frame); }
+
+const kpis = [
+  {label:'Samples Today', value:142, trend:'+9%', up:true, color:'indigo', icon:'<path d="M9 3h6v4l4 9a2 2 0 01-2 3H7a2 2 0 01-2-3l4-9z"/>'},
+  {label:'Pending Review', value:7, trend:'+2', up:false, color:'warning', icon:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'},
+  {label:'Critical Values', value:2, trend:'flagged', up:false, color:'danger', icon:'<path d="M12 9v4M12 17h.01"/><circle cx="12" cy="12" r="9"/>'},
+  {label:'Avg. Turnaround', value:3.4, decimals:1, trend:'-6%', up:true, color:'cyan', icon:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>', suffix:'h'},
+];
+const kpiGrid = document.getElementById('kpiGrid');
+kpis.forEach((k,i)=>{
+  const d = document.createElement('div'); d.className='card kpi-card';
+  d.innerHTML = `<div class="kpi-top"><div class="kpi-icon" style="background:var(--${k.color}-soft); color:var(--${k.color});"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">${k.icon}</svg></div><span class="kpi-trend ${k.up?'up':'down'}">${k.up?'▲':'▼'} ${k.trend}</span></div>
+  <div class="kpi-value" id="kv${i}">0</div><div class="kpi-label">${k.label}</div>`;
+  kpiGrid.appendChild(d);
+  setTimeout(()=>animateCount(document.getElementById('kv'+i), k.value, 900, k.decimals||0), 200+i*80);
+});
+
+/* ===== imaging canvas (fake MRI-style render) ===== */
+const canvas = document.getElementById('scanCanvas');
+const ctx = canvas.getContext('2d');
+function resizeCanvas(){ const r = canvas.getBoundingClientRect(); canvas.width = r.width*2; canvas.height = r.height*2; drawScan(); }
+function drawScan(){
+  const w = canvas.width, h = canvas.height;
+  ctx.fillStyle = '#0B0C14'; ctx.fillRect(0,0,w,h);
+  const wVal = document.getElementById('windowSlider').value/100;
+  const lVal = document.getElementById('levelSlider').value/100;
+  // simulate a spine-like MRI blob using layered radial gradients + noise-ish shapes
+  for(let i=0;i<7;i++){
+    const cx = w*0.5 + Math.sin(i*1.3)*w*0.06;
+    const cy = h*(0.12+i*0.115);
+    const rx = w*0.16, ry = h*0.09;
+    const grad = ctx.createRadialGradient(cx,cy,2,cx,cy,rx);
+    const bright = (0.35+lVal*0.5)*255;
+    grad.addColorStop(0, `rgba(${bright+40},${bright+40},${bright+50},${0.55+wVal*0.35})`);
+    grad.addColorStop(1, 'rgba(10,10,20,0)');
+    ctx.fillStyle = grad;
+    ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.fill();
+  }
+  // spinal cord line
+  ctx.strokeStyle = `rgba(180,190,255,${0.25+wVal*0.3})`;
+  ctx.lineWidth = w*0.012;
+  ctx.beginPath();
+  ctx.moveTo(w*0.5, h*0.06);
+  for(let i=0;i<=10;i++){ const y=h*0.06+i*(h*0.88/10); const x=w*0.5+Math.sin(i*0.7)*w*0.02; ctx.lineTo(x,y); }
+  ctx.stroke();
+  // grid overlay
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth=1;
+  for(let x=0;x<w;x+=w/12){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,h); ctx.stroke(); }
+  for(let y=0;y<h;y+=h/12){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(w,y); ctx.stroke(); }
+  // crosshair markers (annotations)
+  ctx.strokeStyle = 'rgba(124,58,237,0.9)'; ctx.lineWidth=2;
+  const mx=w*0.52, my=h*0.42;
+  ctx.beginPath(); ctx.arc(mx,my,w*0.02,0,Math.PI*2); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(mx-w*0.03,my); ctx.lineTo(mx+w*0.03,my); ctx.moveTo(mx,my-w*0.03); ctx.lineTo(mx,my+w*0.03); ctx.stroke();
+}
+window.addEventListener('resize', resizeCanvas);
+document.getElementById('windowSlider').addEventListener('input', drawScan);
+document.getElementById('levelSlider').addEventListener('input', drawScan);
+canvas.addEventListener('mousemove', e=>{
+  const r = canvas.getBoundingClientRect();
+  document.getElementById('coordLabel').textContent = `x: ${Math.round(e.clientX-r.left)}, y: ${Math.round(e.clientY-r.top)}`;
+});
+setTimeout(resizeCanvas, 50);
+
+/* sample queue */
+const samples = [
+  {n:'#LB-8821 · Hesham Sabry', m:'MRI Lumbar Spine', status:'processing', color:'warning'},
+  {n:'#LB-8822 · Farida Nabil', m:'Complete Blood Count', status:'critical', color:'danger'},
+  {n:'#LB-8823 · Tarek Mostafa', m:'Fasting Glucose', status:'complete', color:'success'},
+  {n:'#LB-8824 · Salma Reda', m:'Thyroid Panel (TSH)', status:'processing', color:'warning'},
+  {n:'#LB-8825 · Dalia Karim', m:'Chest X-Ray', status:'complete', color:'success'},
+];
+document.getElementById('sampleQueue').innerHTML = samples.map(s=>`
+  <div class="sample-row"><div class="sample-tube" style="background:var(--${s.color}-soft); color:var(--${s.color});"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 3h6v4l4 9a2 2 0 01-2 3H7a2 2 0 01-2-3l4-9z"/></svg></div>
+  <div class="info"><div class="sn">${s.n}</div><div class="sm">${s.m}</div></div><span class="status-chip ${s.status}">${s.status[0].toUpperCase()+s.status.slice(1)}</span></div>`).join('');
+
+/* test catalog */
+const tests = [ {n:'Complete Blood Count', p:'EGP 180'}, {n:'Lipid Profile', p:'EGP 240'}, {n:'Thyroid Panel (TSH)', p:'EGP 320'}, {n:'PCR — Respiratory', p:'EGP 450'}, {n:'MRI — Lumbar Spine', p:'EGP 2,400'} ];
+document.getElementById('testCatalog').innerHTML = tests.map(t=>`<div class="test-row"><span class="tn">${t.n}</span><span class="tp">${t.p}</span></div>`).join('');
+
+/* reports */
+const reports = [ {n:'Blood Panel — Farida Nabil', m:'Signed 12 min ago'}, {n:'Chest X-Ray — Dalia Karim', m:'Signed 40 min ago'}, {n:'Glucose Test — Tarek Mostafa', m:'Signed 1 hr ago'} ];
+document.getElementById('reportList').innerHTML = reports.map(r=>`
+  <div class="report-row"><div class="report-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M6 3h9l5 5v13H6z"/><path d="M14 3v5h5"/></svg></div><div><div class="rn">${r.n}</div><div class="rm">${r.m}</div></div></div>`).join('');
+
+/* turnaround */
+const turn = [ {n:'Blood Tests', p:78}, {n:'Radiology', p:56}, {n:'PCR', p:64}, {n:'Hormone Panels', p:44} ];
+document.getElementById('turnaroundList').innerHTML = turn.map(t=>`
+  <div class="turnaround-row"><span class="tn">${t.n}</span><div class="turnaround-track"><div class="turnaround-fill" data-w="${t.p}"></div></div></div>`).join('');
+setTimeout(()=>{ document.querySelectorAll('.turnaround-fill').forEach(el=>{ el.style.width = el.dataset.w+'%'; }); }, 300);
+</script>
+</body>
+</html>

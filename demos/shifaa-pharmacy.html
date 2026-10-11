@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>صيدلية الشفاء</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap">
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #F3FBF6; font-family: 'Cairo', sans-serif; }
+  #root { min-height: 100vh; }
+  ::-webkit-scrollbar { width: 6px; height: 6px; }
+  ::-webkit-scrollbar-thumb { background: #B7DDC7; border-radius: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+</style>
+</head>
+<body>
+<div id="root">
+  <div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#5E7A69;">
+    جارِ التحميل...
+  </div>
+</div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useMemo } = React;
+
+/* ---------- Minimal inline icon set (no external dependency) ---------- */
+function Icon({ children, size = 16, color, strokeWidth = 2, fill = "none", style, ...rest }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color || "currentColor"}
+         strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" style={style} {...rest}>
+      {children}
+    </svg>
+  );
+}
+const PillIcon = (p) => <Icon {...p}><rect x="4.5" y="8.5" width="15" height="7" rx="3.5" transform="rotate(45 12 12)" /><line x1="12" y1="6.3" x2="12" y2="17.7" transform="rotate(45 12 12)" /></Icon>;
+const SearchIcon = (p) => <Icon {...p}><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></Icon>;
+const ShoppingBagIcon = (p) => <Icon {...p}><path d="M6 8h12l-1 12H7L6 8z" /><path d="M9 8V6a3 3 0 0 1 6 0v2" /></Icon>;
+const TruckIcon = (p) => <Icon {...p}><rect x="1" y="7" width="13" height="9" rx="1" /><path d="M14 10h4l3 3v3h-7z" /><circle cx="6" cy="18" r="1.6" /><circle cx="17" cy="18" r="1.6" /></Icon>;
+const ClockIcon = (p) => <Icon {...p}><circle cx="12" cy="12" r="9" /><polyline points="12 7 12 12 16 14" /></Icon>;
+const ShieldCheckIcon = (p) => <Icon {...p}><path d="M12 3l7 3v6c0 5-3.5 8-7 9c-3.5-1-7-4-7-9V6l7-3z" /><polyline points="9 12 11 14 15 10" /></Icon>;
+const XIcon = (p) => <Icon {...p}><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></Icon>;
+const PlusIcon = (p) => <Icon {...p}><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></Icon>;
+const MinusIcon = (p) => <Icon {...p}><line x1="5" y1="12" x2="19" y2="12" /></Icon>;
+const StethoscopeIcon = (p) => <Icon {...p}><path d="M5 3v5a4 4 0 0 0 8 0V3" /><path d="M9 12v2a5 5 0 0 0 10 0v-2" /><circle cx="19" cy="10" r="1.6" /></Icon>;
+const BabyIcon = (p) => <Icon {...p}><circle cx="12" cy="8" r="4" /><path d="M6 20c0-4 3-6 6-6s6 2 6 6" /></Icon>;
+const SunIcon = (p) => <Icon {...p}><circle cx="12" cy="12" r="4" /><line x1="12" y1="2" x2="12" y2="4" /><line x1="12" y1="20" x2="12" y2="22" /><line x1="2" y1="12" x2="4" y2="12" /><line x1="20" y1="12" x2="22" y2="12" /><line x1="4.9" y1="4.9" x2="6.3" y2="6.3" /><line x1="17.7" y1="17.7" x2="19.1" y2="19.1" /><line x1="4.9" y1="19.1" x2="6.3" y2="17.7" /><line x1="17.7" y1="6.3" x2="19.1" y2="4.9" /></Icon>;
+const HeartPulseIcon = (p) => <Icon {...p}><path d="M20 8.5c0-2.5-2-4.5-4.5-4.5-1.5 0-2.8.7-3.5 1.8-.7-1.1-2-1.8-3.5-1.8C6 4 4 6 4 8.5c0 4 4.5 7 8 10 3.5-3 8-6 8-10z" /><polyline points="7 10 9.5 10 11 8 13 13 14.5 10 17 10" /></Icon>;
+const SendIcon = (p) => <Icon {...p}><line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" /></Icon>;
+const CrownIcon = (p) => <Icon {...p}><path d="M3 18h18l-1.5-9-4 3-3.5-6-3.5 6-4-3L3 18z" /></Icon>;
+const SparklesIcon = (p) => <Icon {...p}><path d="M12 3l1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3z" /><path d="M19 14l.7 2.1L22 17l-2.3.9L19 20l-.7-2.1L16 17l2.3-.9L19 14z" /></Icon>;
+const BadgeCheckIcon = (p) => <Icon {...p}><path d="M12 2l2.2 1.3 2.5-.4 1.1 2.3 2.3 1.1-.4 2.5L21 12l-1.3 2.2.4 2.5-2.3 1.1-1.1 2.3-2.5-.4L12 21l-2.2-1.3-2.5.4-1.1-2.3-2.3-1.1.4-2.5L3 12l1.3-2.2-.4-2.5 2.3-1.1 1.1-2.3 2.5.4L12 2z" /><polyline points="9 12 11 14 15 10" /></Icon>;
+const ChevronLeftIcon = (p) => <Icon {...p}><polyline points="15 18 9 12 15 6" /></Icon>;
+
+const FONT_ID = "shifaa-fonts";
+function useFonts() {
+  useEffect(() => {
+    if (document.getElementById(FONT_ID)) return;
+    const l = document.createElement("link");
+    l.id = FONT_ID; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap";
+    document.head.appendChild(l);
+  }, []);
+}
+
+const C = {
+  bg: "#F3FBF6", surface: "#FFFFFF", border: "#D8EEE1",
+  ink: "#12281B", muted: "#5E7A69",
+  green: "#0E8F5C", greenDeep: "#075C3A", greenSoft: "rgba(14,143,92,0.1)",
+  teal: "#20B2A6", gold: "#C9922E", goldSoft: "rgba(201,146,46,0.12)",
+};
+const font = { display: "'Cairo', sans-serif", body: "'Cairo', sans-serif" };
+const shadow = {
+  sm: "0 1px 3px rgba(18,40,27,0.06)",
+  md: "0 10px 26px rgba(18,40,27,0.08)",
+  lg: "0 20px 44px rgba(18,40,27,0.16)",
+  glow: "0 8px 24px rgba(14,143,92,0.25)",
+};
+
+const PHARMACY = { name: "صيدلية الشفاء", pharmacist: "د. صيدلي وائل غنيم", address: "شارع الحجاز، مصر الجديدة، القاهرة" };
+
+const CATEGORIES = [
+  { id: "chronic", l: "أدوية مزمنة", icon: HeartPulseIcon },
+  { id: "baby", l: "أدوات أطفال ورضاعة", icon: BabyIcon },
+  { id: "skin", l: "عناية بالبشرة", icon: SunIcon },
+  { id: "general", l: "أدوية عامة", icon: StethoscopeIcon },
+];
+
+const PRODUCTS = [
+  { id: 1, cat: "chronic", name: "أقراص ضغط الدم", price: 45, tag: "الأكثر طلبًا" },
+  { id: 2, cat: "chronic", name: "شريط قياس السكر (50 قطعة)", price: 320 },
+  { id: 3, cat: "baby", name: "حليب أطفال مرحلة 2", price: 285, tag: "عرض خاص" },
+  { id: 4, cat: "baby", name: "مناديل مبللة للأطفال", price: 35 },
+  { id: 5, cat: "skin", name: "كريم واقي شمس SPF50", price: 190, tag: "الأكثر طلبًا" },
+  { id: 6, cat: "skin", name: "غسول بشرة حساسة", price: 150 },
+  { id: 7, cat: "general", name: "خافض حرارة للكبار", price: 25 },
+  { id: 8, cat: "general", name: "فيتامين سي فوار", price: 60 },
+];
+
+function App() {
+  useFonts();
+  const [cat, setCat] = useState("chronic");
+  const [query, setQuery] = useState("");
+  const [cart, setCart] = useState({});
+  const [drawer, setDrawer] = useState(false);
+  const [pulseId, setPulseId] = useState(null);
+
+  const filtered = useMemo(() => {
+    let list = PRODUCTS.filter((p) => p.cat === cat);
+    if (query) list = PRODUCTS.filter((p) => p.name.includes(query));
+    return list;
+  }, [cat, query]);
+
+  const setQty = (id, q) => {
+    setCart((c) => ({ ...c, [id]: Math.max(0, q) }));
+    if (q > (cart[id] || 0)) {
+      setPulseId(id);
+      setTimeout(() => setPulseId(null), 260);
+    }
+  };
+  const count = Object.values(cart).reduce((a, b) => a + b, 0);
+  const total = Object.entries(cart).reduce((a, [id, q]) => a + (PRODUCTS.find(p => p.id === Number(id))?.price || 0) * q, 0);
+  const freeDeliveryLeft = Math.max(0, 300 - total);
+
+  return (
+    <div dir="rtl" style={{ background: C.bg, minHeight: "100vh", fontFamily: font.body, color: C.ink, maxWidth: 480, margin: "0 auto", paddingBottom: 96, position: "relative", boxShadow: "0 0 60px rgba(18,40,27,0.08)" }}>
+      <style>{`
+        * { box-sizing: border-box; }
+        input::placeholder { color: #9BB5A9; }
+        @keyframes slideUp { from { opacity:0; transform:translateY(24px);} to {opacity:1; transform:translateY(0);} }
+        @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+        @keyframes popQty { 0% { transform: scale(1);} 40% { transform: scale(1.35);} 100% { transform: scale(1);} }
+        @keyframes shimmer { 0% { background-position: -200% 0; } 100% { background-position: 200% 0; } }
+        .prod-card { transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease; }
+        .prod-card:hover { transform: translateY(-2px); box-shadow: 0 14px 30px rgba(18,40,27,0.12); border-color: rgba(14,143,92,0.35); }
+        .cat-chip { transition: all .2s ease; }
+        .cat-chip:active { transform: scale(0.96); }
+        .qty-btn { transition: transform .15s ease, background .15s ease; }
+        .qty-btn:active { transform: scale(0.88); }
+        .cart-bar { transition: transform .25s cubic-bezier(.34,1.56,.64,1); }
+        .checkout-btn { transition: transform .15s ease, box-shadow .15s ease; }
+        .checkout-btn:hover { transform: translateY(-1px); box-shadow: 0 12px 26px rgba(14,143,92,0.35); }
+        .header-pattern {
+          background-image: radial-gradient(circle at 18% 20%, rgba(255,255,255,0.14) 0, transparent 40%),
+                             radial-gradient(circle at 85% 0%, rgba(255,255,255,0.1) 0, transparent 45%);
+        }
+        .vip-shine {
+          background: linear-gradient(90deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.35) 50%, rgba(255,255,255,0) 100%);
+          background-size: 200% 100%;
+          animation: shimmer 3.2s infinite linear;
+        }
+      `}</style>
+
+      {/* Header */}
+      <div className="header-pattern" style={{ background: `linear-gradient(160deg, ${C.green}, ${C.greenDeep})`, padding: "30px 22px 24px", borderRadius: "0 0 28px 28px", color: "#fff", position: "relative", overflow: "hidden" }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 18 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <div style={{ width: 44, height: 44, borderRadius: 13, background: "rgba(255,255,255,0.16)", display: "flex", alignItems: "center", justifyContent: "center", border: "1px solid rgba(255,255,255,0.18)" }}>
+              <PillIcon size={20} color="#fff" />
+            </div>
+            <div>
+              <div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 17 }}>{PHARMACY.name}</div>
+              <div style={{ fontFamily: font.body, fontSize: 10.5, opacity: 0.78 }}>{PHARMACY.pharmacist}</div>
+            </div>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 5, background: "rgba(255,255,255,0.14)", border: "1px solid rgba(255,255,255,0.28)", borderRadius: 999, padding: "6px 11px", position: "relative", overflow: "hidden" }}>
+            <div className="vip-shine" style={{ position: "absolute", inset: 0 }} />
+            <CrownIcon size={12} color="#FFE9B0" style={{ position: "relative", zIndex: 1 }} />
+            <span style={{ fontSize: 10.5, fontWeight: 800, fontFamily: font.display, position: "relative", zIndex: 1, letterSpacing: 0.2 }}>عضوية VIP</span>
+          </div>
+        </div>
+        <div style={{ display: "flex", gap: 16, fontFamily: font.body, fontSize: 11, opacity: 0.95 }}>
+          <span style={{ display: "flex", alignItems: "center", gap: 4 }}><TruckIcon size={12} /> توصيل خلال ساعة</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 4 }}><ClockIcon size={12} /> يعمل 24 ساعة</span>
+          <span style={{ display: "flex", alignItems: "center", gap: 4 }}><ShieldCheckIcon size={12} /> أدوية أصلية 100%</span>
+        </div>
+      </div>
+
+      {/* Free delivery progress (VIP touch) */}
+      {freeDeliveryLeft > 0 && count > 0 && (
+        <div style={{ margin: "14px 20px 0", background: C.goldSoft, border: `1px solid rgba(201,146,46,0.27)`, borderRadius: 12, padding: "9px 13px", display: "flex", alignItems: "center", gap: 8, animation: "fadeIn .3s ease" }}>
+          <SparklesIcon size={13} color={C.gold} />
+          <span style={{ fontSize: 11, fontFamily: font.body, color: "#7A5A17" }}>
+            أضف <b>{freeDeliveryLeft} ج.م</b> أخرى للحصول على توصيل مجاني
+          </span>
+        </div>
+      )}
+
+      {/* Search */}
+      <div style={{ padding: "16px 20px 0" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 8, background: C.surface, border: `1px solid ${C.border}`, borderRadius: 14, padding: "11px 14px", boxShadow: shadow.sm }}>
+          <SearchIcon size={15} color={C.muted} />
+          <input
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="ابحث عن دواء أو منتج..."
+            style={{ background: "transparent", border: "none", outline: "none", flex: 1, fontFamily: font.body, fontSize: 13, textAlign: "right", color: C.ink }}
+          />
+        </div>
+      </div>
+
+      {/* Categories */}
+      {!query && (
+        <div style={{ display: "flex", gap: 8, padding: "16px 20px", overflowX: "auto" }}>
+          {CATEGORIES.map((c) => (
+            <div
+              key={c.id}
+              onClick={() => setCat(c.id)}
+              className="cat-chip"
+              style={{
+                display: "flex", alignItems: "center", gap: 6, padding: "9px 15px", borderRadius: 999,
+                whiteSpace: "nowrap", cursor: "pointer",
+                background: cat === c.id ? `linear-gradient(135deg, ${C.green}, ${C.greenDeep})` : C.surface,
+                color: cat === c.id ? "#fff" : C.ink,
+                border: `1px solid ${cat === c.id ? C.green : C.border}`,
+                fontFamily: font.body, fontWeight: 700, fontSize: 12,
+                boxShadow: cat === c.id ? shadow.glow : "none",
+              }}
+            >
+              <c.icon size={13} /> {c.l}
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* Products */}
+      <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", gap: 10 }}>
+        {filtered.length === 0 && (
+          <div style={{ textAlign: "center", padding: "40px 0", color: C.muted, fontFamily: font.body, fontSize: 13 }}>
+            لا توجد نتائج مطابقة لبحثك
+          </div>
+        )}
+        {filtered.map((p) => (
+          <div key={p.id} className="prod-card" style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 14, padding: 14, display: "flex", alignItems: "center", gap: 12, boxShadow: shadow.sm, position: "relative" }}>
+            <div style={{ width: 46, height: 46, borderRadius: 12, background: C.greenSoft, display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+              <PillIcon size={18} color={C.green} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 6 }}>
+                <div style={{ fontFamily: font.body, fontSize: 12.5, fontWeight: 700, color: C.ink }}>{p.name}</div>
+                {p.tag && (
+                  <span style={{ fontSize: 9, fontWeight: 800, color: C.gold, background: C.goldSoft, padding: "2px 7px", borderRadius: 999, fontFamily: font.display }}>{p.tag}</span>
+                )}
+              </div>
+              <div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 13, color: C.green, marginTop: 3 }}>{p.price} ج.م</div>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 8, background: C.greenSoft, borderRadius: 10, padding: "4px 6px" }}>
+              <div onClick={() => setQty(p.id, (cart[p.id] || 0) - 1)} className="qty-btn" style={{ width: 22, height: 22, borderRadius: 6, background: "#fff", display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", boxShadow: shadow.sm }}>
+                <MinusIcon size={12} color={C.green} />
+              </div>
+              <span style={{ fontFamily: font.display, fontWeight: 700, fontSize: 12, width: 14, textAlign: "center", display: "inline-block", animation: pulseId === p.id ? "popQty .26s ease" : "none" }}>
+                {cart[p.id] || 0}
+              </span>
+              <div onClick={() => setQty(p.id, (cart[p.id] || 0) + 1)} className="qty-btn" style={{ width: 22, height: 22, borderRadius: 6, background: `linear-gradient(135deg, ${C.green}, ${C.greenDeep})`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <PlusIcon size={12} color="#fff" />
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Sticky cart bar */}
+      {count > 0 && (
+        <div
+          onClick={() => setDrawer(true)}
+          className="cart-bar"
+          style={{
+            position: "fixed", bottom: 18, left: 18, right: 18, maxWidth: 440, margin: "0 auto",
+            background: `linear-gradient(135deg, ${C.green}, ${C.greenDeep})`, borderRadius: 16, padding: "14px 20px",
+            display: "flex", justifyContent: "space-between", alignItems: "center",
+            boxShadow: "0 14px 32px rgba(14,143,92,0.38)", cursor: "pointer", animation: "slideUp 0.3s ease",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: 10, color: "#fff" }}>
+            <ShoppingBagIcon size={16} />
+            <span style={{ fontFamily: font.body, fontWeight: 700, fontSize: 13.5 }}>{count} منتج</span>
+          </div>
+          <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
+            <span style={{ color: "#fff", fontFamily: font.display, fontWeight: 800, fontSize: 15 }}>{total} ج.م</span>
+            <ChevronLeftIcon size={15} color="#fff" style={{ opacity: 0.8 }} />
+          </div>
+        </div>
+      )}
+
+      {/* Cart drawer */}
+      {drawer && (
+        <div onClick={() => setDrawer(false)} style={{ position: "fixed", inset: 0, background: "rgba(18,40,27,0.45)", zIndex: 90, animation: "fadeIn .2s ease" }}>
+          <div
+            onClick={(e) => e.stopPropagation()}
+            style={{
+              position: "fixed", bottom: 0, left: 0, right: 0, maxWidth: 480, margin: "0 auto",
+              background: C.surface, borderRadius: "22px 22px 0 0", padding: 22, maxHeight: "70vh", overflowY: "auto",
+              animation: "slideUp .28s cubic-bezier(.22,1,.36,1)", boxShadow: "0 -20px 50px rgba(18,40,27,0.2)",
+            }}
+          >
+            <div style={{ width: 40, height: 4, borderRadius: 99, background: C.border, margin: "0 auto 16px" }} />
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 16, alignItems: "center" }}>
+              <span style={{ fontFamily: font.display, fontWeight: 800, fontSize: 17 }}>طلبك</span>
+              <div onClick={() => setDrawer(false)} style={{ width: 30, height: 30, borderRadius: 9, background: C.greenSoft, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer" }}>
+                <XIcon size={16} color={C.ink} />
+              </div>
+            </div>
+            {Object.entries(cart).filter(([, q]) => q > 0).map(([id, q]) => {
+              const p = PRODUCTS.find(x => x.id === Number(id));
+              return (
+                <div key={id} style={{ display: "flex", justifyContent: "space-between", padding: "11px 0", borderBottom: `1px solid ${C.border}`, fontFamily: font.body, fontSize: 12.5 }}>
+                  <span>{p.name} × {q}</span>
+                  <span style={{ fontWeight: 700 }}>{p.price * q} ج.م</span>
+                </div>
+              );
+            })}
+            <div style={{ display: "flex", justifyContent: "space-between", padding: "14px 0 4px", fontFamily: font.display, fontWeight: 800, fontSize: 14 }}>
+              <span>الإجمالي</span>
+              <span style={{ color: C.green }}>{total} ج.م</span>
+            </div>
+            <div style={{ display: "flex", alignItems: "center", gap: 6, marginTop: 6, marginBottom: 4, color: C.muted, fontSize: 11 }}>
+              <BadgeCheckIcon size={13} color={C.green} />
+              <span>كعميل VIP، طلبك مؤمّن وقابل للاسترجاع خلال 48 ساعة</span>
+            </div>
+            <button className="checkout-btn" style={{ width: "100%", marginTop: 14, padding: "13px 0", borderRadius: 12, border: "none", background: `linear-gradient(135deg, ${C.green}, ${C.greenDeep})`, color: "#fff", fontFamily: font.body, fontWeight: 700, fontSize: 14, cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, boxShadow: shadow.glow }}>
+              <SendIcon size={15} /> تأكيد الطلب (عرض تجريبي)
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<App />);
+</script>
+</body>
+</html>

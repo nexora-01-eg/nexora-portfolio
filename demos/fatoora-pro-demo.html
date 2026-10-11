@@ -1,0 +1,1620 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>فاتورة برو — Demo</title>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy:    #1B2E5E;
+    --navy2:   #243d7a;
+    --gold:    #D4A843;
+    --gold2:   #f0c060;
+    --white:   #FFFFFF;
+    --bg:      #F4F6FB;
+    --bg2:     #EEF1F8;
+    --text:    #1a2340;
+    --muted:   #6b7a9d;
+    --border:  #dde3f0;
+    --success: #17a362;
+    --danger:  #e03f3f;
+    --warning: #f59e0b;
+    --info:    #3b82f6;
+    --sidebar-w: 240px;
+  }
+
+  body {
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 14px;
+    min-height: 100vh;
+    direction: rtl;
+  }
+
+  /* ── SCREEN SWITCHER ── */
+  .nav-screens {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    gap: 6px;
+    background: rgba(27,46,94,0.95);
+    backdrop-filter: blur(12px);
+    padding: 10px 16px;
+    border-radius: 50px;
+    z-index: 9999;
+    box-shadow: 0 8px 32px rgba(27,46,94,0.3);
+  }
+  .nav-screens button {
+    background: transparent;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: rgba(255,255,255,0.7);
+    padding: 6px 14px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 12px;
+    transition: all .2s;
+    white-space: nowrap;
+  }
+  .nav-screens button:hover { background: rgba(255,255,255,0.1); color:#fff; }
+  .nav-screens button.active { background: var(--gold); color: var(--navy); border-color: var(--gold); font-weight: 600; }
+
+  /* ── SCREENS ── */
+  .screen { display: none; min-height: 100vh; }
+  .screen.active { display: flex; }
+
+  /* ══════════════════════════════════════════
+     SCREEN 1 — LOGIN
+  ══════════════════════════════════════════ */
+  #s-login {
+    background: linear-gradient(135deg, #0f1d3e 0%, #1B2E5E 50%, #243d7a 100%);
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+  }
+  #s-login::before {
+    content: '';
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(circle, rgba(212,168,67,0.12) 0%, transparent 70%);
+    top: -100px; left: -100px;
+  }
+  #s-login::after {
+    content: '';
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(59,130,246,0.08) 0%, transparent 70%);
+    bottom: -50px; right: -50px;
+  }
+  .login-card {
+    background: rgba(255,255,255,0.06);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+    padding: 48px 40px;
+    width: 420px;
+    position: relative;
+    z-index: 1;
+  }
+  .login-logo {
+    text-align: center;
+    margin-bottom: 32px;
+  }
+  .login-logo .logo-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 56px; height: 56px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    border-radius: 14px;
+    font-size: 24px;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 24px rgba(212,168,67,0.4);
+  }
+  .login-logo h1 { color: #fff; font-size: 24px; font-weight: 700; }
+  .login-logo p { color: rgba(255,255,255,0.5); font-size: 13px; margin-top: 4px; }
+  .form-group { margin-bottom: 18px; }
+  .form-group label { display: block; color: rgba(255,255,255,0.7); font-size: 13px; margin-bottom: 8px; }
+  .form-group input {
+    width: 100%;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 12px 16px;
+    color: #fff;
+    font-family: inherit;
+    font-size: 14px;
+    outline: none;
+    transition: border-color .2s;
+    direction: rtl;
+  }
+  .form-group input:focus { border-color: var(--gold); }
+  .form-group input::placeholder { color: rgba(255,255,255,0.3); }
+  .btn-primary {
+    width: 100%;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    color: var(--navy);
+    border: none;
+    border-radius: 10px;
+    padding: 13px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all .2s;
+    box-shadow: 0 4px 16px rgba(212,168,67,0.35);
+  }
+  .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(212,168,67,0.45); }
+  .login-footer { text-align: center; margin-top: 20px; color: rgba(255,255,255,0.4); font-size: 13px; }
+  .login-footer a { color: var(--gold); text-decoration: none; }
+  .divider-or { display: flex; align-items: center; gap: 12px; margin: 20px 0; }
+  .divider-or span { color: rgba(255,255,255,0.3); font-size: 12px; white-space: nowrap; }
+  .divider-or::before, .divider-or::after { content:''; flex:1; height:1px; background: rgba(255,255,255,0.1); }
+  .btn-google {
+    width: 100%;
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 10px;
+    padding: 12px;
+    color: rgba(255,255,255,0.8);
+    font-family: inherit;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    transition: background .2s;
+  }
+  .btn-google:hover { background: rgba(255,255,255,0.1); }
+
+  /* ══════════════════════════════════════════
+     LAYOUT: SIDEBAR + MAIN
+  ══════════════════════════════════════════ */
+  .app-layout { display: flex; width: 100%; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-w);
+    background: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .sidebar-logo {
+    padding: 24px 20px 20px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 12px;
+  }
+  .sidebar-logo .mark {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--gold), var(--gold2));
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+  }
+  .sidebar-logo .brand { color: #fff; font-weight: 700; font-size: 16px; line-height: 1.2; }
+  .sidebar-logo .brand span { display: block; font-size: 10px; font-weight: 400; color: rgba(255,255,255,0.4); }
+
+  .sidebar-nav { padding: 16px 12px; flex: 1; overflow-y: auto; }
+  .nav-section { margin-bottom: 24px; }
+  .nav-section-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 0 8px;
+    margin-bottom: 8px;
+  }
+  .nav-item {
+    display: flex; align-items: center; gap: 10px;
+    padding: 9px 12px;
+    border-radius: 9px;
+    color: rgba(255,255,255,0.6);
+    cursor: pointer;
+    transition: all .15s;
+    font-size: 13.5px;
+    margin-bottom: 2px;
+    position: relative;
+  }
+  .nav-item:hover { background: rgba(255,255,255,0.07); color: #fff; }
+  .nav-item.active { background: rgba(212,168,67,0.15); color: var(--gold); }
+  .nav-item.active::before {
+    content: '';
+    position: absolute;
+    right: 0; top: 50%; transform: translateY(-50%);
+    width: 3px; height: 20px;
+    background: var(--gold);
+    border-radius: 3px 0 0 3px;
+  }
+  .nav-item .icon { font-size: 16px; width: 20px; text-align: center; flex-shrink: 0; }
+  .nav-badge {
+    margin-right: auto;
+    background: var(--danger);
+    color: #fff;
+    font-size: 10px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+  .sidebar-user {
+    padding: 16px;
+    border-top: 1px solid rgba(255,255,255,0.08);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .user-avatar {
+    width: 34px; height: 34px;
+    background: linear-gradient(135deg, var(--gold), #e0960a);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 700; color: var(--navy);
+    flex-shrink: 0;
+  }
+  .user-info { flex: 1; min-width: 0; }
+  .user-info .name { color: #fff; font-size: 13px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .user-info .role { color: rgba(255,255,255,0.4); font-size: 11px; }
+
+  /* TOPBAR */
+  .main-area { flex: 1; display: flex; flex-direction: column; min-width: 0; }
+  .topbar {
+    background: var(--white);
+    border-bottom: 1px solid var(--border);
+    padding: 0 28px;
+    height: 60px;
+    display: flex; align-items: center; justify-content: space-between;
+    flex-shrink: 0;
+  }
+  .topbar-title { font-size: 18px; font-weight: 700; color: var(--navy); }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .topbar-btn {
+    background: none; border: 1px solid var(--border);
+    border-radius: 8px; padding: 7px 10px;
+    cursor: pointer; color: var(--muted);
+    font-size: 16px; line-height: 1;
+    transition: all .15s;
+  }
+  .topbar-btn:hover { border-color: var(--navy); color: var(--navy); }
+  .btn-add {
+    background: var(--navy);
+    color: #fff; border: none;
+    border-radius: 9px;
+    padding: 8px 18px;
+    font-family: inherit;
+    font-size: 13px; font-weight: 600;
+    cursor: pointer;
+    display: flex; align-items: center; gap: 7px;
+    transition: background .15s;
+  }
+  .btn-add:hover { background: var(--navy2); }
+
+  /* PAGE CONTENT */
+  .page-content { flex: 1; padding: 28px; overflow-y: auto; }
+
+  /* ══════════════════════════════════════════
+     SCREEN 2 — DASHBOARD
+  ══════════════════════════════════════════ */
+  .kpi-grid { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+  .kpi-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    position: relative;
+    overflow: hidden;
+  }
+  .kpi-card::after {
+    content: '';
+    position: absolute;
+    top: 0; right: 0;
+    width: 4px; height: 100%;
+    border-radius: 0 14px 14px 0;
+  }
+  .kpi-card.c1::after { background: var(--success); }
+  .kpi-card.c2::after { background: var(--warning); }
+  .kpi-card.c3::after { background: var(--danger); }
+  .kpi-card.c4::after { background: var(--info); }
+  .kpi-label { font-size: 12px; color: var(--muted); margin-bottom: 8px; }
+  .kpi-value { font-size: 26px; font-weight: 700; color: var(--navy); line-height: 1; }
+  .kpi-value span { font-size: 14px; font-weight: 400; color: var(--muted); }
+  .kpi-change { font-size: 12px; margin-top: 8px; display: flex; align-items: center; gap: 4px; }
+  .kpi-change.up { color: var(--success); }
+  .kpi-change.down { color: var(--danger); }
+  .kpi-icon { position: absolute; top: 16px; left: 16px; font-size: 28px; opacity: 0.12; }
+
+  .charts-row { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 24px; }
+  .chart-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid var(--border);
+  }
+  .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+  .card-title { font-size: 14px; font-weight: 700; color: var(--navy); }
+  .card-action { font-size: 12px; color: var(--muted); cursor: pointer; }
+  .card-action:hover { color: var(--navy); }
+
+  /* Fake chart bars */
+  .bar-chart { display: flex; align-items: flex-end; gap: 8px; height: 140px; }
+  .bar-wrap { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; }
+  .bar {
+    width: 100%;
+    background: linear-gradient(to top, var(--navy), var(--navy2));
+    border-radius: 5px 5px 0 0;
+    transition: height .3s;
+  }
+  .bar.gold { background: linear-gradient(to top, var(--gold), var(--gold2)); }
+  .bar-label { font-size: 10px; color: var(--muted); }
+
+  /* Donut */
+  .donut-wrap { display: flex; align-items: center; justify-content: center; gap: 24px; }
+  .donut {
+    width: 120px; height: 120px;
+    border-radius: 50%;
+    background: conic-gradient(
+      var(--success) 0deg 162deg,
+      var(--warning) 162deg 234deg,
+      var(--danger) 234deg 288deg,
+      var(--border) 288deg 360deg
+    );
+    position: relative;
+  }
+  .donut::after {
+    content: '';
+    position: absolute;
+    inset: 28px;
+    background: var(--white);
+    border-radius: 50%;
+  }
+  .donut-legend { display: flex; flex-direction: column; gap: 10px; }
+  .legend-item { display: flex; align-items: center; gap: 8px; font-size: 12px; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+
+  /* Recent invoices */
+  .table-card {
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    overflow: hidden;
+  }
+  .table-card .card-header { padding: 16px 20px; border-bottom: 1px solid var(--border); margin: 0; }
+  table { width: 100%; border-collapse: collapse; }
+  th {
+    padding: 10px 20px;
+    text-align: right;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: .5px;
+    background: var(--bg);
+    border-bottom: 1px solid var(--border);
+  }
+  td {
+    padding: 13px 20px;
+    font-size: 13px;
+    border-bottom: 1px solid var(--bg2);
+    color: var(--text);
+    vertical-align: middle;
+  }
+  tr:last-child td { border-bottom: none; }
+  tr:hover td { background: var(--bg); }
+  .badge {
+    display: inline-flex; align-items: center;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px; font-weight: 600;
+  }
+  .badge.paid    { background: #d1fae5; color: #065f46; }
+  .badge.sent    { background: #dbeafe; color: #1e40af; }
+  .badge.overdue { background: #fee2e2; color: #991b1b; }
+  .badge.draft   { background: #f3f4f6; color: #6b7280; }
+  .badge.pending { background: #fef3c7; color: #92400e; }
+
+  /* ══════════════════════════════════════════
+     SCREEN 3 — INVOICES LIST
+  ══════════════════════════════════════════ */
+  .filter-bar {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 16px 20px;
+    border: 1px solid var(--border);
+    margin-bottom: 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .search-input {
+    flex: 1;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    direction: rtl;
+    color: var(--text);
+  }
+  .search-input:focus { border-color: var(--navy); }
+  .filter-select {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 14px;
+    font-family: inherit;
+    font-size: 13px;
+    outline: none;
+    color: var(--text);
+    cursor: pointer;
+  }
+  .stats-strip {
+    display: grid; grid-template-columns: repeat(4,1fr);
+    gap: 12px; margin-bottom: 16px;
+  }
+  .stat-mini {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 16px;
+    display: flex; align-items: center; gap: 12px;
+  }
+  .stat-mini .icon-wrap {
+    width: 38px; height: 38px;
+    border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .stat-mini .val { font-size: 18px; font-weight: 700; color: var(--navy); }
+  .stat-mini .lbl { font-size: 11px; color: var(--muted); }
+
+  /* ══════════════════════════════════════════
+     SCREEN 4 — CREATE INVOICE
+  ══════════════════════════════════════════ */
+  .invoice-form-grid { display: grid; grid-template-columns: 1fr 320px; gap: 20px; }
+  .form-card {
+    background: var(--white);
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    padding: 24px;
+  }
+  .form-section-title {
+    font-size: 13px; font-weight: 700; color: var(--navy);
+    margin-bottom: 16px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+  .field-row.three { grid-template-columns: 1fr 1fr 1fr; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field label { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .field input, .field select, .field textarea {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 9px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    color: var(--text);
+    outline: none;
+    transition: border-color .15s;
+    direction: rtl;
+  }
+  .field input:focus, .field select:focus { border-color: var(--navy); background: #fff; }
+
+  .items-table { width: 100%; border-collapse: collapse; margin-bottom: 12px; }
+  .items-table th {
+    background: var(--bg);
+    padding: 9px 12px;
+    font-size: 11px; font-weight: 600; color: var(--muted);
+    text-align: right;
+    border: 1px solid var(--border);
+  }
+  .items-table td {
+    border: 1px solid var(--border);
+    padding: 0;
+  }
+  .items-table td input {
+    width: 100%; border: none; background: transparent;
+    padding: 9px 12px; font-family: inherit; font-size: 13px;
+    outline: none; direction: rtl;
+  }
+  .items-table td input:focus { background: #fffbf0; }
+  .btn-add-row {
+    background: none; border: 1px dashed var(--border);
+    border-radius: 8px; padding: 8px 16px;
+    color: var(--muted); font-family: inherit; font-size: 13px;
+    cursor: pointer; width: 100%; transition: all .15s;
+  }
+  .btn-add-row:hover { border-color: var(--navy); color: var(--navy); }
+
+  .totals-box { margin-top: 20px; }
+  .totals-row {
+    display: flex; justify-content: space-between;
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .totals-row.total {
+    font-size: 16px; font-weight: 700; color: var(--navy);
+    border-bottom: none; padding-top: 12px;
+  }
+  .totals-row .lbl { color: var(--muted); }
+
+  .invoice-sidebar .form-card { margin-bottom: 16px; }
+  .status-badge-big {
+    display: flex; align-items: center; justify-content: center;
+    padding: 10px; border-radius: 10px;
+    font-size: 14px; font-weight: 600;
+    background: #fef3c7; color: #92400e;
+    margin-bottom: 16px;
+  }
+  .action-btns { display: flex; flex-direction: column; gap: 8px; }
+  .btn-outline {
+    background: none; border: 1px solid var(--border);
+    border-radius: 9px; padding: 10px;
+    font-family: inherit; font-size: 13px; font-weight: 600;
+    cursor: pointer; color: var(--navy);
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    transition: all .15s;
+  }
+  .btn-outline:hover { border-color: var(--navy); background: var(--bg); }
+  .btn-success {
+    background: var(--success); color: #fff; border: none;
+    border-radius: 9px; padding: 11px;
+    font-family: inherit; font-size: 13px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+  .btn-danger-outline {
+    background: none; border: 1px solid #fee2e2; color: var(--danger);
+    border-radius: 9px; padding: 10px;
+    font-family: inherit; font-size: 13px;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+  }
+
+  /* ══════════════════════════════════════════
+     SCREEN 5 — CLIENTS
+  ══════════════════════════════════════════ */
+  .clients-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; margin-top: 16px; }
+  .client-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 20px;
+    cursor: pointer;
+    transition: all .2s;
+  }
+  .client-card:hover { border-color: var(--navy); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(27,46,94,0.1); }
+  .client-card-top { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .client-av {
+    width: 46px; height: 46px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; font-weight: 700; color: #fff; flex-shrink: 0;
+  }
+  .client-av.c1 { background: linear-gradient(135deg,#3b82f6,#1d4ed8); }
+  .client-av.c2 { background: linear-gradient(135deg,#8b5cf6,#6d28d9); }
+  .client-av.c3 { background: linear-gradient(135deg,#10b981,#065f46); }
+  .client-av.c4 { background: linear-gradient(135deg,#f59e0b,#d97706); }
+  .client-av.c5 { background: linear-gradient(135deg,#ef4444,#b91c1c); }
+  .client-av.c6 { background: linear-gradient(135deg,#06b6d4,#0e7490); }
+  .client-name { font-size: 15px; font-weight: 700; }
+  .client-type { font-size: 11px; color: var(--muted); }
+  .client-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .client-stat { background: var(--bg); border-radius: 8px; padding: 10px; }
+  .client-stat .val { font-size: 15px; font-weight: 700; color: var(--navy); }
+  .client-stat .lbl { font-size: 11px; color: var(--muted); margin-top: 2px; }
+  .client-footer { display: flex; align-items: center; justify-content: space-between; margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .client-contact { font-size: 12px; color: var(--muted); }
+
+  /* ══════════════════════════════════════════
+     SCREEN 6 — ETA STATUS
+  ══════════════════════════════════════════ */
+  .eta-summary { display: grid; grid-template-columns: repeat(4,1fr); gap: 16px; margin-bottom: 24px; }
+  .eta-card {
+    background: var(--white);
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    text-align: center;
+  }
+  .eta-card .big { font-size: 36px; font-weight: 800; margin-bottom: 6px; }
+  .eta-card .lbl { font-size: 12px; color: var(--muted); }
+  .eta-card.success .big { color: var(--success); }
+  .eta-card.warning .big { color: var(--warning); }
+  .eta-card.danger .big { color: var(--danger); }
+  .eta-card.info .big { color: var(--info); }
+  .health-bar-wrap { background: var(--white); border-radius: 14px; border: 1px solid var(--border); padding: 20px; margin-bottom: 24px; }
+  .health-label { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 13px; }
+  .health-bar { height: 12px; background: var(--bg); border-radius: 10px; overflow: hidden; }
+  .health-fill { height: 100%; background: linear-gradient(to right, var(--success), #34d399); border-radius: 10px; width: 87%; }
+  .eta-table-card { background: var(--white); border-radius: 14px; border: 1px solid var(--border); overflow: hidden; }
+
+  /* ══════════════════════════════════════════
+     RESPONSIVE ADJUSTMENTS
+  ══════════════════════════════════════════ */
+  @media (max-width: 1100px) {
+    .kpi-grid { grid-template-columns: repeat(2,1fr); }
+    .charts-row { grid-template-columns: 1fr; }
+    .invoice-form-grid { grid-template-columns: 1fr; }
+    .clients-grid { grid-template-columns: repeat(2,1fr); }
+    .eta-summary { grid-template-columns: repeat(2,1fr); }
+  }
+
+  /* Notification dot */
+  .notif-dot {
+    width: 8px; height: 8px;
+    background: var(--danger);
+    border-radius: 50%;
+    position: absolute;
+    top: -2px; left: -2px;
+    border: 2px solid var(--white);
+  }
+  .notif-wrap { position: relative; }
+
+  /* Plan badge */
+  .plan-badge {
+    background: rgba(212,168,67,0.15);
+    color: var(--gold);
+    font-size: 10px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-top: 4px;
+    display: inline-block;
+  }
+
+  /* Progress */
+  .usage-bar-wrap { margin-top: 12px; }
+  .usage-label { display: flex; justify-content: space-between; font-size: 11px; color: var(--muted); margin-bottom: 5px; }
+  .usage-bar { height: 4px; background: rgba(255,255,255,0.1); border-radius: 4px; overflow: hidden; }
+  .usage-fill { height: 100%; background: var(--gold); border-radius: 4px; }
+
+  /* Pulse animation */
+  @keyframes pulse {
+    0%,100% { opacity: 1; }
+    50% { opacity: .5; }
+  }
+  .live-dot {
+    width: 8px; height: 8px;
+    background: var(--success);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 2s infinite;
+    margin-left: 6px;
+  }
+</style>
+</head>
+<body>
+
+<!-- ═══ SCREEN NAVIGATOR ═══ -->
+<nav class="nav-screens">
+  <button class="active" onclick="showScreen('s-login')">🔐 تسجيل الدخول</button>
+  <button onclick="showScreen('s-dashboard')">📊 الداشبورد</button>
+  <button onclick="showScreen('s-invoices')">🧾 الفواتير</button>
+  <button onclick="showScreen('s-create')">✏️ إنشاء فاتورة</button>
+  <button onclick="showScreen('s-clients')">👥 العملاء</button>
+  <button onclick="showScreen('s-eta')">🏛️ هيئة الضرائب</button>
+</nav>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 1: LOGIN
+═══════════════════════════════════════════ -->
+<div id="s-login" class="screen active">
+  <div class="login-card">
+    <div class="login-logo">
+      <div class="logo-mark">🧾</div>
+      <h1>فاتورة برو</h1>
+      <p>الحل المحاسبي الذكي للشركات المصرية</p>
+    </div>
+    <div class="form-group">
+      <label>البريد الإلكتروني</label>
+      <input type="email" placeholder="ahmed@company.com" value="ahmed@techcorp.com"/>
+    </div>
+    <div class="form-group">
+      <label>كلمة المرور</label>
+      <input type="password" placeholder="••••••••" value="••••••••"/>
+    </div>
+    <button class="btn-primary" onclick="showScreen('s-dashboard')">دخول →</button>
+    <div class="divider-or"><span>أو</span></div>
+    <button class="btn-google">
+      <svg width="16" height="16" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      تسجيل الدخول بـ Google
+    </button>
+    <div class="login-footer">
+      ليس لديك حساب؟ <a href="#">سجل مجاناً</a> &nbsp;·&nbsp; <a href="#">نسيت كلمة المرور؟</a>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 2: DASHBOARD
+═══════════════════════════════════════════ -->
+<div id="s-dashboard" class="screen">
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-logo">
+        <div class="mark">🧾</div>
+        <div class="brand">فاتورة برو<span>TechCorp Solutions</span></div>
+      </div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-section-label">الرئيسية</div>
+          <div class="nav-item active"><span class="icon">📊</span> لوحة التحكم</div>
+          <div class="nav-item" onclick="showScreen('s-invoices')"><span class="icon">🧾</span> الفواتير <span class="nav-badge">3</span></div>
+          <div class="nav-item"><span class="icon">📄</span> عروض الأسعار</div>
+          <div class="nav-item" onclick="showScreen('s-clients')"><span class="icon">👥</span> العملاء</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">المالية</div>
+          <div class="nav-item"><span class="icon">💰</span> المدفوعات</div>
+          <div class="nav-item"><span class="icon">🛒</span> المصروفات</div>
+          <div class="nav-item"><span class="icon">📦</span> المنتجات</div>
+          <div class="nav-item"><span class="icon">📈</span> التقارير</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">الضرائب</div>
+          <div class="nav-item" onclick="showScreen('s-eta')"><span class="icon">🏛️</span> هيئة الضرائب</div>
+          <div class="nav-item"><span class="icon">📋</span> إقرار الضريبة</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">الإعدادات</div>
+          <div class="nav-item"><span class="icon">⚙️</span> الإعدادات</div>
+          <div class="nav-item"><span class="icon">👤</span> المستخدمون</div>
+        </div>
+      </nav>
+      <div class="sidebar-user">
+        <div class="user-avatar">أح</div>
+        <div class="user-info">
+          <div class="name">أحمد محمد</div>
+          <div class="role">مدير الحساب</div>
+          <div class="plan-badge">Business ✨</div>
+        </div>
+      </div>
+      <div style="padding: 0 16px 16px;">
+        <div class="usage-bar-wrap">
+          <div class="usage-label"><span>الفواتير</span><span>847 / 1000</span></div>
+          <div class="usage-bar"><div class="usage-fill" style="width:85%"></div></div>
+        </div>
+      </div>
+    </aside>
+    <!-- Main -->
+    <div class="main-area">
+      <div class="topbar">
+        <div>
+          <div class="topbar-title">لوحة التحكم</div>
+          <div style="font-size:12px;color:var(--muted)">مرحباً أحمد، يوم الجمعة ١٢ يونيو ٢٠٢٦ <span class="live-dot"></span></div>
+        </div>
+        <div class="topbar-right">
+          <div class="notif-wrap">
+            <button class="topbar-btn">🔔</button>
+            <div class="notif-dot"></div>
+          </div>
+          <button class="topbar-btn">🔍</button>
+          <button class="btn-add" onclick="showScreen('s-create')">+ فاتورة جديدة</button>
+        </div>
+      </div>
+      <div class="page-content">
+        <!-- KPIs -->
+        <div class="kpi-grid">
+          <div class="kpi-card c1">
+            <div class="kpi-label">إجمالي الإيرادات (يونيو)</div>
+            <div class="kpi-value">٣٤٧,٨٥٠ <span>ج.م</span></div>
+            <div class="kpi-change up">↑ ١٨٪ عن الشهر الماضي</div>
+            <div class="kpi-icon">💰</div>
+          </div>
+          <div class="kpi-card c2">
+            <div class="kpi-label">مستحق التحصيل</div>
+            <div class="kpi-value">٨٩,٢٠٠ <span>ج.م</span></div>
+            <div class="kpi-change down">↑ ٢٣ فاتورة مفتوحة</div>
+            <div class="kpi-icon">⏳</div>
+          </div>
+          <div class="kpi-card c3">
+            <div class="kpi-label">فواتير متأخرة</div>
+            <div class="kpi-value">٢٢,٤٠٠ <span>ج.م</span></div>
+            <div class="kpi-change down">↓ ٥ فواتير تجاوزت المدة</div>
+            <div class="kpi-icon">⚠️</div>
+          </div>
+          <div class="kpi-card c4">
+            <div class="kpi-label">العملاء النشطون</div>
+            <div class="kpi-value">١٢٨ <span>عميل</span></div>
+            <div class="kpi-change up">↑ ٧ عملاء جدد هذا الشهر</div>
+            <div class="kpi-icon">👥</div>
+          </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="charts-row">
+          <div class="chart-card">
+            <div class="card-header">
+              <div class="card-title">📈 تطور الإيرادات (٢٠٢٦)</div>
+              <div class="card-action">تفاصيل ←</div>
+            </div>
+            <div class="bar-chart">
+              <div class="bar-wrap"><div class="bar" style="height:65%"></div><div class="bar-label">يناير</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:55%"></div><div class="bar-label">فبراير</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:75%"></div><div class="bar-label">مارس</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:80%"></div><div class="bar-label">أبريل</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:70%"></div><div class="bar-label">مايو</div></div>
+              <div class="bar-wrap"><div class="bar gold" style="height:90%"></div><div class="bar-label">يونيو</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:30%;opacity:.3"></div><div class="bar-label">يوليو</div></div>
+              <div class="bar-wrap"><div class="bar" style="height:25%;opacity:.3"></div><div class="bar-label">أغسطس</div></div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="card-header">
+              <div class="card-title">🍩 حالة الفواتير</div>
+            </div>
+            <div class="donut-wrap">
+              <div class="donut"></div>
+              <div class="donut-legend">
+                <div class="legend-item"><div class="legend-dot" style="background:var(--success)"></div><span>مدفوعة (٤٥٪)</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--warning)"></div><span>مرسلة (٢٠٪)</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--danger)"></div><span>متأخرة (١٥٪)</span></div>
+                <div class="legend-item"><div class="legend-dot" style="background:var(--border)"></div><span>مسودة (٢٠٪)</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent invoices -->
+        <div class="table-card">
+          <div class="card-header">
+            <div class="card-title">🧾 آخر الفواتير</div>
+            <div class="card-action" onclick="showScreen('s-invoices')">عرض الكل ←</div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>رقم الفاتورة</th>
+                <th>العميل</th>
+                <th>التاريخ</th>
+                <th>تاريخ الاستحقاق</th>
+                <th>المبلغ</th>
+                <th>الحالة</th>
+                <th>هيئة الضرائب</th>
+                <th>إجراء</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong style="color:var(--navy)">#INV-2026-0091</strong></td>
+                <td>شركة النيل للتكنولوجيا</td>
+                <td>١٠ يونيو ٢٠٢٦</td>
+                <td>٢٥ يونيو ٢٠٢٦</td>
+                <td><strong>٤٥,٠٠٠ ج.م</strong></td>
+                <td><span class="badge sent">مرسلة</span></td>
+                <td><span class="badge paid">مقبولة ✓</span></td>
+                <td><button class="btn-outline" style="padding:5px 12px;font-size:12px;">عرض</button></td>
+              </tr>
+              <tr>
+                <td><strong style="color:var(--navy)">#INV-2026-0090</strong></td>
+                <td>مجموعة الفجر العقارية</td>
+                <td>٨ يونيو ٢٠٢٦</td>
+                <td>٨ يونيو ٢٠٢٦</td>
+                <td><strong>١٢٠,٠٠٠ ج.م</strong></td>
+                <td><span class="badge overdue">متأخرة</span></td>
+                <td><span class="badge paid">مقبولة ✓</span></td>
+                <td><button class="btn-outline" style="padding:5px 12px;font-size:12px;">تذكير</button></td>
+              </tr>
+              <tr>
+                <td><strong style="color:var(--navy)">#INV-2026-0089</strong></td>
+                <td>مكتبة المعرفة</td>
+                <td>٥ يونيو ٢٠٢٦</td>
+                <td>٢٠ يونيو ٢٠٢٦</td>
+                <td><strong>٨,٥٠٠ ج.م</strong></td>
+                <td><span class="badge paid">مدفوعة</span></td>
+                <td><span class="badge paid">مقبولة ✓</span></td>
+                <td><button class="btn-outline" style="padding:5px 12px;font-size:12px;">PDF</button></td>
+              </tr>
+              <tr>
+                <td><strong style="color:var(--navy)">#INV-2026-0088</strong></td>
+                <td>شركة سكاي للاستيراد</td>
+                <td>٣ يونيو ٢٠٢٦</td>
+                <td>١٨ يونيو ٢٠٢٦</td>
+                <td><strong>٦٧,٢٠٠ ج.م</strong></td>
+                <td><span class="badge draft">مسودة</span></td>
+                <td><span class="badge draft">لم تُرسل</span></td>
+                <td><button class="btn-add" style="padding:6px 14px;font-size:12px;" onclick="showScreen('s-create')">إرسال</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 3: INVOICES LIST
+═══════════════════════════════════════════ -->
+<div id="s-invoices" class="screen">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="mark">🧾</div><div class="brand">فاتورة برو<span>TechCorp Solutions</span></div></div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-item" onclick="showScreen('s-dashboard')"><span class="icon">📊</span> لوحة التحكم</div>
+          <div class="nav-item active"><span class="icon">🧾</span> الفواتير</div>
+          <div class="nav-item"><span class="icon">📄</span> عروض الأسعار</div>
+          <div class="nav-item" onclick="showScreen('s-clients')"><span class="icon">👥</span> العملاء</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">المالية</div>
+          <div class="nav-item"><span class="icon">💰</span> المدفوعات</div>
+          <div class="nav-item"><span class="icon">🛒</span> المصروفات</div>
+          <div class="nav-item"><span class="icon">📦</span> المنتجات</div>
+          <div class="nav-item"><span class="icon">📈</span> التقارير</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">الضرائب</div>
+          <div class="nav-item" onclick="showScreen('s-eta')"><span class="icon">🏛️</span> هيئة الضرائب</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-item"><span class="icon">⚙️</span> الإعدادات</div>
+        </div>
+      </nav>
+      <div class="sidebar-user">
+        <div class="user-avatar">أح</div>
+        <div class="user-info"><div class="name">أحمد محمد</div><div class="role">مدير الحساب</div><div class="plan-badge">Business ✨</div></div>
+      </div>
+    </aside>
+    <div class="main-area">
+      <div class="topbar">
+        <div class="topbar-title">الفواتير</div>
+        <div class="topbar-right">
+          <button class="topbar-btn">📥 استيراد</button>
+          <button class="topbar-btn">📤 تصدير</button>
+          <button class="btn-add" onclick="showScreen('s-create')">+ فاتورة جديدة</button>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="stats-strip">
+          <div class="stat-mini">
+            <div class="icon-wrap" style="background:#d1fae5">💚</div>
+            <div><div class="val">١٥٦</div><div class="lbl">مدفوعة</div></div>
+          </div>
+          <div class="stat-mini">
+            <div class="icon-wrap" style="background:#dbeafe">📨</div>
+            <div><div class="val">٢٣</div><div class="lbl">مرسلة</div></div>
+          </div>
+          <div class="stat-mini">
+            <div class="icon-wrap" style="background:#fee2e2">⚠️</div>
+            <div><div class="val">٥</div><div class="lbl">متأخرة</div></div>
+          </div>
+          <div class="stat-mini">
+            <div class="icon-wrap" style="background:#f3f4f6">📝</div>
+            <div><div class="val">١٢</div><div class="lbl">مسودة</div></div>
+          </div>
+        </div>
+
+        <div class="filter-bar">
+          <input class="search-input" placeholder="🔍  ابحث برقم الفاتورة أو اسم العميل..." style="flex:1"/>
+          <select class="filter-select"><option>كل الحالات</option><option>مدفوعة</option><option>مرسلة</option><option>متأخرة</option><option>مسودة</option></select>
+          <select class="filter-select"><option>كل العملاء</option></select>
+          <select class="filter-select"><option>هذا الشهر</option><option>الشهر الماضي</option><option>هذه السنة</option></select>
+          <button class="btn-add" style="white-space:nowrap">🔍 تصفية</button>
+        </div>
+
+        <div class="table-card">
+          <table>
+            <thead>
+              <tr>
+                <th><input type="checkbox"/></th>
+                <th>رقم الفاتورة</th>
+                <th>العميل</th>
+                <th>تاريخ الإصدار</th>
+                <th>تاريخ الاستحقاق</th>
+                <th>المبلغ</th>
+                <th>ض.ق.م</th>
+                <th>الحالة</th>
+                <th>ETA</th>
+                <th>إجراءات</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><input type="checkbox"/></td>
+                <td><strong style="color:var(--navy)">#INV-2026-0091</strong></td>
+                <td>شركة النيل للتكنولوجيا</td>
+                <td>١٠/٠٦/٢٠٢٦</td>
+                <td>٢٥/٠٦/٢٠٢٦</td>
+                <td><strong>٤٥,٠٠٠ ج.م</strong></td>
+                <td>٦,٣٠٠ ج.م</td>
+                <td><span class="badge sent">مرسلة</span></td>
+                <td><span class="badge paid">✓ مقبولة</span></td>
+                <td style="white-space:nowrap">
+                  <button class="topbar-btn" title="عرض">👁</button>
+                  <button class="topbar-btn" title="PDF">📄</button>
+                  <button class="topbar-btn" title="إرسال">📧</button>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"/></td>
+                <td><strong style="color:var(--navy)">#INV-2026-0090</strong></td>
+                <td>مجموعة الفجر العقارية</td>
+                <td>٠٨/٠٦/٢٠٢٦</td>
+                <td>٠٨/٠٦/٢٠٢٦</td>
+                <td><strong>١٢٠,٠٠٠ ج.م</strong></td>
+                <td>١٦,٨٠٠ ج.م</td>
+                <td><span class="badge overdue">متأخرة</span></td>
+                <td><span class="badge paid">✓ مقبولة</span></td>
+                <td style="white-space:nowrap">
+                  <button class="topbar-btn">👁</button>
+                  <button class="topbar-btn">📄</button>
+                  <button class="topbar-btn">🔔</button>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"/></td>
+                <td><strong style="color:var(--navy)">#INV-2026-0089</strong></td>
+                <td>مكتبة المعرفة</td>
+                <td>٠٥/٠٦/٢٠٢٦</td>
+                <td>٢٠/٠٦/٢٠٢٦</td>
+                <td><strong>٨,٥٠٠ ج.م</strong></td>
+                <td>١,١٩٠ ج.م</td>
+                <td><span class="badge paid">مدفوعة</span></td>
+                <td><span class="badge paid">✓ مقبولة</span></td>
+                <td style="white-space:nowrap">
+                  <button class="topbar-btn">👁</button>
+                  <button class="topbar-btn">📄</button>
+                  <button class="topbar-btn">📋</button>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"/></td>
+                <td><strong style="color:var(--navy)">#INV-2026-0088</strong></td>
+                <td>شركة سكاي للاستيراد</td>
+                <td>٠٣/٠٦/٢٠٢٦</td>
+                <td>١٨/٠٦/٢٠٢٦</td>
+                <td><strong>٦٧,٢٠٠ ج.م</strong></td>
+                <td>٩,٤٠٨ ج.م</td>
+                <td><span class="badge draft">مسودة</span></td>
+                <td><span class="badge draft">لم تُرسل</span></td>
+                <td style="white-space:nowrap">
+                  <button class="topbar-btn">✏️</button>
+                  <button class="topbar-btn">📄</button>
+                  <button class="topbar-btn">🗑</button>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"/></td>
+                <td><strong style="color:var(--navy)">#INV-2026-0087</strong></td>
+                <td>مستشفى القاهرة الحديث</td>
+                <td>٠١/٠٦/٢٠٢٦</td>
+                <td>١٦/٠٦/٢٠٢٦</td>
+                <td><strong>٢٣٤,٠٠٠ ج.م</strong></td>
+                <td>٣٢,٧٦٠ ج.م</td>
+                <td><span class="badge paid">مدفوعة</span></td>
+                <td><span class="badge paid">✓ مقبولة</span></td>
+                <td style="white-space:nowrap">
+                  <button class="topbar-btn">👁</button>
+                  <button class="topbar-btn">📄</button>
+                  <button class="topbar-btn">📋</button>
+                </td>
+              </tr>
+              <tr>
+                <td><input type="checkbox"/></td>
+                <td><strong style="color:var(--navy)">#INV-2026-0086</strong></td>
+                <td>شركة الأهرام للطباعة</td>
+                <td>٢٩/٠٥/٢٠٢٦</td>
+                <td>١٣/٠٦/٢٠٢٦</td>
+                <td><strong>١٥,٧٥٠ ج.م</strong></td>
+                <td>٢,٢٠٥ ج.م</td>
+                <td><span class="badge overdue">متأخرة</span></td>
+                <td><span class="badge pending">⏳ قيد المراجعة</span></td>
+                <td style="white-space:nowrap">
+                  <button class="topbar-btn">👁</button>
+                  <button class="topbar-btn">🔄</button>
+                  <button class="topbar-btn">🔔</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 4: CREATE INVOICE
+═══════════════════════════════════════════ -->
+<div id="s-create" class="screen">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="mark">🧾</div><div class="brand">فاتورة برو<span>TechCorp Solutions</span></div></div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-item" onclick="showScreen('s-dashboard')"><span class="icon">📊</span> لوحة التحكم</div>
+          <div class="nav-item active"><span class="icon">🧾</span> الفواتير</div>
+          <div class="nav-item"><span class="icon">📄</span> عروض الأسعار</div>
+          <div class="nav-item" onclick="showScreen('s-clients')"><span class="icon">👥</span> العملاء</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">المالية</div>
+          <div class="nav-item"><span class="icon">💰</span> المدفوعات</div>
+          <div class="nav-item"><span class="icon">🛒</span> المصروفات</div>
+          <div class="nav-item"><span class="icon">📈</span> التقارير</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-item" onclick="showScreen('s-eta')"><span class="icon">🏛️</span> هيئة الضرائب</div>
+        </div>
+      </nav>
+      <div class="sidebar-user">
+        <div class="user-avatar">أح</div>
+        <div class="user-info"><div class="name">أحمد محمد</div><div class="role">مدير الحساب</div></div>
+      </div>
+    </aside>
+    <div class="main-area">
+      <div class="topbar">
+        <div style="display:flex;align-items:center;gap:12px">
+          <button class="topbar-btn" onclick="showScreen('s-invoices')">← رجوع</button>
+          <div class="topbar-title">إنشاء فاتورة جديدة</div>
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-btn">👁 معاينة PDF</button>
+          <button class="btn-outline" style="padding:8px 16px">💾 حفظ مسودة</button>
+          <button class="btn-success" style="padding:9px 18px">📤 إرسال للعميل</button>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="invoice-form-grid">
+          <div>
+            <!-- Header info -->
+            <div class="form-card" style="margin-bottom:16px">
+              <div class="form-section-title">🧾 بيانات الفاتورة</div>
+              <div class="field-row three">
+                <div class="field"><label>رقم الفاتورة</label><input value="INV-2026-0092" readonly style="background:#f0f0f0"/></div>
+                <div class="field"><label>تاريخ الإصدار</label><input type="date" value="2026-06-12"/></div>
+                <div class="field"><label>تاريخ الاستحقاق</label><input type="date" value="2026-06-27"/></div>
+              </div>
+              <div class="field-row">
+                <div class="field"><label>العميل</label>
+                  <select>
+                    <option>-- اختر عميل --</option>
+                    <option selected>شركة النيل للتكنولوجيا</option>
+                    <option>مجموعة الفجر العقارية</option>
+                  </select>
+                </div>
+                <div class="field"><label>شروط الدفع</label>
+                  <select><option>Net 15</option><option selected>Net 30</option><option>Net 60</option><option>فوري</option></select>
+                </div>
+              </div>
+            </div>
+
+            <!-- Items -->
+            <div class="form-card" style="margin-bottom:16px">
+              <div class="form-section-title">📦 بنود الفاتورة</div>
+              <table class="items-table">
+                <thead>
+                  <tr>
+                    <th style="width:35%">المنتج / الخدمة</th>
+                    <th style="width:25%">الوصف</th>
+                    <th style="width:8%">الكمية</th>
+                    <th style="width:12%">سعر الوحدة</th>
+                    <th style="width:8%">خصم %</th>
+                    <th style="width:8%">ض.ق.م %</th>
+                    <th style="width:12%">الإجمالي</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td><input value="تطوير موقع إلكتروني"/></td>
+                    <td><input value="تصميم وبرمجة كاملة"/></td>
+                    <td><input value="1" style="text-align:center"/></td>
+                    <td><input value="25,000"/></td>
+                    <td><input value="0" style="text-align:center"/></td>
+                    <td><input value="14" style="text-align:center"/></td>
+                    <td><input value="25,000" style="background:#fffbf0;font-weight:700" readonly/></td>
+                  </tr>
+                  <tr>
+                    <td><input value="استضافة سحابية"/></td>
+                    <td><input value="خادم AWS - سنة كاملة"/></td>
+                    <td><input value="1" style="text-align:center"/></td>
+                    <td><input value="8,000"/></td>
+                    <td><input value="10" style="text-align:center"/></td>
+                    <td><input value="14" style="text-align:center"/></td>
+                    <td><input value="7,200" style="background:#fffbf0;font-weight:700" readonly/></td>
+                  </tr>
+                  <tr>
+                    <td><input value="دعم فني شهري"/></td>
+                    <td><input value="٣ أشهر دعم مستمر"/></td>
+                    <td><input value="3" style="text-align:center"/></td>
+                    <td><input value="2,500"/></td>
+                    <td><input value="0" style="text-align:center"/></td>
+                    <td><input value="14" style="text-align:center"/></td>
+                    <td><input value="7,500" style="background:#fffbf0;font-weight:700" readonly/></td>
+                  </tr>
+                </tbody>
+              </table>
+              <button class="btn-add-row">+ إضافة بند جديد</button>
+              <div class="totals-box">
+                <div class="totals-row"><span class="lbl">المجموع الفرعي</span><span><strong>٣٩,٧٠٠ ج.م</strong></span></div>
+                <div class="totals-row"><span class="lbl">الخصم</span><span style="color:var(--success)">- ٨٠٠ ج.م</span></div>
+                <div class="totals-row"><span class="lbl">ضريبة القيمة المضافة (١٤٪)</span><span>+ ٥,٤٣٨ ج.م</span></div>
+                <div class="totals-row total"><span>الإجمالي النهائي</span><span style="color:var(--gold)">٤٤,٣٣٨ ج.م</span></div>
+              </div>
+            </div>
+
+            <!-- Notes -->
+            <div class="form-card">
+              <div class="form-section-title">📝 ملاحظات</div>
+              <div class="field">
+                <label>ملاحظات للعميل</label>
+                <textarea rows="3" style="resize:vertical">شكراً لثقتكم في خدماتنا. يُرجى التواصل معنا في حال وجود أي استفسار.</textarea>
+              </div>
+            </div>
+          </div>
+
+          <!-- Sidebar -->
+          <div class="invoice-sidebar">
+            <div class="form-card">
+              <div class="status-badge-big">📝 مسودة</div>
+              <div class="action-btns">
+                <button class="btn-success">📤 إرسال للعميل</button>
+                <button class="btn-outline">🏛️ إرسال لهيئة الضرائب</button>
+                <button class="btn-outline">👁 معاينة PDF</button>
+                <button class="btn-outline">📋 نسخ الفاتورة</button>
+                <button class="btn-outline">🔗 رابط دفع إلكتروني</button>
+                <button class="btn-danger-outline">🗑 حذف</button>
+              </div>
+            </div>
+            <div class="form-card">
+              <div class="form-section-title">💳 طريقة الدفع</div>
+              <div class="field" style="margin-bottom:10px">
+                <label>البنك / الحساب</label>
+                <select><option>البنك الأهلي — ٠٠١٢٣٤٥</option><option>CIB — ٩٩٩٠١٢</option></select>
+              </div>
+              <div style="display:flex;gap:8px">
+                <button class="btn-outline" style="flex:1;padding:8px;font-size:12px">💳 Paymob</button>
+                <button class="btn-outline" style="flex:1;padding:8px;font-size:12px">🏪 Fawry</button>
+              </div>
+            </div>
+            <div class="form-card">
+              <div class="form-section-title">🏛️ هيئة الضرائب المصرية</div>
+              <div style="background:var(--bg);border-radius:8px;padding:12px;font-size:12px;color:var(--muted)">
+                <div style="margin-bottom:6px">📋 الرقم الضريبي للعميل: <strong style="color:var(--text)">٢٣٤-٥٦٧-٨٩٠</strong></div>
+                <div style="margin-bottom:6px">🔑 رمز ETA: <strong style="color:var(--text)">لم يُرسل بعد</strong></div>
+                <div style="color:var(--warning)">⚠️ يجب إرسال الفاتورة لـ ETA قبل الإرسال للعميل</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 5: CLIENTS
+═══════════════════════════════════════════ -->
+<div id="s-clients" class="screen">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="mark">🧾</div><div class="brand">فاتورة برو<span>TechCorp Solutions</span></div></div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-item" onclick="showScreen('s-dashboard')"><span class="icon">📊</span> لوحة التحكم</div>
+          <div class="nav-item" onclick="showScreen('s-invoices')"><span class="icon">🧾</span> الفواتير</div>
+          <div class="nav-item"><span class="icon">📄</span> عروض الأسعار</div>
+          <div class="nav-item active"><span class="icon">👥</span> العملاء</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">المالية</div>
+          <div class="nav-item"><span class="icon">💰</span> المدفوعات</div>
+          <div class="nav-item"><span class="icon">🛒</span> المصروفات</div>
+          <div class="nav-item"><span class="icon">📈</span> التقارير</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-item" onclick="showScreen('s-eta')"><span class="icon">🏛️</span> هيئة الضرائب</div>
+        </div>
+      </nav>
+      <div class="sidebar-user">
+        <div class="user-avatar">أح</div>
+        <div class="user-info"><div class="name">أحمد محمد</div><div class="role">مدير الحساب</div></div>
+      </div>
+    </aside>
+    <div class="main-area">
+      <div class="topbar">
+        <div class="topbar-title">إدارة العملاء</div>
+        <div class="topbar-right">
+          <button class="topbar-btn">📤 تصدير Excel</button>
+          <button class="topbar-btn">📥 استيراد</button>
+          <button class="btn-add">+ عميل جديد</button>
+        </div>
+      </div>
+      <div class="page-content">
+        <div class="filter-bar">
+          <input class="search-input" placeholder="🔍  ابحث باسم العميل أو الرقم الضريبي أو الهاتف..."/>
+          <select class="filter-select"><option>كل الأنواع</option><option>شركات</option><option>أفراد</option></select>
+          <select class="filter-select"><option>الكل</option><option>نشط</option><option>متأخر في السداد</option></select>
+        </div>
+        <div class="clients-grid">
+          <div class="client-card">
+            <div class="client-card-top">
+              <div class="client-av c1">ن</div>
+              <div>
+                <div class="client-name">شركة النيل للتكنولوجيا</div>
+                <div class="client-type">🏢 شركة · منذ يناير ٢٠٢٤</div>
+              </div>
+            </div>
+            <div class="client-stats">
+              <div class="client-stat"><div class="val">٣٤٧,٥٠٠ ج.م</div><div class="lbl">إجمالي المشتريات</div></div>
+              <div class="client-stat"><div class="val">٢٣</div><div class="lbl">إجمالي الفواتير</div></div>
+              <div class="client-stat"><div class="val" style="color:var(--success)">٠ ج.م</div><div class="lbl">رصيد متأخر</div></div>
+              <div class="client-stat"><div class="val">Net 30</div><div class="lbl">شروط الدفع</div></div>
+            </div>
+            <div class="client-footer">
+              <div class="client-contact">📞 01001234567 · 📧 info@nile.tech</div>
+              <span class="badge paid">ممتاز</span>
+            </div>
+          </div>
+
+          <div class="client-card">
+            <div class="client-card-top">
+              <div class="client-av c2">ف</div>
+              <div>
+                <div class="client-name">مجموعة الفجر العقارية</div>
+                <div class="client-type">🏢 شركة · منذ مارس ٢٠٢٣</div>
+              </div>
+            </div>
+            <div class="client-stats">
+              <div class="client-stat"><div class="val">٨٩٠,٢٠٠ ج.م</div><div class="lbl">إجمالي المشتريات</div></div>
+              <div class="client-stat"><div class="val">٤١</div><div class="lbl">إجمالي الفواتير</div></div>
+              <div class="client-stat"><div class="val" style="color:var(--danger)">١٢٠,٠٠٠ ج.م</div><div class="lbl">رصيد متأخر</div></div>
+              <div class="client-stat"><div class="val">Net 15</div><div class="lbl">شروط الدفع</div></div>
+            </div>
+            <div class="client-footer">
+              <div class="client-contact">📞 01002345678 · 📧 hr@fajr.com</div>
+              <span class="badge overdue">متأخر</span>
+            </div>
+          </div>
+
+          <div class="client-card">
+            <div class="client-card-top">
+              <div class="client-av c3">م</div>
+              <div>
+                <div class="client-name">مكتبة المعرفة</div>
+                <div class="client-type">👤 فرد · منذ يونيو ٢٠٢٥</div>
+              </div>
+            </div>
+            <div class="client-stats">
+              <div class="client-stat"><div class="val">٤٥,٨٠٠ ج.م</div><div class="lbl">إجمالي المشتريات</div></div>
+              <div class="client-stat"><div class="val">٨</div><div class="lbl">إجمالي الفواتير</div></div>
+              <div class="client-stat"><div class="val" style="color:var(--success)">٠ ج.م</div><div class="lbl">رصيد متأخر</div></div>
+              <div class="client-stat"><div class="val">فوري</div><div class="lbl">شروط الدفع</div></div>
+            </div>
+            <div class="client-footer">
+              <div class="client-contact">📞 01003456789</div>
+              <span class="badge paid">جيد</span>
+            </div>
+          </div>
+
+          <div class="client-card">
+            <div class="client-card-top">
+              <div class="client-av c4">س</div>
+              <div>
+                <div class="client-name">شركة سكاي للاستيراد</div>
+                <div class="client-type">🏢 شركة · منذ أغسطس ٢٠٢٤</div>
+              </div>
+            </div>
+            <div class="client-stats">
+              <div class="client-stat"><div class="val">١٢٣,٤٠٠ ج.م</div><div class="lbl">إجمالي المشتريات</div></div>
+              <div class="client-stat"><div class="val">١٥</div><div class="lbl">إجمالي الفواتير</div></div>
+              <div class="client-stat"><div class="val" style="color:var(--warning)">٦٧,٢٠٠ ج.م</div><div class="lbl">رصيد معلّق</div></div>
+              <div class="client-stat"><div class="val">Net 30</div><div class="lbl">شروط الدفع</div></div>
+            </div>
+            <div class="client-footer">
+              <div class="client-contact">📞 01004567890 · 📧 sky@import.eg</div>
+              <span class="badge pending">مراقبة</span>
+            </div>
+          </div>
+
+          <div class="client-card">
+            <div class="client-card-top">
+              <div class="client-av c5">ق</div>
+              <div>
+                <div class="client-name">مستشفى القاهرة الحديث</div>
+                <div class="client-type">🏥 مؤسسة · منذ فبراير ٢٠٢٣</div>
+              </div>
+            </div>
+            <div class="client-stats">
+              <div class="client-stat"><div class="val">١,٢٣٤,٠٠٠ ج.م</div><div class="lbl">إجمالي المشتريات</div></div>
+              <div class="client-stat"><div class="val">٥٦</div><div class="lbl">إجمالي الفواتير</div></div>
+              <div class="client-stat"><div class="val" style="color:var(--success)">٠ ج.م</div><div class="lbl">رصيد متأخر</div></div>
+              <div class="client-stat"><div class="val">Net 60</div><div class="lbl">شروط الدفع</div></div>
+            </div>
+            <div class="client-footer">
+              <div class="client-contact">📞 01005678901</div>
+              <span class="badge paid">ممتاز</span>
+            </div>
+          </div>
+
+          <div class="client-card" style="border:2px dashed var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;min-height:200px;">
+            <div style="text-align:center;color:var(--muted)">
+              <div style="font-size:40px;margin-bottom:12px">➕</div>
+              <div style="font-size:14px;font-weight:600">إضافة عميل جديد</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════
+     SCREEN 6: ETA STATUS
+═══════════════════════════════════════════ -->
+<div id="s-eta" class="screen">
+  <div class="app-layout">
+    <aside class="sidebar">
+      <div class="sidebar-logo"><div class="mark">🧾</div><div class="brand">فاتورة برو<span>TechCorp Solutions</span></div></div>
+      <nav class="sidebar-nav">
+        <div class="nav-section">
+          <div class="nav-item" onclick="showScreen('s-dashboard')"><span class="icon">📊</span> لوحة التحكم</div>
+          <div class="nav-item" onclick="showScreen('s-invoices')"><span class="icon">🧾</span> الفواتير</div>
+          <div class="nav-item" onclick="showScreen('s-clients')"><span class="icon">👥</span> العملاء</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-section-label">الضرائب</div>
+          <div class="nav-item active"><span class="icon">🏛️</span> هيئة الضرائب</div>
+          <div class="nav-item"><span class="icon">📋</span> إقرار الضريبة</div>
+          <div class="nav-item"><span class="icon">📊</span> تقرير ض.ق.م</div>
+        </div>
+        <div class="nav-section">
+          <div class="nav-item"><span class="icon">⚙️</span> إعدادات ETA</div>
+        </div>
+      </nav>
+      <div class="sidebar-user">
+        <div class="user-avatar">أح</div>
+        <div class="user-info"><div class="name">أحمد محمد</div><div class="role">مدير الحساب</div></div>
+      </div>
+    </aside>
+    <div class="main-area">
+      <div class="topbar">
+        <div>
+          <div class="topbar-title">هيئة الضرائب المصرية — ETA</div>
+          <div style="font-size:12px;color:var(--muted)">بوابة الفاتورة الإلكترونية · <span class="live-dot"></span> متصل</div>
+        </div>
+        <div class="topbar-right">
+          <button class="topbar-btn">🔄 تحديث الحالة</button>
+          <button class="btn-add">📤 إرسال دفعي</button>
+        </div>
+      </div>
+      <div class="page-content">
+
+        <div class="eta-summary">
+          <div class="eta-card success">
+            <div class="big">٨٤٣</div>
+            <div class="lbl">✅ فواتير مقبولة</div>
+          </div>
+          <div class="eta-card warning">
+            <div class="big">٧</div>
+            <div class="lbl">⏳ قيد المراجعة</div>
+          </div>
+          <div class="eta-card danger">
+            <div class="big">٣</div>
+            <div class="lbl">❌ مرفوضة</div>
+          </div>
+          <div class="eta-card info">
+            <div class="big">١٢</div>
+            <div class="lbl">📋 لم تُرسل بعد</div>
+          </div>
+        </div>
+
+        <div class="health-bar-wrap">
+          <div class="card-title" style="margin-bottom:12px">🎯 نسبة الامتثال الضريبي</div>
+          <div class="health-label">
+            <span>معدل القبول</span>
+            <span style="font-weight:700;color:var(--success)">٨٧٪</span>
+          </div>
+          <div class="health-bar"><div class="health-fill"></div></div>
+          <div style="font-size:12px;color:var(--muted);margin-top:8px">٨٤٣ فاتورة مقبولة من أصل ٨٦٥ فاتورة مرسلة هذا العام</div>
+        </div>
+
+        <div class="eta-table-card">
+          <div class="card-header" style="padding:16px 20px;border-bottom:1px solid var(--border)">
+            <div class="card-title">📋 سجل الإرسال</div>
+            <div style="display:flex;gap:8px">
+              <select class="filter-select" style="font-size:12px"><option>كل الحالات</option><option>مقبولة</option><option>مرفوضة</option><option>قيد المراجعة</option></select>
+              <button class="topbar-btn" style="font-size:12px">📤 تصدير</button>
+            </div>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>رقم الفاتورة</th>
+                <th>العميل</th>
+                <th>المبلغ</th>
+                <th>تاريخ الإرسال</th>
+                <th>UUID المنظومة</th>
+                <th>حالة ETA</th>
+                <th>التفاصيل</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong>#INV-2026-0091</strong></td>
+                <td>شركة النيل للتكنولوجيا</td>
+                <td>٤٥,٠٠٠ ج.م</td>
+                <td>١٠/٠٦/٢٠٢٦ ١٠:٣٢</td>
+                <td style="font-family:monospace;font-size:11px;color:var(--muted)">a1b2c3d4-e5f6...</td>
+                <td><span class="badge paid">✅ مقبولة</span></td>
+                <td><button class="topbar-btn" style="font-size:12px">عرض QR</button></td>
+              </tr>
+              <tr>
+                <td><strong>#INV-2026-0090</strong></td>
+                <td>مجموعة الفجر العقارية</td>
+                <td>١٢٠,٠٠٠ ج.م</td>
+                <td>٠٨/٠٦/٢٠٢٦ ١٤:١٥</td>
+                <td style="font-family:monospace;font-size:11px;color:var(--muted)">b2c3d4e5-f6a1...</td>
+                <td><span class="badge paid">✅ مقبولة</span></td>
+                <td><button class="topbar-btn" style="font-size:12px">عرض QR</button></td>
+              </tr>
+              <tr>
+                <td><strong>#INV-2026-0086</strong></td>
+                <td>شركة الأهرام للطباعة</td>
+                <td>١٥,٧٥٠ ج.م</td>
+                <td>٣١/٠٥/٢٠٢٦ ٠٩:٤٥</td>
+                <td style="font-family:monospace;font-size:11px;color:var(--muted)">—</td>
+                <td><span class="badge pending">⏳ قيد المراجعة</span></td>
+                <td><button class="topbar-btn" style="font-size:12px">🔄 تحديث</button></td>
+              </tr>
+              <tr style="background:#fff5f5">
+                <td><strong>#INV-2026-0081</strong></td>
+                <td>شركة ديلتا للمقاولات</td>
+                <td>٣٤,٠٠٠ ج.م</td>
+                <td>٢٥/٠٥/٢٠٢٦ ١١:٢٠</td>
+                <td style="font-family:monospace;font-size:11px;color:var(--muted)">—</td>
+                <td><span class="badge overdue">❌ مرفوضة</span></td>
+                <td><button class="btn-add" style="padding:5px 12px;font-size:12px">🔧 تصحيح وإعادة إرسال</button></td>
+              </tr>
+              <tr style="background:#fff5f5">
+                <td><strong>#INV-2026-0079</strong></td>
+                <td>مؤسسة الرسالة</td>
+                <td>٩,٢٠٠ ج.م</td>
+                <td>٢٢/٠٥/٢٠٢٦ ١٦:٠٠</td>
+                <td style="font-family:monospace;font-size:11px;color:var(--muted)">—</td>
+                <td><span class="badge overdue">❌ مرفوضة</span></td>
+                <td><button class="btn-add" style="padding:5px 12px;font-size:12px">🔧 تصحيح وإعادة إرسال</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Rejection reason card -->
+        <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:14px;padding:20px;margin-top:16px">
+          <div style="font-size:14px;font-weight:700;color:var(--danger);margin-bottom:12px">❌ سبب الرفض — #INV-2026-0081</div>
+          <div style="font-size:13px;color:var(--text);line-height:1.8">
+            <div style="margin-bottom:8px"><strong>كود الخطأ:</strong> <code style="background:#fee2e2;padding:2px 8px;border-radius:4px;font-size:12px">ERR-TAX-0024</code></div>
+            <div style="margin-bottom:8px"><strong>الوصف:</strong> الرقم الضريبي للعميل غير مطابق لسجلات هيئة الضرائب المصرية</div>
+            <div style="margin-bottom:12px"><strong>الحل:</strong> يرجى التحقق من الرقم الضريبي للعميل وإعادة إرسال الفاتورة</div>
+            <button class="btn-add" style="width:auto">🔧 تصحيح الفاتورة الآن</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  document.querySelectorAll('.nav-screens button').forEach((btn, i) => {
+    const ids = ['s-login','s-dashboard','s-invoices','s-create','s-clients','s-eta'];
+    btn.classList.toggle('active', ids[i] === id);
+  });
+  window.scrollTo(0,0);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>د. كريم عادل — مركز الرؤية VIP</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%91%81%EF%B8%8F%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Cairo', 'ui-sans-serif', 'system-ui'] },
+      }
+    }
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root { --accent: #6A6FD1; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    opacity: 0;
+    animation: vip-fade-in .5s ease forwards;
+  }
+  @keyframes vip-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent; }
+  button, a, [role="button"] { transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+  button:active { transform: scale(0.97); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #root { min-height: 100vh; }
+  #vip-loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: #0a0a0a; z-index: 9999; transition: opacity .4s ease;
+  }
+  #vip-loading .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-top-color: var(--accent);
+    animation: vip-spin .8s linear infinite;
+  }
+  @keyframes vip-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="vip-loading"><div class="spinner"></div></div>
+<div id="root"></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import * as ReactDOM from "react-dom/client";
+import React, { useState } from "react";
+import {
+  Eye, Search, Bell, Plus, X, Users, Glasses, CalendarDays, Award,
+} from "lucide-react";
+
+const BG = "#0A0A0D";
+const PANEL = "#141319";
+const CARD = "#18171F";
+const BORDER = "#28262F";
+const TEXT = "#F0EFF5";
+const MUTED = "#928FA0";
+const GOLD = "#C9A227";
+const INDIGO = "#6A6FD1";
+const INDIGO_SOFT = "rgba(106,111,209,0.16)";
+const GREEN = "#3FA66B";
+
+const TABS = ["نظرة عامة", "المرضى", "الفحوصات", "النظارات والعدسات"];
+
+const career = [
+  { label: "سنوات الخبرة", value: "١٤" }, { label: "عملية عيون أُجريت", value: "٩٠٠+" },
+  { label: "نسبة نجاح عمليات المياه البيضاء", value: "٪٩٩" }, { label: "فحوصات هذا الشهر", value: "٢١٠" },
+];
+
+const initialPatients = [
+  { name: "طارق منير", issue: "قصر نظر", lastVisit: "٩ يوليو", status: "متابعة" },
+  { name: "سلمى بدر", issue: "مياه بيضاء مبكرة", lastVisit: "٥ يوليو", status: "مجدولة للعملية" },
+  { name: "أيمن راشد", issue: "جفاف العين", lastVisit: "١١ يوليو", status: "علاج" },
+];
+
+const exams = [
+  { patient: "طارق منير", type: "قياس ضغط العين", result: "طبيعي" },
+  { patient: "سلمى بدر", type: "فحص الشبكية", result: "يحتاج متابعة" },
+];
+
+const prescriptions = [
+  { patient: "طارق منير", type: "نظارة قراءة", detail: "OD -1.25 / OS -1.50" },
+  { patient: "أيمن راشد", type: "عدسات لاصقة يومية", detail: "ترطيب إضافي" },
+];
+
+function SnellenChart() {
+  const sizes = [28, 22, 18, 15, 12, 10];
+  return (
+    <div className="flex items-center justify-center gap-4 py-2">
+      {sizes.map((s, i) => (
+        <span key={i} style={{ fontSize: s, color: INDIGO, fontFamily: "monospace", opacity: 1 - i * 0.1 }}>E</span>
+      ))}
+    </div>
+  );
+}
+
+function Card({ children, className = "", style = {} }) {
+  return <div className={`rounded-2xl border ${className}`} style={{ background: CARD, borderColor: BORDER, ...style }}>{children}</div>;
+}
+function TopBar({ title, subtitle, onAdd, addLabel }) {
+  return (
+    <div className="flex items-center justify-between mb-8">
+      <div><h1 className="text-2xl font-semibold tracking-tight">{title}</h1>{subtitle && <p className="text-sm mt-1" style={{ color: MUTED }}>{subtitle}</p>}</div>
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl border" style={{ borderColor: BORDER, background: PANEL }}><Search size={15} style={{ color: MUTED }} /><span className="text-sm" style={{ color: MUTED }}>بحث...</span></div>
+        {onAdd && <button onClick={onAdd} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm" style={{ background: INDIGO, color: "#0E0D1A" }}><Plus size={15} />{addLabel}</button>}
+        <div className="w-10 h-10 rounded-xl border flex items-center justify-center" style={{ borderColor: BORDER, background: PANEL }}><Bell size={17} style={{ color: MUTED }} /></div>
+      </div>
+    </div>
+  );
+}
+function Modal({ title, note, onClose, children }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24" style={{ background: "rgba(0,0,0,0.55)" }}>
+      <Card className="w-full max-w-md p-7 relative" style={{ borderColor: INDIGO }}>
+        <button onClick={onClose} className="absolute left-5 top-5" style={{ color: MUTED }}><X size={18} /></button>
+        <div className="text-lg font-semibold mb-1">{title}</div>
+        <div className="text-xs mb-6" style={{ color: MUTED }}>{note}</div>
+        {children}
+      </Card>
+    </div>
+  );
+}
+const inputStyle = { background: "#100F16", borderColor: BORDER, color: TEXT };
+const Field = ({ label, ...props }) => (
+  <div className="mb-4">
+    <label className="text-xs" style={{ color: MUTED }}>{label}</label>
+    <input {...props} className="w-full mt-1.5 px-3.5 py-2.5 rounded-xl border text-sm outline-none" style={inputStyle} />
+  </div>
+);
+function NewPatientModal({ onClose, onCreate }) {
+  const [name, setName] = useState(""); const [issue, setIssue] = useState("");
+  return (
+    <Modal title="إضافة مريض جديد" note="بيانات محاكاة أمامية فقط" onClose={onClose}>
+      <Field label="اسم المريض" value={name} onChange={(e) => setName(e.target.value)} placeholder="مثال: هبة الطويل" />
+      <Field label="الحالة" value={issue} onChange={(e) => setIssue(e.target.value)} placeholder="مثال: طول نظر" />
+      <button onClick={() => name.trim() && onCreate({ name, issue: issue || "فحص عام", lastVisit: "اليوم", status: "متابعة" })}
+        className="w-full py-3 rounded-xl text-sm font-medium" style={{ background: INDIGO, color: "#0E0D1A" }}>إضافة المريض</button>
+    </Modal>
+  );
+}
+
+function OverviewScreen({ onAdd }) {
+  return (
+    <>
+      <div className="flex items-center gap-1.5 text-xs mb-2" style={{ color: GOLD }}><Award size={13} />زميل الأكاديمية الأمريكية لطب وجراحة العيون</div>
+      <TopBar title="د. كريم عادل" subtitle="استشاري طب وجراحة العيون والليزك" onAdd={onAdd} addLabel="مريض جديد" />
+      <Card className="p-6 mb-7"><SnellenChart /></Card>
+      <div className="grid grid-cols-4 gap-5">
+        {career.map((k) => <Card key={k.label} className="p-5"><div className="text-xs mb-3" style={{ color: MUTED }}>{k.label}</div><div className="text-2xl font-semibold tracking-tight" style={{ color: INDIGO }}>{k.value}</div></Card>)}
+      </div>
+    </>
+  );
+}
+
+function PatientsScreen({ patients, onAdd }) {
+  return (
+    <>
+      <TopBar title="المرضى" subtitle={`${patients.length} مريضًا`} onAdd={onAdd} addLabel="مريض جديد" />
+      <Card className="p-2">
+        {patients.map((p, i) => (
+          <div key={p.name} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== patients.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div><div className="text-sm font-medium">{p.name}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{p.issue} · آخر زيارة {p.lastVisit}</div></div>
+            <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: INDIGO, background: INDIGO_SOFT, border: `1px solid ${INDIGO}` }}>{p.status}</span>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function ExamsScreen() {
+  return (
+    <>
+      <TopBar title="الفحوصات" subtitle={`${exams.length} فحوصات حديثة`} />
+      <Card className="p-2">
+        {exams.map((e, i) => (
+          <div key={i} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== exams.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div><div className="text-sm font-medium">{e.patient}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{e.type}</div></div>
+            <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: e.result === "طبيعي" ? GREEN : GOLD, background: `${e.result === "طبيعي" ? GREEN : GOLD}1A`, border: `1px solid ${e.result === "طبيعي" ? GREEN : GOLD}` }}>{e.result}</span>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function PrescriptionsScreen() {
+  return (
+    <>
+      <TopBar title="النظارات والعدسات" subtitle={`${prescriptions.length} وصفات`} />
+      <Card className="p-2">
+        {prescriptions.map((p, i) => (
+          <div key={i} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== prescriptions.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div className="flex items-center gap-4"><div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: INDIGO_SOFT }}><Glasses size={16} style={{ color: INDIGO }} /></div><div><div className="text-sm font-medium">{p.patient}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{p.type}</div></div></div>
+            <span className="text-xs" style={{ color: MUTED }}>{p.detail}</span>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function DrAdelOphthalmology() {
+  const [tab, setTab] = useState(0);
+  const [patients, setPatients] = useState(initialPatients);
+  const [showModal, setShowModal] = useState(false);
+
+  const screens = [<OverviewScreen onAdd={() => setShowModal(true)} />, <PatientsScreen patients={patients} onAdd={() => setShowModal(true)} />, <ExamsScreen />, <PrescriptionsScreen />];
+
+  return (
+    <div dir="rtl" className="w-full min-h-screen font-sans" style={{ background: BG, color: TEXT }}>
+      <header className="border-b" style={{ borderColor: BORDER, background: PANEL }}>
+        <div className="flex items-center justify-between px-10 py-5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: INDIGO_SOFT, border: `1px solid ${INDIGO}` }}><Eye size={18} style={{ color: INDIGO }} /></div>
+            <div><div className="text-base font-semibold tracking-tight">مركز الرؤية VIP</div><div className="text-xs" style={{ color: MUTED }}>د. كريم عادل</div></div>
+          </div>
+          <nav className="hidden md:flex items-center gap-1">
+            {TABS.map((t, i) => (
+              <button key={t} onClick={() => setTab(i)} className="px-4 py-2 rounded-lg text-sm transition-colors" style={{ color: tab === i ? INDIGO : MUTED, background: tab === i ? INDIGO_SOFT : "transparent" }}>{t}</button>
+            ))}
+          </nav>
+        </div>
+      </header>
+      <main className="px-10 py-9 max-w-7xl mx-auto">{screens[tab]}</main>
+      {showModal && <NewPatientModal onClose={() => setShowModal(false)} onCreate={(p) => { setPatients((prev) => [p, ...prev]); setShowModal(false); }} />}
+    </div>
+  );
+}
+
+
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+root.render(<DrAdelOphthalmology />);
+const loading = document.getElementById("vip-loading");
+if (loading) { loading.style.opacity = "0"; setTimeout(() => loading.remove(), 400); }
+</script>
+</body>
+</html>

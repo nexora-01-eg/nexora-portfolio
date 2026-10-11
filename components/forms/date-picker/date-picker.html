@@ -1,0 +1,21 @@
+<!-- UI-only date picker: native input styled to match the design
+     system, plus an optional custom calendar popover shell. -->
+<div class="nx-field">
+  <label class="nx-field__label" for="dp-native">Launch date</label>
+  <input class="nx-input nx-date-input" type="date" id="dp-native" name="launchDate" />
+</div>
+
+<!-- Custom popover trigger (pairs with the Calendar component for the panel) -->
+<div class="nx-field">
+  <label class="nx-field__label" id="dp-label">Deadline</label>
+  <div class="nx-date-picker" data-nx-date-picker>
+    <button class="nx-date-picker__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-labelledby="dp-label">
+      <span class="nx-date-picker__value">Select a date</span>
+      <span aria-hidden="true">📅</span>
+    </button>
+    <div class="nx-date-picker__panel" role="dialog" aria-label="Choose date" hidden>
+      <!-- Calendar component markup goes here — see /components/ui/calendar -->
+      <p class="nx-small">Calendar component renders here.</p>
+    </div>
+  </div>
+</div>

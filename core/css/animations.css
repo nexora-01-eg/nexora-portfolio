@@ -1,0 +1,69 @@
+/* ============================================================
+   NEXORA — ANIMATION LIBRARY
+   Reusable keyframes referenced by components/pages.
+   All durations/easings come from tokens.css.
+   ============================================================ */
+
+@keyframes nx-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes nx-fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes nx-scale-in {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes nx-shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.nx-anim-fade-in {
+  animation: nx-fade-in var(--nx-duration-slow) var(--nx-ease-out) both;
+}
+
+.nx-anim-fade-up {
+  animation: nx-fade-up var(--nx-duration-slow) var(--nx-ease-emphasized) both;
+}
+
+.nx-anim-scale-in {
+  animation: nx-scale-in var(--nx-duration-base) var(--nx-ease-out) both;
+}
+
+.nx-skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--nx-bg-elevated) 25%,
+    var(--nx-bg-elevated-2) 50%,
+    var(--nx-bg-elevated) 75%
+  );
+  background-size: 200% 100%;
+  animation: nx-shimmer 1.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-anim-fade-in,
+  .nx-anim-fade-up,
+  .nx-anim-scale-in,
+  .nx-skeleton {
+    animation: none !important;
+  }
+}

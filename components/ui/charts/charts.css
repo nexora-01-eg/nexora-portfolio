@@ -1,0 +1,68 @@
+/* ============================================================
+   NEXORA — Charts (UI only)
+   Pure SVG/CSS chart shells with no charting library, per
+   Phase 2 scope. Bind real datasets by generating these same
+   shapes server/client-side from your own data.
+   ============================================================ */
+
+.nx-chart {
+  padding: var(--nx-space-4);
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+}
+
+.nx-chart__svg {
+  width: 100%;
+  height: 100px;
+  margin-top: var(--nx-space-3);
+}
+
+.nx-chart__line {
+  fill: none;
+  stroke: var(--nx-accent-primary);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.nx-chart__bars {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nx-space-3);
+  margin-top: var(--nx-space-3);
+}
+
+.nx-chart__bar {
+  position: relative;
+  height: 8px;
+  border-radius: var(--nx-radius-full);
+  background: var(--nx-bg-elevated-2);
+}
+.nx-chart__bar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  width: var(--nx-bar-value, 0%);
+  background: var(--nx-accent-primary);
+  border-radius: inherit;
+  transition: width var(--nx-duration-slow) var(--nx-ease-out);
+}
+.nx-chart__bar .nx-caption {
+  position: absolute;
+  top: -18px;
+  left: 0;
+}
+
+/* Reuses the same donut technique as Progress's circular variant */
+.nx-chart__donut { width: 64px; height: 64px; transform: rotate(-90deg); }
+.nx-chart__donut-track,
+.nx-chart__donut-value { fill: none; stroke-width: 4; }
+.nx-chart__donut-track { stroke: var(--nx-bg-elevated-2); }
+.nx-chart__donut-value {
+  stroke: var(--nx-accent-primary);
+  stroke-linecap: round;
+  stroke-dasharray: 106.8;
+  stroke-dashoffset: calc(106.8 - (106.8 * var(--nx-progress-value, 0) / 100));
+  transition: stroke-dashoffset var(--nx-duration-slow) var(--nx-ease-out);
+}

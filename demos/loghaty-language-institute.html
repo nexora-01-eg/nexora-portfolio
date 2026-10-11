@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>معهد لغتي لتعليم اللغات</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8C%8D%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Cairo', 'ui-sans-serif', 'system-ui'] },
+      }
+    }
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root { --accent: #1E8A6B; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    opacity: 0;
+    animation: vip-fade-in .5s ease forwards;
+  }
+  @keyframes vip-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent; }
+  button, a, [role="button"] { transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+  button:active { transform: scale(0.97); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #root { min-height: 100vh; }
+  #vip-loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: #0a0a0a; z-index: 9999; transition: opacity .4s ease;
+  }
+  #vip-loading .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-top-color: var(--accent);
+    animation: vip-spin .8s linear infinite;
+  }
+  @keyframes vip-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="vip-loading"><div class="spinner"></div></div>
+<div id="root"></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import * as ReactDOM from "react-dom/client";
+import React, { useState, useEffect } from "react";
+import {
+  Languages, Calendar, Check, Send, Globe, GraduationCap, Users, Award, Sparkles,
+} from "lucide-react";
+
+const FONT_ID = "loghaty-fonts";
+function useFonts() {
+  useEffect(() => {
+    if (document.getElementById(FONT_ID)) return;
+    const l = document.createElement("link");
+    l.id = FONT_ID; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap";
+    document.head.appendChild(l);
+  }, []);
+}
+
+const C = {
+  bg: "#F3F8F6", surface: "#FFFFFF", border: "#DCEAE4",
+  ink: "#122420", muted: "#5C7871",
+  green: "#1E8A6B", greenSoft: "rgba(30,138,107,0.1)", blue: "#2E6FA8", blueSoft: "rgba(46,111,168,0.12)",
+};
+const font = { display: "'Cairo', sans-serif", body: "'Cairo', sans-serif" };
+const shadow = { sm: "0 1px 3px rgba(18,36,32,0.06)", md: "0 10px 26px rgba(18,36,32,0.08)", lg: "0 22px 48px rgba(18,36,32,0.16)" };
+
+const INSTITUTE = { name: "معهد لغتي لتعليم اللغات", address: "شارع الجامعة، الدقي، الجيزة" };
+const LANGS = [{ id: "en", l: "الإنجليزية", flag: "🇬🇧" }, { id: "de", l: "الألمانية", flag: "🇩🇪" }, { id: "fr", l: "الفرنسية", flag: "🇫🇷" }, { id: "es", l: "الإسبانية", flag: "🇪🇸" }];
+const QUESTIONS = [
+  { q: "تقدر تقرأ جملة بسيطة وتفهم معناها؟", levels: { yes: "A2", no: "A1" } },
+  { q: "تقدر تتكلم عن نفسك وشغلك لمدة دقيقتين؟", levels: { yes: "B1", no: "A2" } },
+  { q: "تقدر تفهم فيلم أو بودكاست من غير ترجمة؟", levels: { yes: "B2", no: "B1" } },
+];
+
+function LevelTest() {
+  const [step, setStep] = useState(0);
+  const [level, setLevel] = useState(null);
+  const answer = (yes) => {
+    const lv = QUESTIONS[step].levels[yes ? "yes" : "no"];
+    if (!yes || step === QUESTIONS.length - 1) { setLevel(lv); return; }
+    setStep((s) => s + 1);
+  };
+  const reset = () => { setStep(0); setLevel(null); };
+  return (
+    <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 24, padding: 30, boxShadow: shadow.md }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}><Sparkles size={17} color={C.green} /><span style={{ fontFamily: font.body, fontWeight: 800, fontSize: 18, color: C.ink }}>اختبار تحديد المستوى السريع</span></div>
+      <p style={{ fontFamily: font.body, fontSize: 12, color: C.muted, marginBottom: 22 }}>3 أسئلة بس عشان نحدد مستواك المبدئي قبل أول حصة.</p>
+      {level ? (
+        <div style={{ textAlign: "center", padding: "20px 0" }}>
+          <div style={{ width: 70, height: 70, borderRadius: "50%", background: C.greenSoft, display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto 16px", fontFamily: font.display, fontWeight: 800, fontSize: 22, color: C.green }}>{level}</div>
+          <div style={{ fontFamily: font.body, fontSize: 14, fontWeight: 700, color: C.ink }}>مستواك التقريبي هو {level}</div>
+          <div style={{ fontFamily: font.body, fontSize: 12, color: C.muted, marginTop: 6 }}>هنأكد المستوى بالظبط في المقابلة الأولى مع المدرس.</div>
+          <button onClick={reset} style={{ marginTop: 16, padding: "9px 20px", borderRadius: 999, border: `1px solid ${C.border}`, background: "transparent", fontFamily: font.body, fontSize: 12.5, cursor: "pointer", color: C.ink }}>إعادة الاختبار</button>
+        </div>
+      ) : (
+        <div>
+          <div style={{ display: "flex", gap: 6, marginBottom: 18 }}>
+            {QUESTIONS.map((_, i) => (<div key={i} style={{ flex: 1, height: 5, borderRadius: 999, background: i <= step ? C.green : C.border }} />))}
+          </div>
+          <div style={{ fontFamily: font.body, fontSize: 15, color: C.ink, fontWeight: 700, marginBottom: 22, textAlign: "center", minHeight: 44 }}>{QUESTIONS[step].q}</div>
+          <div style={{ display: "flex", gap: 10 }}>
+            <button onClick={() => answer(true)} style={{ flex: 1, padding: "13px 0", borderRadius: 12, border: "none", background: C.green, color: "#fff", fontFamily: font.body, fontWeight: 700, fontSize: 13.5, cursor: "pointer" }}>أيوة، أقدر</button>
+            <button onClick={() => answer(false)} style={{ flex: 1, padding: "13px 0", borderRadius: 12, border: `1.5px solid ${C.border}`, background: "transparent", color: C.ink, fontFamily: font.body, fontWeight: 700, fontSize: 13.5, cursor: "pointer" }}>لسه لأ</button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function Navbar() {
+  return (
+    <div style={{ position: "sticky", top: 0, zIndex: 50, background: "rgba(243,248,246,0.92)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${C.border}` }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "16px 30px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}><div style={{ width: 40, height: 40, borderRadius: 12, background: `linear-gradient(135deg, ${C.green}, ${C.blue})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Languages size={19} color="#fff" /></div><span style={{ fontFamily: font.body, fontWeight: 800, fontSize: 17, color: C.ink }}>{INSTITUTE.name}</span></div>
+        <button style={{ display: "flex", alignItems: "center", gap: 8, background: C.green, color: "#fff", border: "none", borderRadius: 10, padding: "11px 22px", fontFamily: font.body, fontWeight: 700, fontSize: 13.5, cursor: "pointer" }}><Calendar size={15} /> ابدأ الآن</button>
+      </div>
+    </div>
+  );
+}
+
+function Hero() {
+  return (
+    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "60px 30px 20px", textAlign: "center" }}>
+      <Globe size={20} color={C.blue} />
+      <h1 style={{ fontFamily: font.body, fontWeight: 800, fontSize: 38, color: C.ink, margin: "16px 0 12px" }}>اتقن لغة جديدة في أشهر مش سنين</h1>
+      <p style={{ fontFamily: font.body, fontSize: 14, color: C.muted, maxWidth: 460, marginInline: "auto", marginBottom: 30 }}>كورسات مكثفة مع مدرسين معتمدين، أونلاين أو حضوري، بمناهج عالمية.</p>
+      <div style={{ display: "flex", justifyContent: "center", gap: 12, flexWrap: "wrap" }}>
+        {LANGS.map((l) => (<div key={l.id} style={{ display: "flex", alignItems: "center", gap: 8, background: C.surface, border: `1px solid ${C.border}`, borderRadius: 999, padding: "9px 16px" }}><span>{l.flag}</span><span style={{ fontFamily: font.body, fontSize: 12.5, fontWeight: 700, color: C.ink }}>{l.l}</span></div>))}
+      </div>
+    </div>
+  );
+}
+
+function TestSection() { return <div style={{ padding: "40px 30px 60px" }}><div style={{ maxWidth: 560, margin: "0 auto" }}><LevelTest /></div></div>; }
+
+function StatsSection() {
+  const stats = [{ v: "+8,000", l: "طالب متخرج", i: GraduationCap }, { v: "45", l: "مدرس معتمد", i: Users }, { v: "97%", l: "نسبة اجتياز الاختبارات", i: Award }];
+  return (
+    <div style={{ background: C.surface, borderTop: `1px solid ${C.border}`, padding: "50px 30px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 20 }} className="stats-grid">
+        {stats.map((s, i) => (<div key={i} style={{ textAlign: "center" }}><s.i size={22} color={C.green} style={{ margin: "0 auto 10px" }} /><div style={{ fontFamily: font.body, fontWeight: 800, fontSize: 22, color: C.ink }}>{s.v}</div><div style={{ fontFamily: font.body, fontSize: 11, color: C.muted, marginTop: 4 }}>{s.l}</div></div>))}
+      </div>
+    </div>
+  );
+}
+
+function LoghatyLanguageInstitute() {
+  useFonts();
+  return (
+    <div dir="rtl" style={{ background: C.bg, minHeight: "100vh", fontFamily: font.body, color: C.ink }}>
+      <style>{`* { box-sizing: border-box; } @media (max-width: 900px) { .stats-grid { grid-template-columns: 1fr !important; } }`}</style>
+      <Navbar /><Hero /><TestSection /><StatsSection />
+    </div>
+  );
+}
+
+
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+root.render(<LoghatyLanguageInstitute />);
+const loading = document.getElementById("vip-loading");
+if (loading) { loading.style.opacity = "0"; setTimeout(() => loading.remove(), 400); }
+</script>
+</body>
+</html>

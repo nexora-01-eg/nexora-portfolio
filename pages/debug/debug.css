@@ -1,0 +1,39 @@
+/* ============================================================
+   NEXORA — Import Engine Debug Dashboard (page-specific)
+   Layout only. Every visual primitive (cards, badges, tables,
+   alerts) is the actual component CSS, linked in index.html.
+   ============================================================ */
+
+.debug-cache-row,
+.debug-stat-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--nx-fs-200);
+  padding-block: var(--nx-space-1);
+}
+
+.debug-cache-row__dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--nx-radius-full);
+  display: inline-block;
+  margin-right: var(--nx-space-2);
+}
+
+.debug-report-card {
+  text-align: center;
+}
+
+.debug-report-card__value {
+  font-family: var(--nx-font-display);
+  font-size: var(--nx-fs-600);
+  font-weight: var(--nx-fw-bold);
+  margin-bottom: var(--nx-space-1);
+}
+
+.debug-mono {
+  font-family: var(--nx-font-mono);
+  font-size: var(--nx-fs-100);
+  color: var(--nx-text-secondary);
+}

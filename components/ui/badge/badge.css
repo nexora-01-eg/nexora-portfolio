@@ -1,0 +1,33 @@
+/* ============================================================
+   NEXORA — Badge
+   Status/label indicator. Variants: neutral, success, warning,
+   danger, accent. Sizes: sm, md (default), lg.
+   ============================================================ */
+
+.nx-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nx-space-1);
+  padding: var(--nx-space-1) var(--nx-space-3);
+  font-size: var(--nx-fs-100);
+  font-weight: var(--nx-fw-medium);
+  line-height: 1;
+  border-radius: var(--nx-radius-full);
+  white-space: nowrap;
+}
+
+.nx-badge--sm { padding: 2px var(--nx-space-2); font-size: 0.65rem; }
+.nx-badge--lg { padding: var(--nx-space-2) var(--nx-space-4); font-size: var(--nx-fs-200); }
+
+.nx-badge--neutral { background: var(--nx-bg-elevated-2); color: var(--nx-text-secondary); }
+.nx-badge--success  { background: rgba(61, 154, 106, 0.16); color: var(--nx-color-success); }
+.nx-badge--warning  { background: rgba(201, 138, 44, 0.16); color: var(--nx-color-warning); }
+.nx-badge--danger   { background: rgba(179, 69, 63, 0.16); color: var(--nx-color-danger); }
+.nx-badge--accent   { background: var(--nx-accent-muted); color: var(--nx-accent-primary); }
+
+.nx-badge__dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--nx-radius-full);
+  background: currentColor;
+}

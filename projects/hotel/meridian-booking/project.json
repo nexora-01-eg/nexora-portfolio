@@ -1,0 +1,53 @@
+{
+  "id": "meridian-booking",
+  "slug": "meridian-booking",
+  "industry": "hotel",
+  "designSystem": "hotel",
+  "title": "Meridian Booking",
+  "tagline": "Reservation and guest management for boutique hotels.",
+  "description": "An end-to-end booking engine and guest management system for independent and boutique hotels.",
+  "version": "1.1.0",
+  "status": "draft",
+  "tier": "growth",
+  "difficulty": "intermediate",
+  "service": "Booking Systems",
+  "tags": [
+    "hotel",
+    "booking",
+    "calendar"
+  ],
+  "technologies": [
+    "Next.js",
+    "PostgreSQL"
+  ],
+  "componentsUsed": [
+    "calendar",
+    "card",
+    "form"
+  ],
+  "features": [
+    "Real-time room availability calendar",
+    "Guest profile history",
+    "Automated confirmation emails (placeholder)"
+  ],
+  "timeline": [
+    {
+      "date": "2026-06-20",
+      "label": "Project started",
+      "description": "Booking engine scaffolding."
+    },
+    {
+      "date": "2026-07-08",
+      "label": "v1.1.0 released",
+      "description": "Calendar UI refinements."
+    }
+  ],
+  "relatedProjects": [
+    "aurora-crm"
+  ],
+  "views": 86,
+  "featured": false,
+  "popular": false,
+  "createdAt": "2026-06-20",
+  "updatedAt": "2026-07-08"
+}

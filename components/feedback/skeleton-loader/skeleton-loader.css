@@ -1,0 +1,34 @@
+/* ============================================================
+   NEXORA — Skeleton Loader
+   Content-shaped placeholder shown while real data loads.
+   Base .nx-skeleton shimmer animation is defined once in
+   core/css/animations.css — this file only adds shapes.
+   ============================================================ */
+
+.nx-skeleton {
+  border-radius: var(--nx-radius-sm);
+}
+
+.nx-skeleton--text {
+  height: 12px;
+  border-radius: var(--nx-radius-sm);
+}
+
+.nx-skeleton--avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--nx-radius-full);
+  flex-shrink: 0;
+}
+
+.nx-skeleton--card {
+  width: 100%;
+  height: 220px;
+  border-radius: var(--nx-radius-lg);
+}
+
+.nx-skeleton--thumbnail {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  border-radius: var(--nx-radius-md);
+}

@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>منهج — منصة التعلّم الرقمي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F5F4FB; --surface:#FFFFFF; --surface-2:#EDEBF9; --surface-3:#E1DDF5;
+  --ink:#211D3A; --ink-soft:#63608A; --ink-faint:#9C99BE;
+  --line:#E6E3F5; --line-soft:#EFEDFA;
+  --indigo:#4B3FE0; --indigo-deep:#372FB0; --indigo-pale:#EAE8FC;
+  --amber:#F2A93B; --amber-deep:#C4831F; --amber-pale:#FDF0DA;
+  --teal:#20B0A6; --teal-pale:#DFF6F3;
+  --coral:#EF6C5C; --coral-pale:#FCE4E0;
+  --success:#2FA36A;
+  --shadow-sm: 0 1px 2px rgba(33,29,58,0.06);
+  --shadow-md: 0 8px 24px rgba(33,29,58,0.10);
+  --shadow-lg: 0 20px 48px rgba(33,29,58,0.18);
+  --radius-md:16px; --radius-lg:22px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ background:var(--paper); color:var(--ink); font-family:'Cairo', sans-serif; -webkit-font-smoothing:antialiased; overflow:hidden; }
+::selection{ background:var(--indigo); color:#fff; }
+::-webkit-scrollbar{ width:8px; height:8px; }
+::-webkit-scrollbar-thumb{ background:var(--line); border-radius:8px; }
+.mono{ font-family:'IBM Plex Mono', monospace; direction:ltr; display:inline-block; }
+button{ font-family:inherit; cursor:pointer; }
+a{ color:inherit; text-decoration:none; }
+
+.shell{ display:grid; grid-template-columns:252px 1fr; height:100vh; }
+
+.sidebar{ background:var(--surface); border-left:1px solid var(--line); display:flex; flex-direction:column; padding:24px 16px; }
+.brand{ display:flex; align-items:center; gap:11px; padding:6px 8px 26px;}
+.brand-mark{ width:38px; height:38px; flex-shrink:0; }
+.brand-name{ font-weight:900; font-size:20px; letter-spacing:.3px; color:var(--indigo);}
+.brand-sub{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:9px; letter-spacing:2px; color:var(--amber-deep); text-transform:uppercase; margin-top:2px; font-weight:600;}
+
+.nav-group-label{ font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:var(--ink-faint); padding:16px 12px 7px; font-weight:700;}
+.nav-item{ display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:13px; color:var(--ink-soft); font-size:14.5px; font-weight:600; transition:all .18s ease; margin-bottom:2px;}
+.nav-item svg{ width:18px; height:18px; flex-shrink:0; opacity:.8; }
+.nav-item:hover{ background:var(--surface-2); color:var(--ink); }
+.nav-item.active{ background:linear-gradient(90deg, var(--indigo-pale), transparent); color:var(--indigo-deep); }
+.nav-item.active svg{ opacity:1; color:var(--indigo); }
+.sidebar-foot{ margin-top:auto; padding-top:14px; border-top:1px solid var(--line-soft); }
+
+.streak-card{ background:linear-gradient(135deg, var(--indigo), #6E5FF2); border-radius:18px; padding:16px; color:#fff; margin-top:10px; position:relative; overflow:hidden;}
+.streak-card::after{ content:''; position:absolute; top:-30px; left:-30px; width:100px; height:100px; border-radius:50%; background:rgba(255,255,255,0.12); }
+.streak-num{ font-size:26px; font-weight:900; position:relative; z-index:1;}
+.streak-lab{ font-size:11px; opacity:.85; margin-top:2px; position:relative; z-index:1;}
+
+.header{ height:76px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 30px; background:var(--paper); flex-shrink:0;}
+.header-title h1{ font-weight:900; font-size:22px; }
+.header-title span{ font-size:12.5px; color:var(--ink-faint); font-weight:500; }
+.header-right{ display:flex; align-items:center; gap:14px; }
+.search-box{ display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:10px 15px; width:270px; }
+.search-box:focus-within{ border-color:var(--indigo); box-shadow:0 0 0 3px var(--indigo-pale); }
+.search-box svg{ width:16px; height:16px; color:var(--ink-faint); flex-shrink:0; }
+.search-box input{ border:none; outline:none; font-size:13.5px; width:100%; background:transparent; color:var(--ink); font-family:inherit; }
+.icon-btn{ width:40px; height:40px; border-radius:12px; border:1px solid var(--line); background:var(--surface); display:flex; align-items:center; justify-content:center; position:relative; transition:all .15s ease;}
+.icon-btn:hover{ background:var(--surface-2); }
+.icon-btn svg{ width:17px; height:17px; color:var(--ink-soft); }
+.dot-badge{ position:absolute; top:8px; left:9px; width:7px; height:7px; border-radius:50%; background:var(--coral); border:1.5px solid var(--surface); }
+.profile-chip{ display:flex; align-items:center; gap:10px; padding:5px 12px 5px 5px; border-radius:15px; border:1px solid var(--line); background:var(--surface); }
+.avatar{ width:34px; height:34px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; color:#fff; flex-shrink:0;}
+.profile-chip .name{ font-size:13px; font-weight:700; }
+.profile-chip .role{ font-size:11px; color:var(--ink-faint); }
+
+.main{ display:flex; flex-direction:column; overflow:hidden; }
+.content{ flex:1; overflow-y:auto; padding:26px 30px 60px; }
+.view{ display:none; animation:fadeUp .4s cubic-bezier(.2,.7,.3,1); }
+.view.active{ display:block; }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+.section-title{ display:flex; align-items:center; gap:10px; margin:32px 0 16px; }
+.section-title h2{ font-weight:800; font-size:17.5px; }
+.section-title:first-child{ margin-top:0; }
+.count-pill{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:11px; background:var(--surface-2); color:var(--ink-soft); padding:3px 10px; border-radius:20px; }
+
+.grid{ display:grid; gap:16px; }
+.grid-4{ grid-template-columns:repeat(4,1fr); }
+.grid-3{ grid-template-columns:repeat(3,1fr); }
+.grid-2{ grid-template-columns:repeat(2,1fr); }
+
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:20px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden; transition:all .2s ease; }
+.card.hoverable:hover{ box-shadow:var(--shadow-md); transform:translateY(-2px); border-color:var(--indigo); }
+
+.kpi-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.kpi-icon{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; }
+.kpi-icon svg{ width:19px; height:19px; }
+.kpi-trend{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:20px; }
+.trend-up{ color:var(--success); background:#E4F4EA; }
+.trend-down{ color:var(--coral); background:var(--coral-pale); }
+.kpi-value{ font-weight:800; font-size:28px; letter-spacing:-.5px; }
+.kpi-label{ font-size:12.5px; color:var(--ink-soft); margin-top:4px; font-weight:600;}
+
+.btn{ display:inline-flex; align-items:center; gap:7px; padding:11px 18px; border-radius:12px; font-size:13.5px; font-weight:700; border:1px solid transparent; transition:all .16s ease; }
+.btn svg{ width:15px; height:15px; }
+.btn-primary{ background:var(--indigo); color:#fff; }
+.btn-primary:hover{ background:var(--indigo-deep); box-shadow:var(--shadow-md); }
+.btn-amber{ background:var(--amber); color:#3A2504; }
+.btn-amber:hover{ background:var(--amber-deep); color:#fff; }
+.btn-ghost{ background:var(--surface); border-color:var(--line); color:var(--ink); }
+.btn-ghost:hover{ background:var(--surface-2); }
+
+.tabs{ display:flex; gap:4px; background:var(--surface-2); padding:4px; border-radius:13px; width:fit-content; }
+.tab{ padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700; color:var(--ink-soft); border:none; background:transparent; transition:all .15s ease; }
+.tab.active{ background:var(--surface); color:var(--indigo); box-shadow:var(--shadow-sm); }
+
+.chip{ display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:20px; font-size:11.5px; font-weight:700; }
+.chip::before{ content:''; width:6px; height:6px; border-radius:50%; }
+.chip-ok{ background:var(--teal-pale); color:#128278; } .chip-ok::before{ background:var(--teal); }
+.chip-warn{ background:var(--amber-pale); color:var(--amber-deep); } .chip-warn::before{ background:var(--amber); }
+.chip-new{ background:var(--coral-pale); color:var(--coral); } .chip-new::before{ background:var(--coral); }
+
+.pbar{ width:100%; height:7px; background:var(--surface-2); border-radius:20px; overflow:hidden; }
+.pbar-fill{ height:100%; border-radius:20px; background:linear-gradient(90deg, var(--indigo), #8B7EF5); transition:width 1s cubic-bezier(.2,.8,.3,1); }
+
+/* Continue learning banner */
+.continue-banner{ background:linear-gradient(135deg, var(--indigo), #6E5FF2); border-radius:24px; padding:28px; color:#fff; position:relative; overflow:hidden; display:flex; align-items:center; justify-content:space-between; gap:24px;}
+.continue-banner::before{ content:''; position:absolute; bottom:-60px; left:-40px; width:220px; height:220px; border-radius:50%; background:rgba(255,255,255,0.08); }
+.continue-banner .eyebrow{ font-size:11px; letter-spacing:2px; text-transform:uppercase; opacity:.75; font-weight:700; position:relative; z-index:1;}
+.continue-banner h3{ font-size:22px; font-weight:800; margin-top:6px; position:relative; z-index:1;}
+.continue-banner p{ font-size:12.5px; opacity:.85; margin-top:6px; position:relative; z-index:1;}
+.continue-illustration{ width:130px; height:110px; flex-shrink:0; position:relative; z-index:1;}
+
+/* Course card */
+.course-thumb{ aspect-ratio:16/9; border-radius:14px; position:relative; overflow:hidden; }
+.course-thumb svg{ width:100%; height:100%; }
+.course-thumb .play-badge{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.course-thumb .play-circle{ width:40px; height:40px; border-radius:50%; background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center; }
+.course-thumb .play-circle svg{ width:16px; height:16px; color:var(--indigo); }
+.course-cat{ position:absolute; top:10px; right:10px; }
+.course-title{ font-size:13.5px; font-weight:800; margin-top:12px; }
+.course-instructor{ font-size:11.5px; color:var(--ink-faint); margin-top:2px; }
+.course-progress-row{ display:flex; align-items:center; gap:8px; margin-top:10px; }
+.course-progress-row .pbar{ flex:1; }
+.course-progress-row span{ font-size:11px; color:var(--ink-faint); font-family:'IBM Plex Mono', monospace; }
+
+/* Learning path (roadmap) */
+.path-wrap{ position:relative; padding:20px 10px; }
+.path-node{ display:flex; align-items:center; gap:16px; position:relative; padding-bottom:34px; }
+.path-node:last-child{ padding-bottom:0; }
+.path-node::before{ content:''; position:absolute; right:23px; top:48px; bottom:-6px; width:2px; background:var(--line); }
+.path-node:last-child::before{ display:none; }
+.path-circle{ width:46px; height:46px; border-radius:50%; background:var(--surface-2); border:2px solid var(--line); display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--ink-faint); flex-shrink:0; z-index:1;}
+.path-circle.done{ background:var(--teal); border-color:var(--teal); color:#fff; }
+.path-circle.current{ background:var(--indigo); border-color:var(--indigo); color:#fff; box-shadow:0 0 0 6px var(--indigo-pale); }
+.path-content{ flex:1; background:var(--surface); border:1px solid var(--line); border-radius:14px; padding:14px 16px; }
+.path-content .pn-title{ font-weight:800; font-size:13.5px; }
+.path-content .pn-sub{ font-size:11.5px; color:var(--ink-faint); margin-top:2px; }
+
+/* Certificate card */
+.cert-card{ background:linear-gradient(160deg, var(--amber-pale), var(--surface)); border:1px solid var(--line); border-radius:18px; padding:20px; text-align:center; }
+.cert-icon{ width:52px; height:52px; margin:0 auto 12px; }
+.cert-title{ font-weight:800; font-size:13.5px; }
+.cert-date{ font-size:11px; color:var(--ink-faint); margin-top:4px; }
+
+.settings-row{ display:flex; align-items:center; justify-content:space-between; padding:15px 0; border-bottom:1px solid var(--line-soft); }
+.settings-row:last-child{ border-bottom:none; }
+.settings-row .lab{ font-size:13.5px; font-weight:700; }
+.settings-row .sub{ font-size:11.5px; color:var(--ink-faint); margin-top:2px; }
+.switch{ width:42px; height:24px; border-radius:20px; background:var(--surface-2); position:relative; border:1px solid var(--line); transition:background .2s ease; flex-shrink:0; }
+.switch.on{ background:var(--indigo); border-color:var(--indigo); }
+.switch::after{ content:''; position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%; background:#fff; transition:right .2s ease; }
+.switch.on::after{ right:20px; }
+.field-label{ font-size:12.5px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; display:block; }
+.field-input{ width:100%; padding:11px 14px; border-radius:11px; border:1px solid var(--line); font-size:13.5px; font-family:inherit; background:var(--paper); outline:none; }
+.field-input:focus{ border-color:var(--indigo); }
+.field-row{ margin-bottom:14px; }
+
+.toast-wrap{ position:fixed; bottom:24px; left:24px; z-index:200; display:flex; flex-direction:column; gap:10px; }
+.toast{ display:flex; align-items:center; gap:10px; background:var(--ink); color:#fff; padding:14px 19px; border-radius:14px; box-shadow:var(--shadow-lg); font-size:13px; font-weight:600; transform:translateY(12px); opacity:0; transition:all .3s cubic-bezier(.2,.8,.3,1); }
+.toast.show{ transform:translateY(0); opacity:1; }
+.toast svg{ width:16px; height:16px; color:var(--amber); flex-shrink:0; }
+
+@media (max-width:1100px){ .grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 44 44" fill="none">
+        <circle cx="22" cy="22" r="20" fill="rgba(75,63,224,0.1)"/>
+        <path d="M12 18l10-6 10 6-10 6-10-6z" stroke="#4B3FE0" stroke-width="2" stroke-linejoin="round" fill="none"/>
+        <path d="M16 21v6c0 1.5 3 3 6 3s6-1.5 6-3v-6" stroke="#4B3FE0" stroke-width="2" fill="none"/>
+      </svg>
+      <div><div class="brand-name">منهج</div><div class="brand-sub">LEARN OS</div></div>
+    </div>
+
+    <div class="nav-group-label">التعلّم</div>
+    <div class="nav-item active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+      الرئيسية
+    </div>
+    <div class="nav-item" data-view="mycourses">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14l-3-2-3 2-3-2-3 2-3-2z"/></svg>
+      دوراتي
+    </div>
+    <div class="nav-item" data-view="explore">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      استكشف
+    </div>
+    <div class="nav-item" data-view="path">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 21l4-9 4 5 4-11 4 15"/></svg>
+      مساري التعليمي
+    </div>
+    <div class="nav-item" data-view="certificates">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg>
+      الشهادات
+    </div>
+
+    <div class="nav-group-label">الحساب</div>
+    <div class="nav-item" data-view="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2.1-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2.1 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2.1 1.2L10 21h4l.5-2.6a7 7 0 0 0 2.1-1.2l2.3.9 2-3.4-2-1.5c.067-.396.1-.797.1-1.2z"/></svg>
+      الإعدادات
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="streak-card">
+        <div class="streak-num">🔥 ١٢</div>
+        <div class="streak-lab">يوم متواصل من التعلّم</div>
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="header-title" id="headerTitle">
+        <h1>يلا نكمل يا كريم</h1>
+        <span>الثلاثاء، ١٤ يوليو · ٣ دورات نشطة</span>
+      </div>
+      <div class="header-right">
+        <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input type="text" placeholder="دوّر على دورة أو مهارة…" oninput="handleSearch(this.value)"></div>
+        <button class="icon-btn" onclick="toggleNotif()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot-badge"></span></button>
+        <div class="profile-chip"><div class="avatar" style="background:linear-gradient(135deg,#4B3FE0,#8B7EF5);">كس</div><div><div class="name">كريم سامي</div><div class="role">متعلّم</div></div></div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <section class="view active" id="view-dashboard">
+        <div class="continue-banner">
+          <div>
+            <div class="eyebrow">أكمل من حيث توقفت</div>
+            <h3>أساسيات تصميم UX/UI</h3>
+            <p>الدرس ١٢ من ٢٤ — «مبادئ التسلسل الهرمي البصري»</p>
+            <button class="btn btn-amber" style="margin-top:16px;" onclick="showToast('استكمال الدرس…')">أكمل المشاهدة</button>
+          </div>
+          <svg class="continue-illustration" viewBox="0 0 130 110" fill="none"><rect x="10" y="10" width="110" height="70" rx="10" fill="rgba(255,255,255,0.12)"/><circle cx="65" cy="45" r="18" fill="rgba(255,255,255,0.25)"/><path d="M60 38l14 7-14 7z" fill="#fff"/><rect x="30" y="90" width="70" height="6" rx="3" fill="rgba(255,255,255,0.2)"/></svg>
+        </div>
+
+        <div class="grid grid-4" style="margin-top:20px;" id="kpiGrid"></div>
+
+        <div class="section-title"><h2>دوراتي النشطة</h2></div>
+        <div class="grid grid-3" id="activeCourses"></div>
+
+        <div class="section-title"><h2>موصى بيها ليك</h2></div>
+        <div class="grid grid-3" id="recommendedCourses"></div>
+      </section>
+
+      <section class="view" id="view-mycourses">
+        <div class="tabs" id="courseFilterTabs" style="margin-bottom:18px;"><button class="tab active" data-filter="all">الكل</button><button class="tab" data-filter="progress">قيد التقدم</button><button class="tab" data-filter="done">مكتملة</button></div>
+        <div class="grid grid-3" id="myCoursesGrid"></div>
+      </section>
+
+      <section class="view" id="view-explore">
+        <div class="tabs" id="exploreFilterTabs" style="margin-bottom:18px;"><button class="tab active" data-cat="all">الكل</button><button class="tab" data-cat="design">تصميم</button><button class="tab" data-cat="dev">برمجة</button><button class="tab" data-cat="business">أعمال</button></div>
+        <div class="grid grid-3" id="exploreGrid"></div>
+      </section>
+
+      <section class="view" id="view-path">
+        <div class="card">
+          <div style="font-weight:800; font-size:16px; margin-bottom:6px;">مسار: مصمم منتجات رقمية</div>
+          <div style="font-size:12.5px; color:var(--ink-faint);">٦ دورات — أكملت ٣ منهم</div>
+          <div class="path-wrap" id="pathWrap"></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-certificates">
+        <div class="grid grid-3" id="certsGrid"></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="grid grid-2">
+          <div class="card"><div style="font-weight:800; font-size:16px; margin-bottom:12px;">بيانات الحساب</div>
+            <div class="field-row"><label class="field-label">الاسم بالكامل</label><input class="field-input" value="كريم سامي"></div>
+            <div class="field-row"><label class="field-label">البريد الإلكتروني</label><input class="field-input" value="karim.sami@example.com"></div>
+            <button class="btn btn-primary" onclick="showToast('تم حفظ البيانات')">حفظ التعديلات</button>
+          </div>
+          <div class="card"><div style="font-weight:800; font-size:16px; margin-bottom:6px;">التفضيلات</div>
+            <div class="settings-row"><div><div class="lab">تذكير التعلّم اليومي</div><div class="sub">إشعار يومي الساعة ٨ مساءً</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="settings-row"><div><div class="lab">ترجمة تلقائية</div><div class="sub">ترجمة عربية لكل الفيديوهات</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="settings-row"><div><div class="lab">تحميل للمشاهدة أوفلاين</div><div class="sub">حفظ الدروس تلقائيًا على جهازك</div></div><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="overlay" id="notifOverlay" style="position:fixed; inset:0; background:rgba(33,29,58,0.4); z-index:100; opacity:0; pointer-events:none; transition:opacity .2s;" onclick="toggleNotif()"></div>
+<div class="drawer" id="notifDrawer" style="position:fixed; top:0; left:-440px; width:440px; max-width:92vw; height:100%; background:var(--surface); box-shadow:var(--shadow-lg); z-index:101; transition:left .3s ease; padding:26px; overflow-y:auto;">
+  <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:18px;"><h3 style="font-weight:800; font-size:19px;">الإشعارات</h3><div onclick="toggleNotif()" style="width:32px; height:32px; border-radius:10px; background:var(--surface-2); display:flex; align-items:center; justify-content:center; cursor:pointer;"><svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div></div>
+  <div id="notifList"></div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+function courseThumb(seed,cat){
+  const cols=[['#4B3FE0','#8B7EF5'],['#20B0A6','#5FD4CB'],['#F2A93B','#F7C978'],['#EF6C5C','#F5988C']];
+  const c=cols[seed%4];
+  return `<svg viewBox="0 0 160 90" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="cg${seed}${cat}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${c[0]}"/><stop offset="100%" stop-color="${c[1]}"/></linearGradient></defs><rect width="160" height="90" fill="url(#cg${seed}${cat})"/><circle cx="130" cy="20" r="30" fill="rgba(255,255,255,0.12)"/><circle cx="20" cy="80" r="24" fill="rgba(255,255,255,0.1)"/></svg>`;
+}
+function playBadge(){ return `<div class="play-badge"><div class="play-circle"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></div></div>`; }
+
+document.querySelectorAll('.nav-item[data-view]').forEach(item=> item.addEventListener('click', ()=> switchView(item.dataset.view)));
+const headerCopy = {
+  dashboard:['يلا نكمل يا كريم','الثلاثاء، ١٤ يوليو · ٣ دورات نشطة'],
+  mycourses:['دوراتي','٥ دورات مسجّلة'],
+  explore:['استكشف','٢٤٠ دورة متاحة'],
+  path:['مساري التعليمي','مسار مصمم منتجات رقمية'],
+  certificates:['الشهادات','٤ شهادات حصلت عليها'],
+  settings:['الإعدادات','بيانات الحساب والتفضيلات'],
+};
+function switchView(id){
+  document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  const [h,s]=headerCopy[id]; document.getElementById('headerTitle').innerHTML=`<h1>${h}</h1><span>${s}</span>`;
+}
+
+function renderKPIs(){
+  const kpis=[
+    {label:'ساعات التعلّم هذا الشهر', value:18, suffix:' س', trend:'+٤ س', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#4B3FE0" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>`, bg:'var(--indigo-pale)'},
+    {label:'دورات قيد التقدم', value:3, trend:'ثابت', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#20B0A6" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14l-3-2-3 2-3-2-3 2-3-2z"/></svg>`, bg:'var(--teal-pale)'},
+    {label:'شهادات مكتسبة', value:4, trend:'+١', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#C4831F" stroke-width="2"><circle cx="12" cy="9" r="6"/><path d="M9 14l-2 7 5-3 5 3-2-7"/></svg>`, bg:'var(--amber-pale)'},
+    {label:'نسبة إكمال الأهداف', value:82, suffix:'٪', trend:'+٦٪', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#EF6C5C" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>`, bg:'var(--coral-pale)'},
+  ];
+  document.getElementById('kpiGrid').innerHTML = kpis.map(k=>`<div class="card hoverable"><div class="kpi-top"><div class="kpi-icon" style="background:${k.bg}">${k.icon}</div><div class="kpi-trend ${k.up?'trend-up':'trend-down'}">${k.trend}</div></div><div class="kpi-value" data-count="${k.value}" data-suffix="${k.suffix||''}">0${k.suffix||''}</div><div class="kpi-label">${k.label}</div></div>`).join('');
+  animateCounters();
+}
+function animateCounters(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target=parseFloat(el.dataset.count); const suffix=el.dataset.suffix||''; const start=performance.now(); const dur=900;
+    function tick(now){ const p=Math.min(1,(now-start)/dur); const eased=1-Math.pow(1-p,3); el.textContent=Math.round(target*eased).toLocaleString('en-US')+suffix; if(p<1) requestAnimationFrame(tick); }
+    requestAnimationFrame(tick);
+  });
+}
+
+const myCourses = [
+  {n:'أساسيات تصميم UX/UI', instr:'أ. سارة الجمال', pct:50, cat:'design', status:'progress'},
+  {n:'تطوير الويب باستخدام React', instr:'م. أحمد نبيل', pct:72, cat:'dev', status:'progress'},
+  {n:'إدارة المنتجات الرقمية', instr:'أ. ياسمين خالد', pct:28, cat:'business', status:'progress'},
+  {n:'مبادئ التسويق الرقمي', instr:'أ. عمر فوزي', pct:100, cat:'business', status:'done'},
+  {n:'تصميم الجرافيك للمبتدئين', instr:'أ. نور الدين', pct:100, cat:'design', status:'done'},
+];
+function renderActiveCourses(){
+  document.getElementById('activeCourses').innerHTML = myCourses.filter(c=>c.status==='progress').map((c,i)=>`
+    <div class="card hoverable">
+      <div class="course-thumb">${courseThumb(i,'a')}${playBadge()}<div class="course-cat"><span class="chip chip-ok">${c.cat==='design'?'تصميم':c.cat==='dev'?'برمجة':'أعمال'}</span></div></div>
+      <div class="course-title">${c.n}</div><div class="course-instructor">${c.instr}</div>
+      <div class="course-progress-row"><div class="pbar"><div class="pbar-fill" style="width:${c.pct}%"></div></div><span>${c.pct}%</span></div>
+    </div>`).join('');
+}
+function renderMyCourses(filter='all'){
+  const rows = myCourses.filter(c=> filter==='all' || (filter==='progress'?c.status==='progress':c.status==='done'));
+  document.getElementById('myCoursesGrid').innerHTML = rows.map((c,i)=>`
+    <div class="card hoverable">
+      <div class="course-thumb">${courseThumb(i,'m')}${playBadge()}<div class="course-cat">${c.status==='done'?'<span class="chip chip-ok">مكتملة</span>':'<span class="chip chip-warn">قيد التقدم</span>'}</div></div>
+      <div class="course-title">${c.n}</div><div class="course-instructor">${c.instr}</div>
+      <div class="course-progress-row"><div class="pbar"><div class="pbar-fill" style="width:${c.pct}%"></div></div><span>${c.pct}%</span></div>
+    </div>`).join('');
+}
+document.querySelectorAll('#courseFilterTabs .tab').forEach(t=> t.addEventListener('click', ()=>{ document.querySelectorAll('#courseFilterTabs .tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderMyCourses(t.dataset.filter); }));
+
+const exploreCourses = [
+  {n:'تصميم تجربة المستخدم المتقدم', instr:'أ. سارة الجمال', price:'٤٩٩ ج.م', cat:'design', badge:'الأكثر مبيعًا'},
+  {n:'بايثون للمبتدئين', instr:'م. كريم عادل', price:'٣٥٠ ج.م', cat:'dev', badge:'جديد'},
+  {n:'إدارة المشاريع الاحترافية', instr:'أ. هالة سمير', price:'٥٩٩ ج.م', cat:'business', badge:null},
+  {n:'تصميم الموشن جرافيك', instr:'أ. مازن حسن', price:'٤٢٠ ج.م', cat:'design', badge:'جديد'},
+  {n:'تطوير تطبيقات الموبايل', instr:'م. ندى فتحي', price:'٦٥٠ ج.م', cat:'dev', badge:null},
+  {n:'أساسيات ريادة الأعمال', instr:'أ. عمر فوزي', price:'٣٩٩ ج.م', cat:'business', badge:'الأكثر مبيعًا'},
+];
+function renderRecommended(){
+  document.getElementById('recommendedCourses').innerHTML = exploreCourses.slice(0,3).map((c,i)=>`
+    <div class="card hoverable">
+      <div class="course-thumb">${courseThumb(i+2,'r')}${playBadge()}${c.badge?`<div class="course-cat"><span class="chip chip-new">${c.badge}</span></div>`:''}</div>
+      <div class="course-title">${c.n}</div><div class="course-instructor">${c.instr}</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;"><span class="mono" style="font-weight:800; color:var(--indigo);">${c.price}</span><button class="btn btn-ghost" style="padding:6px 12px; font-size:12px;" onclick="showToast('تم الاشتراك في الدورة')">اشترك</button></div>
+    </div>`).join('');
+}
+function renderExplore(filter='all'){
+  const rows = exploreCourses.filter(c=> filter==='all'||c.cat===filter);
+  document.getElementById('exploreGrid').innerHTML = rows.map((c,i)=>`
+    <div class="card hoverable">
+      <div class="course-thumb">${courseThumb(i+5,'e')}${playBadge()}${c.badge?`<div class="course-cat"><span class="chip chip-new">${c.badge}</span></div>`:''}</div>
+      <div class="course-title">${c.n}</div><div class="course-instructor">${c.instr}</div>
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-top:12px;"><span class="mono" style="font-weight:800; color:var(--indigo);">${c.price}</span><button class="btn btn-ghost" style="padding:6px 12px; font-size:12px;" onclick="showToast('تم الاشتراك في الدورة')">اشترك</button></div>
+    </div>`).join('');
+}
+document.querySelectorAll('#exploreFilterTabs .tab').forEach(t=> t.addEventListener('click', ()=>{ document.querySelectorAll('#exploreFilterTabs .tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderExplore(t.dataset.cat); }));
+
+function renderPath(){
+  const nodes = [
+    {t:'أساسيات التصميم الجرافيكي', s:'مكتملة — ١٢ ساعة', st:'done'},
+    {t:'مبادئ تجربة المستخدم UX', s:'مكتملة — ١٨ ساعة', st:'done'},
+    {t:'تصميم واجهات UI متقدم', s:'مكتملة — ٢٢ ساعة', st:'done'},
+    {t:'أساسيات تصميم UX/UI', s:'قيد التقدم — ٥٠٪', st:'current'},
+    {t:'أنظمة التصميم Design Systems', s:'لم تبدأ بعد', st:'todo'},
+    {t:'مشروع التخرج', s:'لم تبدأ بعد', st:'todo'},
+  ];
+  document.getElementById('pathWrap').innerHTML = nodes.map((n,i)=>`
+    <div class="path-node"><div class="path-circle ${n.st==='done'?'done':n.st==='current'?'current':''}">${n.st==='done'?'✓':i+1}</div><div class="path-content"><div class="pn-title">${n.t}</div><div class="pn-sub">${n.s}</div></div></div>`).join('');
+}
+
+function renderCerts(){
+  const certs = [
+    {n:'أساسيات التصميم الجرافيكي', date:'مايو ٢٠٢٦'},
+    {n:'مبادئ تجربة المستخدم UX', date:'يونيو ٢٠٢٦'},
+    {n:'تصميم واجهات UI متقدم', date:'يوليو ٢٠٢٦'},
+    {n:'أساسيات التسويق الرقمي', date:'أبريل ٢٠٢٦'},
+  ];
+  document.getElementById('certsGrid').innerHTML = certs.map(c=>`
+    <div class="cert-card">
+      <svg class="cert-icon" viewBox="0 0 52 52" fill="none"><circle cx="26" cy="20" r="14" fill="var(--amber-pale)" stroke="var(--amber)" stroke-width="2"/><path d="M19 32l-4 15 11-6 11 6-4-15" fill="var(--amber)" opacity="0.3"/><path d="M20 20l4 4 8-8" stroke="var(--amber-deep)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      <div class="cert-title">${c.n}</div><div class="cert-date">${c.date}</div>
+      <button class="btn btn-ghost" style="margin-top:12px; font-size:11.5px; padding:7px 14px;" onclick="showToast('تم تحميل الشهادة')">تحميل PDF</button>
+    </div>`).join('');
+}
+
+function toggleNotif(){ document.getElementById('notifDrawer').style.left = document.getElementById('notifDrawer').style.left==='0px' ? '-440px':'0px'; document.getElementById('notifOverlay').style.opacity = document.getElementById('notifOverlay').style.opacity==='1'?'0':'1'; document.getElementById('notifOverlay').style.pointerEvents = document.getElementById('notifOverlay').style.pointerEvents==='all'?'none':'all'; }
+function renderNotifList(){
+  const items=[{text:'<b>م. أحمد نبيل</b> أضاف درس جديد في React'},{text:'حصلت على شهادة <b>تصميم واجهات UI متقدم</b> 🎉'},{text:'باقي ٣ أيام على استحقاق واجب «مشروع UX»'},{text:'خصم ٣٠٪ على دورات التصميم لفترة محدودة'}];
+  document.getElementById('notifList').innerHTML = items.map(it=>`<div style="padding:12px 0; border-bottom:1px solid var(--line-soft); font-size:13px;">${it.text}</div>`).join('');
+}
+function showToast(msg){
+  const wrap=document.getElementById('toastWrap'); const t=document.createElement('div'); t.className='toast';
+  t.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>${msg}`;
+  wrap.appendChild(t); requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },3200);
+}
+function handleSearch(q){ if(q.length>1){ switchView('explore'); } }
+
+renderKPIs(); renderActiveCourses(); renderRecommended();
+renderMyCourses(); renderExplore(); renderPath(); renderCerts(); renderNotifList();
+setTimeout(()=> showToast('استمر في التقدم — باقي ١٢ درس على إكمال المسار'), 700);
+</script>
+</body>
+</html>

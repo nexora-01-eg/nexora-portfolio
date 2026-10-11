@@ -1,0 +1,86 @@
+/* ============================================================
+   NEXORA — Command Palette
+   Full-screen keyboard-driven search overlay (⌘K pattern).
+   ============================================================ */
+
+.nx-command-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--nx-z-modal);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 12vh;
+  padding-inline: var(--nx-space-5);
+  background: rgba(10, 10, 10, 0.75);
+  backdrop-filter: blur(6px);
+  animation: nx-fade-in var(--nx-duration-fast) var(--nx-ease-out) both;
+}
+.nx-command-overlay[hidden] { display: none; }
+
+.nx-command {
+  width: 100%;
+  max-width: 560px;
+  max-height: 60vh;
+  display: flex;
+  flex-direction: column;
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-lg);
+  box-shadow: var(--nx-shadow-xl);
+  overflow: hidden;
+  animation: nx-scale-in var(--nx-duration-base) var(--nx-ease-emphasized) both;
+}
+
+.nx-command__input-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--nx-space-3);
+  padding: var(--nx-space-5);
+  border-bottom: 1px solid var(--nx-border-subtle);
+  color: var(--nx-text-muted);
+}
+
+.nx-command__input {
+  flex: 1;
+  font-size: var(--nx-fs-400);
+  color: var(--nx-text-primary);
+  background: transparent;
+}
+.nx-command__input::placeholder { color: var(--nx-text-muted); }
+
+.nx-command__list {
+  overflow-y: auto;
+  padding: var(--nx-space-2);
+}
+
+.nx-command__group-label {
+  padding: var(--nx-space-2) var(--nx-space-3);
+  font-size: var(--nx-fs-100);
+  text-transform: uppercase;
+  letter-spacing: var(--nx-ls-wide);
+  color: var(--nx-text-muted);
+}
+
+.nx-command__option {
+  padding: var(--nx-space-3);
+  font-size: var(--nx-fs-300);
+  border-radius: var(--nx-radius-sm);
+  cursor: pointer;
+}
+
+.nx-command__option[aria-selected="true"] {
+  background: var(--nx-bg-elevated-2);
+  color: var(--nx-accent-primary);
+}
+
+.nx-command__empty {
+  padding: var(--nx-space-6);
+  text-align: center;
+  color: var(--nx-text-muted);
+  font-size: var(--nx-fs-200);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-command-overlay, .nx-command { animation: none; }
+}

@@ -1,0 +1,58 @@
+/* ============================================================
+   NEXORA — UTILITY CLASSES
+   Small, single-purpose helpers. Prefer a component class
+   first; reach for these only for one-off adjustments.
+   ============================================================ */
+
+.nx-hidden { display: none !important; }
+.nx-invisible { visibility: hidden !important; }
+
+.nx-flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.nx-flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.nx-text-center { text-align: center; }
+.nx-text-left { text-align: left; }
+.nx-text-right { text-align: right; }
+
+.nx-w-full { width: 100%; }
+.nx-h-full { height: 100%; }
+
+.nx-rounded-sm { border-radius: var(--nx-radius-sm); }
+.nx-rounded-md { border-radius: var(--nx-radius-md); }
+.nx-rounded-lg { border-radius: var(--nx-radius-lg); }
+.nx-rounded-full { border-radius: var(--nx-radius-full); }
+
+.nx-shadow-sm { box-shadow: var(--nx-shadow-sm); }
+.nx-shadow-md { box-shadow: var(--nx-shadow-md); }
+.nx-shadow-lg { box-shadow: var(--nx-shadow-lg); }
+
+.nx-border {
+  border: 1px solid var(--nx-border-subtle);
+}
+
+.nx-bg-elevated { background-color: var(--nx-bg-elevated); }
+.nx-bg-elevated-2 { background-color: var(--nx-bg-elevated-2); }
+
+.nx-truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.nx-clamp-2,
+.nx-clamp-3 {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.nx-clamp-2 { -webkit-line-clamp: 2; }
+.nx-clamp-3 { -webkit-line-clamp: 3; }

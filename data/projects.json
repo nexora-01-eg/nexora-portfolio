@@ -1,0 +1,332 @@
+{
+  "$schema": "./schemas/project.schema.json",
+  "version": "0.3.0-deprecated",
+  "updatedAt": "2026-07-15",
+  "count": 8,
+  "projects": [
+    {
+      "id": "proj-001",
+      "slug": "aurora-crm",
+      "title": "Aurora CRM",
+      "tagline": "Customer relationship platform for boutique investment firms.",
+      "description": "A full-featured CRM built for boutique investment firms \u2014 pipeline tracking, client communications, and reporting in one workspace.",
+      "version": "2.4.0",
+      "status": "live",
+      "tier": "enterprise",
+      "difficulty": "advanced",
+      "industry": "finance",
+      "service": "CRM Systems",
+      "tags": [
+        "crm",
+        "finance",
+        "dashboard"
+      ],
+      "technologies": [
+        "React",
+        "Supabase",
+        "Tailwind CSS"
+      ],
+      "componentsUsed": [
+        "button",
+        "card",
+        "data-table",
+        "modal"
+      ],
+      "relatedProjects": [
+        "vantage-erp",
+        "ledger-analytics"
+      ],
+      "views": 1204,
+      "featured": true,
+      "popular": true,
+      "media": {
+        "thumbnail": "/assets/images/thumbnails/aurora-crm.jpg",
+        "cover": "/assets/images/covers/aurora-crm-cover.jpg",
+        "preview": "",
+        "gallery": []
+      },
+      "createdAt": "2026-03-02",
+      "updatedAt": "2026-07-10"
+    },
+    {
+      "id": "proj-002",
+      "slug": "meridian-booking",
+      "title": "Meridian Booking",
+      "tagline": "Reservation and guest management for boutique hotels.",
+      "description": "An end-to-end booking engine and guest management system for independent and boutique hotels.",
+      "version": "1.1.0",
+      "status": "draft",
+      "tier": "growth",
+      "difficulty": "intermediate",
+      "industry": "hotel",
+      "service": "Booking Systems",
+      "tags": [
+        "hotel",
+        "booking",
+        "calendar"
+      ],
+      "technologies": [
+        "Next.js",
+        "PostgreSQL"
+      ],
+      "componentsUsed": [
+        "calendar",
+        "card",
+        "form"
+      ],
+      "relatedProjects": [
+        "aurora-crm"
+      ],
+      "views": 86,
+      "featured": false,
+      "popular": false,
+      "media": {
+        "thumbnail": "/assets/images/thumbnails/meridian-booking.jpg",
+        "cover": "/assets/images/covers/meridian-booking-cover.jpg",
+        "preview": "",
+        "gallery": []
+      },
+      "createdAt": "2026-06-20",
+      "updatedAt": "2026-07-08"
+    },
+    {
+      "id": "proj-003",
+      "slug": "vantage-erp",
+      "title": "Vantage ERP",
+      "tagline": "Resource planning for mid-market manufacturers.",
+      "description": "A modular ERP covering inventory, procurement, and production scheduling for mid-market manufacturers.",
+      "version": "3.0.1",
+      "status": "archived",
+      "tier": "enterprise",
+      "difficulty": "advanced",
+      "industry": "corporate",
+      "service": "ERP Systems",
+      "tags": [
+        "erp",
+        "inventory",
+        "corporate"
+      ],
+      "technologies": [
+        "Vue",
+        "FastAPI",
+        "MongoDB"
+      ],
+      "componentsUsed": [
+        "data-table",
+        "dropdown",
+        "badge"
+      ],
+      "relatedProjects": [
+        "aurora-crm"
+      ],
+      "views": 512,
+      "featured": false,
+      "popular": true,
+      "media": {
+        "thumbnail": "/assets/images/thumbnails/vantage-erp.jpg",
+        "cover": "/assets/images/covers/vantage-erp-cover.jpg",
+        "preview": "",
+        "gallery": []
+      },
+      "createdAt": "2025-11-14",
+      "updatedAt": "2026-05-30"
+    },
+    {
+      "id": "proj-004",
+      "slug": "pulseline-ehr",
+      "title": "Pulseline EHR",
+      "tagline": "Electronic health records for outpatient clinics.",
+      "description": "A streamlined electronic health records system for outpatient clinics, with scheduling and secure messaging.",
+      "version": "1.6.2",
+      "status": "live",
+      "tier": "enterprise",
+      "difficulty": "advanced",
+      "industry": "medical",
+      "service": "Internal Company Systems",
+      "tags": [
+        "medical",
+        "records",
+        "compliance"
+      ],
+      "technologies": [
+        "React",
+        "Node.js",
+        "PostgreSQL"
+      ],
+      "componentsUsed": [
+        "table",
+        "form",
+        "modal"
+      ],
+      "relatedProjects": [],
+      "views": 940,
+      "featured": true,
+      "popular": true,
+      "media": {
+        "thumbnail": "/assets/images/thumbnails/pulseline-ehr.jpg",
+        "cover": "/assets/images/covers/pulseline-ehr-cover.jpg",
+        "preview": "",
+        "gallery": []
+      },
+      "createdAt": "2026-01-18",
+      "updatedAt": "2026-07-01"
+    },
+    {
+      "id": "proj-005",
+      "slug": "siteflow-tracker",
+      "title": "SiteFlow Tracker",
+      "tagline": "Project tracking for construction site teams.",
+      "description": "A field-friendly progress tracker for construction crews \u2014 daily logs, punch lists, and photo documentation.",
+      "version": "1.0.0",
+      "status": "draft",
+      "tier": "starter",
+      "difficulty": "beginner",
+      "industry": "construction",
+      "service": "Workflow Automation",
+      "tags": [
+        "construction",
+        "tracking",
+        "mobile"
+      ],
+      "technologies": [
+        "React",
+        "Firebase"
+      ],
+      "componentsUsed": [
+        "timeline",
+        "card",
+        "badge"
+      ],
+      "relatedProjects": [],
+      "views": 54,
+      "featured": false,
+      "popular": false,
+      "media": {
+        "thumbnail": "/assets/images/thumbnails/siteflow-tracker.jpg",
+        "cover": "/assets/images/covers/siteflow-tracker-cover.jpg",
+        "preview": "",
+        "gallery": []
+      },
+      "createdAt": "2026-07-02",
+      "updatedAt": "2026-07-12"
+    },
+    {
+      "id": "proj-006",
+      "slug": "tablehost-pos",
+      "title": "TableHost POS",
+      "tagline": "Point of sale and table management for restaurants.",
+      "description": "A modern point-of-sale and table management system built for full-service restaurants.",
+      "version": "2.1.0",
+      "status": "live",
+      "tier": "growth",
+      "difficulty": "intermediate",
+      "industry": "restaurant",
+      "service": "SaaS Development",
+      "tags": [
+        "restaurant",
+        "pos",
+        "realtime"
+      ],
+      "technologies": [
+        "React",
+        "Supabase"
+      ],
+      "componentsUsed": [
+        "data-table",
+        "toast",
+        "modal"
+      ],
+      "relatedProjects": [],
+      "views": 331,
+      "featured": true,
+      "popular": false,
+      "media": {
+        "thumbnail": "/assets/images/thumbnails/tablehost-pos.jpg",
+        "cover": "/assets/images/covers/tablehost-pos-cover.jpg",
+        "preview": "",
+        "gallery": []
+      },
+      "createdAt": "2026-04-11",
+      "updatedAt": "2026-06-25"
+    },
+    {
+      "id": "proj-007",
+      "slug": "classline-lms",
+      "title": "ClassLine LMS",
+      "tagline": "Course delivery and grading for online academies.",
+      "description": "A learning management system for online academies \u2014 course delivery, assignments, and grading in one place.",
+      "version": "1.3.0",
+      "status": "live",
+      "tier": "growth",
+      "difficulty": "intermediate",
+      "industry": "education",
+      "service": "SaaS Development",
+      "tags": [
+        "education",
+        "lms",
+        "courses"
+      ],
+      "technologies": [
+        "Next.js",
+        "Supabase"
+      ],
+      "componentsUsed": [
+        "progress",
+        "card",
+        "tabs"
+      ],
+      "relatedProjects": [],
+      "views": 278,
+      "featured": false,
+      "popular": true,
+      "media": {
+        "thumbnail": "/assets/images/thumbnails/classline-lms.jpg",
+        "cover": "/assets/images/covers/classline-lms-cover.jpg",
+        "preview": "",
+        "gallery": []
+      },
+      "createdAt": "2026-02-27",
+      "updatedAt": "2026-06-18"
+    },
+    {
+      "id": "proj-008",
+      "slug": "brightlot-realty",
+      "title": "Brightlot Realty",
+      "tagline": "Listings and client portal for real estate agencies.",
+      "description": "A listings management and client portal platform for boutique real estate agencies.",
+      "version": "1.0.4",
+      "status": "draft",
+      "tier": "starter",
+      "difficulty": "beginner",
+      "industry": "real-estate",
+      "service": "Web Applications",
+      "tags": [
+        "real-estate",
+        "listings",
+        "portal"
+      ],
+      "technologies": [
+        "React",
+        "Firebase"
+      ],
+      "componentsUsed": [
+        "gallery-grid",
+        "card",
+        "filter"
+      ],
+      "relatedProjects": [],
+      "views": 112,
+      "featured": false,
+      "popular": false,
+      "media": {
+        "thumbnail": "/assets/images/thumbnails/brightlot-realty.jpg",
+        "cover": "/assets/images/covers/brightlot-realty-cover.jpg",
+        "preview": "",
+        "gallery": []
+      },
+      "createdAt": "2026-05-19",
+      "updatedAt": "2026-07-05"
+    }
+  ],
+  "_deprecated": "Superseded by /data/project-index.json + each project's own projects/<industry>/<slug>/project.json as of Phase 4. Kept for historical reference only \u2014 nothing in the platform reads this file anymore."
+}

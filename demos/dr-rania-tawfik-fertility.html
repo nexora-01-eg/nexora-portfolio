@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>د. رانيا توفيق — استشارية الحقن المجهري وعلاج الخصوبة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Reem+Kufi:wght@500;600;700&family=Tajawal:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF5F0; --card:#FFFFFF; --raised:#F5E6DC;
+  --blush:#D98A82; --blush-soft:rgba(217,138,130,0.1); --gold:#C9973F; --gold-soft:rgba(201,151,63,0.14);
+  --sage:#93AD8A; --sage-soft:rgba(147,173,138,0.14); --text:#3A241E; --muted:#8A6B60; --faint:#C7ACA1; --border:#EEDFD3;
+  --r-lg:26px; --ease:cubic-bezier(.22,1,.36,1); --shadow:0 24px 50px -28px rgba(217,138,130,0.24);
+  --font-display:'Reem Kufi', sans-serif; --font-body:'Tajawal', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{ scroll-behavior:smooth; }
+body{ background:var(--bg); color:var(--text); font-family:var(--font-body); }
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; cursor:pointer; color:inherit;}
+.eyebrow{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--blush); }
+.card{ background:var(--card); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow); }
+.btn{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; padding:12px 24px; border-radius:16px; transition:all .2s var(--ease); }
+.btn-primary{ background:linear-gradient(150deg, var(--blush), #b8564b); color:#fff; box-shadow:0 10px 22px -10px rgba(217,138,130,0.45); } .btn-primary:hover{ transform:translateY(-2px); }
+.btn-outline{ border:1px solid var(--border); background:var(--card); color:var(--text); }
+
+.nav{ position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:18px 32px; background:rgba(251,245,240,0.85); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+.nav-brand{ display:flex; align-items:center; gap:10px; } .nav-mark{ width:36px; height:36px; border-radius:11px; background:var(--blush); display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-size:16px; }
+.nav-name{ font-family:var(--font-display); font-size:18px; } .nav-links{ display:flex; gap:24px; font-size:13px; color:var(--muted); } .nav-links a:hover{ color:var(--blush); }
+
+.hero{ padding:60px 32px 30px; } .hero-grid{ max-width:1140px; margin:0 auto; display:grid; grid-template-columns:1fr .9fr; gap:40px; align-items:center; }
+.hero h1{ font-family:var(--font-display); font-size:36px; line-height:1.5; margin-top:14px; } .hero h1 span{ color:var(--gold); }
+.hero p{ font-size:14px; color:var(--muted); margin-top:16px; max-width:420px; line-height:1.75; }
+.hero-actions{ display:flex; gap:12px; margin-top:24px; }
+.cred-row{ display:flex; gap:20px; margin-top:28px; padding-top:20px; border-top:1px solid var(--border); }
+.cred-item b{ font-family:var(--font-display); font-size:22px; display:block; color:var(--blush); } .cred-item span{ font-size:11px; color:var(--muted); }
+.hero-visual{ position:relative; aspect-ratio:4/5; }
+.hero-photo{ position:absolute; inset:0; border-radius:32px; background:linear-gradient(160deg, var(--blush-soft), var(--gold-soft)); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow); }
+.hero-photo svg{ width:110px; height:110px; color:var(--blush); opacity:.55; }
+.float-chip{ position:absolute; padding:12px 15px; border-radius:15px; background:var(--card); box-shadow:var(--shadow); display:flex; align-items:center; gap:9px; animation:float 4.5s ease-in-out infinite; }
+.float-chip.c1{ bottom:22px; right:-16px; } @keyframes float{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-9px);} }
+.float-chip svg{ width:15px; height:15px; color:var(--sage); } .float-chip b{ font-size:12px; display:block; } .float-chip span{ font-size:10px; color:var(--muted); }
+
+.section{ padding:56px 32px; opacity:0; transform:translateY(18px); transition:all .6s var(--ease); } .section.in{ opacity:1; transform:none; }
+.section-head{ max-width:600px; margin:0 auto 34px; text-align:center; } .section-head h2{ font-family:var(--font-display); font-size:28px; margin-top:8px; } .section-head p{ font-size:13px; color:var(--muted); margin-top:10px; }
+
+.timeline-track{ max-width:900px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.tl-card{ padding:20px; text-align:center; }
+.tl-num{ width:36px; height:36px; border-radius:50%; background:var(--blush); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:800; margin:0 auto 12px; }
+.tl-card h4{ font-size:14px; font-weight:700; } .tl-card p{ font-size:11px; color:var(--muted); margin-top:5px; }
+
+.services-grid{ max-width:1140px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.service-card{ padding:24px 20px; }
+.service-ic{ width:42px; height:42px; border-radius:12px; background:var(--gold-soft); color:var(--gold); display:flex; align-items:center; justify-content:center; margin-bottom:14px; }
+.service-ic svg{ width:19px; height:19px; }
+.service-card h3{ font-family:var(--font-display); font-size:16.5px; } .service-card p{ font-size:12px; color:var(--muted); margin-top:6px; line-height:1.55; }
+
+.testi-grid{ max-width:1140px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.testi-card{ padding:24px; } .testi-card p{ font-size:13.5px; line-height:1.7; }
+.testi-author{ display:flex; align-items:center; gap:10px; margin-top:16px; }
+.t-avatar{ width:34px; height:34px; border-radius:50%; background:var(--sage); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:12px; }
+.t-avatar-name b{ font-size:12px; display:block; } .t-avatar-name span{ font-size:10px; color:var(--muted); }
+
+.footer{ padding:44px 32px 24px; border-top:1px solid var(--border); text-align:center; } .footer p{ font-size:11px; color:var(--faint); }
+@media (max-width:1000px){ .hero-grid{ grid-template-columns:1fr; } .timeline-track, .services-grid, .testi-grid{ grid-template-columns:1fr 1fr; } .nav-links{ display:none; } }
+@media (max-width:620px){ .nav, .hero, .section{ padding-left:18px; padding-right:18px; } .hero h1{ font-size:26px; } .timeline-track, .services-grid, .testi-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-brand"><div class="nav-mark">رت</div><div class="nav-name">د. رانيا توفيق</div></div>
+  <div class="nav-links"><a href="#journey">رحلة العلاج</a><a href="#services">الخدمات</a><a href="#testimonials">قصص أمل</a></div>
+  <a href="#" class="btn btn-primary">احجزي استشارة</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="eyebrow">استشارية الحقن المجهري وعلاج الخصوبة · ٢٠ سنة خبرة</span>
+      <h1>رحلتك نحو الأمومة،<br><span>معانا خطوة بخطوة</span>.</h1>
+      <p>رعاية متخصصة وشخصية في علاج تأخر الإنجاب والحقن المجهري، بخطة علاج واضحة ودعم نفسي طول الرحلة.</p>
+      <div class="hero-actions"><a href="#" class="btn btn-primary">احجزي استشارتك</a><a href="#journey" class="btn btn-outline">رحلة العلاج</a></div>
+      <div class="cred-row">
+        <div class="cred-item"><b>٢٠+</b><span>سنة خبرة</span></div>
+        <div class="cred-item"><b>٢,٩٠٠</b><span>حالة حمل ناجحة</span></div>
+        <div class="cred-item"><b>٤.٩</b><span>تقييم المريضات</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M12 21s-7-4.5-7-10a5 5 0 0110-2 5 5 0 0110 2c0 5.5-7 10-7 10z"/></svg></div>
+      <div class="card float-chip c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg><div><b>دعم نفسي مستمر</b><span>طول رحلة العلاج</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="journey">
+  <div class="section-head"><span class="eyebrow">رحلة العلاج</span><h2>معاكِ من أول استشارة</h2></div>
+  <div class="timeline-track" id="tlGrid"></div>
+</section>
+
+<section class="section" id="services">
+  <div class="section-head"><span class="eyebrow">خدماتي</span><h2>رعاية خصوبة شاملة</h2></div>
+  <div class="services-grid" id="servicesGrid"></div>
+</section>
+
+<section class="section" id="testimonials">
+  <div class="section-head"><span class="eyebrow">قصص أمل</span><h2>رحلات نجحت</h2></div>
+  <div class="testi-grid" id="testiGrid"></div>
+</section>
+
+<footer class="footer"><p>عيادة د. رانيا توفيق © 2026 · مشروع بورتفوليو للعرض فقط</p></footer>
+
+<script>
+const tl = [ {t:'الاستشارة والتقييم', d:'فحص شامل وتحاليل'}, {t:'خطة العلاج المخصصة', d:'حسب حالتك بالظبط'}, {t:'مرحلة التنشيط', d:'متابعة يومية دقيقة'}, {t:'المتابعة بعد الحمل', d:'لحد أول موجات'} ];
+document.getElementById('tlGrid').innerHTML = tl.map((s,i)=>`<div class="card tl-card"><div class="tl-num">${i+1}</div><h4>${s.t}</h4><p>${s.d}</p></div>`).join('');
+
+const services = [
+  {n:'الحقن المجهري (ICSI)', d:'أحدث تقنيات الإخصاب المعملي بنسب نجاح عالية.', icon:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>'},
+  {n:'تجميد البويضات', d:'خيار للحفاظ على الخصوبة للمستقبل.', icon:'<path d="M12 2v20M4.9 4.9l14.2 14.2M19.1 4.9L4.9 19.1"/>'},
+  {n:'علاج تأخر الإنجاب', d:'تشخيص دقيق للأسباب وخطة علاج مناسبة.', icon:'<path d="M12 21s-7-4.5-7-10a5 5 0 0110-2 5 5 0 0110 2c0 5.5-7 10-7 10z"/>'},
+];
+document.getElementById('servicesGrid').innerHTML = services.map(s=>`<div class="card service-card"><div class="service-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">${s.icon}</svg></div><h3>${s.n}</h3><p>${s.d}</p></div>`).join('');
+
+const testis = [ {q:'بعد ٥ سنين انتظار، الدكتورة رانيا كانت السبب في تحقيق حلمنا.', n:'أ. نهى وسمير'}, {q:'الدعم النفسي اللي قدموه لينا كان أهم من العلاج نفسه أحيانًا.', n:'أ. مروة وأحمد'}, {q:'كل خطوة كانت واضحة، ومحدش سابنا لوحدنا في أي مرحلة.', n:'أ. إيمان وكريم'} ];
+document.getElementById('testiGrid').innerHTML = testis.map(t=>`<div class="card testi-card"><p>"${t.q}"</p><div class="testi-author"><div class="t-avatar">${t.n.charAt(3)}</div><div class="t-avatar-name"><b>${t.n}</b><span>قصة نجاح 2025</span></div></div></div>`).join('');
+
+const io = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); }); }, {threshold:.1});
+document.querySelectorAll('.section').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

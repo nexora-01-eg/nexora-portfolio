@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HubSpace — نظام إدارة مساحات العمل المشتركة</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --charcoal:#22262B; --charcoal-dark:#161A1E; --lime:#B4E24C; --lime-dark:#8FBE2F;
+  --orange:#FF7A45; --orange-soft:#FFE9E0;
+  --bg:#F6F7F5; --surface:#FFFFFF;
+  --text:#1B1E22; --text-secondary:#454B52; --muted:#868D93; --faint:#D2D6D9;
+  --border:#E7E9EA; --border-strong:#D2D6D9;
+  --success:#16A34A; --success-soft:#E9F9EF;
+  --warning:#D97706; --warning-soft:#FDF1DF;
+  --danger:#DC2626; --danger-soft:#FCEAEA;
+  --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:24px;
+  --shadow-sm:0 2px 10px rgba(27,30,34,0.07);
+  --shadow-md:0 12px 30px rgba(27,30,34,0.10);
+  --shadow-lg:0 26px 56px rgba(27,30,34,0.20);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;font-weight:900;margin:0;color:var(--text);letter-spacing:-.01em;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 258px;min-height:100vh;}
+.sidebar{background:var(--charcoal);color:#fff;padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:28px;}
+.brand-mark{width:42px;height:42px;border-radius:10px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.brand-name{font-weight:900;font-size:17px;}
+.brand-sub{font-size:10.5px;color:rgba(255,255,255,0.55);}
+.nav-sec{font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.07em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:9px;color:rgba(255,255,255,0.75);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:#fff;}
+.nav-item.active{background:var(--lime);color:var(--charcoal-dark);}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:var(--orange);color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.1);}
+.foot-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.foot-card img{width:36px;height:36px;border-radius:9px;object-fit:cover;}
+.foot-card .name{font-size:12.5px;font-weight:800;} .foot-card .role{font-size:10.5px;color:rgba(255,255,255,0.5);}
+
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(246,247,245,0.9);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:10px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15.5px;}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-weight:800;font-size:13px;border:1px solid transparent;}
+.btn-primary{background:var(--charcoal);color:#fff;}
+.btn-primary:hover{background:var(--charcoal-dark);}
+.btn-lime{background:var(--lime);color:var(--charcoal-dark);}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:#F0F1F0;}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.active{background:var(--success-soft);color:var(--success);}
+.badge.expiring{background:var(--warning-soft);color:var(--warning);}
+.badge.free{background:var(--success-soft);color:var(--success);}
+.badge.occupied{background:var(--orange-soft);color:#C7461A;}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;}
+.stat .value{font-size:24px;font-weight:900;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--success);margin-top:6px;display:inline-block;}
+
+/* Floor plan (signature) */
+.floor-plan{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;}
+.desk-tile{aspect-ratio:1;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-weight:800;cursor:pointer;transition:transform .15s;border:2px solid transparent;}
+.desk-tile:hover{transform:scale(1.05);}
+.desk-tile.free{background:var(--success-soft);color:var(--success);}
+.desk-tile.occupied{background:var(--orange-soft);color:#C7461A;border-color:var(--orange);}
+.desk-tile .n{font-size:16px;} .desk-tile .s{font-size:8.5px;}
+.room-tile{grid-column:span 2;aspect-ratio:2;border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;font-weight:800;cursor:pointer;background:var(--charcoal);color:#fff;}
+.room-tile.occupied{background:var(--orange);}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:#F5F6F5;}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;}
+.avatar{border-radius:50%;object-fit:cover;flex-shrink:0;}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--charcoal-dark);color:var(--lime);padding:11px 17px;border-radius:10px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);}
+
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 76px;} .brand-name,.brand-sub,.nav-item span:not(.ic),.nav-sec,.foot-card .name,.foot-card .role,.nav-badge{display:none;} .floor-plan{grid-template-columns:repeat(4,1fr);} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} .floor-plan{grid-template-columns:repeat(3,1fr);} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">HubSpace — مساحة عمل مشتركة، وسط البلد</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-lime" onclick="switchView('v-floorplan')">+ حجز مكتب</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-floorplan"></section>
+      <section class="view" id="v-members"></section>
+      <section class="view" id="v-events"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🏢</div>
+      <div><div class="brand-name">HubSpace</div><div class="brand-sub">مساحة عمل مشتركة</div></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-floorplan"><span class="ic">🗺️</span><span>خريطة المكاتب</span></div>
+      <div class="nav-item" data-view="v-events"><span class="ic">🎤</span><span>فعاليات المجتمع</span></div>
+      <div class="nav-sec">الأعضاء</div>
+      <div class="nav-item" data-view="v-members"><span class="ic">👥</span><span>الأعضاء</span><span class="nav-badge">2</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="foot-card"><img src="https://i.pravatar.cc/72?img=11"><div><div class="name">أ. زياد سامي</div><div class="role">مدير المساحة</div></div></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const desks = Array.from({length:24}).map((_,i)=>({n:i+1, status: [3,7,11,14,18,21].includes(i+1)?'occupied':'free'}));
+const rooms = [
+  {name:"غرفة اجتماعات A", status:"occupied"},
+  {name:"غرفة اجتماعات B", status:"free"},
+];
+const members = [
+  {name:"م. يوسف طارق", plan:"عضوية شهرية", status:"active", expires:"25 يوليو 2026", img:53},
+  {name:"أ. ريم كامل", plan:"عضوية يومية", status:"active", expires:"اليوم فقط", img:34},
+  {name:"شركة بايت كود", plan:"مكتب خاص (فريق 5)", status:"active", expires:"1 سبتمبر 2026", img:56},
+  {name:"أ. حسن ماهر", plan:"عضوية شهرية", status:"expiring", expires:"بعد يومين", img:58},
+];
+const events = [
+  {title:"ورشة عمل: أساسيات التسويق الرقمي", date:"15 يوليو 2026", attendees:22},
+  {title:"لقاء شبكي لرواد الأعمال", date:"20 يوليو 2026", attendees:45},
+  {title:"جلسة عصف ذهني للمصممين", date:"25 يوليو 2026", attendees:14},
+];
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','HubSpace — مساحة عمل مشتركة، وسط البلد'],
+    'v-floorplan':['خريطة المكاتب', desks.filter(d=>d.status==='free').length+' مكتب متاح الآن'],
+    'v-members':['الأعضاء', members.length+' عضو نشط'],
+    'v-events':['فعاليات المجتمع', events.length+' فعالية قادمة'],
+    'v-settings':['الإعدادات','بيانات المساحة والباقات'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+const statusMap = {active:'نشط',expiring:'قارب على الانتهاء'};
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  const freeDesks = desks.filter(d=>d.status==='free').length;
+  el.innerHTML = `
+    <div class="view-head"><div><h1>أهلاً، أستاذ زياد 🏢</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦</p></div>
+      <button class="btn btn-outline" onclick="switchView('v-floorplan')">عرض خريطة المكاتب</button></div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('مكاتب متاحة الآن',freeDesks+' / '+desks.length,'🗺️','var(--lime-dark)','نسبة إشغال '+Math.round((desks.length-freeDesks)/desks.length*100)+'%')}
+      ${stat('أعضاء نشطين',members.length+' عضو','👥','var(--charcoal)','+5 هذا الشهر')}
+      ${stat('إيراد الشهر','٩٨٬٤٠٠ ج.م','💰','var(--success)','+11%')}
+      ${stat('فعاليات قادمة',events.length+' فعالية','🎤','var(--orange)','هذا الشهر')}
+    </div>
+    <div class="grid g3">
+      <div class="card card-pad" style="grid-column:span 2">
+        <div class="card-title" style="margin-bottom:16px">حالة العضويات</div>
+        ${members.map(m=>`
+          <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+            <div class="flex items-center gap3"><img class="avatar" width="36" height="36" src="https://i.pravatar.cc/72?img=${m.img}"><div><b style="font-size:13px">${m.name}</b><div class="muted" style="font-size:11px">${m.plan}</div></div></div>
+            <span class="badge ${m.status}">${statusMap[m.status]}</span>
+          </div>`).join('')}
+      </div>
+      <div class="card card-pad">
+        <div class="card-title" style="margin-bottom:14px">الفعالية القادمة</div>
+        <b style="font-size:13.5px">${events[0].title}</b>
+        <div class="muted" style="font-size:11.5px;margin:6px 0 12px">${events[0].date} — ${events[0].attendees} مسجل</div>
+        <button class="btn btn-outline btn-sm" style="width:100%;justify-content:center" onclick="switchView('v-events')">عرض كل الفعاليات</button>
+      </div>
+    </div>
+  `;
+}
+
+function renderFloorplan(){
+  const el = document.getElementById('v-floorplan');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>خريطة المكاتب</h1><p class="sub">${desks.filter(d=>d.status==='free').length} مكتب متاح الآن</p></div>
+      <button class="btn btn-lime">+ حجز مكتب</button></div>
+    <div class="card card-pad">
+      <div class="floor-plan">
+        ${rooms.map(r=>`<div class="room-tile ${r.status}" onclick="UI.toast('${r.name} — ${r.status==='free'?'متاحة':'محجوزة الآن'}')">🚪 ${r.name}</div>`).join('')}
+        ${desks.map(d=>`<div class="desk-tile ${d.status}" onclick="UI.toast('مكتب ${d.n} — ${d.status==='free'?'متاح للحجز':'مشغول حاليًا'}')"><span class="n">🪑</span><span class="s">${d.n}</span></div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderMembers(){
+  const el = document.getElementById('v-members');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>الأعضاء</h1><p class="sub">${members.length} عضو</p></div>
+      <button class="btn btn-primary">+ عضو جديد</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>العضو</th><th>الباقة</th><th>تاريخ الانتهاء</th><th>الحالة</th></tr></thead>
+      <tbody>${members.map(m=>`
+        <tr onclick="UI.toast('ملف ${m.name}')">
+          <td><div class="cell-name"><img class="avatar" width="34" height="34" src="https://i.pravatar.cc/68?img=${m.img}">${m.name}</div></td>
+          <td>${m.plan}</td><td>${m.expires}</td>
+          <td><span class="badge ${m.status}">${statusMap[m.status]}</span></td>
+        </tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderEvents(){
+  const el = document.getElementById('v-events');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>فعاليات المجتمع</h1><p class="sub">${events.length} فعالية قادمة</p></div>
+      <button class="btn btn-lime">+ إضافة فعالية</button></div>
+    <div class="grid g3">
+      ${events.map(e=>`
+        <div class="card card-pad">
+          <b style="font-size:14px">${e.title}</b>
+          <div class="muted" style="font-size:11.5px;margin:8px 0">📅 ${e.date}</div>
+          <span class="badge active">${e.attendees} مسجل</span>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1>الإعدادات</h1><p class="sub">بيانات المساحة والباقات</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات اسم المساحة، أنواع العضويات المتاحة، ومرافق المساحة.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderFloorplan(); renderMembers(); renderEvents(); renderSettings();
+</script>
+</body>
+</html>

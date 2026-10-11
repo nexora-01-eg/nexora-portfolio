@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>تجارتي — منصة التجارة الاجتماعية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/prop-types/prop-types.min.js" crossorigin></script>
+<script src="https://unpkg.com/react-is@18/umd/react-is.production.min.js" crossorigin></script>
+<script src="https://unpkg.com/recharts@2/umd/Recharts.min.js" crossorigin></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  html, body { margin: 0; padding: 0; background: #0A0A0C; font-family: 'Cairo', sans-serif; }
+  #root { min-height: 100vh; }
+  ::-webkit-scrollbar { width: 8px; height: 8px; }
+  ::-webkit-scrollbar-thumb { background: #2A2A30; border-radius: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  * { font-family: 'Cairo', sans-serif; }
+</style>
+</head>
+<body>
+<div id="root">
+  <div style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:sans-serif;color:#8E8E93;">
+    جارِ التحميل...
+  </div>
+</div>
+
+<script type="text/babel" data-presets="react">
+const { useState, useEffect } = React;
+const { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, CartesianGrid } = Recharts;
+
+/* ---------- Minimal inline icon set (no external dependency) ---------- */
+function Icon({ children, size = 16, color, strokeWidth = 2, fill = "none", style, ...rest }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={fill} stroke={color || "currentColor"}
+         strokeWidth={strokeWidth} strokeLinecap="round" strokeLinejoin="round" style={style} {...rest}>
+      {children}
+    </svg>
+  );
+}
+const LayoutGridIcon = (p) => <Icon {...p}><rect x="3" y="3" width="7" height="7" rx="1" /><rect x="14" y="3" width="7" height="7" rx="1" /><rect x="3" y="14" width="7" height="7" rx="1" /><rect x="14" y="14" width="7" height="7" rx="1" /></Icon>;
+const PackageIcon = (p) => <Icon {...p}><path d="M21 8l-9-5-9 5 9 5 9-5z" /><path d="M3 8v8l9 5 9-5V8" /><line x1="12" y1="13" x2="12" y2="21" /></Icon>;
+const ShoppingBagIcon = (p) => <Icon {...p}><path d="M6 8h12l-1 12H7L6 8z" /><path d="M9 8V6a3 3 0 0 1 6 0v2" /></Icon>;
+const UsersIcon = (p) => <Icon {...p}><circle cx="9" cy="8" r="3.2" /><path d="M3 20c0-3.5 2.7-6 6-6s6 2.5 6 6" /><circle cx="17" cy="9" r="2.6" /><path d="M15.5 14.2c2.3.5 4 2.6 4 5.8" /></Icon>;
+const TruckIcon = (p) => <Icon {...p}><rect x="1" y="7" width="13" height="9" rx="1" /><path d="M14 10h4l3 3v3h-7z" /><circle cx="6" cy="18" r="1.6" /><circle cx="17" cy="18" r="1.6" /></Icon>;
+const BarChart3Icon = (p) => <Icon {...p}><line x1="4" y1="20" x2="4" y2="10" /><line x1="12" y1="20" x2="12" y2="4" /><line x1="20" y1="20" x2="20" y2="14" /></Icon>;
+const SearchIcon = (p) => <Icon {...p}><circle cx="11" cy="11" r="7" /><line x1="21" y1="21" x2="16.65" y2="16.65" /></Icon>;
+const BellIcon = (p) => <Icon {...p}><path d="M6 8a6 6 0 0 1 12 0c0 5 2 6 2 6H4s2-1 2-6" /><path d="M10 21a2 2 0 0 0 4 0" /></Icon>;
+const ChevronRightIcon = (p) => <Icon {...p}><polyline points="9 18 15 12 9 6" /></Icon>;
+const InstagramIcon = (p) => <Icon {...p}><rect x="3" y="3" width="18" height="18" rx="5" /><circle cx="12" cy="12" r="4" /><circle cx="17.3" cy="6.7" r="1" fill={p.color || "currentColor"} stroke="none" /></Icon>;
+const MessageCircleIcon = (p) => <Icon {...p}><path d="M4 12a8 8 0 1 1 3 6.2L4 20l1.2-3.4A7.9 7.9 0 0 1 4 12z" /></Icon>;
+const FacebookIcon = (p) => <Icon {...p}><path d="M15 4h-2a4 4 0 0 0-4 4v3H6v4h3v7h4v-7h3l1-4h-4V8a1 1 0 0 1 1-1h3V4z" /></Icon>;
+const PlusIcon = (p) => <Icon {...p}><line x1="12" y1="5" x2="12" y2="19" /><line x1="5" y1="12" x2="19" y2="12" /></Icon>;
+const XIcon = (p) => <Icon {...p}><line x1="18" y1="6" x2="6" y2="18" /><line x1="6" y1="6" x2="18" y2="18" /></Icon>;
+const CrownIcon = (p) => <Icon {...p}><path d="M3 18h18l-1.5-9-4 3-3.5-6-3.5 6-4-3L3 18z" /></Icon>;
+const TrendingUpIcon = (p) => <Icon {...p}><polyline points="3 17 9 11 13 15 21 6" /><polyline points="15 6 21 6 21 12" /></Icon>;
+const StarIcon = (p) => <Icon {...p}><polygon points="12 2 15 9 22 9.5 17 14.5 18.5 22 12 18 5.5 22 7 14.5 2 9.5 9 9 12 2" /></Icon>;
+
+const GOLD = "#C9A227";
+const GOLD_LIGHT = "#E8C35A";
+const GOLD_SOFT = "rgba(201,162,39,0.14)";
+const COPPER = "#B8763E";
+const BG = "#0A0A0C";
+const PANEL = "#131316";
+const CARD = "#17171B";
+const BORDER = "#25252B";
+const TEXT = "#F2F1EC";
+const MUTED = "#8E8E93";
+const GREEN = "#2E9E6F";
+const BLUE = "#5B7FC4";
+
+const NAV = [
+  { icon: LayoutGridIcon, label: "نظرة عامة" }, { icon: ShoppingBagIcon, label: "الطلبات" },
+  { icon: PackageIcon, label: "المنتجات" }, { icon: UsersIcon, label: "العملاء" },
+  { icon: TruckIcon, label: "الشحن" }, { icon: BarChart3Icon, label: "التقارير" },
+];
+
+const kpis = [
+  { label: "طلبات اليوم", value: 58, suffix: "", delta: "+21%" },
+  { label: "صافي الربح", value: 14900, suffix: " ج.م", delta: "+9%" },
+  { label: "عملاء جدد", value: 31, suffix: "", delta: "+15%" },
+  { label: "معدل الإرجاع", value: 2.4, suffix: "%", delta: "-0.6%", down: true },
+];
+
+const platforms = [
+  { name: "إنستجرام", value: 48, icon: InstagramIcon, color: GOLD }, { name: "واتساب", value: 33, icon: MessageCircleIcon, color: GREEN },
+  { name: "فيسبوك", value: 19, icon: FacebookIcon, color: BLUE },
+];
+
+const topProducts = [
+  { name: "طقم عناية بالبشرة", sold: 142 }, { name: "عطر فرنسي فاخر", sold: 118 },
+  { name: "شنطة يد جلد طبيعي", sold: 96 }, { name: "ساعة رجالي كلاسيك", sold: 74 }, { name: "مجموعة إكسسوارات", sold: 61 },
+];
+
+const initialOrders = [
+  { id: "#TJ-2291", customer: "سارة حماد", channel: "إنستجرام", total: "890 ج.م", status: "تم الشحن" },
+  { id: "#TJ-2290", customer: "عمر بدوي", channel: "واتساب", total: "1,250 ج.م", status: "قيد التجهيز" },
+  { id: "#TJ-2289", customer: "نور الهدى", channel: "فيسبوك", total: "540 ج.م", status: "تم التسليم" },
+  { id: "#TJ-2288", customer: "حسام فتحي", channel: "إنستجرام", total: "2,100 ج.م", status: "قيد التجهيز" },
+  { id: "#TJ-2287", customer: "مريم صلاح", channel: "واتساب", total: "375 ج.م", status: "تم التسليم" },
+];
+
+const initialProducts = [
+  { name: "طقم عناية بالبشرة", price: "650 ج.م", stock: 34, tint: "#8A6A52" },
+  { name: "عطر فرنسي فاخر", price: "1,400 ج.م", stock: 12, tint: "#5B6355" },
+  { name: "شنطة يد جلد طبيعي", price: "2,200 ج.م", stock: 8, tint: "#6B5645" },
+  { name: "ساعة رجالي كلاسيك", price: "3,100 ج.م", stock: 5, tint: "#7A5B4A" },
+];
+
+const customers = [
+  { name: "سارة حماد", orders: 6, total: "5,340 ج.م", channel: "إنستجرام", vip: true },
+  { name: "عمر بدوي", orders: 3, total: "3,780 ج.م", channel: "واتساب", vip: false },
+  { name: "نور الهدى", orders: 9, total: "6,120 ج.م", channel: "فيسبوك", vip: true },
+  { name: "حسام فتحي", orders: 2, total: "4,200 ج.م", channel: "إنستجرام", vip: false },
+];
+
+const shipments = [
+  { id: "#SH-991", customer: "سارة حماد", carrier: "بوسطة", status: "في الطريق", eta: "غدًا" },
+  { id: "#SH-990", customer: "عمر بدوي", carrier: "أرامكس", status: "تم التسليم", eta: "—" },
+  { id: "#SH-988", customer: "حسام فتحي", carrier: "بوسطة", status: "قيد التجهيز", eta: "بعد يومين" },
+];
+
+const statusColor = (s) => (s === "تم التسليم") ? GREEN : (s === "تم الشحن" || s === "في الطريق") ? BLUE : GOLD;
+
+function useCountUp(target, active, duration = 900) {
+  const [val, setVal] = useState(0);
+  useEffect(() => {
+    if (!active) return;
+    let raf, start;
+    const step = (ts) => {
+      if (!start) start = ts;
+      const p = Math.min(1, (ts - start) / duration);
+      const eased = 1 - Math.pow(1 - p, 3);
+      setVal(target * eased);
+      if (p < 1) raf = requestAnimationFrame(step);
+    };
+    raf = requestAnimationFrame(step);
+    return () => cancelAnimationFrame(raf);
+  }, [target, active]);
+  return val;
+}
+
+function Card({ children, className = "", style = {} }) {
+  return <div className={`rounded-2xl border card-glow ${className}`} style={{ background: CARD, borderColor: BORDER, ...style }}>{children}</div>;
+}
+
+function TopBar({ title, subtitle, onAdd, addLabel }) {
+  return (
+    <div className="flex items-center justify-between mb-8">
+      <div>
+        <h1 className="text-2xl font-semibold tracking-tight flex items-center gap-2">
+          {title}
+        </h1>
+        {subtitle && <p className="text-sm mt-1" style={{ color: MUTED }}>{subtitle}</p>}
+      </div>
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl border" style={{ borderColor: BORDER, background: PANEL }}>
+          <SearchIcon size={15} color={MUTED} /><span className="text-sm" style={{ color: MUTED }}>بحث...</span>
+        </div>
+        {onAdd && (
+          <button onClick={onAdd} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm gold-btn" style={{ background: `linear-gradient(135deg, ${GOLD_LIGHT}, ${GOLD})`, color: "#141110", fontWeight: 600 }}>
+            <PlusIcon size={15} />{addLabel}
+          </button>
+        )}
+        <div className="w-10 h-10 rounded-xl border flex items-center justify-center relative" style={{ borderColor: BORDER, background: PANEL }}>
+          <BellIcon size={17} color={MUTED} />
+          <span style={{ position: "absolute", top: 7, right: 7, width: 6, height: 6, borderRadius: 999, background: GOLD, boxShadow: `0 0 0 2px ${PANEL}` }} />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Modal({ title, note, onClose, children }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24 modal-overlay" style={{ background: "rgba(0,0,0,0.6)" }}>
+      <Card className="w-full max-w-md p-7 relative modal-pop" style={{ borderColor: GOLD, boxShadow: `0 0 0 1px rgba(201,162,39,0.13), 0 30px 60px rgba(0,0,0,0.5)` }}>
+        <button onClick={onClose} className="absolute left-5 top-5" style={{ color: MUTED }}><XIcon size={18} /></button>
+        <div className="text-lg font-semibold mb-1 flex items-center gap-2">
+          <span style={{ width: 6, height: 6, borderRadius: 999, background: GOLD, display: "inline-block" }} />
+          {title}
+        </div>
+        <div className="text-xs mb-6" style={{ color: MUTED }}>{note}</div>
+        {children}
+      </Card>
+    </div>
+  );
+}
+
+const inputStyle = { background: "#141110", borderColor: BORDER, color: TEXT };
+const Field = ({ label, ...props }) => (
+  <div className="mb-4">
+    <label className="text-xs" style={{ color: MUTED }}>{label}</label>
+    <input {...props} className="w-full mt-1.5 px-3.5 py-2.5 rounded-xl border text-sm outline-none focus-gold" style={inputStyle} />
+  </div>
+);
+
+function NewOrderModal({ onClose, onCreate }) {
+  const [customer, setCustomer] = useState(""); const [total, setTotal] = useState(""); const [channel, setChannel] = useState("إنستجرام");
+  return (
+    <Modal title="طلب جديد" note="بيانات محاكاة أمامية فقط" onClose={onClose}>
+      <Field label="اسم العميل" value={customer} onChange={(e) => setCustomer(e.target.value)} placeholder="مثال: ريم عادل" />
+      <Field label="قيمة الطلب" value={total} onChange={(e) => setTotal(e.target.value)} placeholder="مثال: 750 ج.م" />
+      <Field label="المصدر" value={channel} onChange={(e) => setChannel(e.target.value)} placeholder="إنستجرام / واتساب / فيسبوك" />
+      <button onClick={() => customer.trim() && onCreate({ id: `#TJ-${Math.floor(2200 + Math.random() * 99)}`, customer, channel, total: total || "—", status: "قيد التجهيز" })}
+        className="w-full py-3 rounded-xl text-sm font-medium gold-btn" style={{ background: `linear-gradient(135deg, ${GOLD_LIGHT}, ${GOLD})`, color: "#141110" }}>إضافة الطلب</button>
+    </Modal>
+  );
+}
+function NewProductModal({ onClose, onCreate }) {
+  const [name, setName] = useState(""); const [price, setPrice] = useState(""); const [stock, setStock] = useState("");
+  return (
+    <Modal title="منتج جديد" note="بيانات محاكاة أمامية فقط" onClose={onClose}>
+      <Field label="اسم المنتج" value={name} onChange={(e) => setName(e.target.value)} placeholder="مثال: كريم مرطب فاخر" />
+      <Field label="السعر" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="مثال: 480 ج.م" />
+      <Field label="الكمية بالمخزون" value={stock} onChange={(e) => setStock(e.target.value)} placeholder="مثال: 20" />
+      <button onClick={() => name.trim() && onCreate({ name, price: price || "—", stock: Number(stock) || 0, tint: "#8A6A52" })}
+        className="w-full py-3 rounded-xl text-sm font-medium gold-btn" style={{ background: `linear-gradient(135deg, ${GOLD_LIGHT}, ${GOLD})`, color: "#141110" }}>إضافة المنتج</button>
+    </Modal>
+  );
+}
+
+function Kpi({ k, active }) {
+  const isPercent = k.suffix === "%";
+  const raw = useCountUp(k.value, active, 1000);
+  const display = isPercent ? raw.toFixed(1) : Math.round(raw).toLocaleString("en-US");
+  return (
+    <Card className="p-5">
+      <div className="flex items-center justify-between mb-4">
+        <span className="text-xs" style={{ color: MUTED }}>{k.label}</span>
+        <span className="text-xs font-medium flex items-center gap-1" style={{ color: k.down ? "#C24A4A" : GREEN }}>
+          <TrendingUpIcon size={11} style={{ transform: k.down ? "scaleY(-1)" : "none" }} />
+          {k.delta}
+        </span>
+      </div>
+      <div className="text-2xl font-semibold tracking-tight" style={{ fontVariantNumeric: "tabular-nums" }}>{display}{k.suffix}</div>
+    </Card>
+  );
+}
+
+function DashboardScreen() {
+  const [active, setActive] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setActive(true), 50); return () => clearTimeout(t); }, []);
+  return (
+    <>
+      <TopBar title="نظرة عامة على المتجر" subtitle="مبيعات إنستجرام وواتساب وفيسبوك في مكان واحد" />
+      <div className="grid grid-cols-4 gap-5 mb-7">
+        {kpis.map((k) => <Kpi key={k.label} k={k} active={active} />)}
+      </div>
+      <div className="grid grid-cols-3 gap-5 mb-7">
+        <Card className="col-span-2 p-6">
+          <div className="text-sm font-semibold mb-5">أفضل المنتجات مبيعًا</div>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={topProducts} layout="vertical" margin={{ left: 20 }}>
+              <CartesianGrid strokeDasharray="3 3" stroke={BORDER} horizontal={false} />
+              <XAxis type="number" stroke={MUTED} fontSize={12} tickLine={false} axisLine={false} />
+              <YAxis type="category" dataKey="name" stroke={MUTED} fontSize={12} width={140} tickLine={false} axisLine={false} />
+              <Tooltip contentStyle={{ background: PANEL, border: `1px solid ${BORDER}`, borderRadius: 10, color: TEXT }} cursor={{ fill: "rgba(201,162,39,0.06)" }} />
+              <Bar dataKey="sold" fill={COPPER} radius={[0, 6, 6, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+        <Card className="p-6">
+          <div className="text-sm font-semibold mb-4">المبيعات حسب المنصة</div>
+          <ResponsiveContainer width="100%" height={150}>
+            <PieChart>
+              <Pie data={platforms} dataKey="value" nameKey="name" innerRadius={42} outerRadius={65} paddingAngle={3}>
+                {platforms.map((p, i) => <Cell key={i} fill={p.color} />)}
+              </Pie>
+              <Tooltip contentStyle={{ background: PANEL, border: `1px solid ${BORDER}`, borderRadius: 10, color: TEXT }} />
+            </PieChart>
+          </ResponsiveContainer>
+          <div className="flex justify-between mt-2 px-1">
+            {platforms.map((p) => (
+              <div key={p.name} className="flex items-center gap-1.5 text-xs" style={{ color: MUTED }}>
+                <span style={{ width: 7, height: 7, borderRadius: 999, background: p.color, display: "inline-block" }} />
+                {p.name}
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+    </>
+  );
+}
+
+function OrdersScreen({ orders, onAdd }) {
+  return (
+    <>
+      <TopBar title="الطلبات" subtitle={`${orders.length} طلبًا`} onAdd={onAdd} addLabel="طلب جديد" />
+      <Card className="p-2">
+        {orders.map((o, i) => (
+          <div key={o.id} className="flex items-center justify-between px-5 py-4 row-hover" style={{ borderBottom: i !== orders.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div><div className="text-sm font-medium" style={{ color: GOLD }}>{o.id}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{o.customer} · {o.channel}</div></div>
+            <div className="flex items-center gap-4">
+              <span className="text-sm">{o.total}</span>
+              <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: statusColor(o.status), background: `${statusColor(o.status)}1A`, border: `1px solid ${statusColor(o.status)}` }}>{o.status}</span>
+            </div>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function ProductsScreen({ products, onAdd }) {
+  return (
+    <>
+      <TopBar title="المنتجات" subtitle={`${products.length} منتجًا في الكتالوج`} onAdd={onAdd} addLabel="منتج جديد" />
+      <div className="grid grid-cols-4 gap-5">
+        {products.map((p) => (
+          <Card key={p.name} className="overflow-hidden product-card">
+            <div className="h-28" style={{ background: `linear-gradient(135deg, ${p.tint}66, ${p.tint}22)` }} />
+            <div className="p-4">
+              <div className="text-sm font-medium">{p.name}</div>
+              <div className="flex items-center justify-between mt-2">
+                <span className="text-sm" style={{ color: GOLD }}>{p.price}</span>
+                <span className="text-xs" style={{ color: MUTED }}>{p.stock} بالمخزون</span>
+              </div>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function CustomersScreen() {
+  return (
+    <>
+      <TopBar title="العملاء" subtitle={`${customers.length} عميل نشط`} />
+      <Card className="p-2">
+        {customers.map((c, i) => (
+          <div key={c.name} className="flex items-center justify-between px-5 py-4 row-hover" style={{ borderBottom: i !== customers.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center" style={{ background: GOLD_SOFT, border: `1px solid ${GOLD}` }}>
+                {c.vip && <CrownIcon size={14} color={GOLD} />}
+              </div>
+              <div>
+                <div className="text-sm font-medium flex items-center gap-1.5">
+                  {c.name}
+                  {c.vip && <span className="text-[9px] font-bold px-1.5 py-0.5 rounded-full" style={{ color: GOLD, background: GOLD_SOFT }}>VIP</span>}
+                </div>
+                <div className="text-xs mt-0.5" style={{ color: MUTED }}>{c.channel}</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-6 text-xs" style={{ color: MUTED }}>
+              <span>{c.orders} طلبات</span><span style={{ color: TEXT }}>{c.total}</span>
+            </div>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function ShippingScreen() {
+  return (
+    <>
+      <TopBar title="الشحن" subtitle="متابعة الشحنات الجارية" />
+      <Card className="p-2">
+        {shipments.map((s, i) => (
+          <div key={s.id} className="flex items-center justify-between px-5 py-4 row-hover" style={{ borderBottom: i !== shipments.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div><div className="text-sm font-medium" style={{ color: GOLD }}>{s.id}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{s.customer} · {s.carrier}</div></div>
+            <div className="flex items-center gap-4">
+              <span className="text-xs" style={{ color: MUTED }}>{s.eta}</span>
+              <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: statusColor(s.status), background: `${statusColor(s.status)}1A`, border: `1px solid ${statusColor(s.status)}` }}>{s.status}</span>
+            </div>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function ReportsScreen() {
+  return (
+    <>
+      <TopBar title="التقارير" subtitle="أداء المتجر خلال آخر ٣٠ يومًا" />
+      <Card className="p-6">
+        <div className="text-sm font-semibold mb-5">الإيرادات اليومية</div>
+        <ResponsiveContainer width="100%" height={240}>
+          <BarChart data={topProducts.map((p, i) => ({ day: `يوم ${i + 1}`, value: p.sold * 35 }))}>
+            <CartesianGrid strokeDasharray="3 3" stroke={BORDER} vertical={false} />
+            <XAxis dataKey="day" stroke={MUTED} fontSize={12} tickLine={false} axisLine={false} />
+            <YAxis stroke={MUTED} fontSize={12} tickLine={false} axisLine={false} />
+            <Tooltip contentStyle={{ background: PANEL, border: `1px solid ${BORDER}`, borderRadius: 10, color: TEXT }} cursor={{ fill: "rgba(201,162,39,0.06)" }} />
+            <Bar dataKey="value" fill={GOLD} radius={[6, 6, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </Card>
+    </>
+  );
+}
+
+function Tijarti() {
+  const [nav, setNav] = useState(0);
+  const [orders, setOrders] = useState(initialOrders);
+  const [products, setProducts] = useState(initialProducts);
+  const [showOrderModal, setShowOrderModal] = useState(false);
+  const [showProductModal, setShowProductModal] = useState(false);
+
+  const screens = [
+    <DashboardScreen key="d" />,
+    <OrdersScreen key="o" orders={orders} onAdd={() => setShowOrderModal(true)} />,
+    <ProductsScreen key="p" products={products} onAdd={() => setShowProductModal(true)} />,
+    <CustomersScreen key="c" />,
+    <ShippingScreen key="s" />,
+    <ReportsScreen key="r" />,
+  ];
+
+  return (
+    <div dir="rtl" className="w-full min-h-screen flex font-sans app-bg" style={{ background: BG, color: TEXT }}>
+      <style>{`
+        .app-bg {
+          background-image: radial-gradient(ellipse 900px 500px at 15% -10%, rgba(201,162,39,0.08), transparent 60%),
+                             radial-gradient(ellipse 700px 500px at 100% 10%, rgba(91,127,196,0.06), transparent 60%);
+        }
+        .card-glow { transition: border-color .25s ease, box-shadow .25s ease, transform .25s ease; }
+        .card-glow:hover { border-color: rgba(201,162,39,0.35); box-shadow: 0 10px 30px rgba(0,0,0,0.35); }
+        .product-card:hover { transform: translateY(-3px); }
+        .row-hover { transition: background .15s ease; }
+        .row-hover:hover { background: rgba(201,162,39,0.035); }
+        .gold-btn { transition: transform .15s ease, box-shadow .15s ease; }
+        .gold-btn:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(201,162,39,0.35); }
+        .nav-btn { transition: all .2s ease; position: relative; }
+        .nav-btn.active::before { content: ""; position: absolute; right: -1px; top: 8px; bottom: 8px; width: 3px; border-radius: 3px; background: linear-gradient(180deg, #E8C35A, #C9A227); }
+        .focus-gold:focus { border-color: #C9A227 !important; box-shadow: 0 0 0 3px rgba(201,162,39,0.15); }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        main > * { animation: fadeInUp .35s ease; }
+        @keyframes modalIn { from { opacity: 0; transform: scale(.96) translateY(8px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+        .modal-pop { animation: modalIn .22s cubic-bezier(.22,1,.36,1); }
+        .modal-overlay { animation: fadeInUp .18s ease; }
+        .logo-glow { box-shadow: 0 0 0 1px rgba(201,162,39,0.3), 0 0 24px rgba(201,162,39,0.25); }
+      `}</style>
+
+      <aside className="w-64 shrink-0 flex flex-col border-l" style={{ background: PANEL, borderColor: BORDER }}>
+        <div className="px-6 py-7 flex items-center gap-3 border-b" style={{ borderColor: BORDER }}>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center logo-glow" style={{ background: GOLD_SOFT, border: `1px solid ${GOLD}` }}>
+            <ShoppingBagIcon size={19} color={GOLD} />
+          </div>
+          <div>
+            <div className="text-base font-semibold tracking-tight">تجارتي</div>
+            <div className="text-xs" style={{ color: MUTED }}>منصة التجارة الاجتماعية</div>
+          </div>
+        </div>
+        <nav className="flex-1 px-3 py-5 flex flex-col gap-1">
+          {NAV.map((item, i) => {
+            const IconEl = item.icon; const isActive = i === nav;
+            return (
+              <button key={item.label} onClick={() => setNav(i)} className={`nav-btn flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-right ${isActive ? "active" : ""}`}
+                style={{ background: isActive ? GOLD_SOFT : "transparent", color: isActive ? GOLD : MUTED, border: isActive ? `1px solid ${GOLD}` : "1px solid transparent" }}>
+                <IconEl size={17} /><span className="flex-1">{item.label}</span>{isActive && <ChevronRightIcon size={14} />}
+              </button>
+            );
+          })}
+        </nav>
+        <div className="px-5 py-5 border-t" style={{ borderColor: BORDER }}>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full flex items-center justify-center" style={{ background: GOLD_SOFT, border: `1px solid ${GOLD}` }}>
+              <StarIcon size={13} color={GOLD} fill={GOLD} />
+            </div>
+            <div>
+              <div className="text-sm font-medium">متجر لمسة</div>
+              <div className="text-xs" style={{ color: MUTED }}>بائع معتمد</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+
+      <main className="flex-1 px-10 py-8 overflow-y-auto">{screens[nav]}</main>
+
+      {showOrderModal && <NewOrderModal onClose={() => setShowOrderModal(false)} onCreate={(o) => { setOrders((p) => [o, ...p]); setShowOrderModal(false); }} />}
+      {showProductModal && <NewProductModal onClose={() => setShowProductModal(false)} onCreate={(p) => { setProducts((prev) => [p, ...prev]); setShowProductModal(false); }} />}
+    </div>
+  );
+}
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
+root.render(<Tijarti />);
+</script>
+</body>
+</html>

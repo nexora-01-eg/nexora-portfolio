@@ -1,0 +1,20 @@
+{
+  "version": "0.3.0",
+  "updatedAt": "2026-07-15",
+  "platform": {
+    "name": "NEXORA Portfolio Platform",
+    "defaultTheme": "dark",
+    "supportedThemes": ["dark", "light"],
+    "brandColors": {
+      "black": "#0a0a0a",
+      "darkGray": "#1a1a1a",
+      "gold": "#cda449",
+      "white": "#ffffff"
+    }
+  },
+  "features": {
+    "search": true,
+    "filters": true,
+    "lightMode": false
+  }
+}

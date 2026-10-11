@@ -1,0 +1,22 @@
+/* ============================================================
+   NEXORA — Component Card
+   Live mini-preview + name + category, used by the Component
+   Explorer's index grid. Extends .nx-card.
+   ============================================================ */
+
+.nx-component-card__preview {
+  height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--nx-bg-elevated-2);
+  border-radius: var(--nx-radius-md);
+  margin-bottom: var(--nx-space-4);
+  pointer-events: none; /* preview is illustrative, not interactive within the card */
+}
+
+.nx-component-card__meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

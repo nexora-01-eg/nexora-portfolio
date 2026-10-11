@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>د. نور الهدى فتحي — عيادة براعم VIP</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%91%B6%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Cairo', 'ui-sans-serif', 'system-ui'] },
+      }
+    }
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root { --accent: #2EA187; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    opacity: 0;
+    animation: vip-fade-in .5s ease forwards;
+  }
+  @keyframes vip-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent; }
+  button, a, [role="button"] { transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+  button:active { transform: scale(0.97); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #root { min-height: 100vh; }
+  #vip-loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: #0a0a0a; z-index: 9999; transition: opacity .4s ease;
+  }
+  #vip-loading .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-top-color: var(--accent);
+    animation: vip-spin .8s linear infinite;
+  }
+  @keyframes vip-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="vip-loading"><div class="spinner"></div></div>
+<div id="root"></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import * as ReactDOM from "react-dom/client";
+import React, { useState } from "react";
+import {
+  Baby, Search, Bell, Plus, X, Users, Syringe, CalendarDays, ChevronRight, Award, TrendingUp,
+} from "lucide-react";
+
+const BG = "#080B0A";
+const PANEL = "#101513";
+const CARD = "#151B18";
+const BORDER = "#242E29";
+const TEXT = "#EEF4F1";
+const MUTED = "#8B9A94";
+const GOLD = "#C9A227";
+const TEAL = "#2EA187";
+const TEAL_SOFT = "rgba(46,161,135,0.16)";
+const GREEN = "#3FA66B";
+const RED = "#C24A4A";
+
+const NAV = [
+  { icon: Users, label: "نظرة عامة" }, { icon: Syringe, label: "التطعيمات" }, { icon: CalendarDays, label: "المواعيد" },
+];
+
+const career = [
+  { label: "سنوات الخبرة", value: "١٠" }, { label: "طفل تحت المتابعة", value: "٩٤٠+" },
+  { label: "رضا أولياء الأمور", value: "٪٩٩" }, { label: "زيارات هذا الشهر", value: "١٦٨" },
+];
+
+const initialChildren = [
+  { name: "آدم وليد", age: "٢ سنة", parent: "وليد سامي", growth: "طبيعي", nextVaccine: "١٥ يوليو" },
+  { name: "جنى محمود", age: "٥ أشهر", parent: "محمود عاطف", growth: "متابعة", nextVaccine: "١٨ يوليو" },
+  { name: "سيف الدين", age: "٤ سنوات", parent: "أحمد الديب", growth: "طبيعي", nextVaccine: "—" },
+];
+
+const vaccinations = [
+  { child: "آدم وليد", vaccine: "الجرعة الثالثة — خماسي", due: "١٥ يوليو" },
+  { child: "جنى محمود", vaccine: "الروتا فيروس", due: "١٨ يوليو" },
+];
+
+const appointments = [
+  { time: "١٠:٠٠ ص", child: "آدم وليد", type: "متابعة نمو" },
+  { time: "١١:٣٠ ص", child: "جنى محمود", type: "تطعيم دوري" },
+  { time: "١:٠٠ م", child: "طفل جديد", type: "كشف أول" },
+];
+
+function GrowthCurve() {
+  return (
+    <svg viewBox="0 0 400 60" className="w-full h-14">
+      <polyline points="0,55 60,48 120,38 180,30 240,22 300,14 400,6" fill="none" stroke={TEAL} strokeWidth="2.5" strokeLinecap="round" />
+      <polyline points="0,58 60,54 120,49 180,44 240,38 300,32 400,25" fill="none" stroke={BORDER} strokeWidth="1.5" strokeDasharray="3 3" />
+    </svg>
+  );
+}
+
+function Card({ children, className = "", style = {} }) {
+  return <div className={`rounded-2xl border ${className}`} style={{ background: CARD, borderColor: BORDER, ...style }}>{children}</div>;
+}
+function TopBar({ title, subtitle, onAdd, addLabel }) {
+  return (
+    <div className="flex items-center justify-between mb-8">
+      <div><h1 className="text-2xl font-semibold tracking-tight">{title}</h1>{subtitle && <p className="text-sm mt-1" style={{ color: MUTED }}>{subtitle}</p>}</div>
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl border" style={{ borderColor: BORDER, background: PANEL }}><Search size={15} style={{ color: MUTED }} /><span className="text-sm" style={{ color: MUTED }}>بحث...</span></div>
+        {onAdd && <button onClick={onAdd} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm" style={{ background: TEAL, color: "#07120E" }}><Plus size={15} />{addLabel}</button>}
+        <div className="w-10 h-10 rounded-xl border flex items-center justify-center" style={{ borderColor: BORDER, background: PANEL }}><Bell size={17} style={{ color: MUTED }} /></div>
+      </div>
+    </div>
+  );
+}
+function Modal({ title, note, onClose, children }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24" style={{ background: "rgba(0,0,0,0.55)" }}>
+      <Card className="w-full max-w-md p-7 relative" style={{ borderColor: TEAL }}>
+        <button onClick={onClose} className="absolute left-5 top-5" style={{ color: MUTED }}><X size={18} /></button>
+        <div className="text-lg font-semibold mb-1">{title}</div>
+        <div className="text-xs mb-6" style={{ color: MUTED }}>{note}</div>
+        {children}
+      </Card>
+    </div>
+  );
+}
+const inputStyle = { background: "#0D1210", borderColor: BORDER, color: TEXT };
+const Field = ({ label, ...props }) => (
+  <div className="mb-4">
+    <label className="text-xs" style={{ color: MUTED }}>{label}</label>
+    <input {...props} className="w-full mt-1.5 px-3.5 py-2.5 rounded-xl border text-sm outline-none" style={inputStyle} />
+  </div>
+);
+function NewChildModal({ onClose, onCreate }) {
+  const [name, setName] = useState(""); const [age, setAge] = useState(""); const [parent, setParent] = useState("");
+  return (
+    <Modal title="تسجيل طفل جديد" note="بيانات محاكاة أمامية فقط" onClose={onClose}>
+      <Field label="اسم الطفل" value={name} onChange={(e) => setName(e.target.value)} placeholder="مثال: مريم كريم" />
+      <Field label="السن" value={age} onChange={(e) => setAge(e.target.value)} placeholder="مثال: ٣ سنوات" />
+      <Field label="ولي الأمر" value={parent} onChange={(e) => setParent(e.target.value)} placeholder="مثال: كريم فوزي" />
+      <button onClick={() => name.trim() && onCreate({ name, age: age || "—", parent: parent || "—", growth: "طبيعي", nextVaccine: "—" })}
+        className="w-full py-3 rounded-xl text-sm font-medium" style={{ background: TEAL, color: "#07120E" }}>تسجيل الطفل</button>
+    </Modal>
+  );
+}
+
+function OverviewScreen({ children, onAdd }) {
+  return (
+    <>
+      <div className="flex items-center gap-1.5 text-xs mb-2" style={{ color: GOLD }}><Award size={13} />زميلة الأكاديمية المصرية لطب الأطفال</div>
+      <TopBar title="د. نور الهدى فتحي" subtitle="استشارية طب الأطفال وحديثي الولادة" onAdd={onAdd} addLabel="طفل جديد" />
+      <Card className="p-6 mb-7">
+        <div className="flex items-center gap-1.5 text-xs mb-3" style={{ color: TEAL }}><TrendingUp size={13} />منحنى النمو العام للأطفال تحت المتابعة</div>
+        <GrowthCurve />
+      </Card>
+      <div className="grid grid-cols-4 gap-5 mb-7">
+        {career.map((k) => <Card key={k.label} className="p-5"><div className="text-xs mb-3" style={{ color: MUTED }}>{k.label}</div><div className="text-2xl font-semibold tracking-tight" style={{ color: TEAL }}>{k.value}</div></Card>)}
+      </div>
+      <Card className="p-2">
+        {children.map((c, i) => (
+          <div key={c.name} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== children.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div><div className="text-sm font-medium">{c.name}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{c.age} · ولي الأمر: {c.parent}</div></div>
+            <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: c.growth === "طبيعي" ? GREEN : GOLD, background: `${c.growth === "طبيعي" ? GREEN : GOLD}1A`, border: `1px solid ${c.growth === "طبيعي" ? GREEN : GOLD}` }}>{c.growth}</span>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function VaccinationsScreen() {
+  return (
+    <>
+      <TopBar title="التطعيمات" subtitle={`${vaccinations.length} تطعيمات مستحقة`} />
+      <Card className="p-2">
+        {vaccinations.map((v, i) => (
+          <div key={i} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== vaccinations.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div className="flex items-center gap-4"><div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: TEAL_SOFT }}><Syringe size={16} style={{ color: TEAL }} /></div><div><div className="text-sm font-medium">{v.child}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{v.vaccine}</div></div></div>
+            <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: GOLD, background: `${GOLD}1A`, border: `1px solid ${GOLD}` }}>{v.due}</span>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function AppointmentsScreen() {
+  return (
+    <>
+      <TopBar title="المواعيد" subtitle="مواعيد اليوم" />
+      <Card className="p-2">
+        {appointments.map((a, i) => (
+          <div key={i} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== appointments.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div><div className="text-sm font-medium">{a.child}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{a.type}</div></div>
+            <span className="text-xs" style={{ color: TEAL }}>{a.time}</span>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function DrFathyPediatrics() {
+  const [nav, setNav] = useState(0);
+  const [children, setChildren] = useState(initialChildren);
+  const [showModal, setShowModal] = useState(false);
+
+  const screens = [<OverviewScreen children={children} onAdd={() => setShowModal(true)} />, <VaccinationsScreen />, <AppointmentsScreen />];
+
+  return (
+    <div dir="rtl" className="w-full min-h-screen flex font-sans" style={{ background: BG, color: TEXT }}>
+      <aside className="w-64 shrink-0 flex flex-col border-l" style={{ background: PANEL, borderColor: BORDER }}>
+        <div className="px-6 py-7 flex items-center gap-3 border-b" style={{ borderColor: BORDER }}>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: TEAL_SOFT, border: `1px solid ${TEAL}` }}><Baby size={19} style={{ color: TEAL }} /></div>
+          <div><div className="text-base font-semibold tracking-tight">عيادة براعم VIP</div><div className="text-xs" style={{ color: MUTED }}>د. نور الهدى فتحي</div></div>
+        </div>
+        <nav className="flex-1 px-3 py-5 flex flex-col gap-1">
+          {NAV.map((item, i) => {
+            const Icon = item.icon; const isActive = i === nav;
+            return (
+              <button key={item.label} onClick={() => setNav(i)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-colors text-right"
+                style={{ background: isActive ? TEAL_SOFT : "transparent", color: isActive ? TEAL : MUTED, border: isActive ? `1px solid ${TEAL}` : "1px solid transparent" }}>
+                <Icon size={17} /><span className="flex-1">{item.label}</span>{isActive && <ChevronRight size={14} />}
+              </button>
+            );
+          })}
+        </nav>
+      </aside>
+      <main className="flex-1 px-10 py-8 overflow-y-auto">{screens[nav]}</main>
+      {showModal && <NewChildModal onClose={() => setShowModal(false)} onCreate={(c) => { setChildren((p) => [c, ...p]); setShowModal(false); }} />}
+    </div>
+  );
+}
+
+
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+root.render(<DrFathyPediatrics />);
+const loading = document.getElementById("vip-loading");
+if (loading) { loading.style.opacity = "0"; setTimeout(() => loading.remove(), 400); }
+</script>
+</body>
+</html>

@@ -1,0 +1,63 @@
+/* ============================================================
+   NEXORA — Toggle (switch)
+   role="switch" on the underlying input per WAI-ARIA Switch
+   pattern — semantically distinct from a checkbox (on/off
+   setting, not a form selection).
+   ============================================================ */
+
+.nx-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nx-space-3);
+  cursor: pointer;
+}
+
+.nx-toggle__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.nx-toggle__track {
+  width: 40px;
+  height: 22px;
+  border-radius: var(--nx-radius-full);
+  background: var(--nx-bg-elevated-2);
+  border: 1px solid var(--nx-border-subtle);
+  position: relative;
+  transition: var(--nx-transition-base);
+  flex-shrink: 0;
+}
+
+.nx-toggle__thumb {
+  position: absolute;
+  top: 1px;
+  left: 1px;
+  width: 18px;
+  height: 18px;
+  border-radius: var(--nx-radius-full);
+  background: var(--nx-color-white);
+  transition: transform var(--nx-duration-base) var(--nx-ease-out);
+}
+
+.nx-toggle__input:checked + .nx-toggle__track {
+  background: var(--nx-accent-primary);
+  border-color: var(--nx-accent-primary);
+}
+.nx-toggle__input:checked + .nx-toggle__track .nx-toggle__thumb {
+  transform: translateX(18px);
+  background: var(--nx-color-black);
+}
+
+.nx-toggle__input:focus-visible + .nx-toggle__track {
+  outline: 2px solid var(--nx-accent-primary);
+  outline-offset: 2px;
+}
+
+.nx-toggle__input:disabled ~ * {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nx-toggle__label { font-size: var(--nx-fs-300); }

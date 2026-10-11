@@ -1,0 +1,57 @@
+/* ============================================================
+   NEXORA — Pagination
+   ============================================================ */
+
+.nx-pagination {
+  display: flex;
+  align-items: center;
+  gap: var(--nx-space-2);
+}
+
+.nx-pagination__list {
+  display: flex;
+  align-items: center;
+  gap: var(--nx-space-1);
+}
+
+.nx-pagination__btn,
+.nx-pagination__page {
+  min-width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--nx-fs-200);
+  color: var(--nx-text-secondary);
+  border-radius: var(--nx-radius-sm);
+  transition: var(--nx-transition-base);
+}
+
+.nx-pagination__btn:hover:not(:disabled),
+.nx-pagination__page:hover {
+  background: var(--nx-bg-elevated);
+  color: var(--nx-text-primary);
+}
+
+.nx-pagination__btn:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.nx-pagination__page--active,
+.nx-pagination__page[aria-current="page"] {
+  background: var(--nx-accent-primary);
+  color: var(--nx-color-black);
+  font-weight: var(--nx-fw-medium);
+}
+
+.nx-pagination__ellipsis {
+  min-width: 36px;
+  text-align: center;
+  color: var(--nx-text-muted);
+}
+
+@media (max-width: 480px) {
+  .nx-pagination__page:not(.nx-pagination__page--active) { display: none; }
+  .nx-pagination__ellipsis { display: none; }
+}

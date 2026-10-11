@@ -1,0 +1,84 @@
+/* ============================================================
+   NEXORA — Button
+   Variants: primary, secondary, ghost, danger
+   Sizes: sm, md, lg
+   States: default, hover, focus, disabled, loading
+   ============================================================ */
+
+.nx-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--nx-space-2);
+  font-family: var(--nx-font-body);
+  font-weight: var(--nx-fw-medium);
+  border-radius: var(--nx-radius-md);
+  border: 1px solid transparent;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: var(--nx-transition-base);
+  transition-property: background-color, border-color, color, box-shadow, transform;
+}
+
+.nx-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.nx-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+/* Sizes */
+.nx-btn--sm { padding: var(--nx-space-2) var(--nx-space-4); font-size: var(--nx-fs-200); }
+.nx-btn--md { padding: var(--nx-space-3) var(--nx-space-5); font-size: var(--nx-fs-300); }
+.nx-btn--lg { padding: var(--nx-space-4) var(--nx-space-6); font-size: var(--nx-fs-400); }
+
+/* Variants */
+.nx-btn--primary {
+  background-color: var(--nx-accent-primary);
+  color: var(--nx-color-black);
+}
+.nx-btn--primary:hover:not(:disabled) { background-color: var(--nx-accent-hover); box-shadow: var(--nx-glow-gold-sm); transform: translateY(-1px); }
+.nx-btn--primary:focus-visible { box-shadow: var(--nx-shadow-gold-glow); }
+
+.nx-btn--secondary {
+  background-color: var(--nx-bg-elevated);
+  color: var(--nx-text-primary);
+  border-color: var(--nx-border-subtle);
+}
+.nx-btn--secondary:hover:not(:disabled) { border-color: var(--nx-border-strong); background-color: var(--nx-bg-elevated-2); box-shadow: var(--nx-elevation-2); transform: translateY(-1px); }
+
+.nx-btn--ghost {
+  background-color: transparent;
+  color: var(--nx-text-primary);
+}
+.nx-btn--ghost:hover:not(:disabled) { background-color: var(--nx-bg-elevated); }
+
+.nx-btn--danger {
+  background-color: var(--nx-color-danger);
+  color: var(--nx-color-white);
+}
+.nx-btn--danger:hover:not(:disabled) { filter: brightness(1.12); }
+
+/* Loading */
+.nx-btn__spinner {
+  width: 1em;
+  height: 1em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: nx-btn-spin 0.6s linear infinite;
+}
+
+@keyframes nx-btn-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-btn__spinner { animation-duration: 1.2s; }
+}
+
+@media (max-width: 480px) {
+  .nx-btn--lg { padding: var(--nx-space-3) var(--nx-space-5); font-size: var(--nx-fs-300); }
+}

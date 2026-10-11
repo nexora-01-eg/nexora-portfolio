@@ -1,0 +1,59 @@
+/* ============================================================
+   NEXORA — Progress
+   Linear (default, sm) and circular variants. Determinate via
+   inline width/--nx-progress-value; indeterminate variant for
+   unknown-duration tasks.
+   ============================================================ */
+
+.nx-progress {
+  width: 100%;
+  height: 8px;
+  border-radius: var(--nx-radius-full);
+  background: var(--nx-bg-elevated-2);
+  overflow: hidden;
+}
+
+.nx-progress--sm { height: 4px; }
+
+.nx-progress__bar {
+  height: 100%;
+  border-radius: inherit;
+  background: var(--nx-accent-primary);
+  transition: width var(--nx-duration-slow) var(--nx-ease-out);
+}
+
+.nx-progress--indeterminate .nx-progress__bar {
+  width: 40% !important;
+  animation: nx-progress-slide 1.2s var(--nx-ease-standard) infinite;
+}
+
+@keyframes nx-progress-slide {
+  0%   { transform: translateX(-100%); }
+  100% { transform: translateX(250%); }
+}
+
+.nx-progress-circle {
+  width: 48px;
+  height: 48px;
+  transform: rotate(-90deg);
+}
+
+.nx-progress-circle__track,
+.nx-progress-circle__value {
+  fill: none;
+  stroke-width: 3;
+}
+
+.nx-progress-circle__track { stroke: var(--nx-bg-elevated-2); }
+
+.nx-progress-circle__value {
+  stroke: var(--nx-accent-primary);
+  stroke-linecap: round;
+  stroke-dasharray: 106.8; /* 2 * π * r(17) */
+  stroke-dashoffset: calc(106.8 - (106.8 * var(--nx-progress-value, 0) / 100));
+  transition: stroke-dashoffset var(--nx-duration-slow) var(--nx-ease-out);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-progress--indeterminate .nx-progress__bar { animation: none; width: 100% !important; }
+}

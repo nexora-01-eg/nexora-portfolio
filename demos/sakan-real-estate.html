@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>سكن — دوّر على بيت أحلامك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Tajawal:wght@400;500;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FAF6EE; --card:#FFFFFF;
+  --navy:#1B2A41; --navy-soft:rgba(27,42,65,0.07); --gold:#B8923D; --gold-soft:rgba(184,146,61,0.14);
+  --terra:#C1653F; --terra-soft:rgba(193,101,63,0.12); --text:#211A12; --muted:#6B5F4C; --faint:#A4977E; --border:#EBE1CC;
+  --r-lg:24px; --ease:cubic-bezier(.22,1,.36,1); --shadow:0 22px 48px -28px rgba(27,42,65,0.22);
+  --font-display:'Aref Ruqaa', serif; --font-body:'Tajawal', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{ scroll-behavior:smooth; } body{ background:var(--bg); color:var(--text); font-family:var(--font-body); }
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; cursor:pointer; color:inherit;}
+.eyebrow{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--terra); }
+.card{ background:var(--card); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow); transition:all .25s var(--ease); }
+.card:hover{ transform:translateY(-5px); }
+.btn{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; padding:12px 24px; border-radius:14px; transition:all .2s var(--ease); }
+.btn-primary{ background:var(--navy); color:#fff; box-shadow:0 10px 22px -10px rgba(27,42,65,0.4); } .btn-primary:hover{ transform:translateY(-2px); }
+.btn-outline{ border:1px solid var(--border); background:var(--card); color:var(--text); }
+
+.nav{ position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:18px 32px; background:rgba(250,246,238,0.85); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+.nav-brand{ display:flex; align-items:center; gap:10px; } .nav-mark{ width:36px; height:36px; border-radius:11px; background:var(--navy); display:flex; align-items:center; justify-content:center; color:var(--gold); font-family:var(--font-display); font-size:18px; }
+.nav-name{ font-family:var(--font-display); font-size:20px; } .nav-links{ display:flex; gap:24px; font-size:13.5px; color:var(--muted); } .nav-links a:hover{ color:var(--terra); }
+
+.hero{ padding:56px 32px 20px; text-align:center; } .hero h1{ font-family:var(--font-display); font-size:44px; max-width:700px; margin:14px auto 0; line-height:1.4; } .hero h1 span{ color:var(--terra); }
+.hero p{ font-size:14px; color:var(--muted); margin-top:14px; }
+.search-bar{ max-width:820px; margin:26px auto 0; display:flex; gap:8px; background:var(--card); border:1px solid var(--border); border-radius:18px; padding:8px; box-shadow:var(--shadow); flex-wrap:wrap; }
+.search-field{ flex:1; min-width:140px; display:flex; align-items:center; gap:8px; padding:10px 14px; border-left:1px solid var(--border); }
+.search-field:first-child{ border-left:none; } .search-field svg{ width:16px; height:16px; color:var(--faint); flex-shrink:0; }
+.search-field select, .search-field input{ border:none; background:none; font-size:13px; width:100%; font-family:inherit; color:var(--text); }
+.search-btn{ background:var(--terra); color:#fff; padding:12px 26px; border-radius:12px; font-weight:700; font-size:13px; white-space:nowrap; }
+
+.section{ padding:56px 32px; opacity:0; transform:translateY(18px); transition:all .6s var(--ease); } .section.in{ opacity:1; transform:none; }
+.section-head{ display:flex; justify-content:space-between; align-items:baseline; max-width:1180px; margin:0 auto 24px; }
+.section-head h2{ font-family:var(--font-display); font-size:28px; } .section-head .more{ font-size:12.5px; color:var(--terra); font-weight:700; }
+
+.cat-row{ max-width:1180px; margin:0 auto; display:flex; gap:10px; overflow-x:auto; }
+.cat-chip{ flex-shrink:0; display:flex; align-items:center; gap:7px; padding:10px 17px; border-radius:999px; border:1px solid var(--border); background:var(--card); font-size:12px; font-weight:600; color:var(--muted); }
+.cat-chip.active{ background:var(--navy); color:#fff; border-color:var(--navy); } .cat-chip svg{ width:14px; height:14px; }
+
+.property-grid{ max-width:1180px; margin:30px auto 0; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.property-card{ overflow:hidden; }
+.property-thumb{ aspect-ratio:4/3; display:flex; align-items:center; justify-content:center; position:relative; }
+.property-thumb svg{ width:48px; height:48px; opacity:.5; }
+.p-badge{ position:absolute; top:10px; right:10px; font-size:9.5px; font-family:var(--font-mono); padding:3px 8px; border-radius:20px; background:var(--gold-soft); color:#7a5f24; }
+.property-body{ padding:14px 16px; } .property-body .ptype{ font-size:10px; color:var(--faint); font-family:var(--font-mono); text-transform:uppercase; }
+.property-body h3{ font-size:14.5px; font-weight:700; margin-top:5px; } .p-loc{ font-size:11px; color:var(--muted); margin-top:3px; display:flex; align-items:center; gap:4px; } .p-loc svg{ width:11px; height:11px; }
+.p-meta{ display:flex; gap:12px; margin-top:10px; font-size:10.5px; color:var(--muted); }
+.p-price{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; padding-top:12px; border-top:1px solid var(--border); }
+.p-price b{ font-size:15px; font-weight:800; color:var(--navy); }
+
+.how-strip{ background:var(--navy); color:#fff; } .how-strip .eyebrow{ color:var(--gold); }
+.how-grid{ max-width:1000px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; text-align:center; }
+.how-step{ padding:0 10px; } .how-num{ width:44px; height:44px; border-radius:50%; background:rgba(255,255,255,0.12); display:flex; align-items:center; justify-content:center; font-weight:800; font-size:17px; margin:0 auto 14px; }
+.how-step h4{ font-size:14.5px; font-weight:700; } .how-step p{ font-size:11.5px; color:#C9BFA6; margin-top:6px; line-height:1.6; }
+
+.footer{ padding:44px 32px 24px; border-top:1px solid var(--border); text-align:center; } .footer p{ font-size:11px; color:var(--faint); }
+@media (max-width:1000px){ .property-grid{ grid-template-columns:1fr 1fr; } .how-grid{ grid-template-columns:1fr; } .nav-links{ display:none; } }
+@media (max-width:620px){ .nav, .hero, .section{ padding-left:18px; padding-right:18px; } .hero h1{ font-size:29px; } .property-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-brand"><div class="nav-mark">س</div><div class="nav-name">سكن</div></div><div class="nav-links"><a href="#properties">العقارات</a><a href="#how">إزاي بيشتغل</a><a href="#list">اعرض عقارك</a></div><a href="#properties" class="btn btn-primary">دوّر على بيت</a></nav>
+
+<section class="hero">
+  <span class="eyebrow">أكبر منصة عقارية في مصر</span>
+  <h1>بيت أحلامك<br>على بُعد <span>بحث واحد</span></h1>
+  <p>شقق، فيلات، ومحلات للبيع والإيجار في كل المحافظات — بأسعار حقيقية ومُتحقق منها</p>
+  <div class="search-bar">
+    <div class="search-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 21s7-6.5 7-11a7 7 0 10-14 0c0 4.5 7 11 7 11z"/></svg><select><option>المحافظة</option><option>القاهرة</option><option>الجيزة</option><option>الساحل الشمالي</option></select></div>
+    <div class="search-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12l9-9 9 9M5 10v10h14V10"/></svg><select><option>نوع العقار</option><option>شقة</option><option>فيلا</option><option>محل</option></select></div>
+    <div class="search-field"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg><select><option>بيع / إيجار</option><option>بيع</option><option>إيجار</option></select></div>
+    <button class="search-btn">دوّر</button>
+  </div>
+  <div class="cat-row" style="justify-content:center; margin-top:24px;" id="catRow"></div>
+</section>
+
+<section class="section" id="properties">
+  <div class="section-head"><h2>عقارات مقترحة ليك</h2><span class="more">كل العقارات</span></div>
+  <div class="property-grid" id="propertyGrid"></div>
+</section>
+
+<section class="section how-strip" id="how">
+  <span class="eyebrow" style="display:block; text-align:center; margin-bottom:10px;">إزاي بيشتغل</span>
+  <h2 style="text-align:center; font-size:28px; margin-bottom:40px; font-family:var(--font-display);">من البحث للتعاقد</h2>
+  <div class="how-grid" id="howGrid"></div>
+</section>
+
+<footer class="footer" id="list"><p>سكن © 2026 · مشروع بورتفوليو للعرض فقط · مش منصة حقيقية متصلة بعقارات فعلية</p></footer>
+
+<script>
+const cats = [ {n:'كل العقارات', active:true, icon:'<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>'}, {n:'شقق', icon:'<rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 3v18M4 9h5M4 15h5"/>'}, {n:'فيلات', icon:'<path d="M4 21V9l8-6 8 6v12"/>'}, {n:'محلات', icon:'<path d="M3 9l1-5h16l1 5M4 9v11h16V9M4 9h16"/>'}, {n:'الساحل', icon:'<path d="M2 12s3-3 6-3 4 3 6 3 4-3 6-3M2 18s3-3 6-3 4 3 6 3 4-3 6-3"/>'} ];
+document.getElementById('catRow').innerHTML = cats.map(c=>`<button class="cat-chip ${c.active?'active':''}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">${c.icon}</svg>${c.n}</button>`).join('');
+
+const props = [
+  {n:'شقة ٣ غرف — التجمع الخامس', loc:'القاهرة الجديدة', type:'للبيع', price:'٣,٢٠٠,٠٠٠', unit:'ج.م', beds:'٣ غرف', area:'١٨٠ م²', badge:'مميز'},
+  {n:'فيلا مستقلة — الشيخ زايد', loc:'الجيزة', type:'للبيع', price:'٨,٥٠٠,٠٠٠', unit:'ج.م', beds:'٥ غرف', area:'٤٢٠ م²', badge:''},
+  {n:'شاليه على البحر — مراسي', loc:'الساحل الشمالي', type:'إيجار موسمي', price:'١٥,٠٠٠', unit:'ج.م/أسبوع', beds:'٢ غرف', area:'١١٠ م²', badge:'جديد'},
+  {n:'محل تجاري — مدينة نصر', loc:'القاهرة', type:'للإيجار', price:'٢٥,٠٠٠', unit:'ج.م/شهر', beds:'-', area:'٩٠ م²', badge:''},
+];
+document.getElementById('propertyGrid').innerHTML = props.map(p=>`
+  <div class="card property-card"><div class="property-thumb" style="background:linear-gradient(155deg, var(--navy-soft), var(--gold-soft)); color:var(--navy);">${p.badge?`<span class="p-badge">${p.badge}</span>`:''}<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M4 21V9l8-6 8 6v12"/></svg></div>
+  <div class="property-body"><div class="ptype">${p.type}</div><h3>${p.n}</h3><div class="p-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 21s7-6.5 7-11a7 7 0 10-14 0c0 4.5 7 11 7 11z"/></svg>${p.loc}</div>
+  <div class="p-meta"><span>${p.beds}</span><span>${p.area}</span></div>
+  <div class="p-price"><b>${p.price} <small style="font-size:10px; font-weight:400;">${p.unit}</small></b></div></div></div>`).join('');
+
+const steps = [ {n:'١', t:'دوّر واختار', d:'فلتر بالمحافظة والنوع والسعر'}, {n:'٢', t:'كلم المالك مباشرة', d:'تواصل فوري من غير وسيط'}, {n:'٣', t:'اتفق وسجل', d:'نساعدك في إجراءات التسجيل'} ];
+document.getElementById('howGrid').innerHTML = steps.map(s=>`<div class="how-step"><div class="how-num">${s.n}</div><h4>${s.t}</h4><p>${s.d}</p></div>`).join('');
+
+const io = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); }); }, {threshold:.1});
+document.querySelectorAll('.section').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

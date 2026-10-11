@@ -1,0 +1,102 @@
+/* ============================================================
+   NEXORA — Motion System (Experience Layer)
+   Additive to core/css/animations.css (Phase 1-3 reveal/shimmer
+   primitives). Physical, premium micro-interactions: magnetic
+   buttons, card tilt, cursor glow, mesh backgrounds, staggered
+   reveal choreography. Nothing here is applied to any page
+   automatically — pages opt in via data attributes/classes.
+   Every effect respects prefers-reduced-motion.
+   ============================================================ */
+
+.nx-stagger-1 { animation-delay: 60ms; }
+.nx-stagger-2 { animation-delay: 120ms; }
+.nx-stagger-3 { animation-delay: 180ms; }
+.nx-stagger-4 { animation-delay: 240ms; }
+.nx-stagger-5 { animation-delay: 300ms; }
+.nx-stagger-6 { animation-delay: 360ms; }
+
+.nx-magnetic {
+  transition: transform var(--nx-duration-instant) var(--nx-ease-out);
+  transform: translate(var(--nx-mx, 0), var(--nx-my, 0));
+}
+
+.nx-lift-premium {
+  transition: transform var(--nx-duration-base) var(--nx-ease-spring), box-shadow var(--nx-duration-base) var(--nx-ease-standard);
+}
+.nx-lift-premium:hover {
+  transform: translateY(-4px) scale(1.008);
+  box-shadow: var(--nx-elevation-4);
+}
+
+.nx-tilt {
+  transform-style: preserve-3d;
+  transition: transform var(--nx-duration-fast) var(--nx-ease-out);
+  transform: perspective(900px) rotateX(var(--nx-tilt-x, 0)) rotateY(var(--nx-tilt-y, 0));
+}
+
+.nx-zoom-frame { overflow: hidden; }
+.nx-zoom-frame img {
+  transition: transform var(--nx-duration-slower) var(--nx-ease-out);
+}
+.nx-zoom-frame:hover img {
+  transform: scale(1.06);
+}
+
+.nx-glow-surface {
+  position: relative;
+  isolation: isolate;
+}
+.nx-glow-surface::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 0;
+  pointer-events: none;
+  background: radial-gradient(480px circle at var(--nx-glow-x, 50%) var(--nx-glow-y, 50%), rgba(205, 164, 73, 0.10), transparent 60%);
+  transition: opacity var(--nx-duration-base) var(--nx-ease-out);
+}
+.nx-glow-surface:hover::before { opacity: 1; }
+.nx-glow-surface > * { position: relative; z-index: 1; }
+
+.nx-glass {
+  background: var(--nx-glass-bg);
+  backdrop-filter: blur(var(--nx-glass-blur)) saturate(var(--nx-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nx-glass-blur)) saturate(var(--nx-glass-saturate));
+  border: 1px solid var(--nx-glass-border);
+}
+.nx-glass-strong {
+  background: var(--nx-glass-bg-strong);
+  backdrop-filter: blur(var(--nx-glass-blur)) saturate(var(--nx-glass-saturate));
+  -webkit-backdrop-filter: blur(var(--nx-glass-blur)) saturate(var(--nx-glass-saturate));
+  border: 1px solid var(--nx-glass-border);
+}
+
+.nx-atmosphere { position: relative; }
+.nx-atmosphere::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background-image: var(--nx-mesh-gold), var(--nx-mesh-cool), var(--nx-mesh-warm), var(--nx-noise-overlay);
+  background-repeat: no-repeat, no-repeat, no-repeat, repeat;
+}
+.nx-atmosphere > * { position: relative; z-index: 1; }
+
+@keyframes nx-gradient-drift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+.nx-gradient-drift {
+  background-size: 200% 200%;
+  animation: nx-gradient-drift 18s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-magnetic, .nx-tilt { transform: none !important; transition: none !important; }
+  .nx-lift-premium:hover { transform: none; }
+  .nx-zoom-frame:hover img { transform: none; }
+  .nx-glow-surface::before { display: none; }
+  .nx-gradient-drift { animation: none; }
+}

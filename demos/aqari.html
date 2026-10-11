@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>عقاري — مركز قيادة السمسرة العقارية</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8F%99%EF%B8%8F%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Cairo', 'ui-sans-serif', 'system-ui'] },
+      }
+    }
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root { --accent: #C9A227; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    opacity: 0;
+    animation: vip-fade-in .5s ease forwards;
+  }
+  @keyframes vip-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent; }
+  button, a, [role="button"] { transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+  button:active { transform: scale(0.97); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #root { min-height: 100vh; }
+  #vip-loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: #0a0a0a; z-index: 9999; transition: opacity .4s ease;
+  }
+  #vip-loading .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-top-color: var(--accent);
+    animation: vip-spin .8s linear infinite;
+  }
+  @keyframes vip-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="vip-loading"><div class="spinner"></div></div>
+<div id="root"></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import * as ReactDOM from "react-dom/client";
+import React, { useState } from "react";
+import {
+  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
+} from "recharts";
+import {
+  LayoutGrid, Building2, Users2, Handshake, MapPin, FileBarChart,
+  Search, Bell, ChevronRight, ArrowUpLeft, Plus, X,
+} from "lucide-react";
+
+const GOLD = "#C9A227";
+const GOLD_SOFT = "rgba(201,162,39,0.14)";
+const STEEL = "#3E5871";
+const BG = "#0A0A0C";
+const PANEL = "#131316";
+const CARD = "#17171B";
+const BORDER = "#25252B";
+const TEXT = "#F2F1EC";
+const MUTED = "#8E8E93";
+const GREEN = "#2E9E6F";
+const BLUE = "#5B7FC4";
+
+const NAV = [
+  { icon: LayoutGrid, label: "نظرة عامة" }, { icon: Building2, label: "الوحدات" },
+  { icon: Users2, label: "العملاء المحتملون" }, { icon: Handshake, label: "الصفقات" }, { icon: FileBarChart, label: "التقارير" },
+];
+
+const kpis = [
+  { label: "وحدات متاحة", value: "186" }, { label: "عملاء محتملون جدد", value: "47" },
+  { label: "صفقات مغلقة", value: "12" }, { label: "عمولات الشهر", value: "412,000 ج.م" },
+];
+
+const salesByArea = [
+  { area: "التجمع الخامس", value: 5200000 }, { area: "الشيخ زايد", value: 4300000 },
+  { area: "العاصمة الإدارية", value: 6100000 }, { area: "مدينتي", value: 2800000 }, { area: "الساحل الشمالي", value: 7400000 },
+];
+
+const pipeline = [
+  { stage: "تواصل أولي", count: 64, color: STEEL }, { stage: "معاينة وحدة", count: 38, color: BLUE },
+  { stage: "عرض سعر", count: 21, color: GOLD }, { stage: "تعاقد", count: 12, color: GREEN },
+];
+
+const initialDeals = [
+  { unit: "شقة 180م — التجمع الخامس", client: "أحمد رأفت", developer: "مدينة نصر للإسكان", value: "4,850,000 ج.م", stage: "تعاقد" },
+  { unit: "فيلا مستقلة — الشيخ زايد", client: "هبة الجندي", developer: "بالم هيلز", value: "12,200,000 ج.م", stage: "عرض سعر" },
+  { unit: "شاليه — الساحل الشمالي", client: "طارق منصور", developer: "سيدي عبد الرحمن", value: "6,700,000 ج.م", stage: "معاينة وحدة" },
+  { unit: "شقة 140م — العاصمة الإدارية", client: "ياسمين فؤاد", developer: "العاصمة الإدارية الجديدة", value: "3,950,000 ج.م", stage: "تواصل أولي" },
+];
+
+const initialUnits = [
+  { name: "شقة 165م — مدينتي", price: "3,400,000 ج.م", status: "متاحة", area: "مدينتي" },
+  { name: "دوبلكس — الشيخ زايد", price: "8,900,000 ج.م", status: "محجوزة", area: "الشيخ زايد" },
+  { name: "شقة 130م — التجمع الخامس", price: "2,950,000 ج.م", status: "متاحة", area: "التجمع الخامس" },
+  { name: "فيلا — الساحل الشمالي", price: "15,200,000 ج.م", status: "متاحة", area: "الساحل الشمالي" },
+];
+
+const initialLeads = [
+  { name: "منى الجمل", phone: "٠١٠ ١١١٢ ٢٢٣٣", interest: "شقة في التجمع", stage: "تواصل أولي" },
+  { name: "خالد سرحان", phone: "٠١٢ ٤٤٥٥ ٦٦٧٧", interest: "فيلا في الساحل", stage: "معاينة وحدة" },
+  { name: "إيمان توفيق", phone: "٠١٥ ٧٧٨٨ ٩٩٠٠", interest: "دوبلكس في زايد", stage: "عرض سعر" },
+];
+
+const stageColorMap = (s) => pipeline.find((p) => p.stage === s)?.color || GOLD;
+const fmt = (n) => `${(n / 1000000).toFixed(1)}م`;
+
+function Card({ children, className = "", style = {} }) {
+  return <div className={`rounded-2xl border ${className}`} style={{ background: CARD, borderColor: BORDER, ...style }}>{children}</div>;
+}
+function TopBar({ title, subtitle, onAdd, addLabel }) {
+  return (
+    <div className="flex items-center justify-between mb-8">
+      <div><h1 className="text-2xl font-semibold tracking-tight">{title}</h1>{subtitle && <p className="text-sm mt-1" style={{ color: MUTED }}>{subtitle}</p>}</div>
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl border" style={{ borderColor: BORDER, background: PANEL }}>
+          <Search size={15} style={{ color: MUTED }} /><span className="text-sm" style={{ color: MUTED }}>بحث...</span>
+        </div>
+        {onAdd && <button onClick={onAdd} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm" style={{ background: GOLD, color: "#141110" }}><Plus size={15} />{addLabel}</button>}
+        <div className="w-10 h-10 rounded-xl border flex items-center justify-center" style={{ borderColor: BORDER, background: PANEL }}><Bell size={17} style={{ color: MUTED }} /></div>
+      </div>
+    </div>
+  );
+}
+function Modal({ title, note, onClose, children }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24" style={{ background: "rgba(0,0,0,0.55)" }}>
+      <Card className="w-full max-w-md p-7 relative" style={{ borderColor: GOLD }}>
+        <button onClick={onClose} className="absolute left-5 top-5" style={{ color: MUTED }}><X size={18} /></button>
+        <div className="text-lg font-semibold mb-1">{title}</div>
+        <div className="text-xs mb-6" style={{ color: MUTED }}>{note}</div>
+        {children}
+      </Card>
+    </div>
+  );
+}
+const inputStyle = { background: "#141110", borderColor: BORDER, color: TEXT };
+const Field = ({ label, ...props }) => (
+  <div className="mb-4">
+    <label className="text-xs" style={{ color: MUTED }}>{label}</label>
+    <input {...props} className="w-full mt-1.5 px-3.5 py-2.5 rounded-xl border text-sm outline-none" style={inputStyle} />
+  </div>
+);
+
+function NewUnitModal({ onClose, onCreate }) {
+  const [name, setName] = useState(""); const [price, setPrice] = useState(""); const [area, setArea] = useState("");
+  return (
+    <Modal title="إضافة وحدة جديدة" note="بيانات محاكاة أمامية فقط" onClose={onClose}>
+      <Field label="وصف الوحدة" value={name} onChange={(e) => setName(e.target.value)} placeholder="مثال: شقة 150م — العاصمة الإدارية" />
+      <Field label="السعر" value={price} onChange={(e) => setPrice(e.target.value)} placeholder="مثال: 4,200,000 ج.م" />
+      <Field label="المنطقة" value={area} onChange={(e) => setArea(e.target.value)} placeholder="مثال: العاصمة الإدارية" />
+      <button onClick={() => name.trim() && onCreate({ name, price: price || "—", status: "متاحة", area: area || "—" })}
+        className="w-full py-3 rounded-xl text-sm font-medium" style={{ background: GOLD, color: "#141110" }}>إضافة الوحدة</button>
+    </Modal>
+  );
+}
+function NewLeadModal({ onClose, onCreate }) {
+  const [name, setName] = useState(""); const [phone, setPhone] = useState(""); const [interest, setInterest] = useState("");
+  return (
+    <Modal title="عميل محتمل جديد" note="بيانات محاكاة أمامية فقط" onClose={onClose}>
+      <Field label="الاسم" value={name} onChange={(e) => setName(e.target.value)} placeholder="مثال: وليد شكري" />
+      <Field label="رقم الهاتف" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="٠١٠ ٠٠٠٠ ٠٠٠٠" />
+      <Field label="مهتم بـ" value={interest} onChange={(e) => setInterest(e.target.value)} placeholder="مثال: شقة في مدينتي" />
+      <button onClick={() => name.trim() && onCreate({ name, phone: phone || "—", interest: interest || "—", stage: "تواصل أولي" })}
+        className="w-full py-3 rounded-xl text-sm font-medium" style={{ background: GOLD, color: "#141110" }}>إضافة العميل</button>
+    </Modal>
+  );
+}
+
+function DashboardScreen() {
+  return (
+    <>
+      <TopBar title="نظرة عامة على السوق" subtitle="متابعة الوحدات والعملاء والصفقات في مكان واحد" />
+      <div className="grid grid-cols-4 gap-5 mb-7">
+        {kpis.map((k) => (
+          <Card key={k.label} className="p-5"><div className="text-xs mb-4" style={{ color: MUTED }}>{k.label}</div><div className="text-2xl font-semibold tracking-tight">{k.value}</div></Card>
+        ))}
+      </div>
+      <div className="grid grid-cols-3 gap-5 mb-7">
+        <Card className="col-span-2 p-6">
+          <div className="text-sm font-semibold mb-5">المبيعات حسب المنطقة</div>
+          <ResponsiveContainer width="100%" height={220}>
+            <BarChart data={salesByArea}>
+              <CartesianGrid strokeDasharray="3 3" stroke={BORDER} vertical={false} />
+              <XAxis dataKey="area" stroke={MUTED} fontSize={11} tickLine={false} axisLine={false} />
+              <YAxis stroke={MUTED} fontSize={11} tickLine={false} axisLine={false} tickFormatter={fmt} />
+              <Tooltip formatter={(v) => [`${v.toLocaleString()} ج.م`, "القيمة"]} contentStyle={{ background: PANEL, border: `1px solid ${BORDER}`, borderRadius: 10, color: TEXT }} />
+              <Bar dataKey="value" fill={STEEL} radius={[6, 6, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </Card>
+        <Card className="p-6">
+          <div className="text-sm font-semibold mb-5">مسار المبيعات</div>
+          <div className="flex flex-col gap-4">
+            {pipeline.map((p) => (
+              <div key={p.stage}>
+                <div className="flex items-center justify-between text-xs mb-1.5"><span style={{ color: MUTED }}>{p.stage}</span><span>{p.count}</span></div>
+                <div className="h-2 rounded-full" style={{ background: BORDER }}><div className="h-2 rounded-full" style={{ width: `${(p.count / 64) * 100}%`, background: p.color }} /></div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+    </>
+  );
+}
+
+function UnitsScreen({ units, onAdd }) {
+  return (
+    <>
+      <TopBar title="الوحدات" subtitle={`${units.length} وحدة`} onAdd={onAdd} addLabel="إضافة وحدة" />
+      <div className="grid grid-cols-3 gap-5">
+        {units.map((u, i) => (
+          <Card key={i} className="p-6">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: GOLD_SOFT }}><Building2 size={17} style={{ color: GOLD }} /></div>
+            <div className="text-sm font-medium">{u.name}</div>
+            <div className="text-xs mt-1" style={{ color: MUTED }}>{u.area}</div>
+            <div className="flex items-center justify-between mt-4">
+              <span className="text-sm" style={{ color: GOLD }}>{u.price}</span>
+              <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: u.status === "متاحة" ? GREEN : GOLD, background: `${u.status === "متاحة" ? GREEN : GOLD}1A`, border: `1px solid ${u.status === "متاحة" ? GREEN : GOLD}` }}>{u.status}</span>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function LeadsScreen({ leads, onAdd }) {
+  return (
+    <>
+      <TopBar title="العملاء المحتملون" subtitle={`${leads.length} عميلاً محتملاً`} onAdd={onAdd} addLabel="عميل جديد" />
+      <Card className="p-2">
+        {leads.map((l, i) => (
+          <div key={i} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== leads.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-full" style={{ background: GOLD_SOFT, border: `1px solid ${GOLD}` }} />
+              <div><div className="text-sm font-medium">{l.name}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{l.phone} · {l.interest}</div></div>
+            </div>
+            <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: stageColorMap(l.stage), background: `${stageColorMap(l.stage)}1A`, border: `1px solid ${stageColorMap(l.stage)}` }}>{l.stage}</span>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function DealsScreen({ deals }) {
+  return (
+    <>
+      <TopBar title="الصفقات الجارية" subtitle={`${deals.length} صفقة قيد المتابعة`} />
+      <Card className="p-6">
+        {deals.map((d, i) => (
+          <div key={i} className="flex items-center justify-between py-4" style={{ borderBottom: i !== deals.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: GOLD_SOFT }}><MapPin size={16} style={{ color: GOLD }} /></div>
+              <div><div className="text-sm font-medium">{d.unit}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{d.client} · {d.developer}</div></div>
+            </div>
+            <div className="flex items-center gap-5">
+              <span className="text-sm font-medium flex items-center gap-1">{d.value} <ArrowUpLeft size={13} style={{ color: MUTED }} /></span>
+              <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: stageColorMap(d.stage), background: `${stageColorMap(d.stage)}1A`, border: `1px solid ${stageColorMap(d.stage)}` }}>{d.stage}</span>
+            </div>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function ReportsScreen() {
+  return (
+    <>
+      <TopBar title="التقارير" subtitle="أداء المكتب خلال الربع الحالي" />
+      <Card className="p-6">
+        <div className="text-sm font-semibold mb-5">إجمالي المبيعات حسب المنطقة</div>
+        <ResponsiveContainer width="100%" height={240}>
+          <BarChart data={salesByArea}>
+            <CartesianGrid strokeDasharray="3 3" stroke={BORDER} vertical={false} />
+            <XAxis dataKey="area" stroke={MUTED} fontSize={11} tickLine={false} axisLine={false} />
+            <YAxis stroke={MUTED} fontSize={11} tickLine={false} axisLine={false} tickFormatter={fmt} />
+            <Tooltip formatter={(v) => [`${v.toLocaleString()} ج.م`, "القيمة"]} contentStyle={{ background: PANEL, border: `1px solid ${BORDER}`, borderRadius: 10, color: TEXT }} />
+            <Bar dataKey="value" fill={GOLD} radius={[6, 6, 0, 0]} />
+          </BarChart>
+        </ResponsiveContainer>
+      </Card>
+    </>
+  );
+}
+
+function Aqari() {
+  const [nav, setNav] = useState(0);
+  const [units, setUnits] = useState(initialUnits);
+  const [leads, setLeads] = useState(initialLeads);
+  const [deals] = useState(initialDeals);
+  const [showUnitModal, setShowUnitModal] = useState(false);
+  const [showLeadModal, setShowLeadModal] = useState(false);
+
+  const screens = [
+    <DashboardScreen />,
+    <UnitsScreen units={units} onAdd={() => setShowUnitModal(true)} />,
+    <LeadsScreen leads={leads} onAdd={() => setShowLeadModal(true)} />,
+    <DealsScreen deals={deals} />,
+    <ReportsScreen />,
+  ];
+
+  return (
+    <div dir="rtl" className="w-full min-h-screen flex font-sans" style={{ background: BG, color: TEXT }}>
+      <aside className="w-64 shrink-0 flex flex-col border-l" style={{ background: PANEL, borderColor: BORDER }}>
+        <div className="px-6 py-7 flex items-center gap-3 border-b" style={{ borderColor: BORDER }}>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: GOLD_SOFT, border: `1px solid ${GOLD}` }}><Building2 size={19} style={{ color: GOLD }} /></div>
+          <div><div className="text-base font-semibold tracking-tight">عقاري</div><div className="text-xs" style={{ color: MUTED }}>مركز قيادة السمسرة العقارية</div></div>
+        </div>
+        <nav className="flex-1 px-3 py-5 flex flex-col gap-1">
+          {NAV.map((item, i) => {
+            const Icon = item.icon; const isActive = i === nav;
+            return (
+              <button key={item.label} onClick={() => setNav(i)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-colors text-right"
+                style={{ background: isActive ? GOLD_SOFT : "transparent", color: isActive ? GOLD : MUTED, border: isActive ? `1px solid ${GOLD}` : "1px solid transparent" }}>
+                <Icon size={17} /><span className="flex-1">{item.label}</span>{isActive && <ChevronRight size={14} />}
+              </button>
+            );
+          })}
+        </nav>
+        <div className="px-5 py-5 border-t" style={{ borderColor: BORDER }}>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-full" style={{ background: GOLD_SOFT, border: `1px solid ${GOLD}` }} />
+            <div><div className="text-sm font-medium">سمسار عقاري</div><div className="text-xs" style={{ color: MUTED }}>مكتب النخبة العقاري</div></div>
+          </div>
+        </div>
+      </aside>
+
+      <main className="flex-1 px-10 py-8 overflow-y-auto">{screens[nav]}</main>
+
+      {showUnitModal && <NewUnitModal onClose={() => setShowUnitModal(false)} onCreate={(u) => { setUnits((p) => [u, ...p]); setShowUnitModal(false); }} />}
+      {showLeadModal && <NewLeadModal onClose={() => setShowLeadModal(false)} onCreate={(l) => { setLeads((p) => [l, ...p]); setShowLeadModal(false); }} />}
+    </div>
+  );
+}
+
+
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+root.render(<Aqari />);
+const loading = document.getElementById("vip-loading");
+if (loading) { loading.style.opacity = "0"; setTimeout(() => loading.remove(), 400); }
+</script>
+</body>
+</html>

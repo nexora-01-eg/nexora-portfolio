@@ -1,0 +1,61 @@
+{
+  "id": "aurora-crm",
+  "slug": "aurora-crm",
+  "industry": "finance",
+  "designSystem": "finance",
+  "title": "Aurora CRM",
+  "tagline": "Customer relationship platform for boutique investment firms.",
+  "description": "A full-featured CRM built for boutique investment firms \u2014 pipeline tracking, client communications, and reporting in one workspace.",
+  "version": "2.4.0",
+  "status": "live",
+  "tier": "enterprise",
+  "difficulty": "advanced",
+  "service": "CRM Systems",
+  "tags": [
+    "crm",
+    "finance",
+    "dashboard"
+  ],
+  "technologies": [
+    "React",
+    "Supabase",
+    "Tailwind CSS"
+  ],
+  "componentsUsed": [
+    "button",
+    "card",
+    "data-table",
+    "modal"
+  ],
+  "features": [
+    "Deal pipeline with drag-and-drop stages",
+    "Client communication timeline",
+    "Custom report builder",
+    "Role-based team permissions"
+  ],
+  "timeline": [
+    {
+      "date": "2026-03-02",
+      "label": "Project started",
+      "description": "Initial architecture and data model."
+    },
+    {
+      "date": "2026-05-14",
+      "label": "v2.0 released",
+      "description": "Pipeline and reporting modules shipped."
+    },
+    {
+      "date": "2026-07-10",
+      "label": "v2.4.0 released",
+      "description": "Performance improvements and bug fixes."
+    }
+  ],
+  "relatedProjects": [
+    "vantage-erp"
+  ],
+  "views": 1204,
+  "featured": true,
+  "popular": true,
+  "createdAt": "2026-03-02",
+  "updatedAt": "2026-07-10"
+}

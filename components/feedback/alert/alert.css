@@ -1,0 +1,46 @@
+/* ============================================================
+   NEXORA — Alert / Banner
+   Persistent inline message. Variants: info, success, warning,
+   danger. Use role="alert" only for danger/urgent messages —
+   role="status" for the rest (see README).
+   ============================================================ */
+
+.nx-alert {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--nx-space-3);
+  padding: var(--nx-space-4) var(--nx-space-5);
+  border-radius: var(--nx-radius-md);
+  border: 1px solid transparent;
+}
+
+.nx-alert__icon {
+  flex-shrink: 0;
+  font-size: var(--nx-fs-300);
+  line-height: 1.4;
+}
+
+.nx-alert__body { flex: 1; }
+
+.nx-alert__title {
+  font-weight: var(--nx-fw-semibold);
+  margin-bottom: var(--nx-space-1);
+}
+
+.nx-alert__message {
+  font-size: var(--nx-fs-200);
+  color: var(--nx-text-secondary);
+}
+
+.nx-alert__dismiss {
+  flex-shrink: 0;
+  color: var(--nx-text-muted);
+  font-size: var(--nx-fs-400);
+  line-height: 1;
+}
+.nx-alert__dismiss:hover { color: var(--nx-text-primary); }
+
+.nx-alert--info    { background: rgba(61, 122, 154, 0.1); border-color: rgba(61, 122, 154, 0.3); color: var(--nx-color-info); }
+.nx-alert--success { background: rgba(61, 154, 106, 0.1); border-color: rgba(61, 154, 106, 0.3); color: var(--nx-color-success); }
+.nx-alert--warning { background: rgba(201, 138, 44, 0.1); border-color: rgba(201, 138, 44, 0.3); color: var(--nx-color-warning); }
+.nx-alert--danger  { background: rgba(179, 69, 63, 0.1); border-color: rgba(179, 69, 63, 0.3); color: var(--nx-color-danger); }

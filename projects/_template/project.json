@@ -1,0 +1,27 @@
+{
+  "id": "",
+  "slug": "",
+  "industry": "",
+  "designSystem": "",
+  "title": "",
+  "tagline": "",
+  "description": "",
+  "version": "1.0.0",
+  "status": "draft",
+  "tier": "starter",
+  "difficulty": "beginner",
+  "service": "",
+  "tags": [],
+  "technologies": [],
+  "componentsUsed": [],
+  "features": [],
+  "timeline": [
+    { "date": "", "label": "Project started", "description": "" }
+  ],
+  "relatedProjects": [],
+  "views": 0,
+  "featured": false,
+  "popular": false,
+  "createdAt": "",
+  "updatedAt": ""
+}

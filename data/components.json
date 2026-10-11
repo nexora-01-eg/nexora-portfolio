@@ -1,0 +1,759 @@
+{
+  "version": "0.2.0",
+  "updatedAt": "2026-07-15",
+  "count": 55,
+  "categories": [
+    {
+      "id": "ui",
+      "label": "UI Primitives",
+      "path": "/components/ui/"
+    },
+    {
+      "id": "cards",
+      "label": "Cards",
+      "path": "/components/cards/"
+    },
+    {
+      "id": "navigation",
+      "label": "Navigation",
+      "path": "/components/navigation/"
+    },
+    {
+      "id": "modals",
+      "label": "Modals",
+      "path": "/components/modals/"
+    },
+    {
+      "id": "forms",
+      "label": "Forms",
+      "path": "/components/forms/"
+    },
+    {
+      "id": "media",
+      "label": "Media / Gallery",
+      "path": "/components/media/"
+    },
+    {
+      "id": "feedback",
+      "label": "Feedback",
+      "path": "/components/feedback/"
+    }
+  ],
+  "components": [
+    {
+      "id": "card",
+      "label": "Card",
+      "category": "cards",
+      "path": "/components/cards/card/",
+      "hasJS": false,
+      "files": {
+        "html": "card.html",
+        "css": "card.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "component-card",
+      "label": "Component Card",
+      "category": "cards",
+      "path": "/components/cards/component-card/",
+      "hasJS": false,
+      "files": {
+        "html": "component-card.html",
+        "css": "component-card.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "design-system-card",
+      "label": "Design System Card",
+      "category": "cards",
+      "path": "/components/cards/design-system-card/",
+      "hasJS": false,
+      "files": {
+        "html": "design-system-card.html",
+        "css": "design-system-card.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "feature-card",
+      "label": "Feature Card",
+      "category": "cards",
+      "path": "/components/cards/feature-card/",
+      "hasJS": false,
+      "files": {
+        "html": "feature-card.html",
+        "css": "feature-card.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "industry-card",
+      "label": "Industry Card",
+      "category": "cards",
+      "path": "/components/cards/industry-card/",
+      "hasJS": false,
+      "files": {
+        "html": "industry-card.html",
+        "css": "industry-card.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "kpi-card",
+      "label": "Kpi Card",
+      "category": "cards",
+      "path": "/components/cards/kpi-card/",
+      "hasJS": false,
+      "files": {
+        "html": "kpi-card.html",
+        "css": "kpi-card.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "metric-card",
+      "label": "Metric Card",
+      "category": "cards",
+      "path": "/components/cards/metric-card/",
+      "hasJS": false,
+      "files": {
+        "html": "metric-card.html",
+        "css": "metric-card.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "preview-card",
+      "label": "Preview Card",
+      "category": "cards",
+      "path": "/components/cards/preview-card/",
+      "hasJS": false,
+      "files": {
+        "html": "preview-card.html",
+        "css": "preview-card.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "pricing-card",
+      "label": "Pricing Card",
+      "category": "cards",
+      "path": "/components/cards/pricing-card/",
+      "hasJS": false,
+      "files": {
+        "html": "pricing-card.html",
+        "css": "pricing-card.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "project-card",
+      "label": "Project Card",
+      "category": "cards",
+      "path": "/components/cards/project-card/",
+      "hasJS": false,
+      "files": {
+        "html": "project-card.html",
+        "css": "project-card.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "stats-card",
+      "label": "Stats Card",
+      "category": "cards",
+      "path": "/components/cards/stats-card/",
+      "hasJS": false,
+      "files": {
+        "html": "stats-card.html",
+        "css": "stats-card.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "alert",
+      "label": "Alert",
+      "category": "feedback",
+      "path": "/components/feedback/alert/",
+      "hasJS": false,
+      "files": {
+        "html": "alert.html",
+        "css": "alert.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "empty-state",
+      "label": "Empty State",
+      "category": "feedback",
+      "path": "/components/feedback/empty-state/",
+      "hasJS": false,
+      "files": {
+        "html": "empty-state.html",
+        "css": "empty-state.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "loader",
+      "label": "Loader",
+      "category": "feedback",
+      "path": "/components/feedback/loader/",
+      "hasJS": false,
+      "files": {
+        "html": "loader.html",
+        "css": "loader.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "notifications",
+      "label": "Notifications",
+      "category": "feedback",
+      "path": "/components/feedback/notifications/",
+      "hasJS": true,
+      "files": {
+        "html": "notifications.html",
+        "css": "notifications.css",
+        "js": "notifications.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "progress",
+      "label": "Progress",
+      "category": "feedback",
+      "path": "/components/feedback/progress/",
+      "hasJS": false,
+      "files": {
+        "html": "progress.html",
+        "css": "progress.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "skeleton-loader",
+      "label": "Skeleton Loader",
+      "category": "feedback",
+      "path": "/components/feedback/skeleton-loader/",
+      "hasJS": false,
+      "files": {
+        "html": "skeleton-loader.html",
+        "css": "skeleton-loader.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "toast",
+      "label": "Toast",
+      "category": "feedback",
+      "path": "/components/feedback/toast/",
+      "hasJS": true,
+      "files": {
+        "html": "toast.html",
+        "css": "toast.css",
+        "js": "toast.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "checkbox",
+      "label": "Checkbox",
+      "category": "forms",
+      "path": "/components/forms/checkbox/",
+      "hasJS": true,
+      "files": {
+        "html": "checkbox.html",
+        "css": "checkbox.css",
+        "js": "checkbox.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "date-picker",
+      "label": "Date Picker",
+      "category": "forms",
+      "path": "/components/forms/date-picker/",
+      "hasJS": true,
+      "files": {
+        "html": "date-picker.html",
+        "css": "date-picker.css",
+        "js": "date-picker.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "file-upload",
+      "label": "File Upload",
+      "category": "forms",
+      "path": "/components/forms/file-upload/",
+      "hasJS": true,
+      "files": {
+        "html": "file-upload.html",
+        "css": "file-upload.css",
+        "js": "file-upload.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "form",
+      "label": "Form",
+      "category": "forms",
+      "path": "/components/forms/form/",
+      "hasJS": false,
+      "files": {
+        "html": "form.html",
+        "css": "form.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "input",
+      "label": "Input",
+      "category": "forms",
+      "path": "/components/forms/input/",
+      "hasJS": false,
+      "files": {
+        "html": "input.html",
+        "css": "input.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "radio",
+      "label": "Radio",
+      "category": "forms",
+      "path": "/components/forms/radio/",
+      "hasJS": false,
+      "files": {
+        "html": "radio.html",
+        "css": "radio.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "search-box",
+      "label": "Search Box",
+      "category": "forms",
+      "path": "/components/forms/search-box/",
+      "hasJS": true,
+      "files": {
+        "html": "search-box.html",
+        "css": "search-box.css",
+        "js": "search-box.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "select",
+      "label": "Select",
+      "category": "forms",
+      "path": "/components/forms/select/",
+      "hasJS": true,
+      "files": {
+        "html": "select.html",
+        "css": "select.css",
+        "js": "select.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "textarea",
+      "label": "Textarea",
+      "category": "forms",
+      "path": "/components/forms/textarea/",
+      "hasJS": true,
+      "files": {
+        "html": "textarea.html",
+        "css": "textarea.css",
+        "js": "textarea.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "toggle",
+      "label": "Toggle",
+      "category": "forms",
+      "path": "/components/forms/toggle/",
+      "hasJS": false,
+      "files": {
+        "html": "toggle.html",
+        "css": "toggle.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "gallery-grid",
+      "label": "Gallery Grid",
+      "category": "media",
+      "path": "/components/media/gallery-grid/",
+      "hasJS": false,
+      "files": {
+        "html": "gallery-grid.html",
+        "css": "gallery-grid.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "image-preview",
+      "label": "Image Preview",
+      "category": "media",
+      "path": "/components/media/image-preview/",
+      "hasJS": true,
+      "files": {
+        "html": "image-preview.html",
+        "css": "image-preview.css",
+        "js": "image-preview.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "drawer",
+      "label": "Drawer",
+      "category": "modals",
+      "path": "/components/modals/drawer/",
+      "hasJS": true,
+      "files": {
+        "html": "drawer.html",
+        "css": "drawer.css",
+        "js": "drawer.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "modal",
+      "label": "Modal",
+      "category": "modals",
+      "path": "/components/modals/modal/",
+      "hasJS": true,
+      "files": {
+        "html": "modal.html",
+        "css": "modal.css",
+        "js": "modal.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "breadcrumbs",
+      "label": "Breadcrumbs",
+      "category": "navigation",
+      "path": "/components/navigation/breadcrumbs/",
+      "hasJS": false,
+      "files": {
+        "html": "breadcrumbs.html",
+        "css": "breadcrumbs.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "footer",
+      "label": "Footer",
+      "category": "navigation",
+      "path": "/components/navigation/footer/",
+      "hasJS": false,
+      "files": {
+        "html": "footer.html",
+        "css": "footer.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "hero-block",
+      "label": "Hero Block",
+      "category": "navigation",
+      "path": "/components/navigation/hero-block/",
+      "hasJS": false,
+      "files": {
+        "html": "hero-block.html",
+        "css": "hero-block.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "navbar",
+      "label": "Navbar",
+      "category": "navigation",
+      "path": "/components/navigation/navbar/",
+      "hasJS": true,
+      "files": {
+        "html": "navbar.html",
+        "css": "navbar.css",
+        "js": "navbar.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "pagination",
+      "label": "Pagination",
+      "category": "navigation",
+      "path": "/components/navigation/pagination/",
+      "hasJS": true,
+      "files": {
+        "html": "pagination.html",
+        "css": "pagination.css",
+        "js": "pagination.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "section-header",
+      "label": "Section Header",
+      "category": "navigation",
+      "path": "/components/navigation/section-header/",
+      "hasJS": false,
+      "files": {
+        "html": "section-header.html",
+        "css": "section-header.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "sidebar",
+      "label": "Sidebar",
+      "category": "navigation",
+      "path": "/components/navigation/sidebar/",
+      "hasJS": false,
+      "files": {
+        "html": "sidebar.html",
+        "css": "sidebar.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "accordion",
+      "label": "Accordion",
+      "category": "ui",
+      "path": "/components/ui/accordion/",
+      "hasJS": true,
+      "files": {
+        "html": "accordion.html",
+        "css": "accordion.css",
+        "js": "accordion.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "avatar",
+      "label": "Avatar",
+      "category": "ui",
+      "path": "/components/ui/avatar/",
+      "hasJS": false,
+      "files": {
+        "html": "avatar.html",
+        "css": "avatar.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "badge",
+      "label": "Badge",
+      "category": "ui",
+      "path": "/components/ui/badge/",
+      "hasJS": false,
+      "files": {
+        "html": "badge.html",
+        "css": "badge.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "button",
+      "label": "Button",
+      "category": "ui",
+      "path": "/components/ui/button/",
+      "hasJS": false,
+      "files": {
+        "html": "button.html",
+        "css": "button.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "calendar",
+      "label": "Calendar",
+      "category": "ui",
+      "path": "/components/ui/calendar/",
+      "hasJS": true,
+      "files": {
+        "html": "calendar.html",
+        "css": "calendar.css",
+        "js": "calendar.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "charts",
+      "label": "Charts",
+      "category": "ui",
+      "path": "/components/ui/charts/",
+      "hasJS": false,
+      "files": {
+        "html": "charts.html",
+        "css": "charts.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "command-palette",
+      "label": "Command Palette",
+      "category": "ui",
+      "path": "/components/ui/command-palette/",
+      "hasJS": true,
+      "files": {
+        "html": "command-palette.html",
+        "css": "command-palette.css",
+        "js": "command-palette.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "context-menu",
+      "label": "Context Menu",
+      "category": "ui",
+      "path": "/components/ui/context-menu/",
+      "hasJS": true,
+      "files": {
+        "html": "context-menu.html",
+        "css": "context-menu.css",
+        "js": "context-menu.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "data-table",
+      "label": "Data Table",
+      "category": "ui",
+      "path": "/components/ui/data-table/",
+      "hasJS": true,
+      "files": {
+        "html": "data-table.html",
+        "css": "data-table.css",
+        "js": "data-table.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "dropdown",
+      "label": "Dropdown",
+      "category": "ui",
+      "path": "/components/ui/dropdown/",
+      "hasJS": true,
+      "files": {
+        "html": "dropdown.html",
+        "css": "dropdown.css",
+        "js": "dropdown.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "popover",
+      "label": "Popover",
+      "category": "ui",
+      "path": "/components/ui/popover/",
+      "hasJS": true,
+      "files": {
+        "html": "popover.html",
+        "css": "popover.css",
+        "js": "popover.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "table",
+      "label": "Table",
+      "category": "ui",
+      "path": "/components/ui/table/",
+      "hasJS": false,
+      "files": {
+        "html": "table.html",
+        "css": "table.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "tabs",
+      "label": "Tabs",
+      "category": "ui",
+      "path": "/components/ui/tabs/",
+      "hasJS": true,
+      "files": {
+        "html": "tabs.html",
+        "css": "tabs.css",
+        "js": "tabs.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "tag",
+      "label": "Tag",
+      "category": "ui",
+      "path": "/components/ui/tag/",
+      "hasJS": true,
+      "files": {
+        "html": "tag.html",
+        "css": "tag.css",
+        "js": "tag.js",
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "timeline",
+      "label": "Timeline",
+      "category": "ui",
+      "path": "/components/ui/timeline/",
+      "hasJS": false,
+      "files": {
+        "html": "timeline.html",
+        "css": "timeline.css",
+        "js": null,
+        "readme": "README.md"
+      }
+    },
+    {
+      "id": "tooltip",
+      "label": "Tooltip",
+      "category": "ui",
+      "path": "/components/ui/tooltip/",
+      "hasJS": true,
+      "files": {
+        "html": "tooltip.html",
+        "css": "tooltip.css",
+        "js": "tooltip.js",
+        "readme": "README.md"
+      }
+    }
+  ]
+}

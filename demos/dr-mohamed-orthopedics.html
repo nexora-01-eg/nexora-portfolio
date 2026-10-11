@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مركز حركة للعظام — د. محمد الجندي</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --steel:#2C5F7C; --steel-dark:#1C455D; --steel-soft:#E7EEF2;
+  --orange:#F0803C; --orange-soft:#FDECDE;
+  --bg:#F7FAFB; --surface:#FFFFFF;
+  --text:#182830; --text-secondary:#3E535C; --muted:#83959D; --faint:#C7D6DC;
+  --border:#E5EDF0; --border-strong:#CFDEE4;
+  --success:#2E9E5B; --success-soft:#E8F5EE;
+  --warning:#D9932E; --warning-soft:#FBF1DF;
+  --danger:#DC3E4A; --danger-soft:#FCEAEC;
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:26px;
+  --shadow-sm:0 2px 10px rgba(44,95,124,0.07);
+  --shadow-md:0 12px 30px rgba(44,95,124,0.10);
+  --shadow-lg:0 26px 56px rgba(44,95,124,0.20);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;font-weight:900;margin:0;color:var(--text);letter-spacing:-.01em;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 268px;min-height:100vh;}
+.sidebar{background:var(--steel-dark);color:#fff;padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.15);}
+.brand img{width:52px;height:52px;border-radius:12px;object-fit:cover;border:2px solid var(--orange);}
+.brand-name{font-weight:900;font-size:15px;}
+.brand-sub{font-size:10.5px;color:rgba(255,255,255,0.68);margin-top:1px;}
+.vip-tag{display:inline-flex;align-items:center;gap:4px;background:var(--orange);color:#fff;font-size:9px;font-weight:900;padding:2px 8px;border-radius:99px;margin-top:6px;}
+.nav-sec{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.07em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:10px;color:rgba(255,255,255,0.8);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.nav-item.active{background:var(--orange);color:#fff;}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:#fff;color:var(--steel-dark);font-size:10px;font-weight:900;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.15);}
+.trust-box{background:rgba(255,255,255,0.08);border-radius:14px;padding:12px;text-align:center;}
+.trust-box .n{font-size:20px;font-weight:900;color:var(--orange);}
+.trust-box .l{font-size:9.5px;color:rgba(255,255,255,0.7);margin-top:2px;}
+
+.topbar{height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(247,250,251,0.9);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15.5px;}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:var(--steel);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:var(--steel-dark);transform:translateY(-1px);}
+.btn-orange{background:var(--orange);color:#fff;}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--steel-soft);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.recovering{background:var(--success-soft);color:var(--success);}
+.badge.watch{background:var(--warning-soft);color:var(--warning);}
+.badge.urgent{background:var(--danger-soft);color:var(--danger);}
+.badge.orange{background:var(--orange-soft);color:#B85A1F;}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;}
+.stat .value{font-size:24px;font-weight:900;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--success);margin-top:6px;display:inline-block;}
+
+.bone-strip{position:relative;overflow:hidden;border-radius:var(--r-xl);background:linear-gradient(120deg,#12222C,var(--steel),#4A8AAE);padding:26px 28px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.bone-left h2{color:#fff;font-size:21px;margin-bottom:5px;} .bone-left p{color:rgba(255,255,255,0.78);font-size:12.5px;}
+.bone-stats{display:flex;gap:22px;flex-shrink:0;}
+.bone-stat{text-align:center;} .bone-stat .v{font-size:22px;font-weight:900;} .bone-stat .l{font-size:9.5px;color:rgba(255,255,255,0.65);text-transform:uppercase;margin-top:2px;}
+
+/* Mobility tracker (signature) */
+.mobility-row{display:flex;align-items:center;gap:14px;padding:12px 0;border-bottom:1px dashed var(--border);}
+.rom-ring{width:56px;height:56px;position:relative;flex-shrink:0;}
+.rom-ring svg{transform:rotate(-90deg);width:100%;height:100%;}
+.rom-ring circle{fill:none;stroke-width:6;}
+.rom-label{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--steel-soft);}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;}
+.avatar{border-radius:50%;object-fit:cover;flex-shrink:0;}
+
+.cal-wrap{display:grid;grid-template-columns:64px repeat(5,1fr);gap:0;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#fff;}
+.cal-head{padding:14px 8px;text-align:center;font-weight:800;font-size:12.5px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);background:var(--steel-soft);}
+.cal-time{font-size:10px;color:var(--faint);text-align:center;padding-top:8px;border-left:1px solid var(--border);height:70px;}
+.cal-col{border-right:1px solid var(--border);position:relative;}
+.cal-slot{height:70px;border-bottom:1px dashed var(--border);}
+.appt-block{position:absolute;right:4px;left:4px;border-radius:10px;padding:7px 9px;font-size:10.5px;color:#fff;background:var(--steel);cursor:pointer;}
+.appt-block b{display:block;font-size:11px;color:var(--orange);}
+
+.testi-card{background:var(--steel-soft);border-radius:var(--r-lg);padding:16px;}
+.testi-card p{font-size:12.5px;color:var(--text-secondary);line-height:1.7;font-style:italic;}
+.testi-stars{color:var(--orange);margin-bottom:8px;}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--steel-dark);color:#fff;padding:11px 17px;border-radius:12px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);}
+
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 78px;} .brand-name,.brand-sub,.vip-tag,.nav-item span:not(.ic),.nav-sec,.trust-box .l,.nav-badge{display:none;} .cal-wrap{grid-template-columns:50px repeat(5,minmax(110px,1fr));overflow-x:auto;} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} .bone-strip{flex-direction:column;align-items:flex-start;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">مركز حركة للعظام — د. محمد الجندي</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-orange" onclick="switchView('v-appointments')">+ حجز موعد</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-patients"></section>
+      <section class="view" id="v-appointments"></section>
+      <section class="view" id="v-mobility"></section>
+      <section class="view" id="v-profile"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="https://i.pravatar.cc/104?img=61">
+      <div><div class="brand-name">د. محمد الجندي</div><div class="brand-sub">استشاري جراحة العظام والمفاصل</div><span class="vip-tag">🦴 مركز حركة VIP</span></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-appointments"><span class="ic">🗓️</span><span>المواعيد</span></div>
+      <div class="nav-item" data-view="v-mobility"><span class="ic">🦿</span><span>تتبع الحركة والمفاصل</span></div>
+      <div class="nav-sec">المرضى</div>
+      <div class="nav-item" data-view="v-patients"><span class="ic">🩻</span><span>ملفات المرضى</span><span class="nav-badge">2</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-profile"><span class="ic">🧑‍⚕️</span><span>الملف الشخصي</span></div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="trust-box">
+        <div class="n">+2,100</div>
+        <div class="l">عملية عظام ناجحة</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const patients = [
+  {name:"سيد أنور", age:58, condition:"استبدال مفصل الركبة", status:"recovering", rom:78, img:53},
+  {name:"وفاء محسن", age:41, condition:"كسر في عظمة الفخذ", status:"watch", rom:52, img:35},
+  {name:"طارق زيدان", age:67, condition:"خشونة مفاصل متقدمة", status:"urgent", rom:34, img:57},
+  {name:"غادة رمزي", age:35, condition:"إصابة رباط صليبي", status:"recovering", rom:85, img:38},
+  {name:"حسام بدر", age:49, condition:"آلام أسفل الظهر المزمنة", status:"watch", rom:60, img:60},
+];
+const appointments = [
+  {patient:"سيد أنور", type:"جلسة علاج طبيعي", day:0, start:0, span:1},
+  {patient:"وفاء محسن", type:"متابعة الكسر بالأشعة", day:1, start:1, span:1},
+  {patient:"طارق زيدان", type:"استشارة عملية عاجلة", day:1, start:2, span:1},
+  {patient:"غادة رمزي", type:"تقييم مدى الحركة", day:3, start:0, span:1},
+  {patient:"حسام بدر", type:"جلسة علاج طبيعي", day:4, start:3, span:1},
+];
+const days = ['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء'];
+const hours = ['9:00 ص','11:00 ص','1:00 م','3:00 م'];
+const testimonials = [
+  {name:"سيد أنور", text:"بعد عملية الركبة رجعت أمشي زي الأول، الدكتور محمد ومتابعة العلاج الطبيعي كانت ممتازة.", rating:5},
+  {name:"غادة رمزي", text:"رجعت ألعب رياضة تاني بعد إصابة الرباط، فريق العلاج الطبيعي رائع.", rating:5},
+];
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','مركز حركة للعظام — د. محمد الجندي'],
+    'v-patients':['ملفات المرضى', patients.length+' مريض تحت المتابعة'],
+    'v-appointments':['المواعيد','الأسبوع الحالي'],
+    'v-mobility':['تتبع الحركة والمفاصل','نسبة استرجاع مدى الحركة (ROM) لكل مريض'],
+    'v-profile':['الملف الشخصي','السيرة المهنية لـ د. محمد الجندي'],
+    'v-settings':['الإعدادات','بيانات المركز'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+const statusMap = {recovering:'تحسّن جيد',watch:'تحت الملاحظة',urgent:'عاجل'};
+function romRing(val){
+  const r=22,c=2*Math.PI*r,off=c-(val/100)*c;
+  const color = val>=70?'var(--success)':val>=45?'var(--warning)':'var(--danger)';
+  return `<div class="rom-ring"><svg viewBox="0 0 56 56">
+    <circle cx="28" cy="28" r="${r}" stroke="var(--steel-soft)"></circle>
+    <circle cx="28" cy="28" r="${r}" stroke="${color}" stroke-dasharray="${c}" stroke-dashoffset="${off}" stroke-linecap="round"></circle>
+  </svg><div class="rom-label">${val}%</div></div>`;
+}
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>أهلاً، دكتور محمد 🦴</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦ — مركز حركة للعظام</p></div>
+      <button class="btn btn-outline" onclick="switchView('v-appointments')">عرض جدول اليوم</button></div>
+    <div class="bone-strip" style="margin-bottom:18px">
+      <div class="bone-left"><h2>نشاط المركز اليوم</h2><p>لمحة سريعة على حالة العيادة الآن</p></div>
+      <div class="bone-stats">
+        <div class="bone-stat"><div class="v">${appointments.length}</div><div class="l">مواعيد اليوم</div></div>
+        <div class="bone-stat"><div class="v">97%</div><div class="l">رضا المرضى</div></div>
+        <div class="bone-stat"><div class="v">2</div><div class="l">جلسات علاج طبيعي</div></div>
+      </div>
+    </div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('مواعيد اليوم', appointments.length+' موعد','🗓️','var(--steel)','+1 عن أمس')}
+      ${stat('حالات تحت الملاحظة',patients.filter(p=>p.status==='watch').length+' حالة','👁️','var(--warning)','متابعة أسبوعية')}
+      ${stat('إيراد الشهر','٤١٢٬٦٠٠ ج.م','💰','var(--success)','+6.4%')}
+      ${stat('حالات عاجلة',patients.filter(p=>p.status==='urgent').length+' حالة','🚨','var(--danger)','بحاجة لعملية سريعة')}
+    </div>
+    <div class="grid g3">
+      <div class="card card-pad" style="grid-column:span 2">
+        <div class="card-title" style="margin-bottom:16px">حالات المرضى الحالية</div>
+        ${patients.map(p=>`
+          <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+            <div class="flex items-center gap3"><img class="avatar" width="36" height="36" src="https://i.pravatar.cc/72?img=${p.img}"><div><b style="font-size:13px">${p.name}</b><div class="muted" style="font-size:11px">${p.condition}</div></div></div>
+            <span class="badge ${p.status}">${statusMap[p.status]}</span>
+          </div>`).join('')}
+      </div>
+      <div class="card card-pad">
+        <div class="card-title" style="margin-bottom:12px">آراء المرضى</div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p>"${testimonials[0].text}"</p>
+          <div style="margin-top:10px;font-weight:800;font-size:12px">— ${testimonials[0].name}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderPatients(){
+  const el = document.getElementById('v-patients');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>ملفات المرضى</h1><p class="sub">${patients.length} مريض تحت المتابعة</p></div>
+      <button class="btn btn-primary">+ مريض جديد</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>المريض</th><th>الحالة الطبية</th><th>مدى الحركة (ROM)</th><th>الحالة</th></tr></thead>
+      <tbody>${patients.map(p=>`
+        <tr onclick="UI.toast('ملف ${p.name}')">
+          <td><div class="cell-name"><img class="avatar" width="34" height="34" src="https://i.pravatar.cc/68?img=${p.img}">${p.name} <span class="muted" style="font-weight:500">(${p.age})</span></div></td>
+          <td>${p.condition}</td>
+          <td style="width:100px">${p.rom}%</td>
+          <td><span class="badge ${p.status}">${statusMap[p.status]}</span></td>
+        </tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderAppointments(){
+  const el = document.getElementById('v-appointments');
+  el.innerHTML = `<div class="view-head"><div><h1>المواعيد</h1><p class="sub">الأسبوع الحالي</p></div>
+    <button class="btn btn-orange">+ حجز موعد</button></div>
+    <div class="cal-wrap" id="calWrap"></div>`;
+  let html = `<div class="cal-head" style="background:#fff"></div>`;
+  days.forEach(d=> html += `<div class="cal-head">${d}</div>`);
+  html += `<div>`+hours.map(h=>`<div class="cal-time">${h}</div>`).join('')+`</div>`;
+  for(let d=0; d<5; d++){
+    html += `<div class="cal-col">`;
+    hours.forEach(()=> html += `<div class="cal-slot"></div>`);
+    appointments.filter(a=>a.day===d).forEach(a=>{
+      html += `<div class="appt-block" style="top:${a.start*70+4}px;height:${a.span*70-8}px" onclick="UI.toast('${a.patient} — ${a.type}')">
+        <b>${a.patient}</b>${a.type}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  document.getElementById('calWrap').innerHTML = html;
+}
+
+function renderMobility(){
+  const el = document.getElementById('v-mobility');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>تتبع الحركة والمفاصل</h1><p class="sub">نسبة استرجاع مدى الحركة (Range of Motion) لكل مريض</p></div>
+      <button class="btn btn-primary">+ تسجيل قياس جديد</button></div>
+    <div class="card card-pad">
+      ${patients.map(p=>`
+        <div class="mobility-row">
+          ${romRing(p.rom)}
+          <div style="flex:1"><b style="font-size:13.5px">${p.name}</b><div class="muted" style="font-size:11.5px">${p.condition}</div></div>
+          <span class="badge ${p.status}">${statusMap[p.status]}</span>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderProfile(){
+  const el = document.getElementById('v-profile');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>الملف الشخصي</h1><p class="sub">السيرة المهنية المعروضة للمرضى</p></div>
+      <button class="btn btn-outline">تعديل الملف</button></div>
+    <div class="grid g3">
+      <div class="card card-pad" style="grid-column:span 2">
+        <div class="flex items-center gap3" style="margin-bottom:16px">
+          <img src="https://i.pravatar.cc/120?img=61" width="72" height="72" style="border-radius:12px">
+          <div><h3 style="font-size:19px">د. محمد الجندي</h3><div class="muted" style="font-size:12.5px;margin-top:3px">استشاري جراحة العظام والمفاصل</div><div class="testi-stars" style="margin-top:6px">★★★★★ <span class="muted" style="font-size:11px">(4.8 من 289 تقييم)</span></div></div>
+        </div>
+        <p class="muted" style="font-size:13px;line-height:1.8;margin-bottom:16px">استشاري جراحة العظام والمفاصل، متخصص في عمليات استبدال المفاصل بالمنظار، خبرة 18 عامًا، حاصل على زمالة جراحة العظام من بريطانيا.</p>
+        <div class="grid g3">
+          <div><div class="muted" style="font-size:10.5px">التخصص</div><b style="font-size:12.5px">جراحة العظام</b></div>
+          <div><div class="muted" style="font-size:10.5px">سنوات الخبرة</div><b style="font-size:12.5px">18+ سنة</b></div>
+          <div><div class="muted" style="font-size:10.5px">اللغات</div><b style="font-size:12.5px">عربي، إنجليزي</b></div>
+        </div>
+      </div>
+      <div class="flex-col gap3">
+        ${testimonials.map(t=>`
+          <div class="testi-card" style="margin-bottom:12px">
+            <div class="testi-stars">${'★'.repeat(t.rating)}</div>
+            <p>"${t.text}"</p>
+            <div style="margin-top:10px;font-weight:800;font-size:12px">— ${t.name}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1>الإعدادات</h1><p class="sub">بيانات المركز</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات اسم المركز، غرف العلاج الطبيعي، ومواعيد العمل.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderPatients(); renderAppointments(); renderMobility(); renderProfile(); renderSettings();
+</script>
+</body>
+</html>

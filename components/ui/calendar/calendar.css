@@ -1,0 +1,72 @@
+/* ============================================================
+   NEXORA — Calendar
+   Month-grid date picker UI. Date-math (populating real
+   month grids) is a page-level concern; this defines structure
+   and visual states only, per Phase 2 scope ("Calendar — UI only").
+   ============================================================ */
+
+.nx-calendar {
+  width: 100%;
+  max-width: 320px;
+  padding: var(--nx-space-4);
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-lg);
+}
+
+.nx-calendar__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--nx-space-4);
+}
+
+.nx-calendar__title { font-weight: var(--nx-fw-medium); font-size: var(--nx-fs-300); }
+
+.nx-calendar__nav {
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nx-text-secondary);
+  border-radius: var(--nx-radius-sm);
+}
+.nx-calendar__nav:hover { background: var(--nx-bg-elevated-2); color: var(--nx-text-primary); }
+
+.nx-calendar__grid {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.nx-calendar__grid th {
+  padding: var(--nx-space-2) 0;
+  font-size: var(--nx-fs-100);
+  color: var(--nx-text-muted);
+  font-weight: var(--nx-fw-medium);
+}
+
+.nx-calendar__day { text-align: center; padding: 2px; }
+
+.nx-calendar__day button {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--nx-radius-full);
+  font-size: var(--nx-fs-200);
+  color: var(--nx-text-primary);
+  transition: var(--nx-transition-base);
+}
+.nx-calendar__day button:hover { background: var(--nx-bg-elevated-2); }
+
+.nx-calendar__day--muted button { color: var(--nx-text-muted); }
+
+.nx-calendar__day--today button {
+  border: 1px solid var(--nx-accent-primary);
+  color: var(--nx-accent-primary);
+  font-weight: var(--nx-fw-medium);
+}
+
+.nx-calendar__day button[aria-selected="true"] {
+  background: var(--nx-accent-primary);
+  color: var(--nx-color-black);
+}

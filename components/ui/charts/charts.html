@@ -1,0 +1,23 @@
+<!-- UI-only chart shells. Wire real data via each SVG's inline
+     style variables — no charting library, pure SVG per Phase 2 scope. -->
+
+<div class="nx-chart" role="img" aria-label="Monthly views trending upward from 200 to 1,200">
+  <p class="nx-caption">Monthly Views</p>
+  <svg viewBox="0 0 300 100" class="nx-chart__svg" preserveAspectRatio="none">
+    <polyline class="nx-chart__line" points="0,80 50,70 100,60 150,55 200,35 250,20 300,10" />
+  </svg>
+</div>
+
+<div class="nx-chart" role="img" aria-label="Project status breakdown: 60% live, 25% draft, 15% archived">
+  <p class="nx-caption">Project Status</p>
+  <div class="nx-chart__bars">
+    <div class="nx-chart__bar" style="--nx-bar-value: 60%;"><span class="nx-caption">Live</span></div>
+    <div class="nx-chart__bar" style="--nx-bar-value: 25%;"><span class="nx-caption">Draft</span></div>
+    <div class="nx-chart__bar" style="--nx-bar-value: 15%;"><span class="nx-caption">Archived</span></div>
+  </div>
+</div>
+
+<svg class="nx-chart__donut" viewBox="0 0 40 40" role="img" aria-label="60 percent complete">
+  <circle class="nx-chart__donut-track" cx="20" cy="20" r="17"></circle>
+  <circle class="nx-chart__donut-value" cx="20" cy="20" r="17" style="--nx-progress-value: 60;"></circle>
+</svg>

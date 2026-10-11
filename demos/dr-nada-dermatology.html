@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>د. ندى الحلواني — عيادة لومير للجلدية</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%E2%9C%A8%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Cairo', 'ui-sans-serif', 'system-ui'] },
+      }
+    }
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root { --accent: #C97B84; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    opacity: 0;
+    animation: vip-fade-in .5s ease forwards;
+  }
+  @keyframes vip-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent; }
+  button, a, [role="button"] { transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+  button:active { transform: scale(0.97); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #root { min-height: 100vh; }
+  #vip-loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: #0a0a0a; z-index: 9999; transition: opacity .4s ease;
+  }
+  #vip-loading .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-top-color: var(--accent);
+    animation: vip-spin .8s linear infinite;
+  }
+  @keyframes vip-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="vip-loading"><div class="spinner"></div></div>
+<div id="root"></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import * as ReactDOM from "react-dom/client";
+import React, { useState, useEffect } from "react";
+import {
+  Sparkles, Calendar, Star, ShieldCheck, Check, Quote, Send, ArrowLeft,
+  Droplet, Sun, Wind, Flower2, Award,
+} from "lucide-react";
+
+/* ============================== الهوية البصرية — عيادة د. ندى الحلواني ============================== */
+const FONT_ID = "dr-nada-fonts";
+function useFonts() {
+  useEffect(() => {
+    if (document.getElementById(FONT_ID)) return;
+    const l = document.createElement("link");
+    l.id = FONT_ID; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap";
+    document.head.appendChild(l);
+  }, []);
+}
+
+const C = {
+  bg: "#FCF6F5", surface: "#FFFFFF", border: "#F1DEDA",
+  ink: "#2E2023", muted: "#8C7377",
+  rose: "#C97B84", roseDark: "#A85A64", roseSoft: "rgba(201,123,132,0.12)",
+  champagne: "#C9A876", champagneSoft: "rgba(201,168,118,0.16)",
+};
+const font = { display: "'Fraunces', serif", body: "'Cairo', sans-serif" };
+const shadow = { sm: "0 1px 3px rgba(46,32,35,0.06)", md: "0 10px 28px rgba(46,32,35,0.08)", lg: "0 26px 56px rgba(46,32,35,0.16)" };
+
+const DOCTOR = { name: "د. ندى الحلواني", title: "استشاري الأمراض الجلدية والليزر التجميلي", creds: "عضو الجمعية الأوروبية لطب وجراحة الجلدية — 14 سنة خبرة", clinic: "عيادة لومير للجلدية", address: "شارع محمد أنور، الزمالك، القاهرة" };
+
+const STATS = [{ v: "+9,000", l: "جلسة تجميلية" }, { v: "14", l: "سنة خبرة" }, { v: "98%", l: "رضا العملاء" }, { v: "4.9", l: "تقييم المريضات" }];
+
+const CONCERNS = [
+  { id: "acne", label: "حب شباب وآثاره", icon: Droplet, rec: "بروتوكول تقشير كيميائي + جلسات ليزر فراكشنال لتوحيد الملمس." },
+  { id: "aging", label: "علامات تقدم السن", icon: Sun, rec: "حقن بوتوكس وفيلر طبيعي مع جلسات شد بالهايفو." },
+  { id: "pigment", label: "تصبغات وبقع داكنة", icon: Wind, rec: "تقشير طبي مخصص مع جلسات ليزر بيكوشور لتفتيح البشرة." },
+  { id: "sensitive", label: "بشرة حساسة ومتهيجة", icon: Flower2, rec: "روتين علاجي هادئ بمنتجات طبية بدون كورتيزون." },
+];
+
+/* ============================== أداة تشخيص البشرة التفاعلية ============================== */
+function SkinAdvisor() {
+  const [active, setActive] = useState(CONCERNS[0].id);
+  const current = CONCERNS.find((c) => c.id === active);
+  return (
+    <div style={{ background: C.surface, border: `1px solid ${C.border}`, borderRadius: 24, padding: 30, boxShadow: shadow.md }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 6 }}>
+        <Sparkles size={16} color={C.rose} />
+        <span style={{ fontFamily: font.display, fontWeight: 600, fontSize: 19, color: C.ink }}>استشارة بشرة سريعة</span>
+      </div>
+      <p style={{ fontFamily: font.body, fontSize: 12, color: C.muted, marginBottom: 22 }}>اختاري أكتر حاجة بتضايقك في بشرتك، وهنقترح خطة العلاج المناسبة.</p>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: 10, marginBottom: 22 }} className="concerns-grid">
+        {CONCERNS.map((c) => (
+          <div key={c.id} onClick={() => setActive(c.id)} style={{
+            textAlign: "center", padding: "16px 10px", borderRadius: 16, cursor: "pointer",
+            border: `1.5px solid ${active === c.id ? C.rose : C.border}`, background: active === c.id ? C.roseSoft : "transparent",
+            transition: "all 0.2s ease",
+          }}>
+            <c.icon size={20} color={active === c.id ? C.rose : C.muted} style={{ margin: "0 auto 8px" }} />
+            <div style={{ fontFamily: font.body, fontSize: 11, fontWeight: 700, color: active === c.id ? C.roseDark : C.ink }}>{c.label}</div>
+          </div>
+        ))}
+      </div>
+      <div style={{ background: C.champagneSoft, borderRadius: 16, padding: 18, display: "flex", gap: 12, alignItems: "flex-start" }}>
+        <Award size={18} color="#8A6B2C" style={{ flexShrink: 0, marginTop: 2 }} />
+        <div>
+          <div style={{ fontFamily: font.body, fontSize: 12, color: "#8A6B2C", fontWeight: 700, marginBottom: 4 }}>خطة العلاج المقترحة</div>
+          <div style={{ fontFamily: font.body, fontSize: 13, color: C.ink, lineHeight: 1.8 }}>{current.rec}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================== الأقسام ============================== */
+
+function Navbar() {
+  return (
+    <div style={{ position: "sticky", top: 0, zIndex: 50, background: "rgba(252,246,245,0.92)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${C.border}` }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "16px 30px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+          <div style={{ width: 40, height: 40, borderRadius: 12, background: `linear-gradient(135deg, ${C.rose}, ${C.champagne})`, display: "flex", alignItems: "center", justifyContent: "center" }}><Sparkles size={18} color="#fff" /></div>
+          <div><div style={{ fontFamily: font.display, fontWeight: 600, fontSize: 16, color: C.ink }}>{DOCTOR.name}</div><div style={{ fontFamily: font.body, fontSize: 9.5, color: C.muted }}>{DOCTOR.clinic}</div></div>
+        </div>
+        <button style={{ display: "flex", alignItems: "center", gap: 8, background: C.rose, color: "#fff", border: "none", borderRadius: 999, padding: "11px 22px", fontFamily: font.body, fontWeight: 700, fontSize: 13.5, cursor: "pointer" }}><Calendar size={15} /> احجزي استشارة</button>
+      </div>
+    </div>
+  );
+}
+
+function Hero() {
+  return (
+    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "64px 30px 50px", display: "grid", gridTemplateColumns: "1fr 0.85fr", gap: 50, alignItems: "center" }} className="hero-grid">
+      <div>
+        <div style={{ display: "inline-flex", alignItems: "center", gap: 7, background: C.champagneSoft, borderRadius: 999, padding: "7px 15px", marginBottom: 20 }}>
+          <ShieldCheck size={13} color="#8A6B2C" /><span style={{ fontFamily: font.body, fontSize: 11.5, fontWeight: 700, color: "#8A6B2C" }}>{DOCTOR.creds}</span>
+        </div>
+        <h1 style={{ fontFamily: font.display, fontWeight: 400, fontSize: 42, color: C.ink, lineHeight: 1.3, margin: "0 0 18px" }}>
+          بشرتك تستاهل لمسة <span style={{ color: C.rose, fontStyle: "italic", fontWeight: 600 }}>خبيرة</span>
+        </h1>
+        <p style={{ fontFamily: font.body, fontSize: 14.5, color: C.muted, lineHeight: 1.9, maxWidth: 460, marginBottom: 28 }}>
+          {DOCTOR.title} — علاجات جلدية وتجميلية مخصصة لكل نوع بشرة، بأحدث تقنيات الليزر وبدون مبالغة في التدخل.
+        </p>
+        <div style={{ display: "flex", gap: 12, marginBottom: 40 }}>
+          <button style={{ display: "flex", alignItems: "center", gap: 8, background: C.rose, color: "#fff", border: "none", borderRadius: 999, padding: "13px 24px", fontFamily: font.body, fontWeight: 700, fontSize: 14, cursor: "pointer" }}><Calendar size={16} /> احجزي استشارتك</button>
+          <button style={{ display: "flex", alignItems: "center", gap: 8, background: "transparent", color: C.roseDark, border: `1.5px solid ${C.rose}`, borderRadius: 999, padding: "13px 24px", fontFamily: font.body, fontWeight: 700, fontSize: 14, cursor: "pointer" }}><ArrowLeft size={16} /> خدماتنا</button>
+        </div>
+        <div style={{ display: "flex", gap: 34 }}>
+          {STATS.map((s, i) => (
+            <div key={i}><div style={{ fontFamily: font.display, fontWeight: 600, fontSize: 22, color: C.ink }}>{s.v}</div><div style={{ fontFamily: font.body, fontSize: 10.5, color: C.muted, marginTop: 3 }}>{s.l}</div></div>
+          ))}
+        </div>
+      </div>
+      <div style={{ position: "relative" }}>
+        <div style={{ position: "absolute", top: -20, right: -20, width: 200, height: 200, borderRadius: "50%", background: C.roseSoft, zIndex: 0 }} />
+        <div style={{ position: "relative", aspectRatio: "4/5", borderRadius: 28, background: `linear-gradient(155deg, ${C.rose}, ${C.champagne})`, boxShadow: shadow.lg, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <Sparkles size={56} color="rgba(255,255,255,0.35)" />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function AdvisorSection() {
+  return <div style={{ padding: "60px 30px" }}><div style={{ maxWidth: 780, margin: "0 auto" }}><SkinAdvisor /></div></div>;
+}
+
+function TestimonialsSection() {
+  const items = [
+    { name: "ريهام عادل", text: "جلسات الليزر مع د. ندى غيرت ملمس بشرتي تمامًا، وحسيت إنها بتسمعني قبل ما تقرر أي علاج." },
+    { name: "نورهان محمد", text: "أول مرة حد يشرحلي التصبغات بطريقة علمية وواضحة، النتيجة كانت أحسن من المتوقع." },
+  ];
+  return (
+    <div style={{ background: C.surface, borderTop: `1px solid ${C.border}`, padding: "64px 30px" }}>
+      <div style={{ maxWidth: 900, margin: "0 auto", textAlign: "center" }}>
+        <div style={{ fontFamily: font.body, fontSize: 11.5, color: C.rose, fontWeight: 700, letterSpacing: 1.5, textTransform: "uppercase", marginBottom: 30 }}>آراء المريضات</div>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 20 }} className="testimonials-grid">
+          {items.map((t, i) => (
+            <div key={i} style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 18, padding: 24, textAlign: "right" }}>
+              <Quote size={20} color={C.champagne} style={{ marginBottom: 12 }} />
+              <p style={{ fontFamily: font.body, fontSize: 13, color: C.ink, lineHeight: 1.8, margin: 0 }}>{t.text}</p>
+              <div style={{ fontFamily: font.body, fontSize: 11.5, color: C.muted, marginTop: 14, fontWeight: 600 }}>{t.name}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ContactSection() {
+  const [sent, setSent] = useState(false);
+  return (
+    <div style={{ padding: "64px 30px" }}>
+      <div style={{ maxWidth: 520, margin: "0 auto", background: C.surface, border: `1px solid ${C.border}`, borderRadius: 24, padding: 30, boxShadow: shadow.md, textAlign: "center" }}>
+        <Calendar size={26} color={C.rose} style={{ margin: "0 auto 12px" }} />
+        <h3 style={{ fontFamily: font.display, fontWeight: 600, fontSize: 20, color: C.ink, margin: "0 0 8px" }}>احجزي استشارتك مع د. ندى</h3>
+        <p style={{ fontFamily: font.body, fontSize: 12.5, color: C.muted, marginBottom: 20 }}>{DOCTOR.address}</p>
+        {sent ? (
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, color: C.roseDark, fontFamily: font.body, fontWeight: 700 }}><Check size={18} /> تم استلام طلبك</div>
+        ) : (
+          <>
+            <input placeholder="الاسم بالكامل" style={{ width: "100%", padding: "12px 14px", borderRadius: 12, border: `1px solid ${C.border}`, background: C.bg, fontFamily: font.body, fontSize: 13, outline: "none", textAlign: "right", boxSizing: "border-box", marginBottom: 10 }} />
+            <input placeholder="رقم الموبايل" style={{ width: "100%", padding: "12px 14px", borderRadius: 12, border: `1px solid ${C.border}`, background: C.bg, fontFamily: font.body, fontSize: 13, outline: "none", textAlign: "right", boxSizing: "border-box", marginBottom: 16 }} />
+            <button onClick={() => setSent(true)} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: C.rose, color: "#fff", border: "none", borderRadius: 999, padding: "13px 0", fontFamily: font.body, fontWeight: 700, fontSize: 14, cursor: "pointer" }}><Send size={15} /> تأكيد الحجز</button>
+          </>
+        )}
+      </div>
+    </div>
+  );
+}
+
+/* ============================== التطبيق ============================== */
+
+function DrNadaDermatology() {
+  useFonts();
+  return (
+    <div dir="rtl" style={{ background: C.bg, minHeight: "100vh", fontFamily: font.body, color: C.ink }}>
+      <style>{`
+        * { box-sizing: border-box; } input::placeholder { color: #C4AEB1; }
+        @media (max-width: 900px) {
+          .hero-grid { grid-template-columns: 1fr !important; }
+          .concerns-grid { grid-template-columns: repeat(2,1fr) !important; }
+          .testimonials-grid { grid-template-columns: 1fr !important; }
+        }
+      `}</style>
+      <Navbar /><Hero /><AdvisorSection /><TestimonialsSection /><ContactSection />
+    </div>
+  );
+}
+
+
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+root.render(<DrNadaDermatology />);
+const loading = document.getElementById("vip-loading");
+if (loading) { loading.style.opacity = "0"; setTimeout(() => loading.remove(), 400); }
+</script>
+</body>
+</html>

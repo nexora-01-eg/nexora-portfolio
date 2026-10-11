@@ -1,0 +1,21 @@
+{
+  "version": "0.1.0",
+  "updatedAt": null,
+  "count": 14,
+  "designSystems": [
+    { "id": "medical", "label": "Medical", "path": "/design-systems/medical/", "status": "empty", "componentCount": 0 },
+    { "id": "construction", "label": "Construction", "path": "/design-systems/construction/", "status": "empty", "componentCount": 0 },
+    { "id": "finance", "label": "Finance", "path": "/design-systems/finance/", "status": "empty", "componentCount": 0 },
+    { "id": "restaurant", "label": "Restaurant", "path": "/design-systems/restaurant/", "status": "empty", "componentCount": 0 },
+    { "id": "education", "label": "Education", "path": "/design-systems/education/", "status": "empty", "componentCount": 0 },
+    { "id": "corporate", "label": "Corporate", "path": "/design-systems/corporate/", "status": "empty", "componentCount": 0 },
+    { "id": "real-estate", "label": "Real Estate", "path": "/design-systems/real-estate/", "status": "empty", "componentCount": 0 },
+    { "id": "hotel", "label": "Hotel", "path": "/design-systems/hotel/", "status": "empty", "componentCount": 0 },
+    { "id": "retail", "label": "Retail", "path": "/design-systems/retail/", "status": "empty", "componentCount": 0 },
+    { "id": "hr", "label": "HR", "path": "/design-systems/hr/", "status": "empty", "componentCount": 0 },
+    { "id": "legal", "label": "Legal", "path": "/design-systems/legal/", "status": "empty", "componentCount": 0 },
+    { "id": "technology", "label": "Technology", "path": "/design-systems/technology/", "status": "empty", "componentCount": 0 },
+    { "id": "automation", "label": "Automation", "path": "/design-systems/automation/", "status": "empty", "componentCount": 0 },
+    { "id": "ai", "label": "AI", "path": "/design-systems/ai/", "status": "empty", "componentCount": 0 }
+  ]
+}

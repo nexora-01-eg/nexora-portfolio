@@ -1,0 +1,27 @@
+/* ============================================================
+   NEXORA — Breadcrumbs
+   ============================================================ */
+
+.nx-breadcrumbs__list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--nx-space-2);
+  font-size: var(--nx-fs-200);
+}
+
+.nx-breadcrumbs__list li {
+  display: flex;
+  align-items: center;
+  gap: var(--nx-space-2);
+}
+
+.nx-breadcrumbs__link { color: var(--nx-text-secondary); }
+.nx-breadcrumbs__link:hover { color: var(--nx-text-primary); }
+
+.nx-breadcrumbs__sep { color: var(--nx-text-muted); }
+
+.nx-breadcrumbs__current {
+  color: var(--nx-text-primary);
+  font-weight: var(--nx-fw-medium);
+}

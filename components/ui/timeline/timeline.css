@@ -1,0 +1,39 @@
+/* ============================================================
+   NEXORA — Timeline
+   Vertical chronological list (changelogs, project history).
+   ============================================================ */
+
+.nx-timeline {
+  position: relative;
+  padding-left: var(--nx-space-6);
+}
+
+.nx-timeline::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 6px;
+  bottom: 6px;
+  width: 1px;
+  background: var(--nx-border-subtle);
+}
+
+.nx-timeline__item {
+  position: relative;
+  padding-bottom: var(--nx-space-7);
+}
+.nx-timeline__item:last-child { padding-bottom: 0; }
+
+.nx-timeline__marker {
+  position: absolute;
+  left: calc(-1 * var(--nx-space-6) + 1px);
+  top: 6px;
+  width: 9px;
+  height: 9px;
+  border-radius: var(--nx-radius-full);
+  background: var(--nx-accent-primary);
+  box-shadow: 0 0 0 3px var(--nx-bg-primary);
+}
+
+.nx-timeline__content .nx-caption { margin-bottom: var(--nx-space-1); }
+.nx-timeline__content .nx-h4 { margin-bottom: var(--nx-space-2); }

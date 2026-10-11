@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Import Tool — NEXORA</title>
+  <meta name="description" content="Scan demos/ and generate the demo catalog — no server, no per-file metadata." />
+
+  <link rel="stylesheet" href="../core/css/tokens.css" />
+  <link rel="stylesheet" href="../core/css/base.css" />
+  <link rel="stylesheet" href="../core/css/typography.css" />
+  <link rel="stylesheet" href="../core/css/layout.css" />
+  <link rel="stylesheet" href="../core/css/utilities.css" />
+  <link rel="stylesheet" href="../components/ui/button/button.css" />
+  <link rel="stylesheet" href="../components/ui/badge/badge.css" />
+  <link rel="stylesheet" href="../components/ui/table/table.css" />
+  <link rel="stylesheet" href="../components/feedback/empty-state/empty-state.css" />
+  <link rel="stylesheet" href="../components/feedback/alert/alert.css" />
+  <link rel="stylesheet" href="../components/cards/card/card.css" />
+
+  <style>
+    /* Tool-page-only layout — not part of the live site, no nav/footer. */
+    .it-page { max-width: 880px; margin-inline: auto; padding-block: var(--nx-space-9); }
+    .it-step { display: flex; gap: var(--nx-space-4); margin-bottom: var(--nx-space-6); }
+    .it-step__number {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: var(--nx-radius-full);
+      background: var(--nx-accent-primary); color: var(--nx-color-black);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: var(--nx-fw-bold); font-size: var(--nx-fs-200);
+    }
+    #it-input { display: none; }
+    .it-hint { color: var(--nx-text-muted); font-size: var(--nx-fs-100); margin-top: var(--nx-space-2); }
+  </style>
+</head>
+<body>
+  <main class="nx-container it-page">
+    <p class="nx-caption nx-text-accent">Internal tool — not part of the live site</p>
+    <h1 class="nx-h2" style="margin-bottom: var(--nx-space-2);">Import Tool</h1>
+    <p class="nx-body-lg nx-text-secondary" style="margin-bottom: var(--nx-space-8);">
+      Turns whatever's in <code>demos/</code> into a catalog the platform reads automatically —
+      no per-file <code>project.json</code>, no editing any page. Runs entirely in this
+      browser tab; nothing is uploaded anywhere.
+    </p>
+
+    <div class="it-step">
+      <span class="it-step__number">1</span>
+      <div>
+        <p class="nx-body" style="font-weight: var(--nx-fw-medium);">Select your <code>demos/</code> folder</p>
+        <p class="nx-small nx-text-secondary">Every <code>.html</code> file directly inside it will be detected.</p>
+        <button class="nx-btn nx-btn--primary nx-btn--md" type="button" id="it-choose-btn" style="margin-top: var(--nx-space-3);">Choose demos/ folder</button>
+        <input type="file" id="it-input" webkitdirectory multiple accept=".html" />
+      </div>
+    </div>
+
+    <div id="it-results" hidden>
+      <div class="it-step">
+        <span class="it-step__number">2</span>
+        <div style="flex: 1;">
+          <p class="nx-body" style="font-weight: var(--nx-fw-medium);">Review what was detected</p>
+          <p class="nx-small nx-text-secondary" id="it-summary"></p>
+          <div class="nx-table-wrap" style="margin-top: var(--nx-space-4);">
+            <table class="nx-table">
+              <thead><tr><th scope="col">File</th><th scope="col">Generated Title</th><th scope="col">Slug</th></tr></thead>
+              <tbody id="it-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="it-step">
+        <span class="it-step__number">3</span>
+        <div>
+          <p class="nx-body" style="font-weight: var(--nx-fw-medium);">Save the generated catalog</p>
+          <p class="nx-small nx-text-secondary">Downloads <code>demos-index.json</code> — save it into your project as <code>data/demos-index.json</code>, replacing the old one.</p>
+          <a class="nx-btn nx-btn--primary nx-btn--md nx-w-full" id="it-download-btn" href="#" download="demos-index.json" style="margin-top: var(--nx-space-3); display: inline-flex;">Download demos-index.json</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="nx-empty-state" id="it-empty" hidden>
+      <div class="nx-empty-state__icon" aria-hidden="true">◎</div>
+      <h3 class="nx-h4">No .html files found</h3>
+      <p class="nx-body nx-text-secondary">Make sure you selected the <code>demos/</code> folder itself, and that it contains at least one <code>.html</code> file directly inside it (not in a subfolder).</p>
+    </div>
+
+    <div class="nx-alert nx-alert--info" role="status" id="it-browser-note" style="margin-top: var(--nx-space-8);">
+      <span class="nx-alert__icon" aria-hidden="true">ℹ</span>
+      <div class="nx-alert__body">
+        <p class="nx-alert__message">Folder selection needs a Chromium-based browser (Chrome, Edge, Brave). If your browser doesn't support it, you'll see a normal multi-file picker instead — select every <code>.html</code> file inside <code>demos/</code> manually.</p>
+      </div>
+    </div>
+  </main>
+
+  <script src="import.js"></script>
+</body>
+</html>

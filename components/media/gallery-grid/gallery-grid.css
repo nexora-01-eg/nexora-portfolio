@@ -1,0 +1,53 @@
+/* ============================================================
+   NEXORA — Gallery Grid
+   Masonry-like grid using CSS grid auto-flow; one item can span
+   two columns via --wide for visual variety.
+   ============================================================ */
+
+.nx-gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--nx-space-4);
+}
+
+.nx-gallery-grid__item {
+  border-radius: var(--nx-radius-md);
+  overflow: hidden;
+  background: var(--nx-bg-elevated);
+}
+
+.nx-gallery-grid__item img {
+  width: 100%;
+  height: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--nx-duration-slow) var(--nx-ease-out);
+}
+
+.nx-gallery-grid__item:hover img {
+  transform: scale(1.04);
+}
+
+.nx-gallery-grid__item--wide {
+  grid-column: span 2;
+}
+.nx-gallery-grid__item--wide img {
+  aspect-ratio: 21 / 9;
+}
+
+@media (max-width: 768px) {
+  .nx-gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .nx-gallery-grid__item--wide { grid-column: span 2; }
+}
+
+@media (max-width: 480px) {
+  .nx-gallery-grid { grid-template-columns: 1fr; }
+  .nx-gallery-grid__item--wide { grid-column: span 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-gallery-grid__item:hover img { transform: none; }
+}

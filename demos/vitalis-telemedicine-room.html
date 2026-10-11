@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vitalis — Telemedicine Consultation Room</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;600;700;800&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0E0D1A;
+  --bg-deep: radial-gradient(ellipse 1000px 700px at 15% -10%, rgba(139,92,246,0.16), transparent 60%),
+             radial-gradient(ellipse 800px 600px at 100% 100%, rgba(245,166,35,0.08), transparent 55%),
+             #0E0D1A;
+  --panel:#161428;
+  --panel-raised:#1C1A33;
+  --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.15);
+  --violet:#8B5CF6; --violet-soft: rgba(139,92,246,0.16);
+  --amber:#F5A623; --amber-soft: rgba(245,166,35,0.16);
+  --mint:#3FD9A4; --mint-soft: rgba(63,217,164,0.16);
+  --rose:#F46B8F; --rose-soft: rgba(244,107,143,0.16);
+  --sky:#5FC7E8; --sky-soft: rgba(95,199,232,0.16);
+  --text:#F3F1FA; --muted:#9C97B8; --faint:#635E80;
+  --r-md:16px; --r-lg:22px; --r-pill:999px;
+  --ease: cubic-bezier(.22,1,.36,1);
+  --shadow: 0 26px 54px -24px rgba(0,0,0,0.6);
+  --font-display:'Sora', sans-serif; --font-body:'Inter', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{ background:var(--bg-deep); color:var(--text); font-family:var(--font-body); height:100vh; overflow:hidden; }
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; color:inherit; cursor:pointer;}
+:focus-visible{ outline:2px solid var(--violet); outline-offset:2px; border-radius:8px; }
+.glass{ background:linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow); }
+
+.room{ display:flex; flex-direction:column; height:100vh; padding:16px; gap:14px; }
+
+/* ===== top status bar ===== */
+.status-bar{ display:flex; align-items:center; justify-content:space-between; padding:12px 20px; }
+.status-left{ display:flex; align-items:center; gap:12px; }
+.rec-dot{ width:8px; height:8px; border-radius:50%; background:var(--rose); animation:pulse 1.6s infinite; }
+@keyframes pulse{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+.status-left b{ font-family:var(--font-display); font-size:13.5px; font-weight:700; }
+.status-left span{ font-size:11px; color:var(--muted); margin-right:8px; }
+.status-mid{ display:flex; align-items:center; gap:8px; font-family:var(--font-mono); font-size:12px; color:var(--muted); }
+.signal-bars{ display:flex; align-items:flex-end; gap:2px; height:12px; }
+.signal-bars div{ width:3px; background:var(--mint); border-radius:2px; }
+.status-right{ display:flex; align-items:center; gap:10px; }
+.avatar{ width:32px; height:32px; border-radius:50%; background:linear-gradient(150deg, var(--violet), #5b34ad); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:11px; }
+
+/* ===== main layout ===== */
+.room-body{ flex:1; display:grid; grid-template-columns:1fr 340px; gap:14px; min-height:0; }
+
+/* video stage */
+.stage{ position:relative; border-radius:var(--r-lg); overflow:hidden; background:linear-gradient(160deg, #1a1730, #100e20); border:1px solid var(--border); box-shadow:var(--shadow); }
+.stage-fill{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.stage-avatar{ width:120px; height:120px; border-radius:50%; background:linear-gradient(150deg, var(--violet), #5b34ad); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:800; font-size:38px; box-shadow:0 20px 50px -14px rgba(139,92,246,0.5); }
+.stage-name-tag{ position:absolute; bottom:18px; right:18px; display:flex; align-items:center; gap:8px; padding:8px 14px; border-radius:var(--r-pill); background:rgba(14,13,26,0.6); backdrop-filter:blur(10px); border:1px solid var(--border); }
+.stage-name-tag .dot{ width:7px; height:7px; border-radius:50%; background:var(--mint); }
+.stage-name-tag span{ font-size:12.5px; font-weight:600; }
+
+.self-view{ position:absolute; bottom:18px; left:18px; width:150px; height:104px; border-radius:14px; background:linear-gradient(160deg, #241f42, #16132a); border:1px solid var(--border-strong); box-shadow:var(--shadow); display:flex; align-items:center; justify-content:center; }
+.self-view .init{ font-family:var(--font-display); font-weight:800; font-size:22px; color:var(--muted); }
+.self-view-tag{ position:absolute; bottom:6px; left:8px; font-size:9.5px; background:rgba(0,0,0,0.4); padding:2px 7px; border-radius:20px; }
+
+.vitals-overlay{ position:absolute; top:18px; right:18px; display:flex; flex-direction:column; gap:8px; }
+.vital-chip{ display:flex; align-items:center; gap:8px; padding:8px 12px; border-radius:12px; background:rgba(14,13,26,0.55); backdrop-filter:blur(10px); border:1px solid var(--border); }
+.vital-chip svg{ width:14px; height:14px; }
+.vital-chip b{ font-family:var(--font-mono); font-size:12.5px; }
+.vital-chip span{ font-size:9.5px; color:var(--muted); display:block; }
+
+/* controls bar */
+.controls-bar{ position:absolute; bottom:18px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:10px; padding:10px; border-radius:var(--r-pill); background:rgba(14,13,26,0.65); backdrop-filter:blur(14px); border:1px solid var(--border); }
+.ctrl-btn{ width:44px; height:44px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:rgba(255,255,255,0.06); border:1px solid var(--border-strong); transition:all .16s var(--ease); }
+.ctrl-btn:hover{ background:rgba(255,255,255,0.12); transform:translateY(-2px); }
+.ctrl-btn svg{ width:18px; height:18px; }
+.ctrl-btn.off{ background:var(--rose); border-color:var(--rose); }
+.ctrl-btn.end{ background:var(--rose); border-color:var(--rose); width:52px; border-radius:16px; }
+.ctrl-divider{ width:1px; height:24px; background:var(--border-strong); margin:0 2px; }
+
+/* ===== right sidebar ===== */
+.side-panel{ display:flex; flex-direction:column; gap:12px; min-height:0; }
+.tabs-row{ display:flex; gap:4px; padding:4px; border-radius:12px; background:var(--panel); border:1px solid var(--border); flex-shrink:0; }
+.tab-btn{ flex:1; text-align:center; font-size:11.5px; font-weight:600; padding:9px 6px; border-radius:9px; color:var(--muted); transition:all .16s; }
+.tab-btn.active{ background:var(--violet); color:#fff; }
+
+.panel-scroll{ flex:1; overflow-y:auto; scrollbar-width:none; display:flex; flex-direction:column; gap:12px; }
+.panel-scroll::-webkit-scrollbar{ display:none; }
+.tab-pane{ display:none; flex-direction:column; gap:12px; }
+.tab-pane.active{ display:flex; }
+
+/* patient info pane */
+.patient-card{ padding:18px; }
+.patient-top{ display:flex; align-items:center; gap:12px; }
+.patient-top .avatar{ width:46px; height:46px; font-size:15px; }
+.patient-top b{ font-family:var(--font-display); font-size:14.5px; display:block; } .patient-top span{ font-size:11px; color:var(--muted); }
+.info-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:16px; }
+.info-cell{ padding:10px 12px; border-radius:12px; background:var(--panel-raised); border:1px solid var(--border); }
+.info-cell span{ font-size:9.5px; color:var(--faint); text-transform:uppercase; letter-spacing:.05em; font-family:var(--font-mono); }
+.info-cell b{ display:block; font-size:12.5px; margin-top:3px; }
+
+.hist-card{ padding:16px 18px; }
+.hist-card h4{ font-family:var(--font-display); font-size:13px; font-weight:700; margin-bottom:10px; }
+.hist-row{ display:flex; justify-content:space-between; padding:8px 0; border-top:1px solid var(--border); font-size:11.5px; }
+.hist-row:first-of-type{ border-top:none; padding-top:0; }
+.hist-row span:first-child{ color:var(--muted); }
+.tag-chip{ font-family:var(--font-mono); font-size:9.5px; padding:2px 8px; border-radius:20px; }
+.tag-chip.allergy{ background:var(--rose-soft); color:var(--rose); }
+
+/* chat pane */
+.chat-scroll{ flex:1; overflow-y:auto; display:flex; flex-direction:column; gap:10px; padding:4px; scrollbar-width:none; }
+.chat-scroll::-webkit-scrollbar{ display:none; }
+.msg{ max-width:80%; padding:10px 13px; border-radius:14px; font-size:12.5px; line-height:1.5; }
+.msg.them{ background:var(--panel-raised); border:1px solid var(--border); align-self:flex-start; border-bottom-left-radius:4px; }
+.msg.me{ background:var(--violet); align-self:flex-end; border-bottom-right-radius:4px; }
+.msg-time{ font-size:9px; color:var(--faint); margin-top:4px; }
+.chat-input-row{ display:flex; gap:8px; padding:6px; border-radius:14px; background:var(--panel-raised); border:1px solid var(--border); flex-shrink:0; }
+.chat-input-row input{ flex:1; background:none; border:none; color:var(--text); font-size:12.5px; padding:8px 10px; }
+.chat-send{ width:36px; height:36px; border-radius:10px; background:var(--violet); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.chat-send svg{ width:15px; height:15px; }
+
+/* notes / prescription pane */
+.rx-panel{ padding:16px 18px; }
+.rx-panel h4{ font-family:var(--font-display); font-size:13px; font-weight:700; margin-bottom:10px; }
+.rx-item{ display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px solid var(--border); }
+.rx-item:first-of-type{ border-top:none; padding-top:0; }
+.rx-item .ic{ width:30px; height:30px; border-radius:9px; background:var(--mint-soft); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.rx-item .ic svg{ width:14px; height:14px; color:var(--mint); }
+.rx-item b{ font-size:12px; display:block; } .rx-item span{ font-size:10px; color:var(--muted); }
+textarea.notes-area{ width:100%; background:var(--panel-raised); border:1px solid var(--border); border-radius:12px; padding:12px; color:var(--text); font-family:var(--font-body); font-size:12px; resize:none; height:90px; margin-top:4px; }
+textarea.notes-area::placeholder{ color:var(--faint); }
+
+.btn{ display:inline-flex; align-items:center; justify-content:center; gap:7px; font-size:12px; font-weight:700; padding:10px 14px; border-radius:11px; transition:all .16s; width:100%; }
+.btn svg{ width:14px; height:14px; }
+.btn-primary{ background:var(--violet); color:#fff; } .btn-primary:hover{ background:#7c48e6; }
+.btn-outline{ background:transparent; border:1px solid var(--border-strong); color:var(--text); } .btn-outline:hover{ border-color:var(--violet); }
+
+@media (max-width:980px){
+  .room-body{ grid-template-columns:1fr; grid-template-rows:1fr auto; }
+  .side-panel{ height:280px; }
+  .self-view{ width:100px; height:72px; }
+}
+@media (prefers-reduced-motion:reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+
+<div class="room">
+
+  <!-- STATUS BAR -->
+  <div class="glass status-bar">
+    <div class="status-left">
+      <span class="rec-dot"></span>
+      <b>Live Consultation</b>
+      <span>Cardiology Follow-up</span>
+    </div>
+    <div class="status-mid">
+      <div class="signal-bars"><div style="height:4px;"></div><div style="height:7px;"></div><div style="height:10px;"></div><div style="height:12px;"></div></div>
+      <span id="callTimer">00:00</span>
+      <span>·</span>
+      <span>Encrypted</span>
+    </div>
+    <div class="status-right">
+      <div class="avatar">MN</div>
+      <div style="line-height:1.2;"><b style="font-size:12px; display:block;">Dr. Mostafa Nabil</b><span style="font-size:10px; color:var(--muted);">Host</span></div>
+    </div>
+  </div>
+
+  <div class="room-body">
+
+    <!-- VIDEO STAGE -->
+    <div class="stage">
+      <div class="stage-fill"><div class="stage-avatar">LK</div></div>
+      <div class="vitals-overlay">
+        <div class="vital-chip"><svg viewBox="0 0 24 24" fill="none" stroke="var(--rose)" stroke-width="2"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg><div><b>72 <span style="font-weight:400;">bpm</span></b><span>Heart rate</span></div></div>
+        <div class="vital-chip"><svg viewBox="0 0 24 24" fill="none" stroke="var(--sky)" stroke-width="2"><path d="M12 21s-7-4.5-7-10a5 5 0 0110-2 5 5 0 0110 2c0 5.5-7 10-7 10z"/></svg><div><b>118/76</b><span>Blood pressure</span></div></div>
+      </div>
+      <div class="stage-name-tag"><span class="dot"></span><span>Layla Kassem</span></div>
+      <div class="self-view"><div class="init">MN</div><div class="self-view-tag">You</div></div>
+
+      <div class="controls-bar">
+        <button class="ctrl-btn" id="micBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="9" y="2" width="6" height="12" rx="3"/><path d="M5 10a7 7 0 0014 0M12 19v3"/></svg></button>
+        <button class="ctrl-btn" id="camBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="M16 10l6-3.5v11L16 14"/></svg></button>
+        <div class="ctrl-divider"></div>
+        <button class="ctrl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></button>
+        <button class="ctrl-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 8v4l3 2"/></svg></button>
+        <div class="ctrl-divider"></div>
+        <button class="ctrl-btn end"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 15l5-1.5v-3L4 9c4-4 12-4 16 0l-5 1.5v3L20 15c-1.5 2-3.5 2.5-4.5 1l-1.2-2a4 4 0 00-4.6 0l-1.2 2c-1 1.5-3 1-4.5-1z"/></svg></button>
+      </div>
+    </div>
+
+    <!-- SIDE PANEL -->
+    <div class="side-panel">
+      <div class="tabs-row">
+        <button class="tab-btn active" data-tab="info">Patient</button>
+        <button class="tab-btn" data-tab="chat">Chat</button>
+        <button class="tab-btn" data-tab="rx">Notes &amp; Rx</button>
+      </div>
+
+      <div class="panel-scroll">
+
+        <!-- PATIENT INFO -->
+        <div class="tab-pane active" data-pane="info">
+          <div class="glass patient-card">
+            <div class="patient-top"><div class="avatar">LK</div><div><b>Layla Kassem</b><span>34 yrs · Female · ID #AV-4471</span></div></div>
+            <div class="info-grid">
+              <div class="info-cell"><span>Blood Type</span><b>O+</b></div>
+              <div class="info-cell"><span>Insurance</span><b>NileCare Premium</b></div>
+              <div class="info-cell"><span>Last Visit</span><b>Jun 2, 2026</b></div>
+              <div class="info-cell"><span>Reason</span><b>Follow-up · HTN</b></div>
+            </div>
+          </div>
+
+          <div class="glass hist-card">
+            <h4>Chronic Conditions</h4>
+            <div class="hist-row"><span>Essential Hypertension</span><span>2025</span></div>
+            <div class="hist-row"><span>Type 2 Diabetes</span><span>2024</span></div>
+          </div>
+
+          <div class="glass hist-card">
+            <h4>Allergies</h4>
+            <div class="hist-row"><span>Penicillin</span><span class="tag-chip allergy">Severe</span></div>
+            <div class="hist-row"><span>Shellfish</span><span class="tag-chip allergy">Mild</span></div>
+          </div>
+
+          <div class="glass hist-card">
+            <h4>Current Medications</h4>
+            <div class="hist-row"><span>Amlodipine 5mg</span><span style="color:var(--muted);">Daily</span></div>
+            <div class="hist-row"><span>Metformin 500mg</span><span style="color:var(--muted);">Twice daily</span></div>
+          </div>
+        </div>
+
+        <!-- CHAT -->
+        <div class="tab-pane" data-pane="chat" style="flex:1; min-height:0;">
+          <div class="chat-scroll" id="chatScroll">
+            <div class="msg them">Good morning Dr. Nabil, I've been feeling much better this week.<div class="msg-time">10:31 AM</div></div>
+            <div class="msg me">Great to hear. Have you been taking the Amlodipine as scheduled?<div class="msg-time">10:31 AM</div></div>
+            <div class="msg them">Yes, every morning. No dizziness or side effects.<div class="msg-time">10:32 AM</div></div>
+            <div class="msg me">Perfect. I'll send over a refill and we'll check your BP again in 3 weeks.<div class="msg-time">10:33 AM</div></div>
+          </div>
+          <div class="chat-input-row">
+            <input type="text" placeholder="Type a message…">
+            <button class="chat-send"><svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+          </div>
+        </div>
+
+        <!-- NOTES / RX -->
+        <div class="tab-pane" data-pane="rx">
+          <div class="glass rx-panel">
+            <h4>Clinical Notes</h4>
+            <textarea class="notes-area" placeholder="Patient reports improved symptom control. BP stable at 118/76. Continue current regimen…"></textarea>
+          </div>
+          <div class="glass rx-panel">
+            <h4>Prescription Pad</h4>
+            <div class="rx-item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></div><div><b>Amlodipine 5mg</b><span>1 tablet · once daily · 30 days</span></div></div>
+            <div class="rx-item"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M9 7h6M9 11h6M9 15h3"/></svg></div><div><b>Metformin 500mg</b><span>1 tablet · twice daily · 30 days</span></div></div>
+            <button class="btn btn-outline" style="margin-top:12px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Add Medication</button>
+          </div>
+          <button class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg>Send Prescription &amp; End Visit</button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* call timer */
+let secs=0;
+setInterval(()=>{ secs++; const m=String(Math.floor(secs/60)).padStart(2,'0'), s=String(secs%60).padStart(2,'0'); document.getElementById('callTimer').textContent=`${m}:${s}`; },1000);
+
+/* tabs */
+document.querySelectorAll('.tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.tab-pane').forEach(p=>p.classList.remove('active'));
+    document.querySelector(`.tab-pane[data-pane="${btn.dataset.tab}"]`).classList.add('active');
+  });
+});
+
+/* mic / cam toggle */
+document.getElementById('micBtn').addEventListener('click', function(){ this.classList.toggle('off'); });
+document.getElementById('camBtn').addEventListener('click', function(){ this.classList.toggle('off'); });
+
+/* auto scroll chat to bottom */
+const chatScroll = document.getElementById('chatScroll');
+chatScroll.scrollTop = chatScroll.scrollHeight;
+</script>
+</body>
+</html>

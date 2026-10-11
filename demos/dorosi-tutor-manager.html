@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>دروسي — نظام إدارة الدروس الخصوصية</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%93%9A%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Cairo', 'ui-sans-serif', 'system-ui'] },
+      }
+    }
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root { --accent: #5B7FC4; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    opacity: 0;
+    animation: vip-fade-in .5s ease forwards;
+  }
+  @keyframes vip-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent; }
+  button, a, [role="button"] { transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+  button:active { transform: scale(0.97); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #root { min-height: 100vh; }
+  #vip-loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: #0a0a0a; z-index: 9999; transition: opacity .4s ease;
+  }
+  #vip-loading .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-top-color: var(--accent);
+    animation: vip-spin .8s linear infinite;
+  }
+  @keyframes vip-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="vip-loading"><div class="spinner"></div></div>
+<div id="root"></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import * as ReactDOM from "react-dom/client";
+import React, { useState, useEffect } from "react";
+import {
+  LayoutGrid, Users, CalendarDays, Wallet, GraduationCap, Settings as SettingsIcon,
+  Search, Plus, X, Check, Phone, MessageCircle, Clock, ChevronLeft, BookOpen,
+  Sparkles, ArrowUpRight, ArrowDownRight, Award, Target, PenLine, Layers,
+  Banknote, CalendarCheck, TrendingUp, Star,
+} from "lucide-react";
+import {
+  AreaChart, Area, PieChart, Pie, Cell, XAxis, YAxis, Tooltip, ResponsiveContainer, CartesianGrid,
+} from "recharts";
+
+/* ============================== الخطوط والهوية ============================== */
+const FONT_ID = "dorosi-fonts";
+function useFonts() {
+  useEffect(() => {
+    if (document.getElementById(FONT_ID)) return;
+    const l = document.createElement("link");
+    l.id = FONT_ID; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap";
+    document.head.appendChild(l);
+  }, []);
+}
+
+const C = {
+  bg: "#F3F6FB",
+  surface: "#FFFFFF",
+  border: "#E1E7F2",
+  primary: "#1B2A4A",
+  primaryDark: "#101B33",
+  primarySoft: "rgba(27,42,74,0.07)",
+  coral: "#FF6B4A",
+  coralSoft: "rgba(255,107,74,0.12)",
+  amber: "#FFC145",
+  amberSoft: "rgba(255,193,69,0.16)",
+  text: "#161F33",
+  muted: "#6B7690",
+  success: "#2E9E6E",
+  danger: "#E15550",
+};
+const font = { display: "'Cairo', sans-serif", body: "'Cairo', sans-serif" };
+const shadow = {
+  sm: "0 1px 3px rgba(22,31,51,0.06)",
+  md: "0 8px 22px rgba(22,31,51,0.08)",
+  lg: "0 20px 44px rgba(22,31,51,0.14)",
+};
+
+/* ============================== بيانات وهمية ============================== */
+const TUTOR = { name: "أ. هشام عبد المنعم", role: "مدرس رياضيات · ثانوي عام", initials: "هع" };
+
+const NAV = [
+  { id: "home", label: "الرئيسية", icon: LayoutGrid },
+  { id: "students", label: "الطلاب", icon: Users },
+  { id: "sessions", label: "الحصص", icon: CalendarDays },
+  { id: "groups", label: "المجموعات", icon: Layers },
+  { id: "payments", label: "المصروفات", icon: Wallet },
+  { id: "settings", label: "الإعدادات", icon: SettingsIcon },
+];
+
+const STUDENTS = [
+  { id: 1, name: "يوسف عماد", phone: "01011122244", last: "أمس", grade: "٧٨٪", tag: "متفوق", note: "ثالثة ثانوي — مجموعة السبت" },
+  { id: 2, name: "جنى محمود", phone: "01122233355", last: "منذ يومين", grade: "٦٥٪", tag: "بحاجة متابعة", note: "ثانية ثانوي — فردي" },
+  { id: 3, name: "عبد الرحمن سيد", phone: "01233344466", last: "منذ 3 أيام", grade: "٨٩٪", tag: "متفوق", note: "ثالثة ثانوي — مجموعة الأحد" },
+  { id: 4, name: "ملك أحمد", phone: "01544455577", last: "اليوم", grade: "٧٢٪", tag: "جيد", note: "أولى ثانوي — مجموعة الثلاثاء" },
+];
+
+const SESSIONS_TODAY = [
+  { id: 1, time: "04:00 م", name: "مجموعة السبت — ثالثة ثانوي", type: "مراجعة تفاضل وتكامل", status: "مؤكد" },
+  { id: 2, time: "06:00 م", name: "جنى محمود", type: "حصة فردية — تقوية", status: "مؤكد" },
+  { id: 3, time: "07:30 م", name: "مجموعة الثلاثاء — أولى ثانوي", type: "جبر ومتتابعات", status: "في الانتظار" },
+];
+
+const REVENUE_WEEK = [
+  { d: "السبت", v: 1400 }, { d: "الأحد", v: 2100 }, { d: "الإثنين", v: 900 },
+  { d: "الثلاثاء", v: 2600 }, { d: "الأربعاء", v: 1700 }, { d: "الخميس", v: 3000 },
+];
+
+const GRADE_SPLIT = [
+  { name: "ثالثة ثانوي", value: 40, fill: "#1B2A4A" },
+  { name: "ثانية ثانوي", value: 28, fill: "#FF6B4A" },
+  { name: "أولى ثانوي", value: 22, fill: "#FFC145" },
+  { name: "إعدادي", value: 10, fill: "#C7D1E4" },
+];
+
+const GROUPS = [
+  { name: "مجموعة السبت — ثالثة ثانوي", students: 14, day: "السبت 4:00 م", note: "مراجعة نهائية" },
+  { name: "مجموعة الأحد — ثالثة ثانوي", students: 12, day: "الأحد 5:00 م", note: "حل امتحانات سابقة" },
+  { name: "مجموعة الثلاثاء — أولى ثانوي", students: 9, day: "الثلاثاء 7:30 م", note: "أساسيات الجبر" },
+];
+
+const PAYMENTS = [
+  { id: "T-330", name: "يوسف عماد", amount: 400, status: "مدفوع", date: "اليوم" },
+  { id: "T-329", name: "جنى محمود", amount: 250, status: "غير مدفوع", date: "أمس" },
+  { id: "T-328", name: "عبد الرحمن سيد", amount: 400, status: "مدفوع", date: "منذ يومين" },
+  { id: "T-327", name: "ملك أحمد", amount: 350, status: "مدفوع", date: "منذ 3 أيام" },
+];
+
+/* ============================== عناصر أساسية ============================== */
+
+function Badge({ children, tone = "primary" }) {
+  const map = {
+    primary: { c: C.primary, bg: C.primarySoft }, coral: { c: C.coral, bg: C.coralSoft },
+    amber: { c: "#8A6414", bg: C.amberSoft }, success: { c: C.success, bg: "rgba(46,158,110,0.12)" },
+    danger: { c: C.danger, bg: "rgba(225,85,80,0.12)" },
+  };
+  const t = map[tone];
+  return <span style={{ display: "inline-flex", alignItems: "center", gap: 5, fontFamily: font.body, fontWeight: 700, fontSize: 11.5, color: t.c, background: t.bg, padding: "4px 10px", borderRadius: 8, whiteSpace: "nowrap" }}>{children}</span>;
+}
+
+function Card({ children, style, onClick, hoverLift = true }) {
+  const [h, setH] = useState(false);
+  return (
+    <div onClick={onClick} onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} style={{
+      background: C.surface, border: `1px solid ${h && hoverLift ? "rgba(255,107,74,0.3)" : C.border}`,
+      borderRadius: 18, boxShadow: h && hoverLift ? shadow.lg : shadow.sm,
+      transform: h && hoverLift ? "translateY(-3px)" : "translateY(0)",
+      transition: "all 0.3s cubic-bezier(.2,.8,.2,1)", cursor: onClick ? "pointer" : "default", ...style,
+    }}>{children}</div>
+  );
+}
+
+function Button({ children, variant = "primary", icon: Icon, onClick, style, small }) {
+  const [h, setH] = useState(false);
+  const variants = {
+    primary: { background: h ? "#E85A3B" : C.coral, color: "#fff", border: "none", boxShadow: h ? "0 10px 26px rgba(255,107,74,0.32)" : "0 6px 18px rgba(255,107,74,0.22)" },
+    navy: { background: h ? C.primaryDark : C.primary, color: "#fff", border: "none" },
+    outline: { background: h ? C.coralSoft : "transparent", color: C.coral, border: `1.5px solid ${C.coral}` },
+    ghost: { background: h ? "#EEF2F9" : "transparent", color: C.text, border: `1px solid ${C.border}` },
+  };
+  return (
+    <button onClick={onClick} onMouseEnter={() => setH(true)} onMouseLeave={() => setH(false)} style={{
+      display: "inline-flex", alignItems: "center", gap: 8, fontFamily: font.body, fontWeight: 700,
+      fontSize: small ? 13 : 14.5, padding: small ? "8px 15px" : "11px 20px", borderRadius: 12,
+      cursor: "pointer", transition: "all 0.2s ease", whiteSpace: "nowrap", ...variants[variant], ...style,
+    }}>
+      {Icon && <Icon size={small ? 14 : 16} />}{children}
+    </button>
+  );
+}
+
+function Input({ placeholder, icon: Icon, value, onChange, type = "text" }) {
+  return (
+    <div style={{ position: "relative" }}>
+      {Icon && <Icon size={15} color={C.muted} style={{ position: "absolute", right: 13, top: "50%", transform: "translateY(-50%)" }} />}
+      <input type={type} value={value} onChange={onChange} placeholder={placeholder} style={{
+        width: "100%", background: "#F3F6FB", border: `1px solid ${C.border}`, borderRadius: 12,
+        padding: "11px 12px", paddingRight: Icon ? 38 : 12, color: C.text, fontFamily: font.body,
+        fontSize: 14, outline: "none", boxSizing: "border-box", textAlign: "right",
+      }} />
+    </div>
+  );
+}
+
+function Select({ options }) {
+  return (
+    <select style={{
+      width: "100%", background: "#F3F6FB", border: `1px solid ${C.border}`, borderRadius: 12,
+      padding: "11px 12px", color: C.text, fontFamily: font.body, fontSize: 14, outline: "none",
+      boxSizing: "border-box", textAlign: "right",
+    }}>{options.map((o) => <option key={o}>{o}</option>)}</select>
+  );
+}
+
+function FieldLabel({ children }) {
+  return <label style={{ display: "block", fontSize: 12.5, fontFamily: font.body, color: C.muted, marginBottom: 6, fontWeight: 700 }}>{children}</label>;
+}
+
+function SectionHeader({ eyebrow, title, action }) {
+  return (
+    <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-end", marginBottom: 22, flexWrap: "wrap", gap: 12 }}>
+      <div>
+        {eyebrow && <div style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: font.body, fontSize: 12, color: C.coral, fontWeight: 800, marginBottom: 5 }}><PenLine size={13} />{eyebrow}</div>}
+        <h2 style={{ fontFamily: font.display, fontWeight: 800, fontSize: 26, color: C.text, margin: 0 }}>{title}</h2>
+      </div>
+      {action}
+    </div>
+  );
+}
+
+function Modal({ open, onClose, title, children, width = 500 }) {
+  if (!open) return null;
+  return (
+    <div onClick={onClose} style={{ position: "fixed", inset: 0, background: "rgba(22,31,51,0.45)", backdropFilter: "blur(3px)", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 100 }}>
+      <div onClick={(e) => e.stopPropagation()} style={{ width, maxWidth: "90vw", maxHeight: "85vh", overflowY: "auto", background: C.surface, border: `1px solid ${C.border}`, borderRadius: 22, padding: 28, boxShadow: shadow.lg, animation: "slideUp 0.28s cubic-bezier(.2,.8,.2,1)" }}>
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 20 }}>
+          <h3 style={{ fontFamily: font.display, fontWeight: 800, fontSize: 20, color: C.text, margin: 0 }}>{title}</h3>
+          <div onClick={onClose} style={{ cursor: "pointer", color: C.muted, padding: 6 }}><X size={18} /></div>
+        </div>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function Toast({ show, message }) {
+  return (
+    <div style={{
+      position: "fixed", bottom: 26, left: 26, zIndex: 200, background: C.primary, color: "#fff",
+      borderRadius: 14, padding: "13px 18px", display: "flex", alignItems: "center", gap: 10,
+      fontFamily: font.body, fontSize: 13.5, fontWeight: 700, boxShadow: shadow.lg,
+      transform: show ? "translateY(0)" : "translateY(16px)", opacity: show ? 1 : 0,
+      pointerEvents: "none", transition: "all 0.3s cubic-bezier(.2,.8,.2,1)",
+    }}><Check size={14} color={C.amber} /> {message}</div>
+  );
+}
+
+function StatCard({ label, value, delta, positive, icon: Icon, prefix = "", tone = "coral" }) {
+  const toneMap = { coral: C.coral, navy: C.primary, amber: "#B98A1E" };
+  const tc = toneMap[tone];
+  return (
+    <Card style={{ padding: 20, flex: 1, minWidth: 190 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+        <div style={{ width: 40, height: 40, borderRadius: 12, background: `${tc}17`, display: "flex", alignItems: "center", justifyContent: "center" }}><Icon size={18} color={tc} /></div>
+        <div style={{ display: "flex", alignItems: "center", gap: 4 }}>
+          {positive ? <ArrowUpRight size={13} color={C.success} /> : <ArrowDownRight size={13} color={C.danger} />}
+          <span style={{ fontFamily: font.body, fontSize: 11.5, fontWeight: 700, color: positive ? C.success : C.danger }}>{delta}</span>
+        </div>
+      </div>
+      <div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 26, color: C.text, marginTop: 14 }}>{prefix}{value}</div>
+      <div style={{ fontFamily: font.body, fontSize: 12.5, color: C.muted, marginTop: 4 }}>{label}</div>
+    </Card>
+  );
+}
+
+/* ============================== الشريط الجانبي والعلوي ============================== */
+
+function Sidebar({ active, setActive }) {
+  return (
+    <div style={{ width: 232, flexShrink: 0, background: C.surface, borderLeft: `1px solid ${C.border}`, padding: "22px 14px", height: "100%" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 10, padding: "0 8px", marginBottom: 26 }}>
+        <div style={{ width: 38, height: 38, borderRadius: 12, background: "linear-gradient(135deg, #FF6B4A, #1B2A4A)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <GraduationCap size={18} color="#fff" />
+        </div>
+        <div>
+          <div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 17, color: C.text }}>دروسي</div>
+          <div style={{ fontFamily: font.body, fontSize: 10, color: C.muted }}>إدارة سنتراتك بسهولة</div>
+        </div>
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+        {NAV.map((item) => {
+          const isActive = active === item.id;
+          return (
+            <div key={item.id} onClick={() => setActive(item.id)} style={{
+              display: "flex", alignItems: "center", gap: 12, padding: "11px 12px", borderRadius: 12, cursor: "pointer",
+              background: isActive ? C.coralSoft : "transparent", color: isActive ? C.coral : "#4A5471",
+              fontFamily: font.body, fontSize: 14.5, fontWeight: isActive ? 700 : 600, transition: "all 0.2s ease",
+            }}
+              onMouseEnter={(e) => { if (!isActive) e.currentTarget.style.background = "#EEF2F9"; }}
+              onMouseLeave={(e) => { if (!isActive) e.currentTarget.style.background = "transparent"; }}
+            >
+              <item.icon size={18} strokeWidth={isActive ? 2.3 : 1.8} />
+              <span>{item.label}</span>
+            </div>
+          );
+        })}
+      </div>
+      <div style={{ marginTop: 30, padding: 16, borderRadius: 16, background: "linear-gradient(135deg, rgba(255,193,69,0.2), rgba(255,107,74,0.1))", border: `1px solid ${C.border}` }}>
+        <Award size={16} color={C.coral} />
+        <div style={{ fontFamily: font.display, fontWeight: 700, fontSize: 12.5, color: C.text, marginTop: 8 }}>باقة السنتر الذهبية</div>
+        <div style={{ fontFamily: font.body, fontSize: 11, color: C.muted, marginTop: 3, lineHeight: 1.6 }}>تتبع درجات الطلاب وتذكيرات أولياء الأمور تلقائيًا.</div>
+      </div>
+    </div>
+  );
+}
+
+function Topbar({ label }) {
+  const [notif, setNotif] = useState(false);
+  return (
+    <div style={{ height: 70, borderBottom: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 26px", background: "rgba(243,246,251,0.9)", backdropFilter: "blur(10px)", position: "relative", zIndex: 20 }}>
+      <div>
+        <div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 19, color: C.text }}>{label}</div>
+        <div style={{ fontFamily: font.body, fontSize: 11.5, color: C.muted }}>السبت، ١١ يوليو ٢٠٢٦</div>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
+        <div style={{ width: 230 }}><Input placeholder="ابحث عن طالب..." icon={Search} /></div>
+        <div style={{ position: "relative" }}>
+          <div onClick={() => setNotif(!notif)} style={{ width: 40, height: 40, borderRadius: 12, border: `1px solid ${C.border}`, display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer", position: "relative", background: notif ? C.coralSoft : C.surface }}>
+            <BookOpen size={16} color={C.text} />
+            <div style={{ position: "absolute", top: 8, left: 9, width: 7, height: 7, borderRadius: 999, background: C.coral, border: `2px solid ${C.surface}` }} />
+          </div>
+          {notif && (
+            <div style={{ position: "absolute", top: 48, left: 0, width: 260, background: C.surface, border: `1px solid ${C.border}`, borderRadius: 16, padding: 8, boxShadow: shadow.lg }}>
+              {["حصة مجموعة السبت بعد ساعة", "مصروفات جنى محمود لسه ماتدفعتش", "عبد الرحمن حقق أعلى درجة الأسبوع"].map((n, i) => (
+                <div key={i} style={{ padding: "10px 12px", fontFamily: font.body, fontSize: 12.5, color: C.text, borderRadius: 10 }}
+                  onMouseEnter={(e) => e.currentTarget.style.background = "#EEF2F9"} onMouseLeave={(e) => e.currentTarget.style.background = "transparent"}>{n}</div>
+              ))}
+            </div>
+          )}
+        </div>
+        <div style={{ width: 40, height: 40, borderRadius: 12, background: "linear-gradient(135deg, #FF6B4A, #1B2A4A)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: font.display, fontWeight: 800, fontSize: 13, color: "#fff" }}>{TUTOR.initials}</div>
+      </div>
+    </div>
+  );
+}
+
+/* ============================== الرئيسية ============================== */
+
+function Home({ setActive }) {
+  const [toast, setToast] = useState(false);
+  const fire = () => { setToast(true); setTimeout(() => setToast(false), 2000); };
+  return (
+    <div>
+      <div style={{ marginBottom: 26 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 6, fontFamily: font.body, fontSize: 12.5, color: C.coral, fontWeight: 800, marginBottom: 6 }}><Sparkles size={13} /> نظرة عامة على يومك</div>
+        <h1 style={{ fontFamily: font.display, fontWeight: 800, fontSize: 30, color: C.text, margin: 0 }}>أهلاً بيك يا أستاذ هشام 📘</h1>
+        <p style={{ fontFamily: font.body, fontSize: 14, color: C.muted, marginTop: 6 }}>عندك {SESSIONS_TODAY.length} حصص النهاردة، وإيراد الأسبوع لحد دلوقتي ١١,٧٠٠ جنيه.</p>
+      </div>
+
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 22 }}>
+        <StatCard label="إيراد النهاردة" value="1,050" prefix="ج.م " delta="+9%" positive icon={Banknote} tone="coral" />
+        <StatCard label="حصص النهاردة" value="3" delta="+1" positive icon={CalendarCheck} tone="navy" />
+        <StatCard label="طلاب جدد" value="5" delta="هذا الأسبوع" positive icon={Users} tone="amber" />
+        <StatCard label="متوسط الدرجات" value="76%" delta="+4%" positive icon={Target} tone="coral" />
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1.5fr 1fr", gap: 18, marginBottom: 18 }}>
+        <Card style={{ padding: 22 }}>
+          <span style={{ fontFamily: font.display, fontWeight: 700, fontSize: 16.5, color: C.text }}>إيراد الأسبوع</span>
+          <ResponsiveContainer width="100%" height={200}>
+            <AreaChart data={REVENUE_WEEK}>
+              <defs><linearGradient id="rg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stopColor={C.coral} stopOpacity={0.28} /><stop offset="100%" stopColor={C.coral} stopOpacity={0} /></linearGradient></defs>
+              <CartesianGrid stroke="#EEF2F9" vertical={false} />
+              <XAxis dataKey="d" stroke={C.muted} fontSize={11.5} tickLine={false} axisLine={false} fontFamily={font.body} />
+              <YAxis stroke={C.muted} fontSize={11} tickLine={false} axisLine={false} />
+              <Tooltip contentStyle={{ borderRadius: 14, border: `1px solid ${C.border}`, fontFamily: font.body, fontSize: 12, textAlign: "right" }} />
+              <Area type="monotone" dataKey="v" stroke={C.coral} strokeWidth={2.5} fill="url(#rg)" />
+            </AreaChart>
+          </ResponsiveContainer>
+        </Card>
+        <Card style={{ padding: 22 }}>
+          <span style={{ fontFamily: font.display, fontWeight: 700, fontSize: 16.5, color: C.text }}>توزيع الطلاب بالصفوف</span>
+          <ResponsiveContainer width="100%" height={190}>
+            <PieChart>
+              <Pie data={GRADE_SPLIT} dataKey="value" innerRadius={42} outerRadius={72} paddingAngle={3}>
+                {GRADE_SPLIT.map((s, i) => <Cell key={i} fill={s.fill} />)}
+              </Pie>
+              <Tooltip contentStyle={{ borderRadius: 14, border: `1px solid ${C.border}`, fontFamily: font.body, fontSize: 12, textAlign: "right" }} />
+            </PieChart>
+          </ResponsiveContainer>
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 6 }}>
+            {GRADE_SPLIT.map((s) => (
+              <div key={s.name} style={{ display: "flex", alignItems: "center", gap: 5, fontFamily: font.body, fontSize: 10.5, color: C.muted }}>
+                <div style={{ width: 8, height: 8, borderRadius: 3, background: s.fill }} /> {s.name}
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 18 }}>
+        <Card style={{ padding: 22 }}>
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 16 }}>
+            <span style={{ fontFamily: font.display, fontWeight: 700, fontSize: 16.5, color: C.text }}>حصص النهاردة</span>
+            <span onClick={() => setActive("sessions")} style={{ fontFamily: font.body, fontSize: 12.5, color: C.coral, cursor: "pointer", fontWeight: 700, display: "flex", alignItems: "center", gap: 3 }}>عرض الكل <ChevronLeft size={13} /></span>
+          </div>
+          {SESSIONS_TODAY.map((a) => (
+            <div key={a.id} style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 0", borderBottom: `1px solid ${C.border}` }}>
+              <div style={{ fontFamily: font.display, fontWeight: 700, fontSize: 13, color: C.coral, width: 58 }}>{a.time}</div>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontFamily: font.body, fontSize: 13.5, color: C.text, fontWeight: 700 }}>{a.name}</div>
+                <div style={{ fontFamily: font.body, fontSize: 11.5, color: C.muted }}>{a.type}</div>
+              </div>
+              <Badge tone={a.status === "مؤكد" ? "navy" : "coral"}>{a.status}</Badge>
+            </div>
+          ))}
+        </Card>
+
+        <Card style={{ padding: 22 }}>
+          <span style={{ fontFamily: font.display, fontWeight: 700, fontSize: 16.5, color: C.text }}>إجراءات سريعة</span>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 10, marginTop: 14 }}>
+            {[
+              { l: "إضافة طالب", i: Users }, { l: "حجز حصة", i: CalendarDays },
+              { l: "تسجيل دفعة", i: Wallet }, { l: "إرسال تذكير", i: MessageCircle },
+            ].map((q) => (
+              <div key={q.l} onClick={fire} style={{
+                display: "flex", alignItems: "center", gap: 9, padding: "12px 14px", borderRadius: 12,
+                border: `1px solid ${C.border}`, cursor: "pointer", fontFamily: font.body, fontSize: 13, fontWeight: 600, color: "#4A5471",
+                transition: "all 0.2s ease",
+              }}
+                onMouseEnter={(e) => { e.currentTarget.style.borderColor = C.coral; e.currentTarget.style.color = C.coral; e.currentTarget.style.background = C.coralSoft; }}
+                onMouseLeave={(e) => { e.currentTarget.style.borderColor = C.border; e.currentTarget.style.color = "#4A5471"; e.currentTarget.style.background = "transparent"; }}
+              >
+                <q.i size={15} /> {q.l}
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+      <Toast show={toast} message="تم تنفيذ الإجراء في العرض التجريبي." />
+    </div>
+  );
+}
+
+/* ============================== الطلاب ============================== */
+
+function Students() {
+  const [query, setQuery] = useState("");
+  const [modalOpen, setModalOpen] = useState(false);
+  const [selected, setSelected] = useState(null);
+  const [toast, setToast] = useState(false);
+  const filtered = STUDENTS.filter((p) => p.name.includes(query));
+  const save = () => { setModalOpen(false); setToast(true); setTimeout(() => setToast(false), 2000); };
+
+  return (
+    <div>
+      <SectionHeader eyebrow="طلابك" title="الطلاب" action={<Button icon={Plus} onClick={() => setModalOpen(true)}>إضافة طالب</Button>} />
+      <div style={{ marginBottom: 18, maxWidth: 320 }}><Input placeholder="ابحث بالاسم..." icon={Search} value={query} onChange={(e) => setQuery(e.target.value)} /></div>
+
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(270px, 1fr))", gap: 16 }}>
+        {filtered.map((p) => (
+          <Card key={p.id} onClick={() => setSelected(p)} style={{ padding: 20 }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                <div style={{ width: 46, height: 46, borderRadius: 14, background: C.coralSoft, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: font.display, fontWeight: 800, fontSize: 15, color: C.coral }}>{p.name.slice(0, 1)}</div>
+                <div>
+                  <div style={{ fontFamily: font.display, fontWeight: 700, fontSize: 14.5, color: C.text }}>{p.name}</div>
+                  <div style={{ fontFamily: font.body, fontSize: 11.5, color: C.muted, marginTop: 2, direction: "ltr", textAlign: "right" }}>{p.phone}</div>
+                </div>
+              </div>
+              <Badge tone={p.tag === "متفوق" ? "navy" : p.tag === "بحاجة متابعة" ? "danger" : "amber"}>{p.tag}</Badge>
+            </div>
+            <div style={{ fontFamily: font.body, fontSize: 12.5, color: C.text, marginTop: 14 }}>{p.note}</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 14, paddingTop: 12, borderTop: `1px solid ${C.border}` }}>
+              <span style={{ fontFamily: font.body, fontSize: 11.5, color: C.muted }}>آخر حصة: {p.last}</span>
+              <span style={{ fontFamily: font.display, fontWeight: 700, fontSize: 12.5, color: C.coral }}>{p.grade}</span>
+            </div>
+          </Card>
+        ))}
+      </div>
+
+      <Modal open={modalOpen} onClose={() => setModalOpen(false)} title="إضافة طالب جديد">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div style={{ gridColumn: "1 / -1" }}><FieldLabel>الاسم بالكامل</FieldLabel><Input placeholder="مثال: يوسف عماد" /></div>
+          <div><FieldLabel>رقم ولي الأمر</FieldLabel><Input placeholder="01xxxxxxxxx" /></div>
+          <div><FieldLabel>الصف الدراسي</FieldLabel><Select options={["أولى ثانوي", "ثانية ثانوي", "ثالثة ثانوي", "إعدادي"]} /></div>
+          <div style={{ gridColumn: "1 / -1" }}><FieldLabel>ملاحظات</FieldLabel><Input placeholder="مثال: يحتاج تقوية في الهندسة" /></div>
+        </div>
+        <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
+          <Button icon={Check} onClick={save}>حفظ الطالب</Button>
+          <Button variant="ghost" onClick={() => setModalOpen(false)}>إلغاء</Button>
+        </div>
+      </Modal>
+
+      <Modal open={!!selected} onClose={() => setSelected(null)} title={selected?.name || ""} width={440}>
+        {selected && (
+          <div>
+            <div style={{ display: "flex", alignItems: "center", gap: 14, marginBottom: 20 }}>
+              <div style={{ width: 56, height: 56, borderRadius: 16, background: C.coralSoft, display: "flex", alignItems: "center", justifyContent: "center", fontFamily: font.display, fontWeight: 800, fontSize: 19, color: C.coral }}>{selected.name.slice(0, 1)}</div>
+              <div><div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 17, color: C.text }}>{selected.name}</div><Badge tone="amber">{selected.tag}</Badge></div>
+            </div>
+            {[
+              { icon: Phone, label: "ولي الأمر", v: selected.phone }, { icon: Clock, label: "آخر حصة", v: selected.last },
+              { icon: Star, label: "متوسط الدرجات", v: selected.grade }, { icon: BookOpen, label: "ملاحظات", v: selected.note },
+            ].map((r, i) => (
+              <div key={i} style={{ display: "flex", alignItems: "center", gap: 12, padding: "11px 0", borderBottom: `1px solid ${C.border}` }}>
+                <r.icon size={15} color={C.coral} />
+                <span style={{ fontFamily: font.body, fontSize: 12, color: C.muted, width: 90 }}>{r.label}</span>
+                <span style={{ fontFamily: font.body, fontSize: 13, color: C.text, fontWeight: 600 }}>{r.v}</span>
+              </div>
+            ))}
+            <div style={{ display: "flex", gap: 10, marginTop: 18 }}>
+              <Button icon={MessageCircle} small style={{ flex: 1 }}>واتساب لولي الأمر</Button>
+              <Button icon={Phone} variant="outline" small style={{ flex: 1 }}>اتصال</Button>
+            </div>
+          </div>
+        )}
+      </Modal>
+      <Toast show={toast} message="تم حفظ بيانات الطالب في العرض التجريبي." />
+    </div>
+  );
+}
+
+/* ============================== الحصص ============================== */
+
+function Sessions() {
+  const [open, setOpen] = useState(false);
+  const [toast, setToast] = useState(false);
+  const save = () => { setOpen(false); setToast(true); setTimeout(() => setToast(false), 2000); };
+  return (
+    <div>
+      <SectionHeader eyebrow="جدول حصصك" title="الحصص" action={<Button icon={Plus} onClick={() => setOpen(true)}>حجز حصة</Button>} />
+      <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        {SESSIONS_TODAY.map((a) => (
+          <Card key={a.id} style={{ padding: 18, display: "flex", alignItems: "center", gap: 18 }}>
+            <div style={{ textAlign: "center", width: 70 }}><div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 16.5, color: C.coral }}>{a.time}</div></div>
+            <div style={{ width: 1, height: 34, background: C.border }} />
+            <div style={{ flex: 1 }}>
+              <div style={{ fontFamily: font.body, fontSize: 14.5, color: C.text, fontWeight: 700 }}>{a.name}</div>
+              <div style={{ fontFamily: font.body, fontSize: 12, color: C.muted }}>{a.type}</div>
+            </div>
+            <Badge tone={a.status === "مؤكد" ? "navy" : "coral"}>{a.status}</Badge>
+            <ChevronLeft size={16} color={C.muted} />
+          </Card>
+        ))}
+      </div>
+      <Modal open={open} onClose={() => setOpen(false)} title="حجز حصة جديدة">
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+          <div style={{ gridColumn: "1 / -1" }}><FieldLabel>الطالب أو المجموعة</FieldLabel><Select options={[...STUDENTS.map(p => p.name), ...GROUPS.map(g => g.name)]} /></div>
+          <div><FieldLabel>الموضوع</FieldLabel><Input placeholder="مثال: مراجعة تفاضل" /></div>
+          <div><FieldLabel>التاريخ</FieldLabel><Input type="date" /></div>
+          <div><FieldLabel>الوقت</FieldLabel><Input type="time" /></div>
+        </div>
+        <div style={{ display: "flex", gap: 10, marginTop: 22 }}>
+          <Button icon={Check} onClick={save}>تأكيد الحجز</Button>
+          <Button variant="ghost" onClick={() => setOpen(false)}>إلغاء</Button>
+        </div>
+      </Modal>
+      <Toast show={toast} message="تم حجز الحصة في العرض التجريبي." />
+    </div>
+  );
+}
+
+/* ============================== المجموعات ============================== */
+
+function Groups() {
+  return (
+    <div>
+      <SectionHeader eyebrow="مجموعاتك الدراسية" title="المجموعات" action={<Button icon={Plus}>إضافة مجموعة</Button>} />
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: 16 }}>
+        {GROUPS.map((g, i) => (
+          <Card key={i} style={{ padding: 20 }}>
+            <div style={{ width: 40, height: 40, borderRadius: 12, background: C.primarySoft, display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 }}><Layers size={18} color={C.primary} /></div>
+            <div style={{ fontFamily: font.display, fontWeight: 700, fontSize: 15.5, color: C.text }}>{g.name}</div>
+            <div style={{ fontFamily: font.body, fontSize: 12, color: C.muted, marginTop: 4 }}>{g.day}</div>
+            <div style={{ fontFamily: font.body, fontSize: 12.5, color: C.text, marginTop: 10 }}>{g.note}</div>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: 14, paddingTop: 12, borderTop: `1px solid ${C.border}` }}>
+              <span style={{ display: "flex", alignItems: "center", gap: 5, fontFamily: font.body, fontSize: 12, color: C.muted }}><Users size={12} /> {g.students} طالب</span>
+            </div>
+          </Card>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ============================== المصروفات ============================== */
+
+function Payments() {
+  const paid = PAYMENTS.filter(p => p.status === "مدفوع").reduce((a, b) => a + b.amount, 0);
+  const unpaid = PAYMENTS.filter(p => p.status !== "مدفوع").reduce((a, b) => a + b.amount, 0);
+  return (
+    <div>
+      <SectionHeader eyebrow="أموالك تحت السيطرة" title="المصروفات" action={<Button icon={Plus}>فاتورة جديدة</Button>} />
+      <div style={{ display: "flex", gap: 16, flexWrap: "wrap", marginBottom: 22 }}>
+        <StatCard label="محصّل هذا الأسبوع" value={paid.toLocaleString()} prefix="ج.م " delta="+7%" positive icon={Banknote} tone="coral" />
+        <StatCard label="مبالغ لسه مادفعتش" value={unpaid.toLocaleString()} prefix="ج.م " delta="فاتورة واحدة" positive={false} icon={Wallet} tone="navy" />
+      </div>
+      <Card style={{ padding: 0 }} hoverLift={false}>
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.8fr 1fr 1fr 1fr", padding: "13px 20px", borderBottom: `1px solid ${C.border}`, fontFamily: font.body, fontSize: 11, color: C.muted, fontWeight: 700 }}>
+          <div>الفاتورة</div><div>الطالب</div><div>المبلغ</div><div>الحالة</div><div>التاريخ</div>
+        </div>
+        {PAYMENTS.map((p) => (
+          <div key={p.id} style={{ display: "grid", gridTemplateColumns: "1fr 1.8fr 1fr 1fr 1fr", padding: "14px 20px", borderBottom: `1px solid ${C.border}`, alignItems: "center" }}>
+            <div style={{ fontFamily: font.body, fontSize: 12, color: C.muted, direction: "ltr", textAlign: "right" }}>{p.id}</div>
+            <div style={{ fontFamily: font.body, fontSize: 13, color: C.text, fontWeight: 600 }}>{p.name}</div>
+            <div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 14, color: C.text }}>{p.amount} ج.م</div>
+            <div><Badge tone={p.status === "مدفوع" ? "navy" : "danger"}>{p.status}</Badge></div>
+            <div style={{ fontFamily: font.body, fontSize: 11.5, color: C.muted }}>{p.date}</div>
+          </div>
+        ))}
+      </Card>
+    </div>
+  );
+}
+
+/* ============================== الإعدادات ============================== */
+
+function Toggle({ defaultOn = false }) {
+  const [on, setOn] = useState(defaultOn);
+  return (
+    <div onClick={() => setOn(!on)} style={{ width: 42, height: 24, borderRadius: 999, background: on ? C.coral : "#E1E7F2", cursor: "pointer", position: "relative", transition: "background 0.25s ease" }}>
+      <div style={{ width: 18, height: 18, borderRadius: 999, background: "#fff", position: "absolute", top: 3, right: on ? 21 : 3, transition: "right 0.25s cubic-bezier(.2,.8,.2,1)" }} />
+    </div>
+  );
+}
+
+function Settings() {
+  const [tab, setTab] = useState("profile");
+  const tabs = [{ id: "profile", l: "البيانات الشخصية" }, { id: "hours", l: "مواعيد الحصص" }, { id: "notif", l: "الإشعارات" }];
+  return (
+    <div>
+      <SectionHeader eyebrow="خصّص سنترك" title="الإعدادات" />
+      <div style={{ display: "grid", gridTemplateColumns: "200px 1fr", gap: 24 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 3 }}>
+          {tabs.map((t) => (
+            <div key={t.id} onClick={() => setTab(t.id)} style={{ padding: "11px 14px", borderRadius: 12, cursor: "pointer", fontFamily: font.body, fontSize: 13.5, fontWeight: 700, background: tab === t.id ? C.coralSoft : "transparent", color: tab === t.id ? C.coral : "#4A5471" }}>{t.l}</div>
+          ))}
+        </div>
+        <Card style={{ padding: 26 }} hoverLift={false}>
+          {tab === "profile" && (
+            <div>
+              <div style={{ display: "flex", alignItems: "center", gap: 16, marginBottom: 22 }}>
+                <div style={{ width: 64, height: 64, borderRadius: 18, background: "linear-gradient(135deg, #FF6B4A, #1B2A4A)", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: font.display, fontWeight: 800, fontSize: 22, color: "#fff" }}>{TUTOR.initials}</div>
+                <div><div style={{ fontFamily: font.display, fontWeight: 800, fontSize: 18, color: C.text }}>{TUTOR.name}</div><div style={{ fontFamily: font.body, fontSize: 12.5, color: C.muted }}>{TUTOR.role}</div></div>
+              </div>
+              <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 14 }}>
+                <div><FieldLabel>الاسم</FieldLabel><Input placeholder={TUTOR.name} /></div>
+                <div><FieldLabel>المادة</FieldLabel><Input placeholder="رياضيات" /></div>
+                <div><FieldLabel>رقم الموبايل</FieldLabel><Input placeholder="01xxxxxxxxx" /></div>
+                <div><FieldLabel>عنوان السنتر</FieldLabel><Input placeholder="المهندسين، الجيزة" /></div>
+              </div>
+              <div style={{ marginTop: 20 }}><Button icon={Check}>حفظ التعديلات</Button></div>
+            </div>
+          )}
+          {tab === "hours" && (
+            <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+              {["السبت", "الأحد", "الإثنين", "الثلاثاء", "الأربعاء", "الخميس", "الجمعة"].map((d) => (
+                <div key={d} style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "12px 0", borderBottom: `1px solid ${C.border}` }}>
+                  <span style={{ fontFamily: font.body, fontSize: 13.5, color: C.text, fontWeight: 600 }}>{d}</span>
+                  {d === "الجمعة" ? <Badge tone="danger">إجازة</Badge> : <span style={{ fontFamily: font.body, fontSize: 12.5, color: C.muted }}>04:00 م — 09:00 م</span>}
+                </div>
+              ))}
+            </div>
+          )}
+          {tab === "notif" && (
+            <div>
+              {[
+                { l: "تذكير حصة لولي الأمر", d: "رسالة واتساب قبل الحصة بساعة" },
+                { l: "تنبيه مصروفات متأخرة", d: "إشعار عند تأخر الدفع" },
+                { l: "تقرير درجات أسبوعي", d: "ملخص أداء الطلاب لأولياء الأمور" },
+              ].map((s, i) => (
+                <div key={i} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 0", borderBottom: `1px solid ${C.border}` }}>
+                  <div><div style={{ fontFamily: font.body, fontSize: 13.5, color: C.text, fontWeight: 700 }}>{s.l}</div><div style={{ fontFamily: font.body, fontSize: 11.5, color: C.muted, marginTop: 2 }}>{s.d}</div></div>
+                  <Toggle defaultOn={i !== 2} />
+                </div>
+              ))}
+            </div>
+          )}
+        </Card>
+      </div>
+    </div>
+  );
+}
+
+/* ============================== الهيكل العام ============================== */
+
+function DorosiApp() {
+  useFonts();
+  const [active, setActive] = useState("home");
+  const label = NAV.find((n) => n.id === active)?.label;
+  const screens = {
+    home: <Home setActive={setActive} />, students: <Students />, sessions: <Sessions />,
+    groups: <Groups />, payments: <Payments />, settings: <Settings />,
+  };
+  return (
+    <div dir="rtl" style={{ display: "flex", height: "100vh", width: "100%", background: C.bg, fontFamily: font.body, color: C.text, overflow: "hidden" }}>
+      <style>{`
+        * { box-sizing: border-box; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-thumb { background: rgba(255,107,74,0.25); border-radius: 8px; }
+        input::placeholder { color: #A2ABC4; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+      `}</style>
+      <div style={{ flex: 1, display: "flex", flexDirection: "column", minWidth: 0 }}>
+        <Topbar label={label} />
+        <div style={{ flex: 1, overflowY: "auto", padding: 28 }}>{screens[active]}</div>
+      </div>
+      <Sidebar active={active} setActive={setActive} />
+    </div>
+  );
+}
+
+
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+root.render(<DorosiApp />);
+const loading = document.getElementById("vip-loading");
+if (loading) { loading.style.opacity = "0"; setTimeout(() => loading.remove(), 400); }
+</script>
+</body>
+</html>

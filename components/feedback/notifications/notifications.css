@@ -1,0 +1,49 @@
+/* ============================================================
+   NEXORA — Notifications Panel
+   Persistent, reviewable list — distinct from Toast (transient).
+   ============================================================ */
+
+.nx-notif-panel {
+  width: 100%;
+  max-width: 380px;
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-lg);
+  box-shadow: var(--nx-shadow-lg);
+  overflow: hidden;
+}
+
+.nx-notif-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--nx-space-4) var(--nx-space-5);
+  border-bottom: 1px solid var(--nx-border-subtle);
+}
+
+.nx-notif-list {
+  max-height: 360px;
+  overflow-y: auto;
+}
+
+.nx-notif {
+  display: flex;
+  gap: var(--nx-space-3);
+  padding: var(--nx-space-4) var(--nx-space-5);
+  border-bottom: 1px solid var(--nx-border-subtle);
+  transition: background-color var(--nx-duration-base) var(--nx-ease-standard);
+}
+.nx-notif:last-child { border-bottom: none; }
+.nx-notif:hover { background: var(--nx-bg-elevated-2); }
+
+.nx-notif__dot {
+  width: 8px;
+  height: 8px;
+  margin-top: 6px;
+  border-radius: var(--nx-radius-full);
+  background: transparent;
+  flex-shrink: 0;
+}
+.nx-notif--unread .nx-notif__dot { background: var(--nx-accent-primary); }
+
+.nx-notif__text { font-size: var(--nx-fs-200); margin-bottom: var(--nx-space-1); }

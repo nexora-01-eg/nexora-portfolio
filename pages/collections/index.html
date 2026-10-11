@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Collections — NEXORA</title>
+  <meta name="description" content="Browse NEXORA projects grouped by theme — Featured, Latest, Popular, Enterprise, and more." />
+
+  <link rel="stylesheet" href="../../core/css/tokens.css" />
+  <link rel="stylesheet" href="../../core/css/base.css" />
+  <link rel="stylesheet" href="../../core/css/typography.css" />
+  <link rel="stylesheet" href="../../core/css/layout.css" />
+  <link rel="stylesheet" href="../../core/css/utilities.css" />
+  <link rel="stylesheet" href="../../core/css/animations.css" />
+  <link rel="stylesheet" href="../../core/css/shell.css" />
+
+  <link rel="stylesheet" href="../../components/navigation/navbar/navbar.css" />
+  <link rel="stylesheet" href="../../components/navigation/footer/footer.css" />
+  <link rel="stylesheet" href="../../components/navigation/breadcrumbs/breadcrumbs.css" />
+  <link rel="stylesheet" href="../../components/navigation/section-header/section-header.css" />
+  <link rel="stylesheet" href="../../components/ui/button/button.css" />
+  <link rel="stylesheet" href="../../components/ui/badge/badge.css" />
+  <link rel="stylesheet" href="../../components/ui/tabs/tabs.css" />
+  <link rel="stylesheet" href="../../components/ui/command-palette/command-palette.css" />
+  <link rel="stylesheet" href="../../components/forms/search-box/search-box.css" />
+  <link rel="stylesheet" href="../../components/cards/card/card.css" />
+  <link rel="stylesheet" href="../../components/cards/project-card/project-card.css" />
+  <link rel="stylesheet" href="../../components/feedback/empty-state/empty-state.css" />
+</head>
+<body>
+  <div class="nx-page-loader" aria-hidden="true"><span class="nx-page-loader__mark">NEXORA</span></div>
+  <div class="nx-scroll-progress" aria-hidden="true"></div>
+  <a class="nx-skip-link" href="#nx-main">Skip to content</a>
+
+  <header class="nx-navbar nx-navbar--glass">
+    <div class="nx-navbar__inner nx-container">
+      <a class="nx-navbar__brand" href="../../index.html">NEXORA</a>
+      <nav class="nx-navbar__links" aria-label="Primary">
+        <a class="nx-navbar__link" href="../../index.html">Home</a>
+        <a class="nx-navbar__link" href="../projects/index.html">Projects</a>
+        <a class="nx-navbar__link" href="../industries/index.html">Industries</a>
+        <a class="nx-navbar__link" href="../design-systems/index.html">Design Systems</a>
+        <a class="nx-navbar__link" href="../component-explorer/index.html">Components</a>
+        <a class="nx-navbar__link nx-navbar__link--active" href="index.html" aria-current="page">Collections</a>
+      </nav>
+      <div class="nx-navbar__actions">
+        <button class="nx-btn nx-btn--secondary nx-btn--sm nx-ripple-host" type="button" data-nx-command-trigger>Search <kbd class="nx-search-box__shortcut">⌘K</kbd></button>
+        <button class="nx-navbar__menu-toggle" type="button" aria-expanded="false" aria-controls="nx-navbar-mobile" aria-label="Open menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <nav class="nx-navbar__mobile" id="nx-navbar-mobile" aria-label="Primary mobile" hidden>
+      <a class="nx-navbar__link" href="../../index.html">Home</a>
+      <a class="nx-navbar__link" href="../projects/index.html">Projects</a>
+      <a class="nx-navbar__link" href="../industries/index.html">Industries</a>
+      <a class="nx-navbar__link" href="../design-systems/index.html">Design Systems</a>
+      <a class="nx-navbar__link" href="../component-explorer/index.html">Components</a>
+      <a class="nx-navbar__link" href="index.html">Collections</a>
+    </nav>
+  </header>
+
+  <main id="nx-main" class="nx-container nx-page-transition" role="main" style="padding-top: var(--nx-space-6);">
+    <nav class="nx-breadcrumbs" aria-label="Breadcrumb">
+      <ol class="nx-breadcrumbs__list">
+        <li><a class="nx-breadcrumbs__link" href="../../index.html">Home</a></li>
+        <li><span class="nx-breadcrumbs__sep" aria-hidden="true">/</span><span class="nx-breadcrumbs__current" aria-current="page">Collections</span></li>
+      </ol>
+    </nav>
+
+    <div class="nx-section-header" style="margin-top: var(--nx-space-5);">
+      <div>
+        <p class="nx-caption nx-text-accent">Curated Sets</p>
+        <h1 class="nx-h2">Collections</h1>
+        <p class="nx-body-lg nx-text-secondary">Browse projects grouped by theme rather than industry.</p>
+      </div>
+    </div>
+
+    <div class="nx-tabs" data-nx-tabs>
+      <div class="nx-tabs__list" role="tablist" aria-label="Collections">
+        <button class="nx-tabs__tab" role="tab" id="tab-featured" aria-controls="panel-featured" aria-selected="true" type="button">Featured</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-latest" aria-controls="panel-latest" aria-selected="false" type="button" tabindex="-1">Latest</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-popular" aria-controls="panel-popular" aria-selected="false" type="button" tabindex="-1">Popular</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-enterprise" aria-controls="panel-enterprise" aria-selected="false" type="button" tabindex="-1">Enterprise</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-favorites" aria-controls="panel-favorites" aria-selected="false" type="button" tabindex="-1">Favorites</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-medical" aria-controls="panel-medical" aria-selected="false" type="button" tabindex="-1">Medical</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-construction" aria-controls="panel-construction" aria-selected="false" type="button" tabindex="-1">Construction</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-finance" aria-controls="panel-finance" aria-selected="false" type="button" tabindex="-1">Finance</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-ai" aria-controls="panel-ai" aria-selected="false" type="button" tabindex="-1">AI</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-automation" aria-controls="panel-automation" aria-selected="false" type="button" tabindex="-1">Automation</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-restaurant" aria-controls="panel-restaurant" aria-selected="false" type="button" tabindex="-1">Restaurant</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-education" aria-controls="panel-education" aria-selected="false" type="button" tabindex="-1">Education</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-crm" aria-controls="panel-crm" aria-selected="false" type="button" tabindex="-1">CRM</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-dashboard" aria-controls="panel-dashboard" aria-selected="false" type="button" tabindex="-1">Dashboard</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-landing-pages" aria-controls="panel-landing-pages" aria-selected="false" type="button" tabindex="-1">Landing Pages</button>
+        <button class="nx-tabs__tab" role="tab" id="tab-websites" aria-controls="panel-websites" aria-selected="false" type="button" tabindex="-1">Websites</button>
+      </div>
+
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-featured" aria-labelledby="tab-featured">
+        <div class="nx-grid nx-grid--3" id="collection-featured" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-latest" aria-labelledby="tab-latest" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-latest" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-popular" aria-labelledby="tab-popular" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-popular" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-enterprise" aria-labelledby="tab-enterprise" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-enterprise" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-favorites" aria-labelledby="tab-favorites" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-favorites" role="list"></div>
+        <div class="nx-empty-state" id="collection-favorites-empty" hidden>
+          <div class="nx-empty-state__icon" aria-hidden="true">☆</div>
+          <h3 class="nx-h4">No favorites yet</h3>
+          <p class="nx-body nx-text-secondary">Star a project from its detail page to save it here.</p>
+        </div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-medical" aria-labelledby="tab-medical" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-medical" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-construction" aria-labelledby="tab-construction" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-construction" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-finance" aria-labelledby="tab-finance" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-finance" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-ai" aria-labelledby="tab-ai" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-ai" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-automation" aria-labelledby="tab-automation" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-automation" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-restaurant" aria-labelledby="tab-restaurant" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-restaurant" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-education" aria-labelledby="tab-education" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-education" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-crm" aria-labelledby="tab-crm" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-crm" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-dashboard" aria-labelledby="tab-dashboard" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-dashboard" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-landing-pages" aria-labelledby="tab-landing-pages" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-landing-pages" role="list"></div>
+      </div>
+      <div class="nx-tabs__panel" role="tabpanel" id="panel-websites" aria-labelledby="tab-websites" hidden>
+        <div class="nx-grid nx-grid--3" id="collection-websites" role="list"></div>
+      </div>
+    </div>
+  </main>
+
+  <footer class="nx-footer">
+    <div class="nx-container nx-footer__inner">
+      <div class="nx-footer__brand"><p class="nx-h4">NEXORA</p><p class="nx-small">Enterprise Demo Library — built to scale.</p></div>
+      <nav class="nx-footer__col" aria-label="Library"><p class="nx-caption">Library</p><a href="../projects/index.html">Projects</a><a href="index.html">Collections</a></nav>
+    </div>
+    <div class="nx-container nx-footer__bottom"><p class="nx-small">© 2026 NEXORA. All rights reserved.</p></div>
+  </footer>
+
+  <div class="nx-command-overlay" data-nx-command-palette role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+    <div class="nx-command">
+      <div class="nx-command__input-wrap"><span aria-hidden="true">⌕</span><input class="nx-command__input" type="text" placeholder="Search…" aria-label="Search" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="nx-command-list" /></div>
+      <ul class="nx-command__list" id="nx-command-list" role="listbox">
+        <!-- Populated at runtime by command-palette.js via the shared Search engine -->
+      </ul>
+    </div>
+  </div>
+
+  <script src="../../core/js/core.js"></script>
+  <script src="../../core/js/storage.js"></script>
+  <script src="../../core/js/helpers.js"></script>
+  <script src="../../core/js/theme.js"></script>
+  <script src="../../data/fallback-data.js"></script>
+  <script src="../../core/js/manifest.js"></script>
+  <script src="../../core/js/search.js"></script>
+  <script src="../../core/js/filters.js"></script>
+  <script src="../../core/js/sort.js"></script>
+  <script src="../../core/js/pagination.js"></script>
+  <script src="../../core/js/favorites.js"></script>
+  <script src="../../core/js/animations.js"></script>
+  <script src="../../core/js/shell.js"></script>
+  <script src="../../components/navigation/navbar/navbar.js"></script>
+  <script src="../../components/ui/tabs/tabs.js"></script>
+  <script src="../../components/ui/command-palette/command-palette.js"></script>
+  <script src="collections.js"></script>
+</body>
+</html>

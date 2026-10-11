@@ -1,0 +1,25 @@
+/* ============================================================
+   NEXORA — Industries (page-specific)
+   Grid uses Industry Card component as-is. Spotlight sections
+   (per-industry mini hero + stat + project grid) are page
+   layout only — cards/badges/etc. are all component CSS.
+   ============================================================ */
+
+.nx-industry-spotlight {
+  padding-block: var(--nx-space-8);
+  border-top: 1px solid var(--nx-border-subtle);
+}
+
+.nx-industry-spotlight__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--nx-space-5);
+  margin-bottom: var(--nx-space-6);
+}
+
+.nx-industry-spotlight__header h2 { margin-bottom: var(--nx-space-1); }
+
+@media (max-width: 768px) {
+  .nx-industry-spotlight__header { flex-direction: column; align-items: flex-start; }
+}

@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Falcon EMS — Dispatch Command Center</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#07090D;
+  --bg-deep: radial-gradient(ellipse 1100px 700px at 50% -10%, rgba(16,185,129,0.06), transparent 55%), #07090D;
+  --panel:#0D1117;
+  --panel-raised:#131A22;
+  --border: rgba(255,255,255,0.07);
+  --border-strong: rgba(255,255,255,0.14);
+  --amber:#F5A623; --amber-soft: rgba(245,166,35,0.14);
+  --red:#EF4444; --red-soft: rgba(239,68,68,0.15);
+  --green:#22D3A5; --green-soft: rgba(34,211,165,0.14);
+  --cyan:#38D6F0; --cyan-soft: rgba(56,214,240,0.12);
+  --violet:#9A7BF5; --violet-soft: rgba(154,123,245,0.14);
+  --text:#EDF1F5; --muted:#7C8794; --faint:#4A525C;
+  --r-md:14px; --r-lg:20px; --r-pill:999px;
+  --ease: cubic-bezier(.22,1,.36,1);
+  --shadow: 0 24px 50px -26px rgba(0,0,0,0.7);
+  --font-display:'Rajdhani', sans-serif; --font-body:'Inter', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{ background:var(--bg-deep); color:var(--text); font-family:var(--font-body); height:100vh; overflow:hidden; }
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; color:inherit; cursor:pointer;}
+:focus-visible{ outline:2px solid var(--green); outline-offset:2px; border-radius:6px; }
+::-webkit-scrollbar{width:6px;} ::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+.panel{ background:var(--panel); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow); }
+.mono{ font-family:var(--font-mono); }
+
+.shell{ display:flex; flex-direction:column; height:100vh; padding:14px; gap:12px; }
+
+/* ===== top bar ===== */
+.topbar{ display:flex; align-items:center; justify-content:space-between; padding:12px 20px; flex-shrink:0; }
+.topbar-brand{ display:flex; align-items:center; gap:11px; }
+.brand-mark{ width:36px; height:36px; border-radius:10px; background:linear-gradient(150deg, var(--green), #0d8f6f); display:flex; align-items:center; justify-content:center; }
+.brand-mark svg{ width:18px; height:18px; color:#04140f; }
+.brand-name{ font-family:var(--font-display); font-size:19px; font-weight:700; letter-spacing:.02em; }
+.brand-sub{ font-size:10px; color:var(--muted); font-family:var(--font-mono); letter-spacing:.08em; text-transform:uppercase; }
+.topbar-stats{ display:flex; gap:26px; }
+.tstat{ text-align:center; }
+.tstat b{ font-family:var(--font-display); font-size:22px; font-weight:700; display:block; }
+.tstat span{ font-size:9.5px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; font-family:var(--font-mono); }
+.tstat.alert b{ color:var(--red); }
+.topbar-right{ display:flex; align-items:center; gap:12px; }
+.live-chip{ display:flex; align-items:center; gap:7px; padding:8px 14px; border-radius:var(--r-pill); background:var(--red-soft); border:1px solid rgba(239,68,68,0.3); }
+.live-dot{ width:7px; height:7px; border-radius:50%; background:var(--red); animation:blink 1.3s infinite; }
+@keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+.live-chip span{ font-family:var(--font-mono); font-size:11px; color:var(--red); font-weight:600; }
+.clock{ font-family:var(--font-mono); font-size:13px; color:var(--muted); }
+.avatar{ width:32px; height:32px; border-radius:9px; background:linear-gradient(150deg, var(--cyan), #1a7d94); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-weight:700; font-size:12px; color:#04191f; }
+
+/* ===== body layout ===== */
+.body-grid{ flex:1; display:grid; grid-template-columns:1fr 320px 300px; gap:12px; min-height:0; }
+
+/* ===== map / radar ===== */
+.map-panel{ position:relative; overflow:hidden; }
+.map-head{ position:absolute; top:16px; left:18px; z-index:5; }
+.map-head b{ font-family:var(--font-display); font-size:15px; font-weight:700; letter-spacing:.02em; }
+.map-head span{ display:block; font-size:10px; color:var(--muted); font-family:var(--font-mono); margin-top:2px; }
+.map-legend{ position:absolute; top:16px; right:18px; z-index:5; display:flex; flex-direction:column; gap:6px; }
+.legend-chip{ display:flex; align-items:center; gap:7px; font-size:10px; font-family:var(--font-mono); color:var(--muted); }
+.legend-dot{ width:7px; height:7px; border-radius:50%; }
+#mapSvg{ width:100%; height:100%; display:block; }
+
+/* ===== dispatch queue ===== */
+.side-col{ display:flex; flex-direction:column; gap:12px; min-height:0; }
+.panel-head{ display:flex; justify-content:space-between; align-items:center; padding:16px 18px 10px; }
+.panel-head b{ font-family:var(--font-display); font-size:14.5px; font-weight:700; }
+.panel-head span{ font-family:var(--font-mono); font-size:10px; color:var(--muted); background:var(--panel-raised); border:1px solid var(--border); padding:3px 8px; border-radius:20px; }
+.queue-scroll{ flex:1; overflow-y:auto; padding:0 18px 16px; display:flex; flex-direction:column; gap:9px; }
+
+.incident-card{ padding:12px 13px; border-radius:12px; background:var(--panel-raised); border-left:3px solid var(--faint); transition:all .2s var(--ease); cursor:pointer; }
+.incident-card:hover{ background:#182029; }
+.incident-card.priority1{ border-left-color:var(--red); }
+.incident-card.priority2{ border-left-color:var(--amber); }
+.incident-card.priority3{ border-left-color:var(--cyan); }
+.inc-top{ display:flex; justify-content:space-between; align-items:center; }
+.inc-id{ font-family:var(--font-mono); font-size:10px; color:var(--muted); }
+.inc-time{ font-family:var(--font-mono); font-size:10px; color:var(--faint); }
+.inc-title{ font-size:12.5px; font-weight:600; margin-top:5px; }
+.inc-loc{ font-size:10.5px; color:var(--muted); margin-top:2px; display:flex; align-items:center; gap:4px; }
+.inc-loc svg{ width:11px; height:11px; }
+.priority-tag{ font-family:var(--font-mono); font-size:9px; padding:2px 7px; border-radius:20px; margin-top:8px; display:inline-block; }
+.priority-tag.p1{ background:var(--red-soft); color:var(--red); } .priority-tag.p2{ background:var(--amber-soft); color:var(--amber); } .priority-tag.p3{ background:var(--cyan-soft); color:var(--cyan); }
+
+/* ===== unit roster ===== */
+.unit-row{ display:flex; align-items:center; gap:10px; padding:10px 0; border-top:1px solid var(--border); }
+.unit-row:first-child{ border-top:none; padding-top:0; }
+.unit-icon{ width:32px; height:32px; border-radius:9px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.unit-icon svg{ width:15px; height:15px; }
+.unit-row .info{ flex:1; min-width:0; } .unit-row .un{ font-size:12px; font-weight:700; font-family:var(--font-mono); } .unit-row .um{ font-size:10px; color:var(--muted); margin-top:1px; }
+.unit-status{ font-family:var(--font-mono); font-size:9px; padding:2px 8px; border-radius:20px; text-align:center; }
+.unit-status.available{ background:var(--green-soft); color:var(--green); }
+.unit-status.enroute{ background:var(--amber-soft); color:var(--amber); }
+.unit-status.onscene{ background:var(--red-soft); color:var(--red); }
+.unit-status.returning{ background:var(--cyan-soft); color:var(--cyan); }
+
+/* ===== response time chart ===== */
+.metric-panel{ padding:16px 18px; }
+.metric-panel b{ font-family:var(--font-display); font-size:13.5px; font-weight:700; }
+.metric-row{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; }
+.metric-row .ml{ font-size:11px; color:var(--muted); }
+.metric-track{ width:100px; height:5px; border-radius:5px; background:var(--panel-raised); overflow:hidden; }
+.metric-fill{ height:100%; border-radius:5px; width:0; transition:width 1s var(--ease); }
+
+@media (max-width:1300px){ .body-grid{ grid-template-columns:1fr 280px; } .side-col:nth-child(3){ display:none; } }
+@media (max-width:800px){ .body-grid{ grid-template-columns:1fr; grid-template-rows:1fr auto; } .topbar-stats{ display:none; } }
+@media (prefers-reduced-motion:reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+
+<div class="shell">
+
+  <!-- TOP BAR -->
+  <div class="panel topbar">
+    <div class="topbar-brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2v20M2 12h20"/></svg></div>
+      <div><div class="brand-name">FALCON EMS</div><div class="brand-sub">Dispatch Command</div></div>
+    </div>
+    <div class="topbar-stats">
+      <div class="tstat alert"><b id="statActive">0</b><span>Active Incidents</span></div>
+      <div class="tstat"><b id="statUnits">0</b><span>Units Available</span></div>
+      <div class="tstat"><b id="statResponse">0:00</b><span>Avg Response</span></div>
+      <div class="tstat"><b id="statCalls">0</b><span>Calls Today</span></div>
+    </div>
+    <div class="topbar-right">
+      <div class="live-chip"><span class="live-dot"></span><span>LIVE</span></div>
+      <div class="clock" id="clock">00:00:00</div>
+      <div class="avatar">SO</div>
+    </div>
+  </div>
+
+  <div class="body-grid">
+
+    <!-- MAP / RADAR -->
+    <div class="panel map-panel">
+      <div class="map-head"><b>City Grid — Zone 4</b><span>Riverside District · Live tracking</span></div>
+      <div class="map-legend">
+        <div class="legend-chip"><span class="legend-dot" style="background:var(--red);"></span>Active incident</div>
+        <div class="legend-chip"><span class="legend-dot" style="background:var(--green);"></span>Available unit</div>
+        <div class="legend-chip"><span class="legend-dot" style="background:var(--amber);"></span>En route</div>
+      </div>
+      <svg id="mapSvg" viewBox="0 0 800 600"></svg>
+    </div>
+
+    <!-- DISPATCH QUEUE -->
+    <div class="panel side-col">
+      <div class="panel-head"><b>Dispatch Queue</b><span id="queueCount">0 pending</span></div>
+      <div class="queue-scroll" id="queueList"></div>
+    </div>
+
+    <!-- UNIT ROSTER + METRICS -->
+    <div class="side-col">
+      <div class="panel" style="flex:1; display:flex; flex-direction:column; min-height:0;">
+        <div class="panel-head"><b>Unit Roster</b><span id="unitCount">0 units</span></div>
+        <div class="queue-scroll" id="unitList" style="gap:0;"></div>
+      </div>
+      <div class="panel metric-panel">
+        <b>Response by Zone</b>
+        <div id="zoneMetrics"></div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+/* clock */
+function tick(){ const n=new Date(); document.getElementById('clock').textContent = n.toLocaleTimeString('en-US',{hour12:false}); }
+tick(); setInterval(tick,1000);
+
+function animateCount(el,target,dur=900,decimals=0){ const start=performance.now();
+  function frame(t){ const p=Math.min(1,(t-start)/dur); const e=1-Math.pow(1-p,3); el.textContent=Math.round(target*e).toLocaleString('en-US'); if(p<1) requestAnimationFrame(frame); }
+  requestAnimationFrame(frame); }
+setTimeout(()=>{
+  animateCount(document.getElementById('statActive'), 4);
+  animateCount(document.getElementById('statUnits'), 6);
+  animateCount(document.getElementById('statCalls'), 38);
+  document.getElementById('statResponse').textContent = '6:42';
+}, 300);
+
+/* ===== MAP / RADAR ===== */
+const svg = document.getElementById('mapSvg');
+const W=800,H=600;
+let map = `<defs>
+  <radialGradient id="radarGrad" cx="50%" cy="50%" r="50%">
+    <stop offset="0%" stop-color="rgba(34,211,165,0.35)"/><stop offset="100%" stop-color="rgba(34,211,165,0)"/>
+  </radialGradient>
+  <linearGradient id="sweepGrad" x1="0" y1="0" x2="1" y2="0">
+    <stop offset="0%" stop-color="rgba(34,211,165,0)"/><stop offset="100%" stop-color="rgba(34,211,165,0.5)"/>
+  </linearGradient>
+</defs>`;
+// grid streets
+map += `<rect width="${W}" height="${H}" fill="#0A0D12"/>`;
+for(let x=0;x<=W;x+=50){ map += `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="rgba(255,255,255,0.035)" stroke-width="1"/>`; }
+for(let y=0;y<=H;y+=50){ map += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="rgba(255,255,255,0.035)" stroke-width="1"/>`; }
+// wider avenues
+for(let x=100;x<=W;x+=200){ map += `<line x1="${x}" y1="0" x2="${x}" y2="${H}" stroke="rgba(255,255,255,0.08)" stroke-width="2.5"/>`; }
+for(let y=100;y<=H;y+=200){ map += `<line x1="0" y1="${y}" x2="${W}" y2="${y}" stroke="rgba(255,255,255,0.08)" stroke-width="2.5"/>`; }
+// district blocks
+const blocks = [[80,80,150,90],[320,60,180,140],[560,90,190,120],[70,260,200,150],[340,240,180,180],[600,260,160,160],[90,470,220,100],[380,470,200,100],[630,460,140,110]];
+blocks.forEach(b=>{ map += `<rect x="${b[0]}" y="${b[1]}" width="${b[2]}" height="${b[3]}" rx="4" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.05)"/>`; });
+
+// radar sweep centered
+const cx=W/2, cy=H/2, R=280;
+map += `<circle cx="${cx}" cy="${cy}" r="${R}" fill="url(#radarGrad)" opacity="0.15"/>`;
+map += `<circle cx="${cx}" cy="${cy}" r="${R}" fill="none" stroke="rgba(34,211,165,0.15)" stroke-width="1"/>`;
+map += `<circle cx="${cx}" cy="${cy}" r="${R*0.66}" fill="none" stroke="rgba(34,211,165,0.1)" stroke-width="1"/>`;
+map += `<circle cx="${cx}" cy="${cy}" r="${R*0.33}" fill="none" stroke="rgba(34,211,165,0.1)" stroke-width="1"/>`;
+map += `<g id="sweepGroup" style="transform-origin:${cx}px ${cy}px;"><path d="M ${cx} ${cy} L ${cx+R} ${cy} A ${R} ${R} 0 0 0 ${cx+R*Math.cos(-0.5)} ${cy+R*Math.sin(-0.5)} Z" fill="url(#sweepGrad)" opacity="0.5"/></g>`;
+
+// incident markers
+const incidents = [ {x:230,y:150,color:'var(--red)'}, {x:610,y:180,color:'var(--red)'}, {x:180,y:400,color:'var(--red)'}, {x:470,y:340,color:'var(--red)'} ];
+incidents.forEach((p,i)=>{
+  map += `<circle cx="${p.x}" cy="${p.y}" r="16" fill="${p.color.replace('var(--red)','rgba(239,68,68,0.18)')}" style="animation:ringPulse 2s infinite; animation-delay:${i*0.3}s;"/>`;
+  map += `<circle cx="${p.x}" cy="${p.y}" r="6" fill="#EF4444"/>`;
+  map += `<circle cx="${p.x}" cy="${p.y}" r="9" fill="none" stroke="#EF4444" stroke-width="1.5" opacity="0.6"/>`;
+});
+// unit markers
+const units = [ {x:130,y:230,color:'#22D3A5'}, {x:340,y:120,color:'#F5A623'}, {x:520,y:260,color:'#22D3A5'}, {x:680,y:340,color:'#F5A623'}, {x:250,y:480,color:'#22D3A5'}, {x:600,y:500,color:'#38D6F0'} ];
+units.forEach(u=>{ map += `<g transform="translate(${u.x},${u.y})"><rect x="-7" y="-7" width="14" height="14" rx="4" fill="${u.color}"/><path d="M-3,-1 h6 M0,-3 v6" stroke="#07090D" stroke-width="1.6"/></g>`; });
+
+map += `<style>@keyframes ringPulse{ 0%{ transform:scale(0.6); opacity:0.9; } 100%{ transform:scale(1.8); opacity:0; } }
+@keyframes sweepRotate{ to{ transform:rotate(360deg); } }
+#sweepGroup{ animation: sweepRotate 5s linear infinite; }
+circle[r="16"]{ transform-box: fill-box; transform-origin: center; }</style>`;
+svg.innerHTML = map;
+
+/* ===== dispatch queue ===== */
+const incData = [
+  {id:'#EM-4471', title:'Cardiac arrest — 41yo male', loc:'Marlowe St & 5th Ave', time:'00:42', pri:1},
+  {id:'#EM-4472', title:'Vehicle collision, 2 injured', loc:'Riverside Bridge', time:'01:58', pri:1},
+  {id:'#EM-4473', title:'Fall injury, elderly patient', loc:'Cedar Grove Apts', time:'03:15', pri:2},
+  {id:'#EM-4474', title:'Breathing difficulty', loc:'Harbor & Vine St', time:'04:30', pri:2},
+  {id:'#EM-4475', title:'Non-urgent transfer request', loc:'St. Aurelia Medical', time:'06:12', pri:3},
+];
+document.getElementById('queueList').innerHTML = incData.map(i=>`
+  <div class="incident-card priority${i.pri}"><div class="inc-top"><span class="inc-id">${i.id}</span><span class="inc-time">${i.time} ago</span></div>
+  <div class="inc-title">${i.title}</div><div class="inc-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 21s7-6.5 7-11a7 7 0 10-14 0c0 4.5 7 11 7 11z"/></svg>${i.loc}</div>
+  <span class="priority-tag p${i.pri}">Priority ${i.pri}</span></div>`).join('');
+document.getElementById('queueCount').textContent = incData.length+' pending';
+
+/* ===== unit roster ===== */
+const unitData = [
+  {id:'AMB-12', crew:'2 crew · Paramedic', status:'onscene'},
+  {id:'AMB-07', crew:'2 crew · EMT', status:'enroute'},
+  {id:'AMB-03', crew:'2 crew · Paramedic', status:'available'},
+  {id:'AMB-19', crew:'2 crew · EMT', status:'enroute'},
+  {id:'AMB-05', crew:'3 crew · Critical Care', status:'available'},
+  {id:'AMB-21', crew:'2 crew · Paramedic', status:'returning'},
+];
+const statusIcon = '<circle cx="12" cy="12" r="9"/><path d="M9 12l2 2 4-4"/>';
+document.getElementById('unitList').innerHTML = unitData.map(u=>`
+  <div class="unit-row" style="padding:9px 18px;"><div class="unit-icon" style="background:var(--panel-raised);"><svg viewBox="0 0 24 24" fill="none" stroke="var(--muted)" stroke-width="1.7"><path d="M3 12V8a2 2 0 012-2h6l3 4h5a2 2 0 012 2v4H3z"/><circle cx="7" cy="17" r="2"/><circle cx="17" cy="17" r="2"/></svg></div>
+  <div class="info"><div class="un">${u.id}</div><div class="um">${u.crew}</div></div><span class="unit-status ${u.status}">${u.status==='onscene'?'On Scene':u.status==='enroute'?'En Route':u.status==='returning'?'Returning':'Available'}</span></div>`).join('');
+document.getElementById('unitCount').textContent = unitData.length+' units';
+
+/* ===== zone metrics ===== */
+const zones = [ {n:'Zone 1 — Downtown', v:82, t:'5:20'}, {n:'Zone 2 — Riverside', v:68, t:'6:42'}, {n:'Zone 3 — Harbor', v:54, t:'8:10'}, {n:'Zone 4 — Suburbs', v:40, t:'10:55'} ];
+document.getElementById('zoneMetrics').innerHTML = zones.map(z=>`
+  <div class="metric-row"><span class="ml">${z.n}</span><div style="display:flex; align-items:center; gap:8px;"><div class="metric-track"><div class="metric-fill" data-w="${z.v}" style="background:${z.v>70?'var(--green)':z.v>50?'var(--amber)':'var(--red)'};"></div></div><span class="mono" style="font-size:10px; color:var(--muted); width:34px;">${z.t}</span></div></div>`).join('');
+setTimeout(()=>{ document.querySelectorAll('.metric-fill').forEach(el=>{ el.style.width = el.dataset.w+'%'; }); }, 400);
+</script>
+</body>
+</html>

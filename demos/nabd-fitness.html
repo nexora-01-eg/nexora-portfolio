@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>نبض — نظام إدارة الأندية الرياضية</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Baloo+Bhaijaan+2:wght@500;700;800&family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0B0B0E; --surface:#151519; --surface-2:#1C1C22;
+  --lime:#C6FF3D; --lime-dark:#94C921;
+  --coral:#FF4D6D; --coral-soft:#3A1620;
+  --text:#F5F5F0; --text-2:#B9B9C2; --muted:#75757F; --faint:#3A3A42;
+  --border:#26262E; --border-strong:#33333D;
+  --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:22px;
+  --shadow-sm:0 2px 10px rgba(0,0,0,0.3);
+  --shadow-md:0 14px 30px rgba(0,0,0,0.4);
+  --shadow-lg:0 30px 60px rgba(0,0,0,0.55);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Baloo Bhaijaan 2';font-weight:800;margin:0;color:#fff;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 260px;min-height:100vh;}
+.sidebar{background:var(--surface);border-left:1px solid var(--border);padding:24px 16px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:10px;padding:0 4px;}
+.brand-mark{width:42px;height:42px;border-radius:12px;background:var(--lime);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;color:#0B0B0E;}
+.brand-name{font-family:'Baloo Bhaijaan 2';font-weight:800;font-size:21px;color:#fff;}
+.brand-sub{font-size:10.5px;color:var(--muted);}
+.pulse-line{height:34px;margin:10px 0 18px;}
+.nav-sec{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;margin:14px 8px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:11px;color:var(--text-2);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;transition:all .15s;}
+.nav-item:hover{background:var(--surface-2);color:#fff;}
+.nav-item.active{background:var(--lime);color:#0B0B0E;}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:var(--coral);color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.nav-item.active .nav-badge{background:rgba(11,11,14,0.2);color:#0B0B0E;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--border);}
+.foot-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:12px;background:var(--surface-2);}
+.foot-card .avatar{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--lime),var(--lime-dark));display:flex;align-items:center;justify-content:center;font-weight:800;color:#0B0B0E;font-size:12px;}
+.foot-card .name{font-size:12.5px;font-weight:800;color:#fff;} .foot-card .role{font-size:10.5px;color:var(--muted);}
+
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(11,11,14,0.85);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;color:#fff;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;font-family:'Cairo';}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--coral);border-radius:50%;border:2px solid var(--bg);}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:27px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;font-family:'Cairo';}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15px;color:#fff;font-family:'Cairo';}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:11px 20px;border-radius:12px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:var(--lime);color:#0B0B0E;}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 8px 20px rgba(198,255,61,0.25);}
+.btn-coral{background:var(--coral);color:#fff;}
+.btn-outline{background:var(--surface);border-color:var(--border-strong);color:#fff;}
+.btn-outline:hover{background:var(--surface-2);}
+.btn-sm{padding:7px 13px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge-active{background:rgba(198,255,61,0.14);color:var(--lime);}
+.badge-warn{background:rgba(255,180,60,0.14);color:#FFB43C;}
+.badge-expired{background:var(--coral-soft);color:var(--coral);}
+
+.kpi{padding:20px 22px;position:relative;overflow:hidden;}
+.kpi .lbl{font-size:12px;color:var(--muted);font-weight:700;}
+.kpi .val{font-family:'Baloo Bhaijaan 2';font-size:30px;color:#fff;margin-top:6px;}
+.kpi .delta{font-size:11.5px;font-weight:800;margin-top:6px;display:inline-flex;align-items:center;gap:4px;}
+.delta.up{color:var(--lime);} .delta.down{color:var(--coral);}
+.kpi .ic-corner{position:absolute;top:16px;left:16px;width:36px;height:36px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--surface-2);}
+
+.member-row{display:flex;align-items:center;gap:12px;padding:11px 0;border-bottom:1px solid var(--border);}
+.avatar-sm{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--lime),var(--lime-dark));display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:#0B0B0E;flex-shrink:0;}
+
+table{width:100%;border-collapse:collapse;}
+th{text-align:right;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:800;padding:10px 14px;border-bottom:1px solid var(--border);}
+td{padding:13px 14px;font-size:13px;border-bottom:1px solid var(--border);color:var(--text-2);}
+td.strong{color:#fff;font-weight:800;}
+tr:last-child td{border-bottom:none;}
+tr.row-hover:hover{background:var(--surface-2);}
+
+/* Schedule */
+.sched{display:grid;grid-template-columns:80px repeat(7,1fr);gap:6px;}
+.sched .hd{font-size:10.5px;color:var(--muted);text-align:center;padding:6px;font-weight:800;}
+.sched .time{font-size:10.5px;color:var(--muted);padding:10px 4px;text-align:left;}
+.slot{background:var(--surface-2);border-radius:9px;min-height:56px;padding:6px;font-size:10px;}
+.slot.has{background:rgba(198,255,61,0.08);border:1px solid rgba(198,255,61,0.3);}
+.slot .cn{font-weight:800;color:var(--lime);} .slot .co{color:var(--muted);}
+
+/* progress ring */
+.ring-wrap{display:flex;align-items:center;gap:16px;}
+.ring{width:88px;height:88px;position:relative;}
+.ring svg{transform:rotate(-90deg);}
+.ring .pct{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Baloo Bhaijaan 2';font-size:17px;color:#fff;}
+
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:10px;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%;}
+.bar{width:100%;border-radius:8px 8px 3px 3px;background:linear-gradient(180deg,var(--lime),var(--lime-dark));transition:height 1s var(--ease);}
+.bar-col .lbl{font-size:10px;color:var(--muted);font-weight:700;}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,0.65);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(2px);}
+.overlay.active{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);width:420px;max-width:92vw;box-shadow:var(--shadow-lg);overflow:hidden;animation:pop .25s var(--ease);}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-head{padding:20px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.modal-body{padding:20px 22px;display:flex;flex-direction:column;gap:14px;}
+.field label{font-size:12px;font-weight:800;color:var(--text-2);margin-bottom:6px;display:block;}
+.field input,.field select{width:100%;padding:10px 12px;border:1px solid var(--border-strong);border-radius:10px;font-family:inherit;font-size:13px;background:var(--surface-2);color:#fff;}
+.modal-foot{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
+.close-x{width:30px;height:30px;border-radius:9px;border:1px solid var(--border);background:var(--surface-2);color:#fff;display:flex;align-items:center;justify-content:center;}
+
+.toast-wrap{position:fixed;bottom:24px;left:24px;z-index:200;display:flex;flex-direction:column;gap:10px;}
+.toast{background:var(--lime);color:#0B0B0E;padding:13px 18px;border-radius:12px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);animation:slidein .3s var(--ease);}
+@keyframes slidein{from{transform:translateX(-30px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+.demo-tag{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--surface);border:1px solid var(--border);color:var(--muted);font-size:10.5px;padding:6px 14px;border-radius:99px;z-index:150;pointer-events:none;}
+
+@media(max-width:1000px){.shell{grid-template-columns:1fr;}.sidebar{display:none;}.g4,.g3,.g2{grid-template-columns:1fr 1fr;}.sched{overflow-x:auto;}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="main">
+    <div class="topbar">
+      <div><h2 id="pageTitle">لوحة التحكم</h2><div class="sub" id="pageSub">أداء النادي اليوم</div></div>
+      <div class="top-actions">
+        <div class="icon-btn">🔔<span class="icon-dot"></span></div>
+        <button class="btn btn-primary btn-sm" onclick="openModal()">+ عضو جديد</button>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="view active" id="view-dashboard">
+        <div class="view-head"><div><h1>مساء الخير، كابتن يوسف 💪</h1><div class="sub">نبض القلب اليوم 128 نبضة/د في المتوسط بالنادي</div></div></div>
+        <div class="grid g4" style="margin-bottom:18px;">
+          <div class="card kpi"><div class="ic-corner">🧍</div><div class="lbl">أعضاء نشطون</div><div class="val">412</div><div class="delta up">▲ 9%</div></div>
+          <div class="card kpi"><div class="ic-corner">🔥</div><div class="lbl">حصص اليوم</div><div class="val">18</div><div class="delta up">▲ 4</div></div>
+          <div class="card kpi"><div class="ic-corner">💳</div><div class="lbl">إيراد الشهر</div><div class="val">312 ألف</div><div class="delta up">▲ 14%</div></div>
+          <div class="card kpi"><div class="ic-corner">⚠️</div><div class="lbl">اشتراكات منتهية</div><div class="val">27</div><div class="delta down">تحتاج متابعة</div></div>
+        </div>
+        <div class="grid g3">
+          <div class="card card-pad" style="grid-column:span 2;">
+            <div class="flex justify-between items-center" style="margin-bottom:16px;"><div class="card-title">دخول الأعضاء — آخر 7 أيام</div><div class="badge badge-active">متوسط 96/يوم</div></div>
+            <div class="bars" id="checkinBars"></div>
+          </div>
+          <div class="card card-pad">
+            <div class="card-title" style="margin-bottom:16px;">إشغال السعة الحالية</div>
+            <div class="ring-wrap">
+              <div class="ring"><svg width="88" height="88"><circle cx="44" cy="44" r="38" stroke="#26262E" stroke-width="9" fill="none"/><circle id="ringFg" cx="44" cy="44" r="38" stroke="#C6FF3D" stroke-width="9" fill="none" stroke-dasharray="239" stroke-dashoffset="239" stroke-linecap="round"/></svg><div class="pct">74%</div></div>
+              <div><div style="font-weight:800;color:#fff;font-size:13px;">148 / 200</div><div class="muted" style="font-size:11.5px;margin-top:4px;">متدرب حاليًا داخل الصالة</div></div>
+            </div>
+            <div style="margin-top:18px;" id="dashMembers"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="view-members">
+        <div class="view-head"><div><h1>الأعضاء</h1><div class="sub">412 عضو مسجل · 27 اشتراك يحتاج تجديد</div></div>
+          <button class="btn btn-primary" onclick="openModal()">+ إضافة عضو</button></div>
+        <div class="card">
+          <table><thead><tr><th>العضو</th><th>الباقة</th><th>تاريخ الانتهاء</th><th>الحالة</th><th></th></tr></thead>
+          <tbody id="membersBody"></tbody></table>
+        </div>
+      </div>
+
+      <div class="view" id="view-classes">
+        <div class="view-head"><div><h1>جدول الحصص</h1><div class="sub">الحصص الجماعية الأسبوعية لكل مدرب</div></div></div>
+        <div class="card card-pad">
+          <div class="sched" id="schedGrid"></div>
+        </div>
+      </div>
+
+      <div class="view" id="view-coaches">
+        <div class="view-head"><div><h1>المدربون</h1><div class="sub">فريق التدريب وتقييمات الأعضاء</div></div></div>
+        <div class="grid g3" id="coachesGrid"></div>
+      </div>
+
+      <div class="view" id="view-payments">
+        <div class="view-head"><div><h1>المدفوعات</h1><div class="sub">سجل تحصيل الاشتراكات</div></div></div>
+        <div class="card">
+          <table><thead><tr><th>العضو</th><th>الباقة</th><th>المبلغ</th><th>طريقة الدفع</th><th>الحالة</th></tr></thead>
+          <tbody id="paymentsBody"></tbody></table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="brand"><div class="brand-mark">⚡</div><div><div class="brand-name">نبض</div><div class="brand-sub">نظام إدارة الأندية</div></div></div>
+    <svg class="pulse-line" viewBox="0 0 220 34" preserveAspectRatio="none"><polyline points="0,17 40,17 52,4 64,30 76,17 220,17" fill="none" stroke="#C6FF3D" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <div class="nav-sec">الرئيسية</div>
+    <div class="nav-item active" data-view="dashboard"><span class="ic">📊</span> لوحة التحكم</div>
+    <div class="nav-item" data-view="members"><span class="ic">🧍</span> الأعضاء <span class="nav-badge">27</span></div>
+    <div class="nav-sec">التشغيل</div>
+    <div class="nav-item" data-view="classes"><span class="ic">🗓️</span> جدول الحصص</div>
+    <div class="nav-item" data-view="coaches"><span class="ic">🏋️</span> المدربون</div>
+    <div class="nav-sec">المالية</div>
+    <div class="nav-item" data-view="payments"><span class="ic">💳</span> المدفوعات</div>
+    <div class="sidebar-foot">
+      <div class="foot-card"><div class="avatar">يس</div><div><div class="name">كابتن يوسف</div><div class="role">مدير النادي</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-head"><h3 style="font-family:'Cairo';font-size:16px;font-weight:800;color:#fff;">إضافة عضو جديد</h3><div class="close-x" onclick="closeModal()">✕</div></div>
+    <div class="modal-body">
+      <div class="field"><label>اسم العضو</label><input placeholder="محمد إبراهيم"></div>
+      <div class="field"><label>الباقة</label><select><option>باقة شهرية</option><option>باقة ربع سنوية</option><option>باقة سنوية VIP</option></select></div>
+      <div class="field"><label>رقم الهاتف</label><input placeholder="01xxxxxxxxx"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" onclick="closeModal()">إلغاء</button><button class="btn btn-primary" onclick="addMember()">حفظ العضو</button></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="demo-tag">🎨 عرض تصميم تفاعلي — بيانات وهمية بالكامل، بدون نظام حقيقي</div>
+
+<script>
+const members = [
+  ['محمد إبراهيم','VIP سنوية','12 ديسمبر 2026','active'],
+  ['سلمى وجدي','شهرية','2 أغسطس 2026','warn'],
+  ['عمر خالد','ربع سنوية','19 يوليو 2026','warn'],
+  ['نورهان سيد','VIP سنوية','5 مارس 2027','active'],
+  ['طارق منير','شهرية','30 يونيو 2026','expired'],
+  ['ياسمين فوزي','ربع سنوية','14 سبتمبر 2026','active'],
+];
+const statusMap = {active:['فعال','badge-active'],warn:['قارب على الانتهاء','badge-warn'],expired:['منتهي','badge-expired']};
+
+function renderMembers(){
+  document.getElementById('membersBody').innerHTML = members.map(m=>{
+    const [txt,cls]=statusMap[m[3]];
+    return `<tr class="row-hover"><td class="strong">${m[0]}</td><td>${m[1]}</td><td>${m[2]}</td><td><span class="badge ${cls}">${txt}</span></td><td><button class="btn btn-outline btn-sm">تجديد</button></td></tr>`;
+  }).join('');
+  document.getElementById('dashMembers').innerHTML = members.slice(0,3).map(m=>`
+    <div class="member-row"><div class="avatar-sm">${m[0][0]}</div><div style="flex:1;"><div style="font-weight:800;font-size:12px;color:#fff;">${m[0]}</div><div class="muted" style="font-size:10.5px;">${m[1]}</div></div></div>`).join('');
+}
+
+function renderBars(){
+  const vals=[62,74,58,90,80,96,70];
+  const days=['سبت','أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة'];
+  const el=document.getElementById('checkinBars');
+  el.innerHTML = vals.map((v,i)=>`<div class="bar-col"><div class="bar" style="height:0%" data-h="${v}%"></div><div class="lbl">${days[i]}</div></div>`).join('');
+  setTimeout(()=>{document.querySelectorAll('.bar').forEach(b=>b.style.height=b.dataset.h);},100);
+  setTimeout(()=>{document.getElementById('ringFg').style.strokeDashoffset='62';document.getElementById('ringFg').style.transition='stroke-dashoffset 1.2s cubic-bezier(.16,1,.3,1)';},200);
+}
+
+const schedule = {
+  '6ص':{'سبت':['كروس فيت','كابتن يوسف']},
+  '9ص':{'أحد':['يوجا','كابتن هدى'],'ثلاثاء':['يوجا','كابتن هدى']},
+  '5م':{'اثنين':['بوكسينج','كابتن مينا'],'أربعاء':['بوكسينج','كابتن مينا'],'خميس':['بوكسينج','كابتن مينا']},
+  '7م':{'سبت':['رفع أثقال','كابتن عمرو'],'ثلاثاء':['سبينينج','كابتن سارة'],'جمعة':['كروس فيت','كابتن يوسف']},
+};
+function renderSchedule(){
+  const days=['سبت','أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة'];
+  const times=['6ص','9ص','5م','7م'];
+  let html = `<div class="hd"></div>` + days.map(d=>`<div class="hd">${d}</div>`).join('');
+  times.forEach(t=>{
+    html += `<div class="time">${t}</div>`;
+    days.forEach(d=>{
+      const cls = schedule[t] && schedule[t][d];
+      html += cls ? `<div class="slot has"><div class="cn">${cls[0]}</div><div class="co">${cls[1]}</div></div>` : `<div class="slot"></div>`;
+    });
+  });
+  document.getElementById('schedGrid').innerHTML = html;
+}
+
+const coaches = [
+  ['كابتن يوسف','كروس فيت وتحمل','4.9',210],
+  ['كابتن هدى','يوجا وتمدد','5.0',156],
+  ['كابتن مينا','ملاكمة ودفاع عن النفس','4.8',188],
+  ['كابتن سارة','سبينينج وكارديو','4.7',134],
+  ['كابتن عمرو','رفع أثقال وقوة','4.9',201],
+  ['كابتن رنا','بيلاتيس','4.8',97],
+];
+function renderCoaches(){
+  document.getElementById('coachesGrid').innerHTML = coaches.map(c=>`
+    <div class="card card-pad">
+      <div class="flex items-center gap3" style="margin-bottom:12px;">
+        <div class="avatar-sm" style="width:46px;height:46px;font-size:15px;border-radius:13px;">${c[0][7]}</div>
+        <div><div style="font-weight:800;color:#fff;font-size:14px;">${c[0]}</div><div class="muted" style="font-size:11px;">${c[1]}</div></div>
+      </div>
+      <div class="flex justify-between items-center">
+        <span class="badge badge-active">⭐ ${c[2]}</span>
+        <span class="muted" style="font-size:11px;">${c[3]} متدرب</span>
+      </div>
+    </div>`).join('');
+}
+
+const payments = [
+  ['محمد إبراهيم','VIP سنوية','4,800 ج.م','بطاقة ائتمان','paid'],
+  ['سلمى وجدي','شهرية','450 ج.م','فودافون كاش','paid'],
+  ['طارق منير','شهرية','450 ج.م','—','due'],
+  ['نورهان سيد','VIP سنوية','4,800 ج.م','تحويل بنكي','paid'],
+];
+const payStatus={paid:['مدفوع','badge-active'],due:['مستحق','badge-warn']};
+function renderPayments(){
+  document.getElementById('paymentsBody').innerHTML = payments.map(p=>{
+    const [txt,cls]=payStatus[p[4]];
+    return `<tr class="row-hover"><td class="strong">${p[0]}</td><td>${p[1]}</td><td>${p[2]}</td><td>${p[3]}</td><td><span class="badge ${cls}">${txt}</span></td></tr>`;
+  }).join('');
+}
+
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+item.dataset.view).classList.add('active');
+    const titles={dashboard:['لوحة التحكم','أداء النادي اليوم'],members:['الأعضاء','إدارة الاشتراكات والملفات'],classes:['جدول الحصص','الحصص الجماعية الأسبوعية'],coaches:['المدربون','فريق التدريب وتقييماتهم'],payments:['المدفوعات','سجل تحصيل الاشتراكات']};
+    document.getElementById('pageTitle').textContent = titles[item.dataset.view][0];
+    document.getElementById('pageSub').textContent = titles[item.dataset.view][1];
+  });
+});
+
+function openModal(){document.getElementById('overlay').classList.add('active');}
+function closeModal(){document.getElementById('overlay').classList.remove('active');}
+function addMember(){closeModal();showToast('✅ تم تسجيل العضو الجديد بنجاح');}
+function showToast(msg){
+  const w=document.getElementById('toastWrap');
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  w.appendChild(t); setTimeout(()=>t.remove(),3200);
+}
+
+renderMembers(); renderBars(); renderSchedule(); renderCoaches(); renderPayments();
+</script>
+</body>
+</html>

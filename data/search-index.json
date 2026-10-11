@@ -1,0 +1,685 @@
+{
+  "version": "0.3.0",
+  "updatedAt": "2026-07-16",
+  "note": "Generated snapshot of the same index core/js/search.js builds live from Manifest data at runtime (now sourced from project-index.json + per-project project.json files, per Phase 4). This file documents the index shape and can serve as a static fallback; it is not hand-edited — regenerate it whenever project-index.json, any project.json, or industries/design-systems/components.json change.",
+  "count": 95,
+  "entries": [
+    {
+      "type": "project",
+      "id": "aurora-crm",
+      "slug": "aurora-crm",
+      "label": "Aurora CRM",
+      "href": "/pages/projects/detail/index.html?slug=aurora-crm",
+      "keywords": "aurora crm customer relationship platform for boutique investment firms. a full-featured crm built for boutique investment firms — pipeline tracking, client communications, and reporting in one workspace. finance crm systems enterprise live 2.4.0 advanced crm finance dashboard react supabase tailwind css button card data-table modal deal pipeline with drag-and-drop stages client communication timeline custom report builder role-based team permissions"
+    },
+    {
+      "type": "project",
+      "id": "meridian-booking",
+      "slug": "meridian-booking",
+      "label": "Meridian Booking",
+      "href": "/pages/projects/detail/index.html?slug=meridian-booking",
+      "keywords": "meridian booking reservation and guest management for boutique hotels. an end-to-end booking engine and guest management system for independent and boutique hotels. hotel booking systems growth draft 1.1.0 intermediate hotel booking calendar next.js postgresql calendar card form real-time room availability calendar guest profile history automated confirmation emails (placeholder)"
+    },
+    {
+      "type": "project",
+      "id": "vantage-erp",
+      "slug": "vantage-erp",
+      "label": "Vantage ERP",
+      "href": "/pages/projects/detail/index.html?slug=vantage-erp",
+      "keywords": "vantage erp resource planning for mid-market manufacturers. a modular erp covering inventory, procurement, and production scheduling for mid-market manufacturers. corporate erp systems enterprise archived 3.0.1 advanced erp inventory corporate dashboard vue fastapi mongodb data-table dropdown badge multi-warehouse inventory tracking procurement approval workflows production scheduling board"
+    },
+    {
+      "type": "project",
+      "id": "pulseline-ehr",
+      "slug": "pulseline-ehr",
+      "label": "Pulseline EHR",
+      "href": "/pages/projects/detail/index.html?slug=pulseline-ehr",
+      "keywords": "pulseline ehr electronic health records for outpatient clinics. a streamlined electronic health records system for outpatient clinics, with scheduling and secure messaging. medical internal company systems enterprise live 1.6.2 advanced medical records compliance react node.js postgresql table form modal patient records with visit history secure clinician messaging appointment scheduling"
+    },
+    {
+      "type": "project",
+      "id": "siteflow-tracker",
+      "slug": "siteflow-tracker",
+      "label": "SiteFlow Tracker",
+      "href": "/pages/projects/detail/index.html?slug=siteflow-tracker",
+      "keywords": "siteflow tracker project tracking for construction site teams. a field-friendly progress tracker for construction crews — daily logs, punch lists, and photo documentation. construction workflow automation starter draft 1.0.0 beginner construction tracking mobile automation react firebase timeline card badge daily site log entries photo-documented punch lists crew assignment board"
+    },
+    {
+      "type": "project",
+      "id": "tablehost-pos",
+      "slug": "tablehost-pos",
+      "label": "TableHost POS",
+      "href": "/pages/projects/detail/index.html?slug=tablehost-pos",
+      "keywords": "tablehost pos point of sale and table management for restaurants. a modern point-of-sale and table management system built for full-service restaurants. restaurant saas development growth live 2.1.0 intermediate restaurant pos realtime react supabase data-table toast modal live table status board split-check billing kitchen order tickets"
+    },
+    {
+      "type": "project",
+      "id": "classline-lms",
+      "slug": "classline-lms",
+      "label": "ClassLine LMS",
+      "href": "/pages/projects/detail/index.html?slug=classline-lms",
+      "keywords": "classline lms course delivery and grading for online academies. a learning management system for online academies — course delivery, assignments, and grading in one place. education saas development growth live 1.3.0 intermediate education lms courses dashboard next.js supabase progress card tabs course progress tracking assignment submission and grading student performance dashboard"
+    },
+    {
+      "type": "project",
+      "id": "brightlot-realty",
+      "slug": "brightlot-realty",
+      "label": "Brightlot Realty",
+      "href": "/pages/projects/detail/index.html?slug=brightlot-realty",
+      "keywords": "brightlot realty listings and client portal for real estate agencies. a listings management and client portal platform for boutique real estate agencies. real-estate web applications starter draft 1.0.4 beginner real-estate listings portal website react firebase gallery-grid card public listing gallery client portal with saved searches agent contact requests"
+    },
+    {
+      "type": "project",
+      "id": "nova-dashboard",
+      "slug": "nova-dashboard",
+      "label": "Nova Dashboard",
+      "href": "/pages/projects/detail/index.html?slug=nova-dashboard",
+      "keywords": "nova dashboard analytics dashboard template for saas products. a general-purpose analytics dashboard template — metrics, charts, and activity feeds for any saas product. technology dashboard development growth live 1.2.0 intermediate dashboard analytics saas react recharts tailwind css kpi-card chart data-table live kpi cards revenue and usage charts recent activity feed"
+    },
+    {
+      "type": "project",
+      "id": "lumen-landing",
+      "slug": "lumen-landing",
+      "label": "Lumen Landing",
+      "href": "/pages/projects/detail/index.html?slug=lumen-landing",
+      "keywords": "lumen landing high-conversion landing page template for product launches. a conversion-focused landing page template — hero, feature grid, pricing, and signup, ready for any product launch. corporate web applications starter live 1.0.0 beginner landing-page website marketing html css javascript hero-block pricing-card feature-card animated hero section pricing comparison table signup form with validation"
+    },
+    {
+      "type": "project",
+      "id": "sentinel-ai",
+      "slug": "sentinel-ai",
+      "label": "Sentinel AI",
+      "href": "/pages/projects/detail/index.html?slug=sentinel-ai",
+      "keywords": "sentinel ai ai-powered support ticket triage agent. an ai agent that classifies, prioritizes, and routes incoming support tickets before a human ever sees them. ai ai agents enterprise draft 0.9.0 advanced ai automation support python fastapi openai badge timeline data-table automatic ticket classification priority scoring suggested response drafting"
+    },
+    {
+      "type": "project",
+      "id": "flowbot-automation",
+      "slug": "flowbot-automation",
+      "label": "FlowBot Automation",
+      "href": "/pages/projects/detail/index.html?slug=flowbot-automation",
+      "keywords": "flowbot automation no-code workflow automation between everyday business tools. a visual workflow builder that connects everyday business tools — no code required. automation workflow automation growth live 1.4.0 intermediate automation workflow integration react n8n node.js dropdown card toggle visual drag-and-drop workflow builder prebuilt integration templates run history and error logs"
+    },
+    {
+      "type": "industry",
+      "id": "medical",
+      "label": "Medical",
+      "href": "/pages/industries/index.html#industry-medical",
+      "keywords": "medical medical"
+    },
+    {
+      "type": "industry",
+      "id": "construction",
+      "label": "Construction",
+      "href": "/pages/industries/index.html#industry-construction",
+      "keywords": "construction construction"
+    },
+    {
+      "type": "industry",
+      "id": "finance",
+      "label": "Finance",
+      "href": "/pages/industries/index.html#industry-finance",
+      "keywords": "finance finance"
+    },
+    {
+      "type": "industry",
+      "id": "restaurant",
+      "label": "Restaurant",
+      "href": "/pages/industries/index.html#industry-restaurant",
+      "keywords": "restaurant restaurant"
+    },
+    {
+      "type": "industry",
+      "id": "education",
+      "label": "Education",
+      "href": "/pages/industries/index.html#industry-education",
+      "keywords": "education education"
+    },
+    {
+      "type": "industry",
+      "id": "corporate",
+      "label": "Corporate",
+      "href": "/pages/industries/index.html#industry-corporate",
+      "keywords": "corporate corporate"
+    },
+    {
+      "type": "industry",
+      "id": "real-estate",
+      "label": "Real Estate",
+      "href": "/pages/industries/index.html#industry-real-estate",
+      "keywords": "real estate real-estate"
+    },
+    {
+      "type": "industry",
+      "id": "hotel",
+      "label": "Hotel",
+      "href": "/pages/industries/index.html#industry-hotel",
+      "keywords": "hotel hotel"
+    },
+    {
+      "type": "industry",
+      "id": "retail",
+      "label": "Retail",
+      "href": "/pages/industries/index.html#industry-retail",
+      "keywords": "retail retail"
+    },
+    {
+      "type": "industry",
+      "id": "hr",
+      "label": "HR",
+      "href": "/pages/industries/index.html#industry-hr",
+      "keywords": "hr hr"
+    },
+    {
+      "type": "industry",
+      "id": "legal",
+      "label": "Legal",
+      "href": "/pages/industries/index.html#industry-legal",
+      "keywords": "legal legal"
+    },
+    {
+      "type": "industry",
+      "id": "technology",
+      "label": "Technology",
+      "href": "/pages/industries/index.html#industry-technology",
+      "keywords": "technology technology"
+    },
+    {
+      "type": "industry",
+      "id": "automation",
+      "label": "Automation",
+      "href": "/pages/industries/index.html#industry-automation",
+      "keywords": "automation automation"
+    },
+    {
+      "type": "industry",
+      "id": "ai",
+      "label": "AI",
+      "href": "/pages/industries/index.html#industry-ai",
+      "keywords": "ai ai"
+    },
+    {
+      "type": "design-system",
+      "id": "medical",
+      "label": "Medical",
+      "href": "/pages/design-systems/index.html#medical",
+      "keywords": "medical medical"
+    },
+    {
+      "type": "design-system",
+      "id": "construction",
+      "label": "Construction",
+      "href": "/pages/design-systems/index.html#construction",
+      "keywords": "construction construction"
+    },
+    {
+      "type": "design-system",
+      "id": "finance",
+      "label": "Finance",
+      "href": "/pages/design-systems/index.html#finance",
+      "keywords": "finance finance"
+    },
+    {
+      "type": "design-system",
+      "id": "restaurant",
+      "label": "Restaurant",
+      "href": "/pages/design-systems/index.html#restaurant",
+      "keywords": "restaurant restaurant"
+    },
+    {
+      "type": "design-system",
+      "id": "education",
+      "label": "Education",
+      "href": "/pages/design-systems/index.html#education",
+      "keywords": "education education"
+    },
+    {
+      "type": "design-system",
+      "id": "corporate",
+      "label": "Corporate",
+      "href": "/pages/design-systems/index.html#corporate",
+      "keywords": "corporate corporate"
+    },
+    {
+      "type": "design-system",
+      "id": "real-estate",
+      "label": "Real Estate",
+      "href": "/pages/design-systems/index.html#real-estate",
+      "keywords": "real estate real-estate"
+    },
+    {
+      "type": "design-system",
+      "id": "hotel",
+      "label": "Hotel",
+      "href": "/pages/design-systems/index.html#hotel",
+      "keywords": "hotel hotel"
+    },
+    {
+      "type": "design-system",
+      "id": "retail",
+      "label": "Retail",
+      "href": "/pages/design-systems/index.html#retail",
+      "keywords": "retail retail"
+    },
+    {
+      "type": "design-system",
+      "id": "hr",
+      "label": "HR",
+      "href": "/pages/design-systems/index.html#hr",
+      "keywords": "hr hr"
+    },
+    {
+      "type": "design-system",
+      "id": "legal",
+      "label": "Legal",
+      "href": "/pages/design-systems/index.html#legal",
+      "keywords": "legal legal"
+    },
+    {
+      "type": "design-system",
+      "id": "technology",
+      "label": "Technology",
+      "href": "/pages/design-systems/index.html#technology",
+      "keywords": "technology technology"
+    },
+    {
+      "type": "design-system",
+      "id": "automation",
+      "label": "Automation",
+      "href": "/pages/design-systems/index.html#automation",
+      "keywords": "automation automation"
+    },
+    {
+      "type": "design-system",
+      "id": "ai",
+      "label": "AI",
+      "href": "/pages/design-systems/index.html#ai",
+      "keywords": "ai ai"
+    },
+    {
+      "type": "component",
+      "id": "card",
+      "label": "Card",
+      "href": "/pages/component-explorer/index.html#card",
+      "keywords": "card card cards"
+    },
+    {
+      "type": "component",
+      "id": "component-card",
+      "label": "Component Card",
+      "href": "/pages/component-explorer/index.html#component-card",
+      "keywords": "component card component-card cards"
+    },
+    {
+      "type": "component",
+      "id": "design-system-card",
+      "label": "Design System Card",
+      "href": "/pages/component-explorer/index.html#design-system-card",
+      "keywords": "design system card design-system-card cards"
+    },
+    {
+      "type": "component",
+      "id": "feature-card",
+      "label": "Feature Card",
+      "href": "/pages/component-explorer/index.html#feature-card",
+      "keywords": "feature card feature-card cards"
+    },
+    {
+      "type": "component",
+      "id": "industry-card",
+      "label": "Industry Card",
+      "href": "/pages/component-explorer/index.html#industry-card",
+      "keywords": "industry card industry-card cards"
+    },
+    {
+      "type": "component",
+      "id": "kpi-card",
+      "label": "Kpi Card",
+      "href": "/pages/component-explorer/index.html#kpi-card",
+      "keywords": "kpi card kpi-card cards"
+    },
+    {
+      "type": "component",
+      "id": "metric-card",
+      "label": "Metric Card",
+      "href": "/pages/component-explorer/index.html#metric-card",
+      "keywords": "metric card metric-card cards"
+    },
+    {
+      "type": "component",
+      "id": "preview-card",
+      "label": "Preview Card",
+      "href": "/pages/component-explorer/index.html#preview-card",
+      "keywords": "preview card preview-card cards"
+    },
+    {
+      "type": "component",
+      "id": "pricing-card",
+      "label": "Pricing Card",
+      "href": "/pages/component-explorer/index.html#pricing-card",
+      "keywords": "pricing card pricing-card cards"
+    },
+    {
+      "type": "component",
+      "id": "project-card",
+      "label": "Project Card",
+      "href": "/pages/component-explorer/index.html#project-card",
+      "keywords": "project card project-card cards"
+    },
+    {
+      "type": "component",
+      "id": "stats-card",
+      "label": "Stats Card",
+      "href": "/pages/component-explorer/index.html#stats-card",
+      "keywords": "stats card stats-card cards"
+    },
+    {
+      "type": "component",
+      "id": "alert",
+      "label": "Alert",
+      "href": "/pages/component-explorer/index.html#alert",
+      "keywords": "alert alert feedback"
+    },
+    {
+      "type": "component",
+      "id": "empty-state",
+      "label": "Empty State",
+      "href": "/pages/component-explorer/index.html#empty-state",
+      "keywords": "empty state empty-state feedback"
+    },
+    {
+      "type": "component",
+      "id": "loader",
+      "label": "Loader",
+      "href": "/pages/component-explorer/index.html#loader",
+      "keywords": "loader loader feedback"
+    },
+    {
+      "type": "component",
+      "id": "notifications",
+      "label": "Notifications",
+      "href": "/pages/component-explorer/index.html#notifications",
+      "keywords": "notifications notifications feedback"
+    },
+    {
+      "type": "component",
+      "id": "progress",
+      "label": "Progress",
+      "href": "/pages/component-explorer/index.html#progress",
+      "keywords": "progress progress feedback"
+    },
+    {
+      "type": "component",
+      "id": "skeleton-loader",
+      "label": "Skeleton Loader",
+      "href": "/pages/component-explorer/index.html#skeleton-loader",
+      "keywords": "skeleton loader skeleton-loader feedback"
+    },
+    {
+      "type": "component",
+      "id": "toast",
+      "label": "Toast",
+      "href": "/pages/component-explorer/index.html#toast",
+      "keywords": "toast toast feedback"
+    },
+    {
+      "type": "component",
+      "id": "checkbox",
+      "label": "Checkbox",
+      "href": "/pages/component-explorer/index.html#checkbox",
+      "keywords": "checkbox checkbox forms"
+    },
+    {
+      "type": "component",
+      "id": "date-picker",
+      "label": "Date Picker",
+      "href": "/pages/component-explorer/index.html#date-picker",
+      "keywords": "date picker date-picker forms"
+    },
+    {
+      "type": "component",
+      "id": "file-upload",
+      "label": "File Upload",
+      "href": "/pages/component-explorer/index.html#file-upload",
+      "keywords": "file upload file-upload forms"
+    },
+    {
+      "type": "component",
+      "id": "form",
+      "label": "Form",
+      "href": "/pages/component-explorer/index.html#form",
+      "keywords": "form form forms"
+    },
+    {
+      "type": "component",
+      "id": "input",
+      "label": "Input",
+      "href": "/pages/component-explorer/index.html#input",
+      "keywords": "input input forms"
+    },
+    {
+      "type": "component",
+      "id": "radio",
+      "label": "Radio",
+      "href": "/pages/component-explorer/index.html#radio",
+      "keywords": "radio radio forms"
+    },
+    {
+      "type": "component",
+      "id": "search-box",
+      "label": "Search Box",
+      "href": "/pages/component-explorer/index.html#search-box",
+      "keywords": "search box search-box forms"
+    },
+    {
+      "type": "component",
+      "id": "select",
+      "label": "Select",
+      "href": "/pages/component-explorer/index.html#select",
+      "keywords": "select select forms"
+    },
+    {
+      "type": "component",
+      "id": "textarea",
+      "label": "Textarea",
+      "href": "/pages/component-explorer/index.html#textarea",
+      "keywords": "textarea textarea forms"
+    },
+    {
+      "type": "component",
+      "id": "toggle",
+      "label": "Toggle",
+      "href": "/pages/component-explorer/index.html#toggle",
+      "keywords": "toggle toggle forms"
+    },
+    {
+      "type": "component",
+      "id": "gallery-grid",
+      "label": "Gallery Grid",
+      "href": "/pages/component-explorer/index.html#gallery-grid",
+      "keywords": "gallery grid gallery-grid media"
+    },
+    {
+      "type": "component",
+      "id": "image-preview",
+      "label": "Image Preview",
+      "href": "/pages/component-explorer/index.html#image-preview",
+      "keywords": "image preview image-preview media"
+    },
+    {
+      "type": "component",
+      "id": "drawer",
+      "label": "Drawer",
+      "href": "/pages/component-explorer/index.html#drawer",
+      "keywords": "drawer drawer modals"
+    },
+    {
+      "type": "component",
+      "id": "modal",
+      "label": "Modal",
+      "href": "/pages/component-explorer/index.html#modal",
+      "keywords": "modal modal modals"
+    },
+    {
+      "type": "component",
+      "id": "breadcrumbs",
+      "label": "Breadcrumbs",
+      "href": "/pages/component-explorer/index.html#breadcrumbs",
+      "keywords": "breadcrumbs breadcrumbs navigation"
+    },
+    {
+      "type": "component",
+      "id": "footer",
+      "label": "Footer",
+      "href": "/pages/component-explorer/index.html#footer",
+      "keywords": "footer footer navigation"
+    },
+    {
+      "type": "component",
+      "id": "hero-block",
+      "label": "Hero Block",
+      "href": "/pages/component-explorer/index.html#hero-block",
+      "keywords": "hero block hero-block navigation"
+    },
+    {
+      "type": "component",
+      "id": "navbar",
+      "label": "Navbar",
+      "href": "/pages/component-explorer/index.html#navbar",
+      "keywords": "navbar navbar navigation"
+    },
+    {
+      "type": "component",
+      "id": "pagination",
+      "label": "Pagination",
+      "href": "/pages/component-explorer/index.html#pagination",
+      "keywords": "pagination pagination navigation"
+    },
+    {
+      "type": "component",
+      "id": "section-header",
+      "label": "Section Header",
+      "href": "/pages/component-explorer/index.html#section-header",
+      "keywords": "section header section-header navigation"
+    },
+    {
+      "type": "component",
+      "id": "sidebar",
+      "label": "Sidebar",
+      "href": "/pages/component-explorer/index.html#sidebar",
+      "keywords": "sidebar sidebar navigation"
+    },
+    {
+      "type": "component",
+      "id": "accordion",
+      "label": "Accordion",
+      "href": "/pages/component-explorer/index.html#accordion",
+      "keywords": "accordion accordion ui"
+    },
+    {
+      "type": "component",
+      "id": "avatar",
+      "label": "Avatar",
+      "href": "/pages/component-explorer/index.html#avatar",
+      "keywords": "avatar avatar ui"
+    },
+    {
+      "type": "component",
+      "id": "badge",
+      "label": "Badge",
+      "href": "/pages/component-explorer/index.html#badge",
+      "keywords": "badge badge ui"
+    },
+    {
+      "type": "component",
+      "id": "button",
+      "label": "Button",
+      "href": "/pages/component-explorer/index.html#button",
+      "keywords": "button button ui"
+    },
+    {
+      "type": "component",
+      "id": "calendar",
+      "label": "Calendar",
+      "href": "/pages/component-explorer/index.html#calendar",
+      "keywords": "calendar calendar ui"
+    },
+    {
+      "type": "component",
+      "id": "charts",
+      "label": "Charts",
+      "href": "/pages/component-explorer/index.html#charts",
+      "keywords": "charts charts ui"
+    },
+    {
+      "type": "component",
+      "id": "command-palette",
+      "label": "Command Palette",
+      "href": "/pages/component-explorer/index.html#command-palette",
+      "keywords": "command palette command-palette ui"
+    },
+    {
+      "type": "component",
+      "id": "context-menu",
+      "label": "Context Menu",
+      "href": "/pages/component-explorer/index.html#context-menu",
+      "keywords": "context menu context-menu ui"
+    },
+    {
+      "type": "component",
+      "id": "data-table",
+      "label": "Data Table",
+      "href": "/pages/component-explorer/index.html#data-table",
+      "keywords": "data table data-table ui"
+    },
+    {
+      "type": "component",
+      "id": "dropdown",
+      "label": "Dropdown",
+      "href": "/pages/component-explorer/index.html#dropdown",
+      "keywords": "dropdown dropdown ui"
+    },
+    {
+      "type": "component",
+      "id": "popover",
+      "label": "Popover",
+      "href": "/pages/component-explorer/index.html#popover",
+      "keywords": "popover popover ui"
+    },
+    {
+      "type": "component",
+      "id": "table",
+      "label": "Table",
+      "href": "/pages/component-explorer/index.html#table",
+      "keywords": "table table ui"
+    },
+    {
+      "type": "component",
+      "id": "tabs",
+      "label": "Tabs",
+      "href": "/pages/component-explorer/index.html#tabs",
+      "keywords": "tabs tabs ui"
+    },
+    {
+      "type": "component",
+      "id": "tag",
+      "label": "Tag",
+      "href": "/pages/component-explorer/index.html#tag",
+      "keywords": "tag tag ui"
+    },
+    {
+      "type": "component",
+      "id": "timeline",
+      "label": "Timeline",
+      "href": "/pages/component-explorer/index.html#timeline",
+      "keywords": "timeline timeline ui"
+    },
+    {
+      "type": "component",
+      "id": "tooltip",
+      "label": "Tooltip",
+      "href": "/pages/component-explorer/index.html#tooltip",
+      "keywords": "tooltip tooltip ui"
+    }
+  ]
+}

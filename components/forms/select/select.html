@@ -1,0 +1,26 @@
+<!-- Native select — preferred default. Style is normalized via CSS only. -->
+<div class="nx-field">
+  <label class="nx-field__label" for="sel-native">Industry</label>
+  <select class="nx-select" id="sel-native" name="industry">
+    <option value="">Select an industry</option>
+    <option value="finance">Finance</option>
+    <option value="retail">Retail</option>
+    <option value="hotel">Hotel</option>
+  </select>
+</div>
+
+<!-- Custom listbox — for when native <select> styling can't be achieved -->
+<div class="nx-field">
+  <label class="nx-field__label" id="cs-label">Service</label>
+  <div class="nx-custom-select" data-nx-select>
+    <button class="nx-custom-select__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="cs-label cs-trigger" id="cs-trigger">
+      <span class="nx-custom-select__value">Choose a service</span>
+      <span aria-hidden="true">⌄</span>
+    </button>
+    <ul class="nx-custom-select__list" role="listbox" aria-labelledby="cs-label" tabindex="-1" hidden>
+      <li class="nx-custom-select__option" role="option" aria-selected="false" tabindex="-1">SaaS Development</li>
+      <li class="nx-custom-select__option" role="option" aria-selected="false" tabindex="-1">CRM Systems</li>
+      <li class="nx-custom-select__option" role="option" aria-selected="false" tabindex="-1">Workflow Automation</li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,56 @@
+{
+  "version": "1.0.0",
+  "updatedAt": "2026-07-16",
+  "note": "The discovery registry. Adding a project means adding one entry here and its own projects/<industry>/<slug>/project.json \u2014 no other file changes. Every page (grid, search, filters, collections, industries) picks it up automatically through Manifest.",
+  "count": 12,
+  "projects": [
+    {
+      "industry": "finance",
+      "slug": "aurora-crm"
+    },
+    {
+      "industry": "hotel",
+      "slug": "meridian-booking"
+    },
+    {
+      "industry": "corporate",
+      "slug": "vantage-erp"
+    },
+    {
+      "industry": "medical",
+      "slug": "pulseline-ehr"
+    },
+    {
+      "industry": "construction",
+      "slug": "siteflow-tracker"
+    },
+    {
+      "industry": "restaurant",
+      "slug": "tablehost-pos"
+    },
+    {
+      "industry": "education",
+      "slug": "classline-lms"
+    },
+    {
+      "industry": "real-estate",
+      "slug": "brightlot-realty"
+    },
+    {
+      "industry": "technology",
+      "slug": "nova-dashboard"
+    },
+    {
+      "industry": "corporate",
+      "slug": "lumen-landing"
+    },
+    {
+      "industry": "ai",
+      "slug": "sentinel-ai"
+    },
+    {
+      "industry": "automation",
+      "slug": "flowbot-automation"
+    }
+  ]
+}

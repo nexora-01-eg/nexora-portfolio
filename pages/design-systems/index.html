@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design Systems — NEXORA</title>
+  <meta name="description" content="Browse every isolated design system in the NEXORA platform." />
+
+  <link rel="stylesheet" href="../../core/css/tokens.css" />
+  <link rel="stylesheet" href="../../core/css/base.css" />
+  <link rel="stylesheet" href="../../core/css/typography.css" />
+  <link rel="stylesheet" href="../../core/css/layout.css" />
+  <link rel="stylesheet" href="../../core/css/utilities.css" />
+  <link rel="stylesheet" href="../../core/css/animations.css" />
+  <link rel="stylesheet" href="../../core/css/shell.css" />
+
+  <link rel="stylesheet" href="../../components/navigation/navbar/navbar.css" />
+  <link rel="stylesheet" href="../../components/navigation/footer/footer.css" />
+  <link rel="stylesheet" href="../../components/navigation/breadcrumbs/breadcrumbs.css" />
+  <link rel="stylesheet" href="../../components/navigation/section-header/section-header.css" />
+  <link rel="stylesheet" href="../../components/ui/button/button.css" />
+  <link rel="stylesheet" href="../../components/ui/badge/badge.css" />
+  <link rel="stylesheet" href="../../components/ui/tabs/tabs.css" />
+  <link rel="stylesheet" href="../../components/ui/command-palette/command-palette.css" />
+  <link rel="stylesheet" href="../../components/forms/search-box/search-box.css" />
+  <link rel="stylesheet" href="../../components/cards/card/card.css" />
+  <link rel="stylesheet" href="../../components/cards/design-system-card/design-system-card.css" />
+  <link rel="stylesheet" href="../../components/modals/drawer/drawer.css" />
+
+  <link rel="stylesheet" href="design-systems.css" />
+</head>
+<body>
+  <div class="nx-page-loader" aria-hidden="true"><span class="nx-page-loader__mark">NEXORA</span></div>
+  <div class="nx-scroll-progress" aria-hidden="true"></div>
+  <a class="nx-skip-link" href="#nx-main">Skip to content</a>
+
+  <header class="nx-navbar nx-navbar--glass">
+    <div class="nx-navbar__inner nx-container">
+      <a class="nx-navbar__brand" href="../../index.html">NEXORA</a>
+      <nav class="nx-navbar__links" aria-label="Primary">
+        <a class="nx-navbar__link" href="../../index.html">Home</a>
+        <a class="nx-navbar__link" href="../projects/index.html">Projects</a>
+        <a class="nx-navbar__link" href="../industries/index.html">Industries</a>
+        <a class="nx-navbar__link nx-navbar__link--active" href="index.html" aria-current="page">Design Systems</a>
+        <a class="nx-navbar__link" href="../component-explorer/index.html">Components</a>
+        <a class="nx-navbar__link" href="../collections/index.html">Collections</a>
+      </nav>
+      <div class="nx-navbar__actions">
+        <button class="nx-btn nx-btn--secondary nx-btn--sm nx-ripple-host" type="button" data-nx-command-trigger>Search <kbd class="nx-search-box__shortcut">⌘K</kbd></button>
+        <button class="nx-navbar__menu-toggle" type="button" aria-expanded="false" aria-controls="nx-navbar-mobile" aria-label="Open menu"><span></span><span></span><span></span></button>
+      </div>
+    </div>
+    <nav class="nx-navbar__mobile" id="nx-navbar-mobile" aria-label="Primary mobile" hidden>
+      <a class="nx-navbar__link" href="../../index.html">Home</a>
+      <a class="nx-navbar__link" href="../projects/index.html">Projects</a>
+      <a class="nx-navbar__link" href="../industries/index.html">Industries</a>
+      <a class="nx-navbar__link" href="index.html">Design Systems</a>
+      <a class="nx-navbar__link" href="../component-explorer/index.html">Components</a>
+      <a class="nx-navbar__link" href="../collections/index.html">Collections</a>
+    </nav>
+  </header>
+
+  <main id="nx-main" class="nx-container nx-page-transition" role="main" style="padding-top: var(--nx-space-6);">
+    <nav class="nx-breadcrumbs" aria-label="Breadcrumb">
+      <ol class="nx-breadcrumbs__list">
+        <li><a class="nx-breadcrumbs__link" href="../../index.html">Home</a></li>
+        <li><span class="nx-breadcrumbs__sep" aria-hidden="true">/</span><span class="nx-breadcrumbs__current" aria-current="page">Design Systems</span></li>
+      </ol>
+    </nav>
+
+    <div class="nx-section-header" style="margin-top: var(--nx-space-5);">
+      <div>
+        <p class="nx-caption nx-text-accent">Visual Language</p>
+        <h1 class="nx-h2">Design Systems</h1>
+        <p class="nx-body-lg nx-text-secondary" id="ds-count">Loading…</p>
+      </div>
+    </div>
+
+    <div class="nx-grid nx-grid--auto" id="ds-grid" role="list" aria-label="Design systems"></div>
+  </main>
+
+  <!-- Design system detail drawer -->
+  <div class="nx-drawer-overlay" id="ds-detail-drawer" data-nx-drawer role="dialog" aria-modal="true" aria-labelledby="ds-detail-title" hidden>
+    <div class="nx-drawer nx-drawer--right nx-ds-drawer">
+      <div class="nx-drawer__header">
+        <h2 class="nx-h4" id="ds-detail-title">Design System</h2>
+        <button class="nx-drawer__close" type="button" aria-label="Close panel" data-nx-drawer-close>×</button>
+      </div>
+      <div class="nx-drawer__body">
+        <div class="nx-tabs" data-nx-tabs>
+          <div class="nx-tabs__list" role="tablist" aria-label="Design system details">
+            <button class="nx-tabs__tab" role="tab" id="ds-tab-colors" aria-controls="ds-panel-colors" aria-selected="true" type="button">Colors</button>
+            <button class="nx-tabs__tab" role="tab" id="ds-tab-type" aria-controls="ds-panel-type" aria-selected="false" type="button" tabindex="-1">Typography</button>
+            <button class="nx-tabs__tab" role="tab" id="ds-tab-components" aria-controls="ds-panel-components" aria-selected="false" type="button" tabindex="-1">Components</button>
+          </div>
+          <div class="nx-tabs__panel" role="tabpanel" id="ds-panel-colors" aria-labelledby="ds-tab-colors">
+            <div class="nx-ds-swatch-list" id="ds-detail-colors"></div>
+          </div>
+          <div class="nx-tabs__panel" role="tabpanel" id="ds-panel-type" aria-labelledby="ds-tab-type" hidden>
+            <p class="nx-display" style="font-size: var(--nx-fs-600);">Aa</p>
+            <p class="nx-small nx-text-secondary">Inherits the platform type scale from core/css/tokens.css — each design system may override weight/tracking only.</p>
+          </div>
+          <div class="nx-tabs__panel" role="tabpanel" id="ds-panel-components" aria-labelledby="ds-tab-components" hidden>
+            <p class="nx-body nx-text-secondary" id="ds-detail-component-count"></p>
+          </div>
+        </div>
+        <a class="nx-btn nx-btn--primary nx-btn--md nx-w-full nx-ripple-host" href="#" id="ds-detail-open" style="margin-top: var(--nx-space-5);">Open in Projects</a>
+      </div>
+    </div>
+  </div>
+
+  <footer class="nx-footer">
+    <div class="nx-container nx-footer__inner">
+      <div class="nx-footer__brand"><p class="nx-h4">NEXORA</p><p class="nx-small">Enterprise Demo Library — built to scale.</p></div>
+      <nav class="nx-footer__col" aria-label="Library"><p class="nx-caption">Library</p><a href="../projects/index.html">Projects</a><a href="index.html">Design Systems</a></nav>
+    </div>
+    <div class="nx-container nx-footer__bottom"><p class="nx-small">© 2026 NEXORA. All rights reserved.</p></div>
+  </footer>
+
+  <div class="nx-command-overlay" data-nx-command-palette role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+    <div class="nx-command">
+      <div class="nx-command__input-wrap"><span aria-hidden="true">⌕</span><input class="nx-command__input" type="text" placeholder="Search…" aria-label="Search" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="nx-command-list" /></div>
+      <ul class="nx-command__list" id="nx-command-list" role="listbox">
+        <!-- Populated at runtime by command-palette.js via the shared Search engine -->
+      </ul>
+    </div>
+  </div>
+
+  <script src="../../core/js/core.js"></script>
+  <script src="../../core/js/storage.js"></script>
+  <script src="../../core/js/helpers.js"></script>
+  <script src="../../core/js/theme.js"></script>
+  <script src="../../data/fallback-data.js"></script>
+  <script src="../../core/js/manifest.js"></script>
+  <script src="../../core/js/search.js"></script>
+  <script src="../../core/js/filters.js"></script>
+  <script src="../../core/js/sort.js"></script>
+  <script src="../../core/js/pagination.js"></script>
+  <script src="../../core/js/favorites.js"></script>
+  <script src="../../core/js/animations.js"></script>
+  <script src="../../core/js/shell.js"></script>
+  <script src="../../components/navigation/navbar/navbar.js"></script>
+  <script src="../../components/modals/drawer/drawer.js"></script>
+  <script src="../../components/ui/tabs/tabs.js"></script>
+  <script src="../../components/ui/command-palette/command-palette.js"></script>
+  <script src="design-systems.js"></script>
+</body>
+</html>

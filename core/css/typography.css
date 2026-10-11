@@ -1,0 +1,78 @@
+/* ============================================================
+   NEXORA — TYPOGRAPHY SYSTEM
+   Semantic type scale. Pages/components reference these
+   classes rather than setting font-size directly.
+   ============================================================ */
+
+.nx-display {
+  font-family: var(--nx-font-display);
+  font-size: var(--nx-fs-900);
+  font-weight: var(--nx-fw-bold);
+  line-height: var(--nx-lh-tight);
+  letter-spacing: var(--nx-ls-tight);
+}
+
+.nx-h1 {
+  font-family: var(--nx-font-display);
+  font-size: var(--nx-fs-800);
+  font-weight: var(--nx-fw-bold);
+  line-height: var(--nx-lh-tight);
+  letter-spacing: var(--nx-ls-tight);
+}
+
+.nx-h2 {
+  font-family: var(--nx-font-display);
+  font-size: var(--nx-fs-700);
+  font-weight: var(--nx-fw-semibold);
+  line-height: var(--nx-lh-tight);
+  letter-spacing: var(--nx-ls-tight);
+}
+
+.nx-h3 {
+  font-family: var(--nx-font-display);
+  font-size: var(--nx-fs-600);
+  font-weight: var(--nx-fw-semibold);
+  line-height: var(--nx-lh-snug);
+}
+
+.nx-h4 {
+  font-family: var(--nx-font-display);
+  font-size: var(--nx-fs-500);
+  font-weight: var(--nx-fw-medium);
+  line-height: var(--nx-lh-snug);
+}
+
+.nx-body-lg {
+  font-size: var(--nx-fs-400);
+  line-height: var(--nx-lh-relaxed);
+  font-weight: var(--nx-fw-regular);
+}
+
+.nx-body {
+  font-size: var(--nx-fs-300);
+  line-height: var(--nx-lh-normal);
+  font-weight: var(--nx-fw-regular);
+}
+
+.nx-small {
+  font-size: var(--nx-fs-200);
+  line-height: var(--nx-lh-normal);
+  color: var(--nx-text-secondary);
+}
+
+.nx-caption {
+  font-size: var(--nx-fs-100);
+  line-height: var(--nx-lh-normal);
+  letter-spacing: var(--nx-ls-wide);
+  text-transform: uppercase;
+  color: var(--nx-text-muted);
+}
+
+.nx-mono {
+  font-family: var(--nx-font-mono);
+}
+
+.nx-text-primary   { color: var(--nx-text-primary); }
+.nx-text-secondary { color: var(--nx-text-secondary); }
+.nx-text-muted     { color: var(--nx-text-muted); }
+.nx-text-accent    { color: var(--nx-accent-primary); }

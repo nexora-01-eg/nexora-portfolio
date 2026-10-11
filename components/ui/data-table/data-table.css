@@ -1,0 +1,20 @@
+/* ============================================================
+   NEXORA — Data Table
+   Extends Table with sortable column headers.
+   ============================================================ */
+
+.nx-data-table__sort {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nx-space-1);
+  color: inherit;
+  font: inherit;
+  text-transform: inherit;
+  letter-spacing: inherit;
+}
+.nx-data-table__sort:hover { color: var(--nx-text-primary); }
+
+.nx-data-table__sort[aria-sort="ascending"] span,
+.nx-data-table__sort[aria-sort="descending"] span {
+  color: var(--nx-accent-primary);
+}

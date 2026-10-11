@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Pulse — ICU Central Monitoring Station</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050708;
+  --panel:#0A0E10;
+  --monitor:#03100A;
+  --border: rgba(255,255,255,0.07);
+  --border-strong: rgba(255,255,255,0.14);
+  --mgreen:#39FF9E;
+  --mgreen-soft: rgba(57,255,158,0.12);
+  --mcyan:#3FE0F0;
+  --mcyan-soft: rgba(63,224,240,0.12);
+  --mamber:#F5C542;
+  --mamber-soft: rgba(245,197,66,0.14);
+  --mred:#FF4D5E;
+  --mred-soft: rgba(255,77,94,0.14);
+  --mviolet:#B08CF0;
+  --text:#EAF2EE; --muted:#7C9088; --faint:#3E4C46;
+  --r-md:14px; --r-lg:20px; --r-pill:999px;
+  --ease: cubic-bezier(.22,1,.36,1);
+  --shadow: 0 22px 46px -26px rgba(0,0,0,0.7);
+  --font-display:'Space Grotesk', sans-serif; --font-body:'Inter', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{ background:var(--bg); color:var(--text); font-family:var(--font-body); min-height:100vh; }
+::-webkit-scrollbar{width:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:10px;}
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; color:inherit; cursor:pointer;}
+:focus-visible{ outline:2px solid var(--mcyan); outline-offset:2px; border-radius:6px; }
+.mono{ font-family:var(--font-mono); }
+.panel{ background:var(--panel); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow); }
+
+.shell{ padding:16px; }
+
+/* ===== top bar ===== */
+.topbar{ display:flex; align-items:center; justify-content:space-between; padding:14px 22px; margin-bottom:14px; }
+.topbar-brand{ display:flex; align-items:center; gap:11px; }
+.brand-mark{ width:36px; height:36px; border-radius:10px; background:linear-gradient(150deg, var(--mgreen), #0d8f5e); display:flex; align-items:center; justify-content:center; }
+.brand-mark svg{ width:18px; height:18px; color:#04140b; }
+.brand-name{ font-family:var(--font-display); font-size:18px; font-weight:700; }
+.brand-sub{ font-size:10px; color:var(--muted); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.07em; }
+.topbar-stats{ display:flex; gap:24px; }
+.tstat{ text-align:center; } .tstat b{ font-family:var(--font-display); font-size:20px; font-weight:700; display:block; } .tstat span{ font-size:9px; color:var(--muted); text-transform:uppercase; letter-spacing:.06em; font-family:var(--font-mono); }
+.tstat.crit b{ color:var(--mred); }
+.topbar-right{ display:flex; align-items:center; gap:12px; }
+.live-chip{ display:flex; align-items:center; gap:7px; padding:7px 13px; border-radius:var(--r-pill); background:var(--mgreen-soft); border:1px solid rgba(57,255,158,0.3); }
+.live-dot{ width:7px; height:7px; border-radius:50%; background:var(--mgreen); animation:blink 1.6s infinite; }
+@keyframes blink{ 0%,100%{opacity:1;} 50%{opacity:.35;} }
+.live-chip span{ font-family:var(--font-mono); font-size:10.5px; color:var(--mgreen); font-weight:600; }
+.clock{ font-family:var(--font-mono); font-size:13px; color:var(--muted); }
+.ward-tabs{ display:flex; gap:4px; padding:3px; border-radius:10px; background:var(--panel); border:1px solid var(--border); }
+.ward-tab{ font-size:11px; padding:6px 12px; border-radius:7px; color:var(--muted); font-weight:600; }
+.ward-tab.active{ background:var(--mgreen); color:#04140b; }
+
+/* ===== monitor grid ===== */
+.monitor-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.monitor-card{ padding:0; overflow:hidden; border-width:1px; transition:border-color .3s; }
+.monitor-card.alarm-critical{ border-color:var(--mred); box-shadow:0 0 0 1px var(--mred), 0 0 24px -6px rgba(255,77,94,0.5); animation:alarmPulse 1.4s infinite; }
+@keyframes alarmPulse{ 0%,100%{ box-shadow:0 0 0 1px var(--mred), 0 0 24px -6px rgba(255,77,94,0.5); } 50%{ box-shadow:0 0 0 1px var(--mred), 0 0 36px -4px rgba(255,77,94,0.75); } }
+.monitor-card.alarm-warning{ border-color:var(--mamber); }
+
+.mon-head{ display:flex; justify-content:space-between; align-items:center; padding:12px 14px; background:rgba(255,255,255,0.02); }
+.mon-head .bed{ font-family:var(--font-mono); font-size:10px; color:var(--muted); }
+.mon-head .name{ font-family:var(--font-display); font-size:13.5px; font-weight:600; margin-top:2px; }
+.mon-alarm-tag{ font-family:var(--font-mono); font-size:9px; padding:2px 7px; border-radius:20px; }
+.mon-alarm-tag.stable{ background:var(--mgreen-soft); color:var(--mgreen); }
+.mon-alarm-tag.warning{ background:var(--mamber-soft); color:var(--mamber); }
+.mon-alarm-tag.critical{ background:var(--mred-soft); color:var(--mred); }
+
+.mon-screen{ background:var(--monitor); position:relative; height:110px; }
+.mon-screen canvas{ width:100%; height:100%; display:block; }
+
+.mon-vitals{ display:grid; grid-template-columns:repeat(4,1fr); border-top:1px solid var(--border); }
+.vital-cell{ padding:9px 10px; border-right:1px solid var(--border); }
+.vital-cell:last-child{ border-right:none; }
+.vital-cell .vl{ font-size:8.5px; color:var(--faint); font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.04em; }
+.vital-cell .vv{ font-family:var(--font-mono); font-size:15px; font-weight:600; margin-top:2px; }
+.vital-cell.hr .vv{ color:var(--mgreen); } .vital-cell.spo2 .vv{ color:var(--mcyan); } .vital-cell.bp .vv{ color:var(--mamber); } .vital-cell.temp .vv{ color:var(--mviolet); }
+
+/* ===== side note ===== */
+.footnote{ text-align:center; margin-top:16px; font-size:10.5px; color:var(--faint); font-family:var(--font-mono); }
+
+@media (max-width:1300px){ .monitor-grid{ grid-template-columns:repeat(2,1fr); } .topbar-stats{ display:none; } }
+@media (max-width:640px){ .monitor-grid{ grid-template-columns:1fr; } .mon-vitals{ grid-template-columns:repeat(2,1fr); } .ward-tabs{ display:none; } }
+@media (prefers-reduced-motion:reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <div class="panel topbar">
+    <div class="topbar-brand">
+      <div class="brand-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l2-7 4 14 2-7h6"/></svg></div>
+      <div><div class="brand-name">PULSE</div><div class="brand-sub">ICU Central Monitoring</div></div>
+    </div>
+    <div class="topbar-stats">
+      <div class="tstat"><b id="statTotal">0</b><span>Monitored Beds</span></div>
+      <div class="tstat crit"><b id="statCrit">0</b><span>Critical Alarms</span></div>
+      <div class="tstat"><b id="statStable">0</b><span>Stable</span></div>
+    </div>
+    <div class="topbar-right">
+      <div class="ward-tabs"><div class="ward-tab active">ICU-A</div><div class="ward-tab">ICU-B</div><div class="ward-tab">CCU</div></div>
+      <div class="live-chip"><span class="live-dot"></span><span>LIVE</span></div>
+      <div class="clock" id="clock">00:00:00</div>
+    </div>
+  </div>
+
+  <div class="monitor-grid" id="monitorGrid"></div>
+
+  <div class="footnote">Simulated telemetry for portfolio demonstration only — not connected to real patient data.</div>
+</div>
+
+<script>
+function tick(){ document.getElementById('clock').textContent = new Date().toLocaleTimeString('en-US',{hour12:false}); }
+tick(); setInterval(tick,1000);
+
+const patients = [
+  {bed:'ICU-A1', name:'Hesham Sabry', hr:118, spo2:91, bp:'92/58', temp:38.9, alarm:'critical', waveColor:'var(--mred)'},
+  {bed:'ICU-A2', name:'Nadia Farouk', hr:76, spo2:98, bp:'118/76', temp:36.8, alarm:'stable', waveColor:'var(--mgreen)'},
+  {bed:'ICU-A3', name:'Karim Bishara', hr:88, spo2:95, bp:'128/84', temp:37.4, alarm:'warning', waveColor:'var(--mamber)'},
+  {bed:'ICU-A4', name:'Layla Kassem', hr:72, spo2:99, bp:'118/76', temp:36.7, alarm:'stable', waveColor:'var(--mgreen)'},
+  {bed:'ICU-A5', name:'Tarek Mostafa', hr:81, spo2:97, bp:'122/80', temp:37.0, alarm:'stable', waveColor:'var(--mgreen)'},
+  {bed:'ICU-A6', name:'Dalia Karim', hr:69, spo2:98, bp:'110/70', temp:36.6, alarm:'stable', waveColor:'var(--mgreen)'},
+  {bed:'ICU-A7', name:'Salma Reda', hr:95, spo2:93, bp:'138/90', temp:37.9, alarm:'warning', waveColor:'var(--mamber)'},
+  {bed:'ICU-A8', name:'Omar Fathy', hr:74, spo2:99, bp:'116/74', temp:36.9, alarm:'stable', waveColor:'var(--mgreen)'},
+];
+
+const grid = document.getElementById('monitorGrid');
+patients.forEach((p,i)=>{
+  const card = document.createElement('div');
+  card.className = `panel monitor-card ${p.alarm==='critical'?'alarm-critical':p.alarm==='warning'?'alarm-warning':''}`;
+  card.innerHTML = `
+    <div class="mon-head"><div><div class="bed">${p.bed}</div><div class="name">${p.name}</div></div><span class="mon-alarm-tag ${p.alarm}">${p.alarm==='critical'?'Critical':p.alarm==='warning'?'Warning':'Stable'}</span></div>
+    <div class="mon-screen"><canvas id="ecg${i}"></canvas></div>
+    <div class="mon-vitals">
+      <div class="vital-cell hr"><div class="vl">HR bpm</div><div class="vv" id="hr${i}">${p.hr}</div></div>
+      <div class="vital-cell spo2"><div class="vl">SpO2 %</div><div class="vv" id="spo2${i}">${p.spo2}</div></div>
+      <div class="vital-cell bp"><div class="vl">NIBP</div><div class="vv" id="bp${i}" style="font-size:12px;">${p.bp}</div></div>
+      <div class="vital-cell temp"><div class="vl">Temp °C</div><div class="vv" id="temp${i}">${p.temp}</div></div>
+    </div>`;
+  grid.appendChild(card);
+});
+
+/* stats */
+function animateCount(el,target,dur=800){ const start=performance.now();
+  function frame(t){ const p=Math.min(1,(t-start)/dur); const e=1-Math.pow(1-p,3); el.textContent=Math.round(target*e); if(p<1) requestAnimationFrame(frame); }
+  requestAnimationFrame(frame); }
+setTimeout(()=>{
+  animateCount(document.getElementById('statTotal'), patients.length);
+  animateCount(document.getElementById('statCrit'), patients.filter(p=>p.alarm==='critical').length);
+  animateCount(document.getElementById('statStable'), patients.filter(p=>p.alarm==='stable').length);
+},300);
+
+/* ===== ECG waveform animation per card ===== */
+const resolvedColors = {}; // cache resolved css var colors
+function resolveColor(varName){
+  if(resolvedColors[varName]) return resolvedColors[varName];
+  const tmp = document.createElement('div'); tmp.style.color = varName; document.body.appendChild(tmp);
+  const c = getComputedStyle(tmp).color; document.body.removeChild(tmp);
+  resolvedColors[varName] = c; return c;
+}
+
+patients.forEach((p,i)=>{
+  const canvas = document.getElementById('ecg'+i);
+  const ctx = canvas.getContext('2d');
+  let dpr = window.devicePixelRatio || 1;
+  function resize(){
+    const r = canvas.getBoundingClientRect();
+    canvas.width = r.width*dpr; canvas.height = r.height*dpr;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  const color = resolveColor(p.waveColor);
+  const speed = p.alarm==='critical' ? 3.2 : p.alarm==='warning' ? 2.2 : 1.6;
+  let history = [];
+  const points = 220;
+  for(let k=0;k<points;k++) history.push(0);
+  let phase = Math.random()*100;
+
+  function ecgSample(x){
+    // generate a QRS-complex-like waveform using combination of gaussian pulses
+    const period = p.alarm==='critical' ? 26 : p.alarm==='warning' ? 34 : 42;
+    const t = ((x + phase) % period) / period;
+    let v = 0;
+    // P wave
+    v += 0.12*Math.exp(-Math.pow((t-0.12)*30,2));
+    // QRS complex
+    v += -0.15*Math.exp(-Math.pow((t-0.24)*80,2));
+    v += 1.0*Math.exp(-Math.pow((t-0.27)*140,2));
+    v += -0.3*Math.exp(-Math.pow((t-0.30)*90,2));
+    // T wave
+    v += 0.25*Math.exp(-Math.pow((t-0.50)*20,2));
+    // baseline noise
+    v += (Math.random()-0.5)*0.02;
+    return v;
+  }
+
+  let frame = 0;
+  function draw(){
+    frame += speed;
+    history.shift();
+    history.push(ecgSample(frame));
+
+    const w = canvas.width, h = canvas.height;
+    ctx.clearRect(0,0,w,h);
+    // subtle grid
+    ctx.strokeStyle = 'rgba(255,255,255,0.035)'; ctx.lineWidth=1;
+    for(let gx=0; gx<w; gx+=w/11){ ctx.beginPath(); ctx.moveTo(gx,0); ctx.lineTo(gx,h); ctx.stroke(); }
+    for(let gy=0; gy<h; gy+=h/5){ ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(w,gy); ctx.stroke(); }
+
+    // waveform
+    ctx.strokeStyle = color;
+    ctx.lineWidth = 2*dpr;
+    ctx.lineJoin='round'; ctx.lineCap='round';
+    ctx.shadowColor = color; ctx.shadowBlur = 6*dpr;
+    ctx.beginPath();
+    const midY = h*0.55;
+    const ampl = h*0.38;
+    for(let k=0;k<history.length;k++){
+      const x = (k/(history.length-1))*w;
+      const y = midY - history[k]*ampl;
+      if(k===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.shadowBlur = 0;
+
+    // sweep leading edge marker
+    const leadX = w*0.97;
+    ctx.fillStyle = color;
+    ctx.beginPath(); ctx.arc(leadX, midY - history[history.length-1]*ampl, 2.5*dpr, 0, Math.PI*2); ctx.fill();
+
+    requestAnimationFrame(draw);
+  }
+  requestAnimationFrame(draw);
+
+  // vitals jitter
+  setInterval(()=>{
+    const hrEl = document.getElementById('hr'+i), spo2El = document.getElementById('spo2'+i);
+    const jitterHr = p.hr + Math.round((Math.random()-0.5)*4);
+    const jitterSpo2 = Math.min(100, p.spo2 + Math.round((Math.random()-0.5)*2));
+    hrEl.textContent = jitterHr;
+    spo2El.textContent = jitterSpo2;
+  }, 1400);
+});
+</script>
+</body>
+</html>

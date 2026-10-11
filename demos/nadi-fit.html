@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nadi Fit — نظام إدارة الأندية والاستوديوهات الرياضية</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --lime:#C6FF3D; --lime-dark:#9FD62B; --orange:#FF6B35;
+  --bg:#0F1115; --surface:#181B21; --surface2:#1F232B;
+  --text:#F5F6F8; --text-secondary:#C6CBD6; --muted:#8A93A6; --faint:#565D6B;
+  --border:#262B33; --border-strong:#343B47;
+  --success:#3FD97A; --success-soft:rgba(63,217,122,0.12);
+  --warning:#FFB020; --warning-soft:rgba(255,176,32,0.12);
+  --danger:#FF5252; --danger-soft:rgba(255,82,82,0.12);
+  --lime-soft:rgba(198,255,61,0.12); --orange-soft:rgba(255,107,53,0.14);
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:26px;
+  --shadow-sm:0 2px 12px rgba(0,0,0,0.3);
+  --shadow-md:0 12px 32px rgba(0,0,0,0.4);
+  --shadow-lg:0 26px 60px rgba(0,0,0,0.55);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Tajawal',sans-serif;font-weight:900;margin:0;color:#fff;letter-spacing:-.01em;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 264px;min-height:100vh;}
+.sidebar{background:var(--surface);border-left:1px solid var(--border);padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:28px;}
+.brand-mark{width:44px;height:44px;border-radius:13px;background:linear-gradient(135deg,var(--lime),#8FE62B);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0;box-shadow:0 0 20px rgba(198,255,61,0.35);}
+.brand-name{font-family:'Tajawal';font-weight:900;font-size:19px;color:#fff;}
+.brand-sub{font-size:10.5px;color:var(--muted);}
+.nav-sec{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.08em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:12px;color:var(--text-secondary);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;transition:all .15s;}
+.nav-item:hover{background:var(--surface2);color:#fff;}
+.nav-item.active{background:var(--lime);color:#0F1115;}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:var(--orange);color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--border);}
+.foot-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:12px;background:var(--surface2);}
+.foot-card img{width:36px;height:36px;border-radius:10px;object-fit:cover;}
+.foot-card .name{font-size:12.5px;font-weight:800;color:#fff;} .foot-card .role{font-size:10.5px;color:var(--muted);}
+
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(15,17,21,0.85);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;color:#fff;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:var(--surface);display:flex;align-items:center;justify-content:center;position:relative;color:#fff;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--orange);border-radius:50%;border:2px solid var(--surface);}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-family:'Tajawal';font-weight:800;font-size:15.5px;color:#fff;}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:var(--lime);color:#0F1115;box-shadow:0 0 20px rgba(198,255,61,0.25);}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:0 0 28px rgba(198,255,61,0.4);}
+.btn-orange{background:var(--orange);color:#fff;}
+.btn-outline{background:transparent;border-color:var(--border-strong);color:#fff;}
+.btn-outline:hover{background:var(--surface2);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.active{background:var(--success-soft);color:var(--success);}
+.badge.expiring{background:var(--warning-soft);color:var(--warning);}
+.badge.expired{background:var(--danger-soft);color:var(--danger);}
+.badge.lime{background:var(--lime-soft);color:var(--lime);}
+.badge.orange{background:var(--orange-soft);color:var(--orange);}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;}
+.stat .value{font-family:'Tajawal';font-size:25px;font-weight:900;color:#fff;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--lime);margin-top:6px;display:inline-block;}
+
+/* Occupancy gauge (signature) */
+.gauge-wrap{display:flex;flex-direction:column;align-items:center;padding:10px 0;}
+.gauge{position:relative;width:150px;height:150px;}
+.gauge svg{transform:rotate(-90deg);width:100%;height:100%;}
+.gauge circle{fill:none;stroke-width:12;}
+.gauge .track{stroke:var(--surface2);}
+.gauge .val{stroke-linecap:round;transition:stroke-dashoffset 1.2s var(--ease);filter:drop-shadow(0 0 8px rgba(198,255,61,0.5));}
+.gauge-label{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.gauge-label .num{font-family:'Tajawal';font-size:30px;font-weight:900;color:#fff;}
+.gauge-label .txt{font-size:10.5px;color:var(--muted);margin-top:2px;}
+
+/* Weekly class schedule */
+.sched-grid{display:grid;grid-template-columns:70px repeat(7,1fr);gap:0;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;}
+.sched-head{padding:12px 6px;text-align:center;font-weight:800;font-size:12px;background:var(--surface2);border-bottom:1px solid var(--border);border-right:1px solid var(--border);color:#fff;}
+.sched-time{font-size:10px;color:var(--faint);text-align:center;padding-top:10px;border-left:1px solid var(--border);height:82px;}
+.sched-col{border-right:1px solid var(--border);position:relative;}
+.sched-cell{height:82px;border-bottom:1px dashed var(--border);}
+.class-block{position:absolute;right:4px;left:4px;border-radius:10px;padding:7px 9px;font-size:10.5px;color:#0F1115;font-weight:700;cursor:pointer;transition:transform .15s;}
+.class-block:hover{transform:scale(1.03);z-index:5;}
+.class-block .t{font-size:11px;font-weight:900;display:block;}
+
+/* Members table + check-in */
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);color:var(--text-secondary);}
+tbody tr:hover{background:var(--surface2);}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;color:#fff;}
+.avatar{border-radius:50%;object-fit:cover;flex-shrink:0;}
+
+.checkin-search{display:flex;gap:10px;margin-bottom:20px;}
+.checkin-search input{flex:1;padding:16px 20px;border-radius:16px;border:1px solid var(--border-strong);background:var(--surface2);color:#fff;font-family:'Cairo';font-size:16px;outline:none;}
+.checkin-search input:focus{border-color:var(--lime);}
+.checkin-card{display:flex;align-items:center;gap:14px;padding:14px;border:1px solid var(--border);border-radius:16px;margin-bottom:10px;background:var(--surface2);}
+
+.progress-track{height:8px;background:var(--surface2);border-radius:99px;overflow:hidden;}
+.progress-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--lime),#8FE62B);}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--lime);color:#0F1115;padding:11px 17px;border-radius:12px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);}
+
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 78px;} .brand-name,.brand-sub,.nav-item span:not(.ic),.nav-sec,.foot-card .name,.foot-card .role,.nav-badge{display:none;} .sched-grid{grid-template-columns:50px repeat(7,minmax(90px,1fr));overflow-x:auto;} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">نادي Nadi Fit — فرع التجمع الخامس</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-primary" onclick="switchView('v-checkin')">⚡ تسجيل حضور</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-schedule"></section>
+      <section class="view" id="v-members"></section>
+      <section class="view" id="v-checkin"></section>
+      <section class="view" id="v-trainers"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🏋️</div>
+      <div><div class="brand-name">Nadi Fit</div><div class="brand-sub">إدارة الأندية الرياضية</div></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-schedule"><span class="ic">🗓️</span><span>جدول الحصص</span></div>
+      <div class="nav-item" data-view="v-checkin"><span class="ic">⚡</span><span>تسجيل الحضور</span></div>
+      <div class="nav-sec">الإدارة</div>
+      <div class="nav-item" data-view="v-members"><span class="ic">👥</span><span>الأعضاء</span><span class="nav-badge">3</span></div>
+      <div class="nav-item" data-view="v-trainers"><span class="ic">💪</span><span>المدربين</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="foot-card"><img src="https://i.pravatar.cc/72?img=51"><div><div class="name">عمر خالد</div><div class="role">مدير النادي</div></div></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const members = [
+  {name:"يوسف عبد الرحمن", plan:"VIP سنوي", status:"active", streak:34, expires:"15 مارس 2027", img:11},
+  {name:"مريم إبراهيم", plan:"شهري", status:"expiring", streak:12, expires:"بعد 3 أيام", img:24},
+  {name:"أحمد رضوان", plan:"ربع سنوي", status:"active", streak:56, expires:"2 سبتمبر 2026", img:14},
+  {name:"نور حسام", plan:"شهري", status:"expired", streak:2, expires:"منتهي منذ يومين", img:28},
+  {name:"كريم سامح", plan:"VIP سنوي", status:"active", streak:89, expires:"20 يناير 2027", img:15},
+  {name:"سلمى عادل", plan:"شهري", status:"expiring", streak:8, expires:"بعد يوم واحد", img:30},
+  {name:"محمد الشناوي", plan:"ربع سنوي", status:"active", streak:41, expires:"11 أكتوبر 2026", img:17},
+];
+const trainers = [
+  {name:"كابتن هاني مراد", role:"تدريب حديد وقوة", sessions:64, rating:4.9, img:33, color:"#C6FF3D"},
+  {name:"كابتنة إيمان صبري", role:"يوجا وبيلاتس", sessions:48, rating:5.0, img:39, color:"#FF6B35"},
+  {name:"كابتن زياد فتحي", role:"كروسفيت", sessions:71, rating:4.8, img:41, color:"#C6FF3D"},
+  {name:"كابتنة رانيا مجدي", role:"زومبا ورقص لياقة", sessions:39, rating:4.9, img:44, color:"#FF6B35"},
+];
+const classesToday = [
+  {name:"كروسفيت صباحي", trainer:0, day:0, start:0, span:1, color:"#C6FF3D"},
+  {name:"يوجا واسترخاء", trainer:1, day:1, start:1, span:1, color:"#FF6B35"},
+  {name:"حديد وقوة", trainer:0, day:2, start:2, span:2, color:"#C6FF3D"},
+  {name:"زومبا مسائية", trainer:3, day:3, start:4, span:1, color:"#FF6B35"},
+  {name:"كروسفيت متقدم", trainer:2, day:4, start:0, span:1, color:"#C6FF3D"},
+  {name:"بيلاتس", trainer:1, day:5, start:3, span:1, color:"#FF6B35"},
+];
+const days = ['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء','الخميس','الجمعة'];
+const hours = ['7:00 ص','9:00 ص','11:00 ص','1:00 م','4:00 م','6:00 م'];
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','نادي Nadi Fit — فرع التجمع الخامس'],
+    'v-schedule':['جدول الحصص','الجدول الأسبوعي لكل المدربين'],
+    'v-members':['الأعضاء', members.length+' عضو مسجل'],
+    'v-checkin':['تسجيل الحضور','ابحث عن اسم العضو لتسجيل الدخول'],
+    'v-trainers':['المدربين','أداء فريق التدريب هذا الشهر'],
+    'v-settings':['الإعدادات','بيانات النادي والاشتراكات'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+const statusMap = {active:['نشط','active'],expiring:['قارب على الانتهاء','expiring'],expired:['منتهي','expired']};
+
+function gauge(pct){
+  const r=58, c=2*Math.PI*r, off=c-(pct/100)*c;
+  return `<div class="gauge"><svg viewBox="0 0 140 140">
+    <circle class="track" cx="70" cy="70" r="${r}"></circle>
+    <circle class="val" cx="70" cy="70" r="${r}" stroke="var(--lime)" stroke-dasharray="${c}" stroke-dashoffset="${off}"></circle>
+  </svg><div class="gauge-label"><div class="num">${pct}%</div><div class="txt">نسبة الإشغال</div></div></div>`;
+}
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>أهلاً، عمر 💪</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦</p></div>
+      <button class="btn btn-orange" onclick="switchView('v-schedule')">عرض جدول اليوم</button></div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('أعضاء نشطين','412 عضو','👥','var(--lime)','+18 هذا الشهر')}
+      ${stat('حصص اليوم','9 حصص','🗓️','var(--orange)','3 حصص جارية الآن')}
+      ${stat('إيراد الشهر','١٤٨٬٦٠٠ ج.م','💰','var(--lime)','+9.2%')}
+      ${stat('اشتراكات تنتهي قريباً','3 أعضاء','⏳','var(--warning)','خلال 3 أيام')}
+    </div>
+    <div class="grid g3">
+      <div class="card card-pad" style="grid-column:span 2">
+        <div class="card-title" style="margin-bottom:16px">آخر الحضور اليوم</div>
+        ${members.slice(0,5).map((m,i)=>`
+          <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+            <div class="flex items-center gap3"><img class="avatar" width="36" height="36" src="https://i.pravatar.cc/72?img=${m.img}"><div><b style="font-size:13px;color:#fff">${m.name}</b><div class="muted" style="font-size:11px">${m.plan}</div></div></div>
+            <span class="badge ${statusMap[m.status][1]}">${statusMap[m.status][0]}</span>
+          </div>`).join('')}
+      </div>
+      <div class="card card-pad gauge-wrap">
+        <div class="card-title" style="align-self:flex-start;margin-bottom:6px">إشغال النادي الآن</div>
+        ${gauge(74)}
+        <div class="muted" style="font-size:11.5px;margin-top:10px">96 من أصل 130 مقعد تدريب</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderSchedule(){
+  const el = document.getElementById('v-schedule');
+  el.innerHTML = `<div class="view-head"><div><h1>جدول الحصص</h1><p class="sub">الأسبوع الحالي — كل المدربين</p></div>
+    <button class="btn btn-primary">+ إضافة حصة</button></div>
+    <div class="sched-grid" id="schedGrid"></div>`;
+  let html = `<div class="sched-head" style="background:var(--surface)"></div>`;
+  days.forEach(d=> html += `<div class="sched-head">${d}</div>`);
+  html += `<div>`+hours.map(h=>`<div class="sched-time">${h}</div>`).join('')+`</div>`;
+  for(let d=0; d<7; d++){
+    html += `<div class="sched-col">`;
+    hours.forEach(()=> html += `<div class="sched-cell"></div>`);
+    classesToday.filter(c=>c.day===d).forEach(c=>{
+      html += `<div class="class-block" style="top:${c.start*82+4}px;height:${c.span*82-8}px;background:${c.color}" onclick="UI.toast('${c.name} — ${trainers[c.trainer].name}')">
+        <span class="t">${c.name}</span>${trainers[c.trainer].name}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  document.getElementById('schedGrid').innerHTML = html;
+}
+
+function renderMembers(){
+  const el = document.getElementById('v-members');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>الأعضاء</h1><p class="sub">${members.length} عضو مسجل</p></div>
+      <button class="btn btn-primary">+ عضو جديد</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>الاسم</th><th>الباقة</th><th>أيام حضور متتالية</th><th>تاريخ الانتهاء</th><th>الحالة</th></tr></thead>
+      <tbody>${members.map(m=>`
+        <tr onclick="UI.toast('ملف ${m.name}')">
+          <td><div class="cell-name"><img class="avatar" width="34" height="34" src="https://i.pravatar.cc/68?img=${m.img}">${m.name}</div></td>
+          <td>${m.plan}</td><td>🔥 ${m.streak} يوم</td><td>${m.expires}</td>
+          <td><span class="badge ${statusMap[m.status][1]}">${statusMap[m.status][0]}</span></td>
+        </tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderCheckin(){
+  const el = document.getElementById('v-checkin');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>تسجيل الحضور</h1><p class="sub">ابحثي بالاسم لتسجيل دخول العضو</p></div></div>
+    <div class="card card-pad" style="max-width:620px">
+      <div class="checkin-search"><input placeholder="اكتب اسم العضو..." id="checkinInput"></div>
+      <div id="checkinResults"></div>
+    </div>
+  `;
+  const renderResults = (q='')=>{
+    const list = members.filter(m=>m.name.includes(q));
+    document.getElementById('checkinResults').innerHTML = list.map(m=>`
+      <div class="checkin-card">
+        <img class="avatar" width="46" height="46" src="https://i.pravatar.cc/92?img=${m.img}">
+        <div style="flex:1"><b style="color:#fff;font-size:14px">${m.name}</b><div class="muted" style="font-size:11.5px">${m.plan}</div></div>
+        <span class="badge ${statusMap[m.status][1]}">${statusMap[m.status][0]}</span>
+        <button class="btn btn-primary btn-sm" onclick="UI.toast('تم تسجيل حضور ${m.name} ✓')" ${m.status==='expired'?'disabled':''}>تسجيل دخول</button>
+      </div>`).join('') || '<p class="muted">لا يوجد نتائج</p>';
+  };
+  renderResults();
+  document.getElementById('checkinInput').addEventListener('input', e=>renderResults(e.target.value));
+}
+
+function renderTrainers(){
+  const el = document.getElementById('v-trainers');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>المدربين</h1><p class="sub">أداء الفريق هذا الشهر</p></div>
+      <button class="btn btn-primary">+ إضافة مدرب</button></div>
+    <div class="grid g4">
+      ${trainers.map(t=>`
+        <div class="card card-pad" style="text-align:center">
+          <img class="avatar" width="64" height="64" src="https://i.pravatar.cc/128?img=${t.img}" style="margin:0 auto 12px">
+          <b style="font-size:14.5px;color:#fff">${t.name}</b>
+          <div class="muted" style="font-size:11.5px;margin-bottom:12px">${t.role}</div>
+          <div class="flex justify-between" style="font-size:12px;margin-bottom:6px"><span class="muted">حصص الشهر</span><b style="color:#fff">${t.sessions}</b></div>
+          <div class="flex justify-between" style="font-size:12px;margin-bottom:12px"><span class="muted">التقييم</span><b style="color:#fff">⭐ ${t.rating}</b></div>
+          <div class="progress-track"><div class="progress-fill" style="width:${t.rating/5*100}%;background:${t.color}"></div></div>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1>الإعدادات</h1><p class="sub">بيانات النادي والباقات</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات الاسم، الفروع، وأنواع الاشتراكات المتاحة.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderSchedule(); renderMembers(); renderCheckin(); renderTrainers(); renderSettings();
+</script>
+</body>
+</html>

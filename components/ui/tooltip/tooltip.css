@@ -1,0 +1,29 @@
+/* ============================================================
+   NEXORA — Tooltip
+   Pure-CSS positioning; content and show/hide timing handled
+   by tooltip.js (needed for proper aria-describedby wiring and
+   to avoid the "title attribute" accessibility pitfalls).
+   ============================================================ */
+
+.nx-tooltip {
+  position: absolute;
+  z-index: var(--nx-z-tooltip);
+  padding: var(--nx-space-2) var(--nx-space-3);
+  font-size: var(--nx-fs-100);
+  color: var(--nx-color-black);
+  background: var(--nx-color-white);
+  border-radius: var(--nx-radius-sm);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px);
+  transition: opacity var(--nx-duration-fast) var(--nx-ease-out), transform var(--nx-duration-fast) var(--nx-ease-out);
+}
+
+.nx-tooltip--visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.nx-tooltip--top    { transform-origin: bottom center; }
+.nx-tooltip--bottom { transform-origin: top center; }

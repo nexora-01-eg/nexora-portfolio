@@ -1,0 +1,33 @@
+/* ============================================================
+   NEXORA — Context Menu
+   Right-click activated menu, positioned at the cursor.
+   Reuses .nx-dropdown__divider from the Dropdown component.
+   ============================================================ */
+
+.nx-context-menu {
+  position: fixed;
+  min-width: 180px;
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+  box-shadow: var(--nx-shadow-lg);
+  padding: var(--nx-space-2);
+  z-index: var(--nx-z-modal);
+  animation: nx-scale-in var(--nx-duration-fast) var(--nx-ease-out) both;
+}
+.nx-context-menu[hidden] { display: none; }
+
+.nx-context-menu__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: var(--nx-space-2) var(--nx-space-3);
+  font-size: var(--nx-fs-200);
+  color: var(--nx-text-primary);
+  border-radius: var(--nx-radius-sm);
+}
+.nx-context-menu__item:hover,
+.nx-context-menu__item:focus-visible {
+  background: var(--nx-bg-elevated-2);
+}
+.nx-context-menu__item--danger { color: var(--nx-color-danger); }

@@ -1,0 +1,24 @@
+<!-- Composition shell — combines existing field components.
+     Not a new input type: just the layout + submit pattern
+     every NEXORA form should follow. -->
+<form class="nx-form" novalidate>
+  <div class="nx-form__section">
+    <h3 class="nx-h4">Project details</h3>
+    <p class="nx-body nx-text-secondary">Basic information about the project.</p>
+  </div>
+
+  <div class="nx-field">
+    <label class="nx-field__label" for="form-name">Name</label>
+    <input class="nx-input" type="text" id="form-name" name="name" required />
+  </div>
+
+  <div class="nx-field">
+    <label class="nx-field__label" for="form-desc">Description</label>
+    <textarea class="nx-textarea" id="form-desc" name="description" rows="3"></textarea>
+  </div>
+
+  <div class="nx-form__actions">
+    <button class="nx-btn nx-btn--ghost nx-btn--md" type="reset">Cancel</button>
+    <button class="nx-btn nx-btn--primary nx-btn--md" type="submit">Save project</button>
+  </div>
+</form>

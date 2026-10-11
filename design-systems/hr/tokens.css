@@ -1,0 +1,19 @@
+/* ============================================================
+   NEXORA — Hr Design System (isolated token overrides)
+   Phase 3.5. Inherits every token from core/css/tokens.css
+   unchanged except the three overridden below — no component
+   CSS is duplicated here; every component still reads its
+   styles from the shared /components/ files, just resolving
+   --nx-accent-* to this system's color under the scope selector.
+
+   NOT YET LINKED into any live page — this is architecture only,
+   per Phase 3.5 scope ("do not redesign the UI"). To activate
+   for a real page, add [data-design-system="hr"] to a
+   container and link this file after core/css/tokens.css.
+   ============================================================ */
+
+[data-design-system="hr"] {
+  --nx-accent-primary: #3d9a6a;
+  --nx-accent-hover: #5aad81;
+  --nx-accent-muted: #dcf2e5;
+}

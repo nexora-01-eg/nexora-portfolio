@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Atelier Lamsa — نظام إدارة أتيليهات الخياطة والتفصيل</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --burgundy:#6B1F30; --burgundy-dark:#4A1522; --burgundy-soft:#F3E6E9;
+  --gold:#C9A24A; --gold-soft:#F8F0DD;
+  --bg:#FBF8F6; --surface:#FFFFFF;
+  --text:#221417; --text-secondary:#4E3138; --muted:#8C7378; --faint:#DCC7CB;
+  --border:#F0E2E4; --border-strong:#E1CBCF;
+  --success:#3F9151; --success-soft:#EAF6EC;
+  --warning:#C9932E; --warning-soft:#FBF1DF;
+  --danger:#B3413A; --danger-soft:#F8EBEA;
+  --r-sm:8px; --r-md:12px; --r-lg:18px; --r-xl:24px;
+  --shadow-sm:0 2px 10px rgba(107,31,48,0.07);
+  --shadow-md:0 12px 30px rgba(107,31,48,0.10);
+  --shadow-lg:0 26px 56px rgba(107,31,48,0.20);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Amiri',serif;font-weight:700;margin:0;color:var(--burgundy-dark);}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 262px;min-height:100vh;}
+.sidebar{background:var(--burgundy);color:#fff;padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:28px;}
+.brand-mark{width:44px;height:44px;border-radius:12px;background:linear-gradient(135deg,var(--gold),#E0C468);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.brand-name{font-family:'Amiri';font-weight:700;font-size:19px;color:var(--gold);}
+.brand-sub{font-size:10.5px;color:rgba(255,255,255,0.6);}
+.nav-sec{font-size:10px;color:rgba(255,255,255,0.35);text-transform:uppercase;letter-spacing:.07em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:10px;color:rgba(255,255,255,0.75);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;}
+.nav-item:hover{background:rgba(255,255,255,0.07);color:#fff;}
+.nav-item.active{background:var(--gold);color:var(--burgundy-dark);}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:#fff;color:var(--burgundy);font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.12);}
+.foot-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:10px;background:rgba(255,255,255,0.06);}
+.foot-card img{width:36px;height:36px;border-radius:9px;object-fit:cover;}
+.foot-card .name{font-size:12.5px;font-weight:800;} .foot-card .role{font-size:10.5px;color:rgba(255,255,255,0.5);}
+
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(251,248,246,0.88);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;font-family:'Cairo';font-weight:800;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;font-family:'Cairo';}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:10px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;font-family:'Cairo';font-weight:800;color:var(--text);} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;font-family:'Cairo';}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-family:'Cairo';font-weight:800;font-size:15.5px;color:var(--text);}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-weight:800;font-size:13px;border:1px solid transparent;font-family:'Cairo';}
+.btn-primary{background:var(--burgundy);color:#fff;}
+.btn-primary:hover{background:var(--burgundy-dark);}
+.btn-gold{background:var(--gold);color:var(--burgundy-dark);}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--burgundy-soft);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;font-family:'Cairo';}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.cutting{background:var(--warning-soft);color:var(--warning);}
+.badge.sewing{background:#EFEAFB;color:#6D4FC4;}
+.badge.fitting{background:var(--burgundy-soft);color:var(--burgundy);}
+.badge.ready{background:var(--success-soft);color:var(--success);}
+.badge.gold{background:var(--gold-soft);color:#8A6425;}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;font-family:'Cairo';}
+.stat .value{font-family:'Cairo';font-size:24px;font-weight:800;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--success);margin-top:6px;display:inline-block;font-family:'Cairo';}
+
+/* Measurement chart (signature) */
+.measure-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.measure-box{border:1px solid var(--border);border-radius:12px;padding:14px;text-align:center;}
+.measure-box .v{font-family:'Amiri';font-size:22px;font-weight:700;color:var(--burgundy);}
+.measure-box .l{font-size:10.5px;color:var(--muted);margin-top:3px;font-family:'Cairo';}
+
+/* Order pipeline */
+.pipe-board{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.pipe-col-head{display:flex;align-items:center;gap:7px;margin-bottom:10px;font-weight:800;font-size:12px;font-family:'Cairo';}
+.pipe-card{background:#fff;border:1px solid var(--border);border-radius:12px;padding:12px;margin-bottom:10px;box-shadow:var(--shadow-sm);cursor:grab;}
+.pipe-card .customer{font-weight:700;font-size:12.5px;font-family:'Cairo';} .pipe-card .item{font-size:11px;color:var(--muted);margin-top:3px;font-family:'Cairo';}
+.pipe-card .foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;}
+.pipe-drop{min-height:60px;border-radius:12px;transition:background .15s;}
+.pipe-drop.drag-over{background:var(--burgundy-soft);outline:2px dashed var(--burgundy);}
+
+table{width:100%;border-collapse:collapse;font-size:13px;font-family:'Cairo';}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--burgundy-soft);}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--burgundy-dark);color:#fff;padding:11px 17px;border-radius:12px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);font-family:'Cairo';}
+
+@media (max-width:1250px){ .pipe-board{grid-template-columns:repeat(4,220px);overflow-x:auto;} }
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 78px;} .brand-name,.brand-sub,.nav-item span:not(.ic),.nav-sec,.foot-card .name,.foot-card .role,.nav-badge{display:none;} .measure-grid{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">Atelier Lamsa — أتيليه خياطة وتفصيل راقي</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-gold" onclick="switchView('v-orders')">+ طلب جديد</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-clients"></section>
+      <section class="view" id="v-orders"></section>
+      <section class="view" id="v-measurements"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🪡</div>
+      <div><div class="brand-name">Atelier Lamsa</div><div class="brand-sub">خياطة وتفصيل راقي</div></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-orders"><span class="ic">✂️</span><span>الطلبات</span><span class="nav-badge">4</span></div>
+      <div class="nav-item" data-view="v-measurements"><span class="ic">📏</span><span>المقاسات</span></div>
+      <div class="nav-sec">الإدارة</div>
+      <div class="nav-item" data-view="v-clients"><span class="ic">👗</span><span>العملاء</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="foot-card"><img src="https://i.pravatar.cc/72?img=64"><div><div class="name">أ. سامية توفيق</div><div class="role">مصممة الأزياء</div></div></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const ordersData = {
+  cutting: [
+    {customer:"م. رشا فتحي", item:"فستان سهرة مطرز", due:"20 يوليو", price:6200},
+    {customer:"أ. نهى عادل", item:"عباية مناسبات", due:"22 يوليو", price:3400},
+  ],
+  sewing: [
+    {customer:"د. ليلى شوقي", item:"بدلة رسمية نسائي", due:"18 يوليو", price:4800},
+    {customer:"أ. مروة سيد", item:"فستان زفاف", due:"5 أغسطس", price:22000},
+  ],
+  fitting: [
+    {customer:"أ. هدى كمال", item:"فستان خطوبة", due:"15 يوليو", price:8900},
+  ],
+  ready: [
+    {customer:"م. سلمى راغب", item:"طقم عيد", due:"جاهز للاستلام", price:2600},
+    {customer:"أ. إيمان طارق", item:"فستان سهرة", due:"جاهز للاستلام", price:5100},
+  ],
+};
+const pipeCols = [['cutting','القص'],['sewing','الخياطة'],['fitting','البروفة'],['ready','جاهز للتسليم']];
+const clients = [
+  {name:"م. رشا فتحي", orders:5, spent:28000, phone:"01011122233", img:81},
+  {name:"د. ليلى شوقي", orders:3, spent:19000, phone:"01022233344", img:83},
+  {name:"أ. مروة سيد", orders:2, spent:26500, phone:"01033344455", img:85},
+  {name:"أ. هدى كمال", orders:1, spent:8900, phone:"01044455566", img:87},
+];
+const measurements = {name:"أ. مروة سيد — فستان الزفاف", data:[
+  {l:"الصدر",v:"92 سم"},{l:"الخصر",v:"70 سم"},{l:"الأرداف",v:"98 سم"},{l:"طول الفستان",v:"148 سم"},
+  {l:"عرض الكتف",v:"38 سم"},{l:"طول الكم",v:"58 سم"},{l:"محيط الرقبة",v:"34 سم"},{l:"طول الظهر",v:"40 سم"},
+]};
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','Atelier Lamsa — أتيليه خياطة وتفصيل راقي'],
+    'v-orders':['الطلبات','اسحبي وأفلتي لتحديث مرحلة كل طلب'],
+    'v-measurements':['المقاسات','خريطة مقاسات دقيقة لكل عميلة'],
+    'v-clients':['العملاء', clients.length+' عميلة'],
+    'v-settings':['الإعدادات','بيانات الأتيليه'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  const total = Object.values(ordersData).reduce((s,a)=>s+a.length,0);
+  el.innerHTML = `
+    <div class="view-head"><div><h1 style="font-family:'Amiri'">أهلاً بعودتك، أستاذة سامية 🪡</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦</p></div>
+      <button class="btn btn-outline" onclick="switchView('v-orders')">فتح لوحة الطلبات</button></div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('طلبات قيد التنفيذ', total+' طلب','✂️','var(--burgundy)','قيمة إجمالية 53 ألف')}
+      ${stat('بروفات هذا الأسبوع','3 بروفات','📅','var(--gold)','مواعيد محجوزة')}
+      ${stat('إيراد الشهر','٢١٨٬٦٠٠ ج.م','💰','var(--success)','+14%')}
+      ${stat('طلبات جاهزة للتسليم',ordersData.ready.length+' طلب','📦','var(--warning)','بانتظار الاستلام')}
+    </div>
+    <div class="card card-pad">
+      <div class="card-title" style="margin-bottom:16px">الطلبات قيد التنفيذ</div>
+      ${Object.entries(ordersData).flatMap(([k,arr])=>arr.map(o=>({...o,stage:k}))).map(o=>`
+        <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+          <div><b style="font-size:13px">${o.customer}</b><div class="muted" style="font-size:11px">${o.item}</div></div>
+          <span class="badge ${o.stage}">${pipeCols.find(c=>c[0]===o.stage)[1]}</span>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderOrders(){
+  const el = document.getElementById('v-orders');
+  el.innerHTML = `<div class="view-head"><div><h1 style="font-family:'Amiri'">الطلبات</h1><p class="sub">اسحبي وأفلتي لتحديث مرحلة كل طلب</p></div>
+    <button class="btn btn-gold">+ طلب جديد</button></div>
+    <div class="pipe-board">
+      ${pipeCols.map(([key,title])=>`
+        <div>
+          <div class="pipe-col-head">${title} <span class="muted" style="font-weight:600">(${ordersData[key].length})</span></div>
+          <div class="pipe-drop" data-col="${key}">
+            ${ordersData[key].map(o=>`
+              <div class="pipe-card" draggable="true">
+                <div class="customer">${o.customer}</div>
+                <div class="item">${o.item}</div>
+                <div class="foot"><span class="badge gold">${o.price.toLocaleString('ar-EG')} ج.م</span><span class="muted" style="font-size:10px">${o.due}</span></div>
+              </div>`).join('')}
+          </div>
+        </div>`).join('')}
+    </div>
+  `;
+  initDnD();
+}
+function initDnD(){
+  let dragEl=null;
+  document.querySelectorAll('.pipe-card').forEach(c=>{
+    c.addEventListener('dragstart',()=>{dragEl=c; c.style.opacity='0.4';});
+    c.addEventListener('dragend',()=>{c.style.opacity='1'; dragEl=null;});
+  });
+  document.querySelectorAll('.pipe-drop').forEach(z=>{
+    z.addEventListener('dragover', e=>{e.preventDefault(); z.classList.add('drag-over');});
+    z.addEventListener('dragleave', ()=>z.classList.remove('drag-over'));
+    z.addEventListener('drop', e=>{
+      e.preventDefault(); z.classList.remove('drag-over');
+      if(dragEl){ z.appendChild(dragEl); UI.toast('تم تحديث مرحلة الطلب'); }
+    });
+  });
+}
+
+function renderMeasurements(){
+  const el = document.getElementById('v-measurements');
+  el.innerHTML = `
+    <div class="view-head"><div><h1 style="font-family:'Amiri'">المقاسات</h1><p class="sub">${measurements.name}</p></div>
+      <button class="btn btn-primary">+ تسجيل مقاسات جديدة</button></div>
+    <div class="card card-pad">
+      <div class="measure-grid">
+        ${measurements.data.map(m=>`
+          <div class="measure-box"><div class="v">${m.v}</div><div class="l">${m.l}</div></div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderClients(){
+  const el = document.getElementById('v-clients');
+  el.innerHTML = `
+    <div class="view-head"><div><h1 style="font-family:'Amiri'">العملاء</h1><p class="sub">${clients.length} عميلة</p></div>
+      <button class="btn btn-primary">+ عميلة جديدة</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>الاسم</th><th>عدد الطلبات</th><th>إجمالي الإنفاق</th><th>الهاتف</th></tr></thead>
+      <tbody>${clients.map(c=>`
+        <tr><td><div class="cell-name"><img src="https://i.pravatar.cc/64?img=${c.img}" width="32" height="32" style="border-radius:50%">${c.name}</div></td>
+        <td>${c.orders} طلب</td><td><b>${c.spent.toLocaleString('ar-EG')} ج.م</b></td><td>${c.phone}</td></tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1 style="font-family:'Amiri'">الإعدادات</h1><p class="sub">بيانات الأتيليه</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات اسم الأتيليه، أنواع الأقمشة المتاحة، وسياسة العربون.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderOrders(); renderMeasurements(); renderClients(); renderSettings();
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+/* ============================================================
+   NEXORA — Design Systems (page-specific)
+   ============================================================ */
+
+/* max-width is scoped to non-mobile widths only — drawer.css's own
+   @media (max-width: 480px) { .nx-drawer { max-width: 100%; } } rule
+   has equal selector specificity, so an unconditional override here
+   would silently win by load order and defeat it on small screens. */
+@media (min-width: 481px) {
+  .nx-ds-drawer { max-width: 420px; }
+}
+
+.nx-ds-swatch-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nx-space-3);
+}
+
+.nx-ds-swatch-row {
+  display: flex;
+  align-items: center;
+  gap: var(--nx-space-3);
+}
+
+.nx-ds-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: var(--nx-radius-sm);
+  border: 1px solid var(--nx-border-subtle);
+  flex-shrink: 0;
+}

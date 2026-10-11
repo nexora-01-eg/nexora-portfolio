@@ -1,0 +1,31 @@
+/* ============================================================
+   NEXORA — Metric Card
+   Icon + single value, horizontal layout. Distinct from KPI
+   Card (which is vertical + trend-focused) — Metric Card is
+   for simpler, icon-led stat displays. Extends .nx-card.
+   ============================================================ */
+
+.nx-metric-card {
+  display: flex;
+  align-items: center;
+  gap: var(--nx-space-4);
+}
+
+.nx-metric-card__icon {
+  width: 48px;
+  height: 48px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--nx-fs-500);
+  border-radius: var(--nx-radius-md);
+  background: var(--nx-accent-muted);
+  color: var(--nx-accent-primary);
+}
+
+.nx-metric-card__value {
+  font-family: var(--nx-font-display);
+  font-size: var(--nx-fs-500);
+  font-weight: var(--nx-fw-semibold);
+}

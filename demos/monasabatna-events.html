@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>مناسباتنا — تنظيم الأفراح والمناسبات</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8E%89%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Cairo', 'ui-sans-serif', 'system-ui'] },
+      }
+    }
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root { --accent: #D4AF5A; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    opacity: 0;
+    animation: vip-fade-in .5s ease forwards;
+  }
+  @keyframes vip-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent; }
+  button, a, [role="button"] { transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+  button:active { transform: scale(0.97); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #root { min-height: 100vh; }
+  #vip-loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: #0a0a0a; z-index: 9999; transition: opacity .4s ease;
+  }
+  #vip-loading .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-top-color: var(--accent);
+    animation: vip-spin .8s linear infinite;
+  }
+  @keyframes vip-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="vip-loading"><div class="spinner"></div></div>
+<div id="root"></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import * as ReactDOM from "react-dom/client";
+import React, { useState, useEffect } from "react";
+import {
+  PartyPopper, Calendar, Check, Send, Star, Crown, Camera, Music2, Gift, Sparkles,
+} from "lucide-react";
+
+const FONT_ID = "monasabatna-fonts";
+function useFonts() {
+  useEffect(() => {
+    if (document.getElementById(FONT_ID)) return;
+    const l = document.createElement("link");
+    l.id = FONT_ID; l.rel = "stylesheet";
+    l.href = "https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&display=swap";
+    document.head.appendChild(l);
+  }, []);
+}
+
+const C = {
+  bg: "#0F0D0B", surface: "#1A1613", border: "rgba(212,175,90,0.16)",
+  ink: "#F6F1E7", muted: "#B3A88F", gold: "#D4AF5A", goldSoft: "rgba(212,175,90,0.14)",
+};
+const font = { display: "'Cairo', sans-serif", body: "'Cairo', sans-serif" };
+const shadow = { md: "0 12px 30px rgba(0,0,0,0.35)", lg: "0 26px 56px rgba(0,0,0,0.5)" };
+
+const COMPANY = { name: "مناسباتنا", tagline: "ننظم أفراحكم ومناسباتكم بلمسة فاخرة لا تُنسى", address: "شارع الميرغني، مصر الجديدة، القاهرة" };
+
+const PACKAGES = [
+  { id: "classic", name: "الباقة الكلاسيكية", price: "45,000", features: ["تنسيق قاعة كامل", "تصوير فوتوغرافي", "دي جي وإضاءة"] },
+  { id: "premium", name: "الباقة البريميوم", price: "85,000", features: ["كل ما سبق", "تصوير فيديو سينمائي", "بوفيه مفتوح مميز", "منسق حفل شخصي"], popular: true },
+  { id: "royal", name: "الباقة الملكية", price: "150,000", features: ["كل ما سبق", "ديكور مخصص بالكامل", "فرقة موسيقية حية", "طاقم خدمة كامل"] },
+];
+
+function PackageSelector() {
+  const [active, setActive] = useState("premium");
+  return (
+    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 18 }} className="pkg-grid">
+      {PACKAGES.map((p) => {
+        const isActive = active === p.id;
+        return (
+          <div key={p.id} onClick={() => setActive(p.id)} style={{
+            background: isActive ? `linear-gradient(160deg, ${C.gold}22, transparent)` : C.surface,
+            border: `1.5px solid ${isActive ? C.gold : C.border}`, borderRadius: 22, padding: 26, cursor: "pointer",
+            position: "relative", transition: "all 0.25s ease", transform: isActive ? "translateY(-6px)" : "translateY(0)",
+          }}>
+            {p.popular && <div style={{ position: "absolute", top: -12, right: 20, background: C.gold, color: "#1A1310", fontFamily: font.body, fontWeight: 800, fontSize: 10, padding: "4px 12px", borderRadius: 999 }}>الأكثر طلبًا</div>}
+            <Crown size={22} color={C.gold} />
+            <div style={{ fontFamily: font.body, fontWeight: 800, fontSize: 17, color: C.ink, marginTop: 14 }}>{p.name}</div>
+            <div style={{ fontFamily: font.body, fontWeight: 800, fontSize: 24, color: C.gold, marginTop: 10 }}>{p.price} <span style={{ fontSize: 12, color: C.muted, fontWeight: 500 }}>ج.م</span></div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 9, marginTop: 18 }}>
+              {p.features.map((f, i) => (<div key={i} style={{ display: "flex", alignItems: "center", gap: 8 }}><Check size={13} color={C.gold} /><span style={{ fontFamily: font.body, fontSize: 12, color: C.muted }}>{f}</span></div>))}
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function Navbar() {
+  return (
+    <div style={{ position: "sticky", top: 0, zIndex: 50, background: "rgba(15,13,11,0.9)", backdropFilter: "blur(12px)", borderBottom: `1px solid ${C.border}` }}>
+      <div style={{ maxWidth: 1200, margin: "0 auto", padding: "16px 30px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 10 }}><div style={{ width: 40, height: 40, borderRadius: 12, background: C.gold, display: "flex", alignItems: "center", justifyContent: "center" }}><PartyPopper size={19} color="#1A1310" /></div><span style={{ fontFamily: font.body, fontWeight: 800, fontSize: 18, color: C.ink }}>{COMPANY.name}</span></div>
+        <button style={{ display: "flex", alignItems: "center", gap: 8, background: C.gold, color: "#1A1310", border: "none", borderRadius: 10, padding: "11px 22px", fontFamily: font.body, fontWeight: 700, fontSize: 13.5, cursor: "pointer" }}><Calendar size={15} /> احجز استشارة</button>
+      </div>
+    </div>
+  );
+}
+
+function Hero() {
+  const items = [{ icon: Camera, l: "تصوير احترافي" }, { icon: Music2, l: "موسيقى وإضاءة" }, { icon: Gift, l: "تنسيق وديكور" }];
+  return (
+    <div style={{ maxWidth: 1200, margin: "0 auto", padding: "70px 30px 40px", textAlign: "center" }}>
+      <Sparkles size={20} color={C.gold} />
+      <h1 style={{ fontFamily: font.body, fontWeight: 800, fontSize: 42, color: C.ink, margin: "18px 0 12px" }}>{COMPANY.tagline}</h1>
+      <p style={{ fontFamily: font.body, fontSize: 14, color: C.muted, maxWidth: 480, marginInline: "auto", marginBottom: 34 }}>من الخطوبة للفرح ولحد أعياد الميلاد الخاصة، بنحول أي مناسبة لذكرى لا تُنسى.</p>
+      <div style={{ display: "flex", justifyContent: "center", gap: 16, marginBottom: 20 }} className="items-row">
+        {items.map((it, i) => (<div key={i} style={{ display: "flex", alignItems: "center", gap: 8, background: C.surface, border: `1px solid ${C.border}`, borderRadius: 999, padding: "10px 18px" }}><it.icon size={15} color={C.gold} /><span style={{ fontFamily: font.body, fontSize: 12, color: C.ink, fontWeight: 600 }}>{it.l}</span></div>))}
+      </div>
+    </div>
+  );
+}
+
+function PackagesSection() { return <div style={{ padding: "30px 30px 60px" }}><div style={{ maxWidth: 1100, margin: "0 auto" }}><PackageSelector /></div></div>; }
+
+function ContactSection() {
+  const [sent, setSent] = useState(false);
+  return (
+    <div style={{ background: C.surface, borderTop: `1px solid ${C.border}`, padding: "60px 30px" }}>
+      <div style={{ maxWidth: 480, margin: "0 auto", textAlign: "center" }}>
+        <h3 style={{ fontFamily: font.body, fontWeight: 800, fontSize: 20, color: C.ink, margin: "0 0 8px" }}>احجز استشارة مجانية</h3>
+        <p style={{ fontFamily: font.body, fontSize: 12.5, color: C.muted, marginBottom: 20 }}>{COMPANY.address}</p>
+        {sent ? <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 8, color: C.gold, fontFamily: font.body, fontWeight: 700 }}><Check size={18} /> تم استلام طلبك</div> : (
+          <div style={{ background: C.bg, border: `1px solid ${C.border}`, borderRadius: 18, padding: 24 }}>
+            <input placeholder="الاسم بالكامل" style={{ width: "100%", padding: "12px 14px", borderRadius: 10, border: `1px solid ${C.border}`, background: C.surface, color: C.ink, fontFamily: font.body, fontSize: 13, outline: "none", textAlign: "right", boxSizing: "border-box", marginBottom: 10 }} />
+            <input placeholder="نوع المناسبة" style={{ width: "100%", padding: "12px 14px", borderRadius: 10, border: `1px solid ${C.border}`, background: C.surface, color: C.ink, fontFamily: font.body, fontSize: 13, outline: "none", textAlign: "right", boxSizing: "border-box", marginBottom: 16 }} />
+            <button onClick={() => setSent(true)} style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: 8, background: C.gold, color: "#1A1310", border: "none", borderRadius: 10, padding: "13px 0", fontFamily: font.body, fontWeight: 700, fontSize: 14, cursor: "pointer" }}><Send size={15} /> إرسال الطلب</button>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function MonasabatnaEvents() {
+  useFonts();
+  return (
+    <div dir="rtl" style={{ background: C.bg, minHeight: "100vh", fontFamily: font.body, color: C.ink }}>
+      <style>{`* { box-sizing: border-box; } input::placeholder { color: #6E6555; } @media (max-width: 900px) { .pkg-grid { grid-template-columns: 1fr !important; } .items-row { flex-wrap: wrap; } }`}</style>
+      <Navbar /><Hero /><PackagesSection /><ContactSection />
+    </div>
+  );
+}
+
+
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+root.render(<MonasabatnaEvents />);
+const loading = document.getElementById("vip-loading");
+if (loading) { loading.style.opacity = "0"; setTimeout(() => loading.remove(), 400); }
+</script>
+</body>
+</html>

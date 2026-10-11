@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mashwar — نظام إدارة وكالات السياحة والسفر</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Merienda:wght@600;700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sunset:#E8734A; --sunset-dark:#C2572F; --sunset-soft:#FCE8DE;
+  --teal:#0E8C88; --teal-soft:#E3F4F3;
+  --bg:#FBF9F5; --surface:#FFFFFF;
+  --text:#28211A; --text-secondary:#544A3F; --muted:#948A7C; --faint:#DED2C0;
+  --border:#F0E7D8; --border-strong:#E1D2B8;
+  --success:#2E9E5B; --success-soft:#E8F5EE;
+  --warning:#D9932E; --warning-soft:#FBF1DF;
+  --danger:#C1443D; --danger-soft:#F9EAE9;
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:26px;
+  --shadow-sm:0 2px 10px rgba(232,115,74,0.08);
+  --shadow-md:0 12px 30px rgba(232,115,74,0.10);
+  --shadow-lg:0 26px 56px rgba(232,115,74,0.20);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;font-weight:800;margin:0;color:var(--text);letter-spacing:-.01em;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 260px;min-height:100vh;}
+.sidebar{background:#fff;border-left:1px solid var(--border);padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:28px;}
+.brand-mark{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--sunset),#F0A46F);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;box-shadow:var(--shadow-sm);}
+.brand-name{font-family:'Merienda';font-weight:700;font-size:18px;color:var(--sunset-dark);}
+.brand-sub{font-size:10.5px;color:var(--muted);}
+.nav-sec{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:12px;color:var(--text-secondary);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;}
+.nav-item:hover{background:var(--sunset-soft);}
+.nav-item.active{background:var(--sunset);color:#fff;}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:var(--teal);color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--border);}
+.foot-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:12px;background:var(--teal-soft);}
+.foot-card img{width:36px;height:36px;border-radius:10px;object-fit:cover;}
+.foot-card .name{font-size:12.5px;font-weight:800;} .foot-card .role{font-size:10.5px;color:var(--muted);}
+
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(251,249,245,0.88);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15.5px;}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:var(--sunset);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:var(--sunset-dark);transform:translateY(-1px);}
+.btn-teal{background:var(--teal);color:#fff;}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--sunset-soft);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.confirmed{background:var(--success-soft);color:var(--success);}
+.badge.pending{background:var(--warning-soft);color:var(--warning);}
+.badge.cancelled{background:var(--danger-soft);color:var(--danger);}
+.badge.teal{background:var(--teal-soft);color:var(--teal);}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;}
+.stat .value{font-size:24px;font-weight:800;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--success);margin-top:6px;display:inline-block;}
+
+/* Destination package cards */
+.dest-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;}
+.dest-card{border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#fff;transition:all .2s var(--ease);}
+.dest-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-md);}
+.dest-img{height:150px;background:linear-gradient(135deg,var(--sunset),#F4B183);display:flex;align-items:center;justify-content:center;font-size:38px;position:relative;}
+.dest-price{position:absolute;bottom:10px;right:10px;background:rgba(255,255,255,0.95);color:var(--sunset-dark);font-weight:800;font-size:12.5px;padding:5px 12px;border-radius:8px;}
+.dest-body{padding:15px;}
+.dest-title{font-weight:800;font-size:14px;} .dest-loc{font-size:11.5px;color:var(--muted);margin-top:3px;}
+.dest-meta{display:flex;gap:14px;margin-top:12px;font-size:11.5px;color:var(--text-secondary);}
+
+/* Itinerary timeline */
+.itin-timeline{position:relative;padding-right:24px;}
+.itin-timeline::before{content:'';position:absolute;right:7px;top:6px;bottom:6px;width:2px;background:var(--border);}
+.itin-day{position:relative;padding-bottom:20px;}
+.itin-dot{position:absolute;right:-24px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--sunset);border:3px solid #fff;box-shadow:0 0 0 2px var(--sunset);}
+.itin-card{background:var(--sunset-soft);border-radius:12px;padding:12px 14px;}
+.itin-card b{font-size:12.5px;} .itin-card p{font-size:11.5px;color:var(--text-secondary);margin-top:4px;}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--sunset-soft);}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;}
+.avatar{border-radius:50%;object-fit:cover;flex-shrink:0;}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--sunset-dark);color:#fff;padding:11px 17px;border-radius:12px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);}
+
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 78px;} .brand-name,.brand-sub,.nav-item span:not(.ic),.nav-sec,.foot-card .name,.foot-card .role,.nav-badge{display:none;} .dest-grid{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} .dest-grid{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">Mashwar — وكالة سياحة وسفر</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-teal" onclick="switchView('v-bookings')">+ حجز رحلة</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-packages"></section>
+      <section class="view" id="v-bookings"></section>
+      <section class="view" id="v-itinerary"></section>
+      <section class="view" id="v-customers"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">✈️</div>
+      <div><div class="brand-name">Mashwar</div><div class="brand-sub">وكالة سياحة وسفر</div></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-bookings"><span class="ic">🎫</span><span>الحجوزات</span><span class="nav-badge">5</span></div>
+      <div class="nav-item" data-view="v-itinerary"><span class="ic">🗺️</span><span>خط سير الرحلة</span></div>
+      <div class="nav-sec">الإدارة</div>
+      <div class="nav-item" data-view="v-packages"><span class="ic">🏝️</span><span>باقات السفر</span></div>
+      <div class="nav-item" data-view="v-customers"><span class="ic">👥</span><span>العملاء</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="foot-card"><img src="https://i.pravatar.cc/72?img=17"><div><div class="name">أ. حازم نبيل</div><div class="role">مدير الوكالة</div></div></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const packages = [
+  {name:"شهر عسل في المالديف", loc:"المالديف — 7 ليالي", price:"68,000", emoji:"🏝️", days:7, category:"رومانسي"},
+  {name:"جولة أوروبية شاملة", loc:"باريس، روما، برشلونة", price:"95,000", emoji:"🏰", days:10, category:"عائلي"},
+  {name:"رحلة سفاري وشواطئ", loc:"زنجبار، تنزانيا", price:"52,000", emoji:"🦁", days:6, category:"مغامرات"},
+  {name:"عمرة مميزة", loc:"مكة والمدينة", price:"18,500", emoji:"🕋", days:9, category:"ديني"},
+  {name:"إسطنبول وكابادوكيا", loc:"تركيا", price:"34,000", emoji:"🎈", days:6, category:"عائلي"},
+  {name:"جزر المالديب الفاخرة", loc:"المالديف — فيلات خاصة", price:"110,000", emoji:"🌴", days:8, category:"فاخر"},
+];
+const bookings = [
+  {customer:"أسرة عبد الرازق", package:"جولة أوروبية شاملة", date:"20 يوليو 2026", travelers:4, status:"confirmed", total:380000},
+  {customer:"محمد وسارة (شهر عسل)", package:"شهر عسل في المالديف", date:"25 يوليو 2026", travelers:2, status:"confirmed", total:136000},
+  {customer:"مجموعة شركة نوفا", package:"إسطنبول وكابادوكيا", date:"1 أغسطس 2026", travelers:12, status:"pending", total:408000},
+  {customer:"عائلة راضي", package:"رحلة سفاري وشواطئ", date:"15 أغسطس 2026", travelers:5, status:"pending", total:260000},
+  {customer:"حجاج بيت الله", package:"عمرة مميزة", date:"10 سبتمبر 2026", travelers:3, status:"confirmed", total:55500},
+];
+const customers = [
+  {name:"أسرة عبد الرازق", trips:3, spent:840000, img:20},
+  {name:"محمد فتحي", trips:1, spent:136000, img:21},
+  {name:"شركة نوفا للمؤتمرات", trips:5, spent:1250000, img:22},
+  {name:"عائلة راضي", trips:2, spent:390000, img:23},
+];
+const itinerary = [
+  {day:"اليوم الأول", title:"الوصول إلى باريس", desc:"استقبال في المطار، تسجيل الفندق، جولة مسائية على نهر السين"},
+  {day:"اليوم الثاني", title:"زيارة برج إيفل واللوفر", desc:"جولة سياحية كاملة مع مرشد سياحي ناطق بالعربية"},
+  {day:"اليوم الثالث", title:"الانتقال إلى روما", desc:"رحلة طيران داخلية، تسجيل الفندق في روما"},
+  {day:"اليوم الرابع", title:"الكولوسيوم والفاتيكان", desc:"جولة تاريخية شاملة مع وجبة غداء إيطالية أصيلة"},
+];
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','Mashwar — وكالة سياحة وسفر'],
+    'v-packages':['باقات السفر', packages.length+' باقة متاحة'],
+    'v-bookings':['الحجوزات', bookings.length+' حجز'],
+    'v-itinerary':['خط سير الرحلة','الجولة الأوروبية الشاملة — أسرة عبد الرازق'],
+    'v-customers':['العملاء', customers.length+' عميل'],
+    'v-settings':['الإعدادات','بيانات الوكالة'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+const statusMap = {confirmed:'مؤكد',pending:'قيد المراجعة',cancelled:'ملغي'};
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>أهلاً، أستاذ حازم ✈️</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦</p></div>
+      <button class="btn btn-outline" onclick="switchView('v-packages')">عرض كل الباقات</button></div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('حجوزات هذا الشهر', bookings.length+' حجز','🎫','var(--sunset)','+4 عن الشهر الماضي')}
+      ${stat('إيراد الشهر','١٬٤٣٩٬٥٠٠ ج.م','💰','var(--teal)','+22%')}
+      ${stat('مسافرين نشطين','26 مسافر','🧳','var(--success)','عبر 5 رحلات')}
+      ${stat('حجوزات قيد المراجعة',bookings.filter(b=>b.status==='pending').length+' حجز','⏳','var(--warning)','بحاجة لتأكيد')}
+    </div>
+    <div class="grid g3">
+      <div class="card card-pad" style="grid-column:span 2">
+        <div class="card-title" style="margin-bottom:16px">أحدث الحجوزات</div>
+        ${bookings.map(b=>`
+          <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+            <div><b style="font-size:13px">${b.customer}</b><div class="muted" style="font-size:11px">${b.package} — ${b.date}</div></div>
+            <span class="badge ${b.status}">${statusMap[b.status]}</span>
+          </div>`).join('')}
+      </div>
+      <div class="card card-pad">
+        <div class="card-title" style="margin-bottom:14px">أكثر الوجهات طلباً</div>
+        ${packages.slice(0,4).map(p=>`
+          <div class="flex items-center gap3" style="margin-bottom:12px">
+            <span style="font-size:20px">${p.emoji}</span>
+            <div style="flex:1"><b style="font-size:12.5px">${p.name}</b><div class="muted" style="font-size:10.5px">${p.price} ج.م / فرد</div></div>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderPackages(){
+  const el = document.getElementById('v-packages');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>باقات السفر</h1><p class="sub">${packages.length} باقة متاحة</p></div>
+      <button class="btn btn-primary">+ إضافة باقة</button></div>
+    <div class="dest-grid">
+      ${packages.map(p=>`
+        <div class="dest-card" onclick="switchView('v-itinerary')">
+          <div class="dest-img">${p.emoji}<span class="dest-price">${p.price} ج.م</span></div>
+          <div class="dest-body">
+            <div class="dest-title">${p.name}</div>
+            <div class="dest-loc">📍 ${p.loc}</div>
+            <div class="dest-meta"><span>🗓️ ${p.days} أيام</span><span class="badge teal">${p.category}</span></div>
+          </div>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderBookings(){
+  const el = document.getElementById('v-bookings');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>الحجوزات</h1><p class="sub">${bookings.length} حجز</p></div>
+      <button class="btn btn-teal">+ حجز جديد</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>العميل</th><th>الباقة</th><th>تاريخ السفر</th><th>عدد المسافرين</th><th>الإجمالي</th><th>الحالة</th></tr></thead>
+      <tbody>${bookings.map(b=>`
+        <tr onclick="switchView('v-itinerary')">
+          <td><b>${b.customer}</b></td><td>${b.package}</td><td>${b.date}</td>
+          <td>${b.travelers} أفراد</td><td><b>${b.total.toLocaleString('ar-EG')} ج.م</b></td>
+          <td><span class="badge ${b.status}">${statusMap[b.status]}</span></td>
+        </tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderItinerary(){
+  const el = document.getElementById('v-itinerary');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>خط سير الرحلة</h1><p class="sub">الجولة الأوروبية الشاملة — أسرة عبد الرازق</p></div>
+      <button class="btn btn-primary">+ إضافة يوم</button></div>
+    <div class="card card-pad">
+      <div class="itin-timeline">
+        ${itinerary.map(d=>`
+          <div class="itin-day">
+            <div class="itin-dot"></div>
+            <div class="muted" style="font-size:11px;font-weight:700;margin-bottom:6px">${d.day}</div>
+            <div class="itin-card"><b>${d.title}</b><p>${d.desc}</p></div>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderCustomers(){
+  const el = document.getElementById('v-customers');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>العملاء</h1><p class="sub">${customers.length} عميل</p></div></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>العميل</th><th>عدد الرحلات</th><th>إجمالي الإنفاق</th></tr></thead>
+      <tbody>${customers.map(c=>`
+        <tr><td><div class="cell-name"><img class="avatar" width="32" height="32" src="https://i.pravatar.cc/64?img=${c.img}">${c.name}</div></td>
+        <td>${c.trips} رحلة</td><td><b>${c.spent.toLocaleString('ar-EG')} ج.م</b></td></tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1>الإعدادات</h1><p class="sub">بيانات الوكالة</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات اسم الوكالة، شركات الطيران الشريكة، وسياسة الحجز والإلغاء.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderPackages(); renderBookings(); renderItinerary(); renderCustomers(); renderSettings();
+</script>
+</body>
+</html>

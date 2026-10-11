@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Wren Clinic — Modern Care, Human Touch</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --forest:#0F3D31;
+  --forest-deep:#0A2B23;
+  --coral:#FF6F59;
+  --coral-soft: rgba(255,111,89,0.12);
+  --cream:#FBF6EE;
+  --cream-card:#FFFFFF;
+  --sand:#F1E7D6;
+  --ink:#14231D;
+  --muted:#5C6B63;
+  --faint:#8FA097;
+  --border: rgba(15,61,49,0.12);
+  --gold:#C9A24B;
+  --r-md:16px; --r-lg:26px; --r-pill:999px;
+  --ease: cubic-bezier(.22,1,.36,1);
+  --shadow: 0 24px 54px -28px rgba(15,61,49,0.3);
+  --font-display:'Newsreader', serif;
+  --font-body:'Inter', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{ scroll-behavior:smooth; }
+body{ background:var(--cream); color:var(--ink); font-family:var(--font-body); }
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; cursor:pointer; color:inherit;}
+img,svg{ display:block; }
+:focus-visible{ outline:2px solid var(--coral); outline-offset:3px; border-radius:6px; }
+.wrap{ max-width:1180px; margin:0 auto; padding:0 32px; }
+.eyebrow{ font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--coral); }
+
+/* ===== nav ===== */
+.nav{ position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:20px 32px; background:rgba(251,246,238,0.82); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+.nav-brand{ display:flex; align-items:center; gap:10px; }
+.nav-mark{ width:34px; height:34px; border-radius:10px; background:var(--forest); display:flex; align-items:center; justify-content:center; }
+.nav-mark svg{ width:17px; height:17px; color:var(--cream); }
+.nav-name{ font-family:var(--font-display); font-size:19px; font-weight:600; }
+.nav-links{ display:flex; gap:30px; }
+.nav-links a{ font-size:13.5px; font-weight:500; color:var(--forest); position:relative; padding:4px 0; }
+.nav-links a::after{ content:''; position:absolute; bottom:0; right:0; width:0; height:1.5px; background:var(--coral); transition:width .25s var(--ease); }
+.nav-links a:hover::after{ width:100%; left:0; right:auto;}
+.nav-cta{ display:flex; align-items:center; gap:14px; }
+.btn{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:600; padding:11px 20px; border-radius:var(--r-pill); transition:all .2s var(--ease); }
+.btn svg{ width:14px; height:14px; }
+.btn-primary{ background:var(--coral); color:#fff; box-shadow:0 10px 24px -10px rgba(255,111,89,0.5); }
+.btn-primary:hover{ transform:translateY(-2px); box-shadow:0 14px 30px -10px rgba(255,111,89,0.6); }
+.btn-outline{ background:transparent; border:1px solid var(--forest); color:var(--forest); }
+.btn-outline:hover{ background:var(--forest); color:var(--cream); }
+.btn-light{ background:var(--cream); color:var(--forest); }
+.mobile-toggle{ display:none; width:38px; height:38px; align-items:center; justify-content:center; border-radius:10px; background:var(--sand); }
+.mobile-toggle svg{ width:18px; height:18px; }
+
+/* ===== hero ===== */
+.hero{ padding:90px 32px 70px; position:relative; overflow:hidden; }
+.hero::before{ content:''; position:absolute; inset:0; background: radial-gradient(ellipse 700px 500px at 85% 0%, rgba(255,111,89,0.09), transparent 60%); pointer-events:none; }
+.hero-grid{ display:grid; grid-template-columns:1fr .85fr; gap:48px; align-items:center; max-width:1180px; margin:0 auto; position:relative; }
+.hero-title{ font-family:var(--font-display); font-size:52px; font-weight:500; line-height:1.12; margin-top:18px; letter-spacing:-.01em; }
+.hero-title em{ font-style:italic; color:var(--coral); }
+.hero-sub{ font-size:15.5px; color:var(--muted); line-height:1.7; margin-top:20px; max-width:460px; }
+.hero-actions{ display:flex; align-items:center; gap:18px; margin-top:30px; }
+.hero-note{ font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; }
+.hero-stats{ display:flex; gap:30px; margin-top:44px; padding-top:28px; border-top:1px solid var(--border); }
+.hero-stat b{ font-family:var(--font-display); font-size:27px; font-weight:600; display:block; }
+.hero-stat span{ font-size:11.5px; color:var(--muted); }
+
+.hero-visual{ position:relative; }
+.hero-photo{ aspect-ratio:4/5; border-radius:32px; background:linear-gradient(155deg, #d9e8dd, #b9d0c0); overflow:hidden; position:relative; box-shadow:var(--shadow); }
+.hero-photo-fill{ position:absolute; inset:0; display:flex; align-items:center; justify-content:center; }
+.hero-photo-fill svg{ width:130px; height:130px; color:rgba(15,61,49,0.28); }
+.float-card{ position:absolute; padding:14px 16px; border-radius:16px; background:var(--cream-card); box-shadow:var(--shadow); display:flex; align-items:center; gap:11px; animation:float 4.5s ease-in-out infinite; }
+.float-card.c1{ top:24px; right:-26px; animation-delay:0s; }
+.float-card.c2{ bottom:36px; left:-30px; animation-delay:1.2s; }
+@keyframes float{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-10px); } }
+.float-ic{ width:34px; height:34px; border-radius:10px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.float-ic svg{ width:16px; height:16px; }
+.float-card b{ font-size:12.5px; display:block; } .float-card span{ font-size:10.5px; color:var(--muted); }
+
+/* ===== trust bar ===== */
+.trust-bar{ padding:26px 32px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.trust-row{ max-width:1180px; margin:0 auto; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:16px; }
+.trust-item{ font-family:var(--font-display); font-size:15px; color:var(--faint); font-style:italic; }
+
+/* ===== section head ===== */
+.section{ padding:86px 32px; opacity:0; transform:translateY(20px); transition:all .7s var(--ease); }
+.section.in{ opacity:1; transform:none; }
+.section-head{ max-width:600px; margin:0 auto 50px; text-align:center; }
+.section-head h2{ font-family:var(--font-display); font-size:36px; font-weight:500; margin-top:12px; line-height:1.2; }
+.section-head p{ font-size:14px; color:var(--muted); margin-top:12px; line-height:1.6; }
+
+/* ===== services ===== */
+.services-grid{ max-width:1180px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.service-card{ padding:30px 26px; background:var(--cream-card); border-radius:var(--r-lg); border:1px solid var(--border); transition:all .3s var(--ease); }
+.service-card:hover{ transform:translateY(-6px); box-shadow:var(--shadow); border-color:transparent; }
+.service-ic{ width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; margin-bottom:20px; }
+.service-ic svg{ width:22px; height:22px; }
+.service-card h3{ font-family:var(--font-display); font-size:19px; font-weight:600; }
+.service-card p{ font-size:13px; color:var(--muted); line-height:1.6; margin-top:8px; }
+.service-link{ display:inline-flex; align-items:center; gap:5px; font-size:12.5px; font-weight:600; color:var(--coral); margin-top:16px; }
+
+/* ===== doctors ===== */
+.doctors-strip{ background:var(--forest); color:var(--cream); }
+.doctors-strip .section-head h2, .doctors-strip .eyebrow{ color:var(--cream); }
+.doctors-strip .eyebrow{ color:#8FC7AE; }
+.doctors-strip .section-head p{ color:#B9D4C6; }
+.doctors-grid{ max-width:1180px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:18px; }
+.doctor-card{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:var(--r-lg); overflow:hidden; transition:all .3s var(--ease); }
+.doctor-card:hover{ transform:translateY(-6px); background:rgba(255,255,255,0.08); }
+.doctor-photo{ aspect-ratio:1; background:linear-gradient(160deg, rgba(255,111,89,0.25), rgba(255,255,255,0.04)); display:flex; align-items:center; justify-content:center; }
+.doctor-photo span{ font-family:var(--font-display); font-size:30px; font-weight:600; color:rgba(251,246,238,0.7); }
+.doctor-info{ padding:18px; }
+.doctor-info b{ font-family:var(--font-display); font-size:15.5px; font-weight:600; display:block; }
+.doctor-info span{ font-size:11.5px; color:#9FC2AF; }
+.doctor-tags{ display:flex; gap:6px; margin-top:10px; }
+.doctor-tag{ font-family:var(--font-mono); font-size:9px; padding:3px 8px; border-radius:20px; background:rgba(255,255,255,0.1); }
+
+/* ===== testimonials ===== */
+.testi-grid{ max-width:1180px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:20px; }
+.testi-card{ padding:28px; background:var(--sand); border-radius:var(--r-lg); }
+.testi-stars{ display:flex; gap:3px; margin-bottom:16px; }
+.testi-stars svg{ width:13px; height:13px; color:var(--gold); }
+.testi-card p{ font-family:var(--font-display); font-size:16px; line-height:1.6; font-style:italic; color:var(--ink); }
+.testi-author{ display:flex; align-items:center; gap:11px; margin-top:20px; }
+.testi-avatar{ width:38px; height:38px; border-radius:50%; background:var(--forest); display:flex; align-items:center; justify-content:center; color:var(--cream); font-family:var(--font-display); font-size:13px; font-weight:600; }
+.testi-author b{ font-size:12.5px; display:block; } .testi-author span{ font-size:10.5px; color:var(--muted); }
+
+/* ===== booking CTA ===== */
+.cta-band{ padding:0 32px; }
+.cta-inner{ max-width:1180px; margin:0 auto; padding:64px 56px; border-radius:36px; background:linear-gradient(150deg, var(--forest), var(--forest-deep)); position:relative; overflow:hidden; display:grid; grid-template-columns:1.3fr 1fr; gap:40px; align-items:center; }
+.cta-inner::after{ content:''; position:absolute; inset:0; background:radial-gradient(circle at 85% 20%, rgba(255,111,89,0.25), transparent 55%); pointer-events:none; }
+.cta-left{ position:relative; z-index:1; }
+.cta-left .eyebrow{ color:#8FC7AE; }
+.cta-left h2{ font-family:var(--font-display); font-size:32px; font-weight:500; color:var(--cream); margin-top:12px; line-height:1.25; max-width:420px; }
+.cta-left p{ font-size:13.5px; color:#B9D4C6; margin-top:14px; max-width:400px; line-height:1.6; }
+.cta-right{ position:relative; z-index:1; display:flex; flex-direction:column; gap:12px; }
+.cta-form-row{ display:flex; gap:10px; }
+.cta-input{ flex:1; padding:13px 16px; border-radius:14px; background:rgba(255,255,255,0.08); border:1px solid rgba(255,255,255,0.18); color:var(--cream); font-size:13px; }
+.cta-input::placeholder{ color:#9FC2AF; }
+
+/* ===== FAQ ===== */
+.faq-list{ max-width:760px; margin:0 auto; display:flex; flex-direction:column; gap:10px; }
+.faq-item{ border:1px solid var(--border); border-radius:16px; background:var(--cream-card); overflow:hidden; }
+.faq-q{ display:flex; justify-content:space-between; align-items:center; padding:18px 22px; cursor:pointer; }
+.faq-q b{ font-size:14px; font-weight:600; }
+.faq-q svg{ width:16px; height:16px; color:var(--coral); transition:transform .25s var(--ease); flex-shrink:0; }
+.faq-item.open .faq-q svg{ transform:rotate(45deg); }
+.faq-a{ max-height:0; overflow:hidden; transition:max-height .35s var(--ease); }
+.faq-a p{ padding:0 22px 18px; font-size:13px; color:var(--muted); line-height:1.6; }
+
+/* ===== footer ===== */
+.footer{ background:var(--forest-deep); color:#B9D4C6; padding:60px 32px 28px; }
+.footer-grid{ max-width:1180px; margin:0 auto; display:grid; grid-template-columns:1.4fr 1fr 1fr 1fr; gap:40px; }
+.footer-brand{ display:flex; align-items:center; gap:9px; margin-bottom:14px; }
+.footer-brand .nav-mark{ background:var(--coral); }
+.footer-brand span{ font-family:var(--font-display); color:var(--cream); font-size:17px; font-weight:600; }
+.footer p.desc{ font-size:12.5px; line-height:1.6; max-width:260px; }
+.footer h4{ font-family:var(--font-mono); font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; color:#8FC7AE; margin-bottom:14px; }
+.footer ul{ list-style:none; display:flex; flex-direction:column; gap:9px; }
+.footer ul a{ font-size:13px; }
+.footer ul a:hover{ color:var(--cream); }
+.footer-bottom{ max-width:1180px; margin:40px auto 0; padding-top:22px; border-top:1px solid rgba(255,255,255,0.1); display:flex; justify-content:space-between; font-size:11.5px; color:#7FA695; flex-wrap:wrap; gap:10px; }
+
+/* ===== responsive ===== */
+@media (max-width:1000px){
+  .nav-links{ display:none; }
+  .mobile-toggle{ display:flex; }
+  .hero-grid{ grid-template-columns:1fr; }
+  .hero-title{ font-size:38px; }
+  .services-grid, .doctors-grid, .testi-grid{ grid-template-columns:1fr 1fr; }
+  .cta-inner{ grid-template-columns:1fr; padding:44px 30px; }
+  .footer-grid{ grid-template-columns:1fr 1fr; }
+}
+@media (max-width:620px){
+  .wrap, .hero, .section, .nav{ padding-left:18px; padding-right:18px; }
+  .services-grid, .doctors-grid, .testi-grid{ grid-template-columns:1fr; }
+  .hero-title{ font-size:32px; }
+  .hero-stats{ flex-wrap:wrap; }
+  .footer-grid{ grid-template-columns:1fr; }
+  .cta-form-row{ flex-direction:column; }
+}
+@media (prefers-reduced-motion:reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <div class="nav-brand"><div class="nav-mark"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-4.5-7-10a5 5 0 0110-2 5 5 0 0110 2c0 5.5-7 10-7 10z"/></svg></div><div class="nav-name">Wren Clinic</div></div>
+  <div class="nav-links">
+    <a href="#services">Services</a>
+    <a href="#doctors">Doctors</a>
+    <a href="#testimonials">Stories</a>
+    <a href="#faq">FAQ</a>
+    <a href="#contact">Contact</a>
+  </div>
+  <div class="nav-cta">
+    <a href="#contact" class="btn btn-outline" style="display:none;">Patient Login</a>
+    <a href="#contact" class="btn btn-primary"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>Book a Visit</a>
+    <button class="mobile-toggle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="eyebrow">Est. 2011 · Family &amp; Specialist Care</span>
+      <h1 class="hero-title">Care that feels<br><em>unhurried</em>, in a<br>world that isn't.</h1>
+      <p class="hero-sub">Wren Clinic pairs board-certified specialists with a calmer kind of healthcare — same-week appointments, real conversations, and follow-through that doesn't stop at the door.</p>
+      <div class="hero-actions">
+        <a href="#contact" class="btn btn-primary" style="padding:14px 26px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>Book Your Visit</a>
+        <span class="hero-note"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="var(--forest)" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>Next opening: Tomorrow, 9:40 AM</span>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat"><b id="statPatients">0</b><span>Patients cared for</span></div>
+        <div class="hero-stat"><b id="statDoctors">0</b><span>Specialist doctors</span></div>
+        <div class="hero-stat"><b id="statRating">0.0</b><span>Average rating</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-photo"><div class="hero-photo-fill"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2"><path d="M12 21s-7-4.5-7-10a5 5 0 0110-2 5 5 0 0110 2c0 5.5-7 10-7 10z"/></svg></div></div>
+      <div class="float-card c1"><div class="float-ic" style="background:var(--coral-soft); color:var(--coral);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div><div><b>Confirmed</b><span>Dr. Aslan · 9:40 AM</span></div></div>
+      <div class="float-card c2"><div class="float-ic" style="background:rgba(201,162,75,0.16); color:var(--gold);"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 17.3l-6.2 3.6 1.6-6.9L2 9.2l7-.6L12 2l3 6.6 7 .6-5.4 4.8 1.6 6.9z"/></svg></div><div><b>4.9 / 5</b><span>1,240 reviews</span></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-row">
+    <span class="trust-item">Cedarline Health</span>
+    <span class="trust-item">NileCare Insurance</span>
+    <span class="trust-item">Meridian Diagnostics</span>
+    <span class="trust-item">Harbor & Vine Wellness</span>
+    <span class="trust-item">Aurora Family Med</span>
+  </div>
+</div>
+
+<!-- SERVICES -->
+<section class="section" id="services">
+  <div class="section-head"><span class="eyebrow">What We Treat</span><h2>Specialist care, organized around you.</h2><p>Eight departments under one roof, each led by physicians who've spent decades in their craft.</p></div>
+  <div class="services-grid" id="servicesGrid"></div>
+</section>
+
+<!-- DOCTORS -->
+<section class="section doctors-strip" id="doctors">
+  <div class="section-head"><span class="eyebrow">Meet the Team</span><h2>Doctors worth waiting for — but you rarely have to.</h2><p>Every physician at Wren carries board certification and an average of 14 years in practice.</p></div>
+  <div class="doctors-grid" id="doctorsGrid"></div>
+</section>
+
+<!-- TESTIMONIALS -->
+<section class="section" id="testimonials">
+  <div class="section-head"><span class="eyebrow">Patient Stories</span><h2>What people say after their first visit.</h2></div>
+  <div class="testi-grid" id="testiGrid"></div>
+</section>
+
+<!-- CTA BAND -->
+<section class="section" style="padding-top:0;">
+  <div class="cta-band">
+    <div class="cta-inner">
+      <div class="cta-left">
+        <span class="eyebrow">Ready when you are</span>
+        <h2>Book your first visit in under two minutes.</h2>
+        <p>No referral needed for most departments. Same-week openings available across all specialties.</p>
+      </div>
+      <div class="cta-right" id="contact">
+        <div class="cta-form-row"><input class="cta-input" type="text" placeholder="Full name"></div>
+        <div class="cta-form-row"><input class="cta-input" type="text" placeholder="Phone number"></div>
+        <button class="btn btn-primary" style="justify-content:center; padding:14px;">Request Appointment</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="section" id="faq">
+  <div class="section-head"><span class="eyebrow">Good to Know</span><h2>Frequently asked questions.</h2></div>
+  <div class="faq-list" id="faqList"></div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer">
+      <div class="footer-brand"><div class="nav-mark"><svg viewBox="0 0 24 24" fill="none" stroke="var(--forest-deep)" stroke-width="2"><path d="M12 21s-7-4.5-7-10a5 5 0 0110-2 5 5 0 0110 2c0 5.5-7 10-7 10z"/></svg></div><span>Wren Clinic</span></div>
+      <p class="desc">A modern multi-specialty clinic built around one idea: healthcare should feel human, not hurried.</p>
+    </div>
+    <div>
+      <h4>Departments</h4>
+      <ul><li><a href="#services">Cardiology</a></li><li><a href="#services">Pediatrics</a></li><li><a href="#services">Dermatology</a></li><li><a href="#services">Orthopedics</a></li></ul>
+    </div>
+    <div>
+      <h4>Clinic</h4>
+      <ul><li><a href="#doctors">Our Doctors</a></li><li><a href="#testimonials">Patient Stories</a></li><li><a href="#faq">FAQ</a></li><li><a href="#contact">Careers</a></li></ul>
+    </div>
+    <div>
+      <h4>Visit Us</h4>
+      <ul><li>14 Marlowe Street, Riverside</li><li>Mon–Sat · 8:00 AM–8:00 PM</li><li>+20 100 555 0142</li><li>hello@wrenclinic.com</li></ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span>© 2026 Wren Clinic. All rights reserved.</span>
+    <span>Portfolio demo · Not a real medical provider</span>
+  </div>
+</footer>
+
+<script>
+/* counters */
+function animateCount(el,target,dur=1200,decimals=0,suffix=''){ const start=performance.now();
+  function frame(t){ const p=Math.min(1,(t-start)/dur); const e=1-Math.pow(1-p,3); el.textContent=(target*e).toLocaleString('en-US',{minimumFractionDigits:decimals,maximumFractionDigits:decimals})+suffix; if(p<1) requestAnimationFrame(frame); }
+  requestAnimationFrame(frame); }
+window.addEventListener('load', ()=>{
+  animateCount(document.getElementById('statPatients'), 28400);
+  animateCount(document.getElementById('statDoctors'), 42);
+  animateCount(document.getElementById('statRating'), 4.9, 1400, 1);
+});
+
+/* services */
+const services = [
+  {n:'Cardiology', d:'Preventive screening, arrhythmia care, and long-term heart health plans.', color:'coral', icon:'<path d="M3 12h4l2-7 4 14 2-7h6"/>'},
+  {n:'Pediatrics', d:'Gentle, unhurried visits for infants through teens, from checkups to care plans.', color:'gold', icon:'<circle cx="12" cy="8" r="3.2"/><path d="M4 20c1.6-4 4.6-6 8-6s6.4 2 8 6"/>'},
+  {n:'Dermatology', d:'Skin health, cosmetic consultations, and same-week biopsy results.', color:'coral', icon:'<circle cx="12" cy="12" r="9"/><path d="M9 9h.01M15 9h.01M8 15c1.5 1.5 6.5 1.5 8 0"/>'},
+  {n:'Orthopedics', d:'Sports injuries, joint care, and physical therapy under one roof.', color:'gold', icon:'<path d="M4 21V9l8-6 8 6v12"/><path d="M9 21v-6h6v6"/>'},
+  {n:'Neurology', d:'Comprehensive evaluation for migraines, sleep, and cognitive health.', color:'coral', icon:'<circle cx="12" cy="12" r="4"/><path d="M4.9 4.9l3 3M19.1 4.9l-3 3M4.9 19.1l3-3M19.1 19.1l-3-3"/>'},
+  {n:'Family Medicine', d:'A dedicated physician for every stage of life, all in one place.', color:'gold', icon:'<path d="M12 21s-7-4.5-7-10a5 5 0 0110-2 5 5 0 0110 2c0 5.5-7 10-7 10z"/>'},
+];
+document.getElementById('servicesGrid').innerHTML = services.map(s=>`
+  <div class="service-card"><div class="service-ic" style="background:${s.color==='coral'?'var(--coral-soft)':'rgba(201,162,75,0.14)'}; color:${s.color==='coral'?'var(--coral)':'var(--gold)'};"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">${s.icon}</svg></div>
+  <h3>${s.n}</h3><p>${s.d}</p><span class="service-link">Learn more <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></span></div>`).join('');
+
+/* doctors */
+const doctors = [
+  {n:'Dr. Elif Aslan', spec:'Cardiology', init:'EA', tags:['MD','FACC']},
+  {n:'Dr. Marcus Webb', spec:'Pediatrics', init:'MW', tags:['MD','FAAP']},
+  {n:'Dr. Nia Osei', spec:'Dermatology', init:'NO', tags:['MD','FAAD']},
+  {n:'Dr. Karim Bishara', spec:'Orthopedics', init:'KB', tags:['MD','FAAOS']},
+];
+document.getElementById('doctorsGrid').innerHTML = doctors.map(d=>`
+  <div class="doctor-card"><div class="doctor-photo"><span>${d.init}</span></div>
+  <div class="doctor-info"><b>${d.n}</b><span>${d.spec}</span><div class="doctor-tags">${d.tags.map(t=>`<span class="doctor-tag">${t}</span>`).join('')}</div></div></div>`).join('');
+
+/* testimonials */
+const testis = [
+  {q:'The first clinic where I didn\\'t feel like a number in a queue. My doctor actually remembered our last conversation.', n:'Farah Hamdy', role:'Patient since 2023', init:'FH'},
+  {q:'Booked same day for my son\\'s fever and we were seen within the hour. Genuinely reassuring experience.', n:'James Okoro', role:'Patient since 2024', init:'JO'},
+  {q:'I switched three clinics before finding Wren. The follow-up care alone makes the difference.', n:'Elena Petrova', role:'Patient since 2021', init:'EP'},
+];
+document.getElementById('testiGrid').innerHTML = testis.map(t=>`
+  <div class="testi-card"><div class="testi-stars">${'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.3l-6.2 3.6 1.6-6.9L2 9.2l7-.6L12 2l3 6.6 7 .6-5.4 4.8 1.6 6.9z"/></svg>'.repeat(5)}</div>
+  <p>"${t.q}"</p><div class="testi-author"><div class="testi-avatar">${t.init}</div><div><b>${t.n}</b><span>${t.role}</span></div></div></div>`).join('');
+
+/* faq */
+const faqs = [
+  {q:'Do I need a referral to book an appointment?', a:'No referral is needed for most departments including Family Medicine, Dermatology, and Pediatrics. Some specialist consultations may request prior records.'},
+  {q:'Which insurance providers do you accept?', a:'We work with all major providers including NileCare, Cedarline Health, and Meridian. Our front desk can verify your coverage before your visit.'},
+  {q:'Can I book a same-day appointment?', a:'Same-week openings are available across all specialties, and same-day slots are often available for urgent Family Medicine visits.'},
+  {q:'Do you offer online consultations?', a:'Yes — most follow-up visits and several specialties support secure video consultations through our patient portal.'},
+];
+document.getElementById('faqList').innerHTML = faqs.map((f,i)=>`
+  <div class="faq-item" data-i="${i}"><div class="faq-q"><b>${f.q}</b><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div><div class="faq-a"><p>${f.a}</p></div></div>`).join('');
+document.querySelectorAll('.faq-item').forEach(item=>{
+  item.querySelector('.faq-q').addEventListener('click', ()=>{
+    const a = item.querySelector('.faq-a');
+    const isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item').forEach(o=>{ o.classList.remove('open'); o.querySelector('.faq-a').style.maxHeight=null; });
+    if(!isOpen){ item.classList.add('open'); a.style.maxHeight = a.scrollHeight+'px'; }
+  });
+});
+
+/* scroll reveal */
+const io = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); }); }, {threshold:.12});
+document.querySelectorAll('.section').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+/* ============================================================
+   NEXORA — Tag
+   Lightweight metadata label. Distinct from Badge: tags
+   describe content (technology, topic); badges describe status.
+   ============================================================ */
+
+.nx-tag-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--nx-space-2);
+}
+
+.nx-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nx-space-1);
+  padding: var(--nx-space-1) var(--nx-space-3);
+  font-size: var(--nx-fs-100);
+  color: var(--nx-text-secondary);
+  background: transparent;
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-sm);
+  transition: var(--nx-transition-base);
+}
+
+.nx-tag:hover {
+  border-color: var(--nx-border-strong);
+  color: var(--nx-text-primary);
+}
+
+.nx-tag__remove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  line-height: 1;
+  color: var(--nx-text-muted);
+  border-radius: var(--nx-radius-full);
+}
+
+.nx-tag__remove:hover {
+  color: var(--nx-text-primary);
+  background: var(--nx-bg-elevated-2);
+}

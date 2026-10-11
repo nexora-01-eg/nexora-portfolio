@@ -1,0 +1,35 @@
+/* ============================================================
+   NEXORA — Accordion
+   Disclosure widget pattern. Multiple items open by default;
+   set data-nx-accordion-single on the root for single-open mode.
+   ============================================================ */
+
+.nx-accordion__item {
+  border-bottom: 1px solid var(--nx-border-subtle);
+}
+
+.nx-accordion__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--nx-space-4) 0;
+  font-size: var(--nx-fs-300);
+  font-weight: var(--nx-fw-medium);
+  text-align: left;
+}
+
+.nx-accordion__trigger:hover { color: var(--nx-accent-primary); }
+
+.nx-accordion__icon {
+  transition: transform var(--nx-duration-base) var(--nx-ease-standard);
+}
+.nx-accordion__trigger[aria-expanded="true"] .nx-accordion__icon {
+  transform: rotate(180deg);
+}
+
+.nx-accordion__panel {
+  padding-bottom: var(--nx-space-4);
+}
+
+.nx-accordion__panel[hidden] { display: none; }

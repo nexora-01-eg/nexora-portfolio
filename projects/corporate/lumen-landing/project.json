@@ -1,0 +1,54 @@
+{
+  "id": "lumen-landing",
+  "slug": "lumen-landing",
+  "industry": "corporate",
+  "designSystem": "corporate",
+  "title": "Lumen Landing",
+  "tagline": "High-conversion landing page template for product launches.",
+  "description": "A conversion-focused landing page template \u2014 hero, feature grid, pricing, and signup, ready for any product launch.",
+  "version": "1.0.0",
+  "status": "live",
+  "tier": "starter",
+  "difficulty": "beginner",
+  "service": "Web Applications",
+  "tags": [
+    "landing-page",
+    "website",
+    "marketing"
+  ],
+  "technologies": [
+    "HTML",
+    "CSS",
+    "JavaScript"
+  ],
+  "componentsUsed": [
+    "hero-block",
+    "pricing-card",
+    "feature-card"
+  ],
+  "features": [
+    "Animated hero section",
+    "Pricing comparison table",
+    "Signup form with validation"
+  ],
+  "timeline": [
+    {
+      "date": "2026-06-01",
+      "label": "Project started",
+      "description": "Landing page sections drafted."
+    },
+    {
+      "date": "2026-06-15",
+      "label": "v1.0.0 released",
+      "description": "Launch-ready build."
+    }
+  ],
+  "relatedProjects": [
+    "nova-dashboard"
+  ],
+  "views": 205,
+  "featured": false,
+  "popular": false,
+  "createdAt": "2026-06-01",
+  "updatedAt": "2026-06-15"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "nova-dashboard",
+  "slug": "nova-dashboard",
+  "industry": "technology",
+  "designSystem": "technology",
+  "title": "Nova Dashboard",
+  "tagline": "Analytics dashboard template for SaaS products.",
+  "description": "A general-purpose analytics dashboard template \u2014 metrics, charts, and activity feeds for any SaaS product.",
+  "version": "1.2.0",
+  "status": "live",
+  "tier": "growth",
+  "difficulty": "intermediate",
+  "service": "Dashboard Development",
+  "tags": [
+    "dashboard",
+    "analytics",
+    "saas"
+  ],
+  "technologies": [
+    "React",
+    "Recharts",
+    "Tailwind CSS"
+  ],
+  "componentsUsed": [
+    "kpi-card",
+    "chart",
+    "data-table"
+  ],
+  "features": [
+    "Live KPI cards",
+    "Revenue and usage charts",
+    "Recent activity feed"
+  ],
+  "timeline": [
+    {
+      "date": "2026-05-01",
+      "label": "Project started",
+      "description": "Dashboard layout drafted."
+    },
+    {
+      "date": "2026-06-30",
+      "label": "v1.2.0 released",
+      "description": "Chart library integration."
+    }
+  ],
+  "relatedProjects": [
+    "aurora-crm"
+  ],
+  "views": 430,
+  "featured": true,
+  "popular": true,
+  "createdAt": "2026-05-01",
+  "updatedAt": "2026-06-30"
+}

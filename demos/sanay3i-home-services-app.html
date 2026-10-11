@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>صنايعي — خدمات المنزل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F6F5F1; --surface:#FFFFFF; --surface-2:#EEEDE6; --surface-3:#E3E1D5;
+  --ink:#1E1B14; --ink-soft:#635C4C; --ink-faint:#A39C88;
+  --line:#E7E4D8; --line-soft:#F0EEE4;
+  --navy:#1B2B4B; --navy-deep:#101B32; --navy-pale:#E6EAF1;
+  --yellow:#F2B705; --yellow-deep:#C99604; --yellow-pale:#FCEFC0;
+  --green:#2E9E63; --green-pale:#E1F3E7;
+  --red:#E24E3B; --red-pale:#FBE3DF;
+  --shadow-sm: 0 2px 10px rgba(20,18,10,0.08);
+  --shadow-md: 0 8px 24px rgba(20,18,10,0.12);
+  --shadow-lg: 0 20px 44px rgba(20,18,10,0.22);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+body{ background:#E7E4D8; font-family:'Cairo', sans-serif; -webkit-font-smoothing:antialiased; display:flex; align-items:center; justify-content:center; min-height:100vh; padding:30px; }
+.mono{ font-family:'IBM Plex Mono', monospace; direction:ltr; display:inline-block; }
+button{ font-family:inherit; cursor:pointer; border:none; background:none; }
+a{ color:inherit; text-decoration:none; }
+::-webkit-scrollbar{ display:none; }
+
+.phone{ width:390px; height:844px; background:var(--paper); border-radius:46px; box-shadow:var(--shadow-lg); position:relative; overflow:hidden; border:9px solid #14181F; }
+.notch{ position:absolute; top:0; left:50%; transform:translateX(-50%); width:150px; height:26px; background:#14181F; border-radius:0 0 18px 18px; z-index:50; }
+.statusbar{ display:flex; justify-content:space-between; align-items:center; padding:16px 26px 4px; font-size:13px; font-weight:700; }
+
+.screen{ display:none; height:calc(100% - 96px); overflow-y:auto; padding:0 18px 20px; }
+.screen.active{ display:block; animation:fadeUp .35s ease; }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+.bottom-nav{ position:absolute; bottom:0; left:0; right:0; height:82px; background:var(--surface); border-top:1px solid var(--line); display:flex; align-items:center; justify-content:space-around; padding-bottom:14px; z-index:40; }
+.nav-btn{ display:flex; flex-direction:column; align-items:center; gap:4px; color:var(--ink-faint); font-size:10px; font-weight:700; position:relative;}
+.nav-btn svg{ width:22px; height:22px; }
+.nav-btn.active{ color:var(--navy); }
+.nav-badge{ position:absolute; top:-4px; left:-8px; background:var(--red); color:#fff; font-size:9px; font-weight:800; width:16px; height:16px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+
+h2.title{ font-size:19px; font-weight:900; margin:14px 0 14px; }
+
+/* HOME */
+.top-bar{ display:flex; justify-content:space-between; align-items:center; padding-top:10px; }
+.loc-chip{ display:flex; align-items:center; gap:5px; font-size:12.5px; font-weight:700; }
+.loc-chip svg{ width:14px; height:14px; color:var(--yellow-deep); }
+.icon-circle{ width:38px; height:38px; border-radius:50%; background:var(--surface); border:1px solid var(--line); display:flex; align-items:center; justify-content:center; position:relative;}
+.icon-circle svg{ width:16px; height:16px; }
+
+.hero-banner{ background:var(--navy); border-radius:20px; padding:20px; margin-top:16px; color:#fff; position:relative; overflow:hidden;}
+.hero-banner::before{ content:''; position:absolute; bottom:-40px; left:-30px; width:130px; height:130px; border-radius:50%; background:radial-gradient(circle, rgba(242,183,5,0.22), transparent 70%); }
+.hero-banner .eyebrow{ font-size:11px; color:var(--yellow); font-weight:700; letter-spacing:1px; position:relative; z-index:1;}
+.hero-banner h3{ font-size:19px; font-weight:800; margin-top:6px; position:relative; z-index:1;}
+.hero-banner p{ font-size:12px; opacity:.8; margin-top:4px; position:relative; z-index:1;}
+
+.service-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-top:18px; }
+.service-tile{ display:flex; flex-direction:column; align-items:center; gap:8px; }
+.service-circle{ width:56px; height:56px; border-radius:18px; display:flex; align-items:center; justify-content:center; }
+.service-circle svg{ width:24px; height:24px; }
+.service-tile span{ font-size:10px; font-weight:700; text-align:center; }
+
+.pro-card{ display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:12px; margin-top:10px; box-shadow:var(--shadow-sm); }
+.pro-avatar{ width:48px; height:48px; border-radius:14px; display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; flex-shrink:0;}
+.pro-name{ font-weight:800; font-size:13px; }
+.pro-meta{ font-size:11px; color:var(--ink-faint); margin-top:2px; }
+.pro-rate{ margin-right:auto; text-align:left; }
+.pro-rate .r{ font-family:'IBM Plex Mono', monospace; font-weight:800; font-size:13px; }
+.pro-rate .l{ font-size:9.5px; color:var(--ink-faint); }
+
+/* BOOKING */
+.cat-header{ display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:18px; padding:16px; margin-bottom:16px; }
+.cat-header-ic{ width:50px; height:50px; border-radius:16px; background:var(--yellow-pale); display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+.cat-header-ic svg{ width:24px; height:24px; color:var(--yellow-deep); }
+.tech-list-item{ display:flex; align-items:center; gap:12px; background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:13px; margin-bottom:10px; }
+.book-btn{ margin-right:auto; background:var(--navy); color:#fff; font-size:11.5px; font-weight:800; padding:8px 14px; border-radius:10px; }
+
+/* ORDERS - live tracking */
+.track-card{ background:var(--navy); border-radius:22px; padding:20px; color:#fff; margin-bottom:16px; position:relative; overflow:hidden;}
+.track-status{ font-size:11px; color:var(--yellow); font-weight:700; letter-spacing:1px; }
+.track-title{ font-size:18px; font-weight:800; margin-top:6px; }
+.eta-row{ display:flex; align-items:center; gap:8px; margin-top:10px; font-size:13px; }
+.eta-row svg{ width:16px; height:16px; color:var(--yellow); }
+.map-mock{ height:120px; border-radius:16px; margin-top:16px; position:relative; overflow:hidden; background:#25324F;}
+.tech-mini{ display:flex; align-items:center; gap:10px; background:rgba(255,255,255,0.08); border-radius:14px; padding:10px; margin-top:14px;}
+.tech-mini-avatar{ width:40px; height:40px; border-radius:12px; background:var(--yellow); display:flex; align-items:center; justify-content:center; font-weight:800; color:var(--navy-deep); flex-shrink:0;}
+.call-btn2{ margin-right:auto; width:36px; height:36px; border-radius:11px; background:rgba(255,255,255,0.14); display:flex; align-items:center; justify-content:center;}
+.call-btn2 svg{ width:15px; height:15px; }
+
+.past-job{ background:var(--surface); border-radius:16px; padding:13px; margin-bottom:10px; box-shadow:var(--shadow-sm); border:1px solid var(--line);}
+.chip{ display:inline-flex; align-items:center; gap:5px; padding:3px 9px; border-radius:20px; font-size:10.5px; font-weight:700; }
+.chip-done{ background:var(--green-pale); color:var(--green); }
+
+/* PROFILE */
+.profile-head{ display:flex; align-items:center; gap:14px; padding:16px 0; }
+.profile-avatar{ width:64px; height:64px; border-radius:50%; background:linear-gradient(135deg,var(--navy),#3A4F7A); display:flex; align-items:center; justify-content:center; font-weight:900; font-size:20px; color:#fff; }
+.settings-list{ background:var(--surface); border-radius:18px; box-shadow:var(--shadow-sm); overflow:hidden; margin-top:10px; border:1px solid var(--line);}
+.settings-item{ display:flex; align-items:center; gap:12px; padding:14px 16px; border-bottom:1px solid var(--line-soft); font-size:13.5px; font-weight:600; }
+.settings-item:last-child{ border-bottom:none; }
+.settings-item svg{ width:18px; height:18px; color:var(--ink-soft); }
+.settings-item .arrow{ margin-right:auto; color:var(--ink-faint); }
+
+.toast-wrap{ position:absolute; bottom:100px; left:18px; right:18px; z-index:200; display:flex; flex-direction:column; gap:8px; align-items:center;}
+.toast{ background:var(--navy); color:#fff; padding:12px 18px; border-radius:14px; box-shadow:var(--shadow-lg); font-size:12.5px; font-weight:700; transform:translateY(10px); opacity:0; transition:all .3s ease; display:flex; align-items:center; gap:8px;}
+.toast.show{ transform:translateY(0); opacity:1; }
+.toast svg{ width:14px; height:14px; color:var(--yellow); }
+</style>
+</head>
+<body>
+
+<div class="phone">
+  <div class="notch"></div>
+  <div class="statusbar"><span>٩:٤١</span><div style="display:flex; gap:5px; align-items:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M2 22h20L12 2z"/></svg><svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><rect x="1" y="10" width="22" height="10" rx="2"/></svg></div></div>
+
+  <!-- HOME -->
+  <section class="screen active" id="screen-home">
+    <div class="top-bar">
+      <div class="loc-chip"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/><circle cx="12" cy="10" r="2.5"/></svg>مدينة نصر، القاهرة</div>
+      <div class="icon-circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/></svg><span class="nav-badge" style="top:-2px; left:-2px;">١</span></div>
+    </div>
+
+    <div class="hero-banner">
+      <div class="eyebrow">استجابة سريعة</div>
+      <h3>صنايعي يوصلك في أقل من ٤٥ دقيقة</h3>
+      <p>أكتر من ٢٠٠ صنايعي معتمد وموثّق في منطقتك</p>
+    </div>
+
+    <h2 class="title">اختار الخدمة</h2>
+    <div class="service-grid" id="serviceGrid"></div>
+
+    <h2 class="title">صنايعية موصى بيهم</h2>
+    <div id="proList"></div>
+  </section>
+
+  <!-- BOOKING -->
+  <section class="screen" id="screen-booking">
+    <div class="cat-header">
+      <div class="cat-header-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg></div>
+      <div><div style="font-weight:800; font-size:15px;">فني سباكة</div><div style="font-size:11.5px; color:var(--ink-faint);">اختار الفني وحدد الموعد</div></div>
+    </div>
+    <div id="techList"></div>
+  </section>
+
+  <!-- ORDERS -->
+  <section class="screen" id="screen-orders">
+    <h2 class="title">طلباتي</h2>
+    <div class="track-card">
+      <div class="track-status">الفني في الطريق</div>
+      <div class="track-title">تسريب مواسير — المطبخ</div>
+      <div class="eta-row"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>هيوصل خلال ١٢ دقيقة</div>
+      <div class="map-mock">
+        <svg width="100%" height="100%" viewBox="0 0 350 120"><path d="M20 100 Q120 20 330 60" stroke="#F2B705" stroke-width="2.5" stroke-dasharray="5 6" fill="none"/><circle cx="20" cy="100" r="6" fill="#F2B705"/><circle cx="330" cy="60" r="6" fill="#fff"/><circle cx="180" cy="55" r="9" fill="#F2B705"/><circle cx="180" cy="55" r="4" fill="#1B2B4B"/></svg>
+      </div>
+      <div class="tech-mini">
+        <div class="tech-mini-avatar">جم</div>
+        <div><div style="font-weight:800; font-size:12.5px;">جمال عبد المنعم</div><div style="font-size:10.5px; opacity:.75;">فني سباكة · ٤.٨ ⭐</div></div>
+        <div class="call-btn2"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.6 2.7a2 2 0 0 1-.5 2.1L8 9.6a16 16 0 0 0 6 6l1-1.1a2 2 0 0 1 2.1-.5c.9.3 1.8.5 2.7.6A2 2 0 0 1 22 16.9z"/></svg></div>
+      </div>
+    </div>
+    <h2 class="title" style="font-size:14px;">طلبات سابقة</h2>
+    <div id="pastJobs"></div>
+  </section>
+
+  <!-- PROFILE -->
+  <section class="screen" id="screen-profile">
+    <div class="profile-head"><div class="profile-avatar">مع</div><div><div style="font-weight:800; font-size:16px;">مصطفى عادل</div><div style="font-size:12px; color:var(--ink-faint);">٠١٢٣٤٥٦٧٨٩٠</div></div></div>
+    <div class="settings-list">
+      <div class="settings-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/></svg>عناويني<span class="arrow">‹</span></div>
+      <div class="settings-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>وسائل الدفع<span class="arrow">‹</span></div>
+      <div class="settings-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2l3 6.5 7 .9-5.2 4.9 1.4 7L12 17.8 5.8 21.3l1.4-7L2 9.4l7-.9z"/></svg>تقييماتي للصنايعية<span class="arrow">‹</span></div>
+      <div class="settings-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/></svg>الإشعارات<span class="arrow">‹</span></div>
+      <div class="settings-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 17v.01M12 7a3 3 0 0 1 3 3c0 2-3 2-3 4"/></svg>مساعدة ودعم<span class="arrow">‹</span></div>
+    </div>
+  </section>
+
+  <div class="toast-wrap" id="toastWrap"></div>
+
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-screen="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h14V10"/></svg>الرئيسية</button>
+    <button class="nav-btn" data-screen="orders"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="14" rx="2"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>طلباتي<span class="nav-badge">١</span></button>
+    <button class="nav-btn" data-screen="profile"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>حسابي</button>
+  </nav>
+</div>
+
+<script>
+document.querySelectorAll('.nav-btn').forEach(b=> b.addEventListener('click', ()=>{
+  document.querySelectorAll('.nav-btn').forEach(x=>x.classList.remove('active'));
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  b.classList.add('active');
+  document.getElementById('screen-'+b.dataset.screen).classList.add('active');
+}));
+
+const services = [
+  {n:'سباكة', ic:`<svg viewBox="0 0 24 24" fill="none" stroke="#1B2B4B" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>`, bg:'var(--navy-pale)'},
+  {n:'كهرباء', ic:`<svg viewBox="0 0 24 24" fill="none" stroke="#C99604" stroke-width="2"><path d="M13 2L4 14h6l-1 8 9-12h-6l1-8z"/></svg>`, bg:'var(--yellow-pale)'},
+  {n:'تكييف', ic:`<svg viewBox="0 0 24 24" fill="none" stroke="#2E9E63" stroke-width="2"><rect x="3" y="6" width="18" height="8" rx="2"/><path d="M7 18v2M12 18v3M17 18v2"/></svg>`, bg:'var(--green-pale)'},
+  {n:'دهانات', ic:`<svg viewBox="0 0 24 24" fill="none" stroke="#E24E3B" stroke-width="2"><path d="M9 3h10v6l-6 12H9l4-12H9z"/></svg>`, bg:'var(--red-pale)'},
+  {n:'نجارة', ic:`<svg viewBox="0 0 24 24" fill="none" stroke="#1B2B4B" stroke-width="2"><path d="M4 21l7-7M14.5 8.5L18 5l3 3-3.5 3.5M3 3l6 6M13 13l7 7"/></svg>`, bg:'var(--navy-pale)'},
+  {n:'تنظيف منازل', ic:`<svg viewBox="0 0 24 24" fill="none" stroke="#C99604" stroke-width="2"><path d="M4 22V10a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4v12"/><path d="M9 6V3M15 6V3"/></svg>`, bg:'var(--yellow-pale)'},
+  {n:'نقل عفش', ic:`<svg viewBox="0 0 24 24" fill="none" stroke="#2E9E63" stroke-width="2"><rect x="1" y="7" width="15" height="10" rx="1"/><path d="M16 10h4l3 3v4h-7"/><circle cx="6" cy="19" r="2"/><circle cx="17" cy="19" r="2"/></svg>`, bg:'var(--green-pale)'},
+  {n:'صيانة أجهزة', ic:`<svg viewBox="0 0 24 24" fill="none" stroke="#E24E3B" stroke-width="2"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2.1-1.2L14 3h-4"/></svg>`, bg:'var(--red-pale)'},
+];
+document.getElementById('serviceGrid').innerHTML = services.map(s=>`<div class="service-tile" onclick="switchToBooking('${s.n}')"><div class="service-circle" style="background:${s.bg}">${s.ic}</div><span>${s.n}</span></div>`).join('');
+function switchToBooking(n){ document.querySelector('.nav-btn').click; document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); document.getElementById('screen-booking').classList.add('active'); }
+
+const pros = [
+  {name:'جمال عبد المنعم', role:'فني سباكة', rate:'١٥٠ ج.م', rating:4.8, color:'linear-gradient(135deg,#1B2B4B,#3A4F7A)'},
+  {name:'حسن فتحي', role:'فني كهرباء', rate:'١٨٠ ج.م', rating:4.9, color:'linear-gradient(135deg,#C99604,#F2B705)'},
+  {name:'وليد عبد الله', role:'فني تكييف', rate:'٢٠٠ ج.م', rating:4.7, color:'linear-gradient(135deg,#2E9E63,#5CC98F)'},
+];
+document.getElementById('proList').innerHTML = pros.map(p=>`<div class="pro-card"><div class="pro-avatar" style="background:${p.color}">${p.name.split(' ').slice(0,2).map(w=>w[0]).join('')}</div><div><div class="pro-name">${p.name}</div><div class="pro-meta">${p.role} · ⭐ ${p.rating}</div></div><div class="pro-rate"><div class="r mono">${p.rate}</div><div class="l">بداية من</div></div></div>`).join('');
+
+const techs = [
+  {name:'جمال عبد المنعم', meta:'٦ سنين خبرة · ٢٤٠ طلب', rate:'١٥٠ ج.م', rating:4.8},
+  {name:'سيد رمضان', meta:'٩ سنين خبرة · ٤١٠ طلب', rate:'١٨٠ ج.م', rating:4.9},
+  {name:'عاطف حلمي', meta:'٤ سنين خبرة · ١٣٠ طلب', rate:'١٣٠ ج.م', rating:4.6},
+];
+document.getElementById('techList').innerHTML = techs.map(t=>`<div class="tech-list-item"><div class="pro-avatar" style="background:linear-gradient(135deg,#1B2B4B,#3A4F7A);">${t.name.split(' ').slice(0,2).map(w=>w[0]).join('')}</div><div style="flex:1;"><div class="pro-name">${t.name}</div><div class="pro-meta">${t.meta}</div></div><div class="book-btn" onclick="showToast('تم حجز الفني '+ '${t.name}')">احجز</div></div>`).join('');
+
+const pastJobs = [
+  {n:'صيانة تكييف', tech:'وليد عبد الله', price:'٢٠٠ ج.م', date:'أمس'},
+  {n:'تركيب لمبات', tech:'حسن فتحي', price:'١٨٠ ج.م', date:'٨ يوليو'},
+];
+document.getElementById('pastJobs').innerHTML = pastJobs.map(j=>`<div class="past-job"><div style="display:flex; justify-content:space-between;"><span style="font-weight:700; font-size:12.5px;">${j.n}</span><span class="chip chip-done">تم</span></div><div style="font-size:11.5px; color:var(--ink-faint); margin-top:4px;">${j.tech} · ${j.date}</div><div class="mono" style="font-weight:800; margin-top:4px; font-size:13px;">${j.price}</div></div>`).join('');
+
+function showToast(msg){
+  const wrap=document.getElementById('toastWrap'); const t=document.createElement('div'); t.className='toast';
+  t.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>${msg}`;
+  wrap.appendChild(t); requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },2400);
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عطر الشرق — نظام إدارة محلات العطور والتجميل</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Aref+Ruqaa:wght@700&family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --amber:#8A5A1E; --amber-dark:#5F3D12; --amber-soft:#F6ECDA;
+  --gold:#C9992F;
+  --bg:#FAF6EE; --surface:#FFFFFF;
+  --text:#26190C; --text-secondary:#4E3A22; --muted:#8F7B62; --faint:#DDCBAB;
+  --border:#F0E4CB; --border-strong:#E1CDA3;
+  --success:#3F9151; --success-soft:#EAF6EC;
+  --warning:#C9932E; --warning-soft:#FBF1DF;
+  --danger:#B3413A; --danger-soft:#F8EBEA;
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:26px;
+  --shadow-sm:0 2px 10px rgba(138,90,30,0.09);
+  --shadow-md:0 12px 30px rgba(138,90,30,0.12);
+  --shadow-lg:0 26px 56px rgba(138,90,30,0.22);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;font-weight:800;margin:0;color:var(--amber-dark);letter-spacing:-.01em;}
+.serif{font-family:'Aref Ruqaa',serif;font-weight:700;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 260px;min-height:100vh;}
+.sidebar{background:linear-gradient(185deg,var(--amber) 0%, var(--amber-dark) 100%);color:#fff;padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:28px;}
+.brand-mark{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#E8CC70);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.brand-name{font-family:'Aref Ruqaa';font-weight:700;font-size:20px;color:var(--gold);}
+.brand-sub{font-size:10.5px;color:rgba(255,255,255,0.62);}
+.nav-sec{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.07em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:12px;color:rgba(255,255,255,0.8);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.nav-item.active{background:var(--gold);color:var(--amber-dark);}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:#fff;color:var(--amber);font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.15);}
+.foot-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:12px;background:rgba(255,255,255,0.07);}
+.foot-card img{width:36px;height:36px;border-radius:10px;object-fit:cover;}
+.foot-card .name{font-size:12.5px;font-weight:800;} .foot-card .role{font-size:10.5px;color:rgba(255,255,255,0.55);}
+
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(250,246,238,0.88);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15.5px;}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:var(--amber);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:var(--amber-dark);transform:translateY(-1px);}
+.btn-gold{background:var(--gold);color:#fff;}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--amber-soft);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.instock{background:var(--success-soft);color:var(--success);}
+.badge.low{background:var(--warning-soft);color:var(--warning);}
+.badge.out{background:var(--danger-soft);color:var(--danger);}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;}
+.stat .value{font-size:24px;font-weight:800;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--success);margin-top:6px;display:inline-block;}
+
+/* Scent note pyramid configurator (signature) */
+.pyramid{display:flex;flex-direction:column;gap:10px;align-items:center;margin-bottom:16px;}
+.pyr-tier{width:100%;text-align:center;}
+.pyr-tier .label{font-size:10.5px;color:var(--muted);font-weight:700;margin-bottom:8px;}
+.note-chip{display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:99px;background:#fff;border:1px solid var(--border);font-size:12px;font-weight:700;cursor:pointer;margin:3px;}
+.note-chip.active{background:var(--amber);color:#fff;border-color:var(--amber);}
+.perfume-preview{background:linear-gradient(135deg,var(--amber-soft),#fff);border-radius:var(--r-lg);padding:20px;text-align:center;border:1px solid var(--border);}
+.perfume-preview .bottle{font-size:52px;}
+
+/* Product grid */
+.prod-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.prod-card{background:#fff;border:1px solid var(--border);border-radius:16px;overflow:hidden;transition:all .18s var(--ease);}
+.prod-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md);}
+.prod-thumb{height:120px;background:var(--amber-soft);display:flex;align-items:center;justify-content:center;font-size:34px;}
+.prod-body{padding:13px;}
+.prod-body b{font-size:12.5px;} .prod-price{font-weight:800;color:var(--amber-dark);margin-top:6px;font-size:13.5px;}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--amber-soft);}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--amber-dark);color:#fff;padding:11px 17px;border-radius:12px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);}
+
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 78px;} .brand-name,.brand-sub,.nav-item span:not(.ic),.nav-sec,.foot-card .name,.foot-card .role,.nav-badge{display:none;} .prod-grid{grid-template-columns:repeat(2,1fr);} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">عطر الشرق — خان الخليلي</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-gold" onclick="switchView('v-blend')">🧪 تركيب عطر مخصص</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-products"></section>
+      <section class="view" id="v-blend"></section>
+      <section class="view" id="v-orders"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🧴</div>
+      <div><div class="brand-name">عطر الشرق</div><div class="brand-sub">عطور ومستحضرات فاخرة</div></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-blend"><span class="ic">🧪</span><span>تركيب عطر مخصص</span></div>
+      <div class="nav-item" data-view="v-orders"><span class="ic">📦</span><span>الطلبات</span><span class="nav-badge">3</span></div>
+      <div class="nav-sec">الإدارة</div>
+      <div class="nav-item" data-view="v-products"><span class="ic">🧴</span><span>المنتجات</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="foot-card"><img src="https://i.pravatar.cc/72?img=27"><div><div class="name">أ. فريدة سامي</div><div class="role">صاحبة المحل</div></div></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const products = [
+  {name:"عود ملكي فاخر", price:850, emoji:"🪵"},
+  {name:"عطر ورد تعز", price:420, emoji:"🌹"},
+  {name:"مسك أبيض أصلي", price:380, emoji:"🤍"},
+  {name:"عنبر شرقي", price:620, emoji:"✨"},
+  {name:"دهن عود كمبودي", price:1200, emoji:"💧"},
+  {name:"بخور معطر (علبة)", price:180, emoji:"🕯️"},
+  {name:"زيت ياسمين طبيعي", price:290, emoji:"🌼"},
+  {name:"عطر فرنسي مستورد", price:950, emoji:"🧴"},
+];
+const orders = [
+  {customer:"أ. نادية شكري", item:"تركيبة عطر مخصصة — عود وورد", total:680, status:"pending"},
+  {customer:"م. طارق سليم", item:"عود ملكي فاخر ×2", total:1700, status:"instock"},
+  {customer:"د. مي عبد الله", item:"تركيبة عطر مخصصة — مسك وعنبر", total:520, status:"pending"},
+];
+const topNotes = ['برغموت','ليمون','لافندر','تفاح أخضر'];
+const heartNotes = ['ياسمين','ورد', 'زعفران','فانيليا'];
+const baseNotes = ['عود','مسك','عنبر','خشب الصندل'];
+let blendSelection = {top:'برغموت', heart:'ياسمين', base:'عود'};
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','عطر الشرق — خان الخليلي'],
+    'v-products':['المنتجات', products.length+' منتج'],
+    'v-blend':['تركيب عطر مخصص','اختاري نغمات العطر لتكوين رائحتك الخاصة'],
+    'v-orders':['الطلبات', orders.length+' طلب'],
+    'v-settings':['الإعدادات','بيانات المحل'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  el.innerHTML = `
+    <div class="view-head"><div><h1 class="serif">أهلاً، أستاذة فريدة 🧴</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦</p></div>
+      <button class="btn btn-outline" onclick="switchView('v-products')">عرض كل المنتجات</button></div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('مبيعات اليوم','١٢٬٤٠٠ ج.م','💰','var(--amber)','+16%')}
+      ${stat('تركيبات عطر مخصصة','3 طلبات','🧪','var(--gold)','هذا الأسبوع')}
+      ${stat('إيراد الشهر','٢٨٦٬٠٠٠ ج.م','📈','var(--success)','+12%')}
+      ${stat('منتجات منخفضة المخزون','2 صنف','📦','var(--warning)','بحاجة لإعادة طلب')}
+    </div>
+    <div class="card card-pad">
+      <div class="card-title" style="margin-bottom:16px">أحدث الطلبات</div>
+      ${orders.map(o=>`
+        <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+          <div><b style="font-size:13px">${o.customer}</b><div class="muted" style="font-size:11px">${o.item}</div></div>
+          <b style="font-size:13px">${o.total} ج.م</b>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderProducts(){
+  const el = document.getElementById('v-products');
+  el.innerHTML = `
+    <div class="view-head"><div><h1 class="serif">المنتجات</h1><p class="sub">${products.length} منتج</p></div>
+      <button class="btn btn-primary">+ إضافة منتج</button></div>
+    <div class="prod-grid">
+      ${products.map(p=>`
+        <div class="prod-card">
+          <div class="prod-thumb">${p.emoji}</div>
+          <div class="prod-body"><b>${p.name}</b><div class="prod-price">${p.price} ج.م</div></div>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderBlend(){
+  const el = document.getElementById('v-blend');
+  el.innerHTML = `
+    <div class="view-head"><div><h1 class="serif">تركيب عطر مخصص</h1><p class="sub">اختاري نغمة علوية، قلبية، وأساسية لتكوين عطرك</p></div></div>
+    <div class="grid g2">
+      <div class="card card-pad">
+        <div class="pyramid">
+          <div class="pyr-tier"><div class="label">النغمة العلوية (Top Notes)</div>${topNotes.map(n=>`<span class="note-chip ${n===blendSelection.top?'active':''}" data-tier="top" data-note="${n}">${n}</span>`).join('')}</div>
+          <div class="pyr-tier"><div class="label">نغمة القلب (Heart Notes)</div>${heartNotes.map(n=>`<span class="note-chip ${n===blendSelection.heart?'active':''}" data-tier="heart" data-note="${n}">${n}</span>`).join('')}</div>
+          <div class="pyr-tier"><div class="label">النغمة الأساسية (Base Notes)</div>${baseNotes.map(n=>`<span class="note-chip ${n===blendSelection.base?'active':''}" data-tier="base" data-note="${n}">${n}</span>`).join('')}</div>
+        </div>
+      </div>
+      <div class="card card-pad">
+        <div class="perfume-preview">
+          <div class="bottle">🧴</div>
+          <b style="font-size:15px;display:block;margin-top:10px" id="blendName">عطر ${blendSelection.top} و${blendSelection.heart} و${blendSelection.base}</b>
+          <p class="muted" style="font-size:12px;margin-top:8px">تركيبة فريدة تجمع بين نضارة ${blendSelection.top}، ودفء ${blendSelection.heart}، وثبات ${blendSelection.base}</p>
+        </div>
+        <button class="btn btn-gold" style="width:100%;justify-content:center;margin-top:16px" onclick="UI.toast('تم إرسال طلب التركيبة المخصصة')">إرسال الطلب للتحضير</button>
+      </div>
+    </div>
+  `;
+  document.querySelectorAll('.note-chip').forEach(chip=>chip.addEventListener('click',()=>{
+    const tier = chip.dataset.tier;
+    document.querySelectorAll(`.note-chip[data-tier="${tier}"]`).forEach(c=>c.classList.remove('active'));
+    chip.classList.add('active');
+    blendSelection[tier] = chip.dataset.note;
+    document.getElementById('blendName').textContent = `عطر ${blendSelection.top} و${blendSelection.heart} و${blendSelection.base}`;
+  }));
+}
+
+function renderOrders(){
+  const el = document.getElementById('v-orders');
+  el.innerHTML = `
+    <div class="view-head"><div><h1 class="serif">الطلبات</h1><p class="sub">${orders.length} طلب</p></div>
+      <button class="btn btn-primary">+ طلب جديد</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>العميل</th><th>الطلب</th><th>الإجمالي</th><th>الحالة</th></tr></thead>
+      <tbody>${orders.map(o=>`
+        <tr><td><b>${o.customer}</b></td><td>${o.item}</td><td>${o.total} ج.م</td>
+        <td><span class="badge ${o.status}">${o.status==='pending'?'قيد التحضير':'جاهز'}</span></td></tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1 class="serif">الإعدادات</h1><p class="sub">بيانات المحل</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات اسم المحل، مصادر الخامات، وأسعار التركيبات المخصصة.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderProducts(); renderBlend(); renderOrders(); renderSettings();
+</script>
+</body>
+</html>

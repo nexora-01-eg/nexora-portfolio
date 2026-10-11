@@ -1,0 +1,22 @@
+{
+  "version": "0.2.0",
+  "updatedAt": "2026-07-16",
+  "collections": [
+    { "id": "featured", "label": "Featured", "description": "Editor's picks.", "rule": "featured" },
+    { "id": "latest", "label": "Latest", "description": "Newest additions to the library.", "rule": "latest", "limit": 12 },
+    { "id": "popular", "label": "Popular", "description": "Most viewed projects.", "rule": "popular", "limit": 12 },
+    { "id": "enterprise", "label": "Enterprise", "description": "Large-scale, enterprise-tier systems.", "rule": "enterprise" },
+    { "id": "favorites", "label": "Favorites", "description": "Projects you've starred.", "rule": "favorites" },
+    { "id": "medical", "label": "Medical", "description": "Medical industry projects.", "rule": "industry", "industryId": "medical" },
+    { "id": "construction", "label": "Construction", "description": "Construction industry projects.", "rule": "industry", "industryId": "construction" },
+    { "id": "finance", "label": "Finance", "description": "Finance industry projects.", "rule": "industry", "industryId": "finance" },
+    { "id": "restaurant", "label": "Restaurant", "description": "Restaurant industry projects.", "rule": "industry", "industryId": "restaurant" },
+    { "id": "education", "label": "Education", "description": "Education industry projects.", "rule": "industry", "industryId": "education" },
+    { "id": "ai", "label": "AI", "description": "AI industry projects.", "rule": "industry", "industryId": "ai" },
+    { "id": "automation", "label": "Automation", "description": "Automation industry projects.", "rule": "industry", "industryId": "automation" },
+    { "id": "crm", "label": "CRM", "description": "Customer relationship management systems.", "rule": "service", "serviceName": "CRM Systems" },
+    { "id": "dashboard", "label": "Dashboard", "description": "Analytics and admin dashboards.", "rule": "tag", "tag": "dashboard" },
+    { "id": "landing-pages", "label": "Landing Pages", "description": "Marketing and product landing pages.", "rule": "tag", "tag": "landing-page" },
+    { "id": "websites", "label": "Websites", "description": "General-purpose websites.", "rule": "tag", "tag": "website" }
+  ]
+}

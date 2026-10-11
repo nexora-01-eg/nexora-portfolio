@@ -1,0 +1,16 @@
+/* ============================================================
+   NEXORA — Design System Card
+   Color swatch preview + name, for the design-systems index.
+   Extends .nx-card.
+   ============================================================ */
+
+.nx-design-system-card__swatches {
+  display: flex;
+  border-radius: var(--nx-radius-sm);
+  overflow: hidden;
+  height: 40px;
+  margin-bottom: var(--nx-space-4);
+}
+.nx-design-system-card__swatches span { flex: 1; }
+
+.nx-design-system-card .nx-h4 { margin-bottom: var(--nx-space-1); }

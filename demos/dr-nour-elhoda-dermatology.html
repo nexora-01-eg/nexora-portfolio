@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>د. نور الهدى — استشارية الجلدية والتجميل</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=El+Messiri:wght@500;700&family=Tajawal:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#FBF3F3; --card:#FFFFFF; --raised:#F7E9EA;
+  --rosegold:#B8794F; --rosegold-soft:rgba(184,121,79,0.1); --blush:#E7A9AE; --blush-soft:rgba(231,169,174,0.16);
+  --plum:#7A4C5E; --plum-soft:rgba(122,76,94,0.1); --text:#2E1E20; --muted:#8A6C70; --faint:#C7A9AD; --border:#EEDBDD;
+  --r-lg:26px; --ease:cubic-bezier(.22,1,.36,1); --shadow:0 24px 50px -28px rgba(184,121,79,0.28);
+  --font-display:'El Messiri', serif; --font-body:'Tajawal', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{ scroll-behavior:smooth; }
+body{ background:var(--bg); color:var(--text); font-family:var(--font-body); }
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; cursor:pointer; color:inherit;}
+.eyebrow{ font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--rosegold); }
+.card{ background:var(--card); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow); }
+.btn{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; padding:12px 24px; border-radius:16px; transition:all .2s var(--ease); }
+.btn-primary{ background:linear-gradient(150deg, var(--rosegold), #8a5936); color:#fff; box-shadow:0 10px 22px -10px rgba(184,121,79,0.45); }
+.btn-primary:hover{ transform:translateY(-2px); }
+.btn-outline{ border:1px solid var(--border); color:var(--text); background:var(--card); }
+
+.nav{ position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:18px 32px; background:rgba(251,243,243,0.85); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+.nav-brand{ display:flex; align-items:center; gap:10px; } .nav-mark{ width:36px; height:36px; border-radius:11px; background:var(--rosegold); display:flex; align-items:center; justify-content:center; color:#fff; font-family:var(--font-display); font-size:16px; }
+.nav-name{ font-family:var(--font-display); font-size:18px; } .nav-links{ display:flex; gap:24px; font-size:13px; color:var(--muted); } .nav-links a:hover{ color:var(--rosegold); }
+
+.hero{ padding:60px 32px 30px; } .hero-grid{ max-width:1140px; margin:0 auto; display:grid; grid-template-columns:1fr .9fr; gap:40px; align-items:center; }
+.hero h1{ font-family:var(--font-display); font-size:40px; line-height:1.35; margin-top:14px; } .hero h1 span{ color:var(--rosegold); }
+.hero p{ font-size:14px; color:var(--muted); margin-top:16px; max-width:420px; line-height:1.75; }
+.hero-actions{ display:flex; gap:12px; margin-top:24px; }
+.cred-row{ display:flex; gap:20px; margin-top:28px; padding-top:20px; border-top:1px solid var(--border); }
+.cred-item b{ font-family:var(--font-display); font-size:22px; display:block; color:var(--rosegold); } .cred-item span{ font-size:11px; color:var(--muted); }
+.hero-visual{ position:relative; aspect-ratio:4/5; }
+.hero-photo{ position:absolute; inset:0; border-radius:32px; background:linear-gradient(160deg, var(--blush-soft), var(--rosegold-soft)); display:flex; align-items:center; justify-content:center; box-shadow:var(--shadow); }
+.hero-photo svg{ width:110px; height:110px; color:var(--rosegold); opacity:.6; }
+.float-chip{ position:absolute; padding:12px 15px; border-radius:15px; background:var(--card); box-shadow:var(--shadow); display:flex; align-items:center; gap:9px; animation:float 4.5s ease-in-out infinite; }
+.float-chip.c1{ bottom:24px; right:-18px; } @keyframes float{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(-9px);} }
+.float-chip svg{ width:15px; height:15px; color:var(--rosegold); } .float-chip b{ font-size:12px; display:block; } .float-chip span{ font-size:10px; color:var(--muted); }
+
+.section{ padding:58px 32px; opacity:0; transform:translateY(18px); transition:all .6s var(--ease); }
+.section.in{ opacity:1; transform:none; }
+.section-head{ max-width:600px; margin:0 auto 36px; text-align:center; }
+.section-head h2{ font-family:var(--font-display); font-size:28px; margin-top:8px; } .section-head p{ font-size:13px; color:var(--muted); margin-top:10px; }
+
+.services-grid{ max-width:1140px; margin:0 auto; display:grid; grid-template-columns:repeat(4,1fr); gap:16px; }
+.service-card{ padding:22px 18px; text-align:center; }
+.service-ic{ width:42px; height:42px; border-radius:13px; background:var(--blush-soft); color:var(--rosegold); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; }
+.service-ic svg{ width:19px; height:19px; }
+.service-card h3{ font-family:var(--font-display); font-size:15.5px; } .service-card p{ font-size:11px; color:var(--muted); margin-top:6px; line-height:1.5; }
+
+.before-after{ max-width:1140px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.ba-card{ overflow:hidden; }
+.ba-strip{ display:flex; aspect-ratio:16/10; }
+.ba-half{ flex:1; display:flex; align-items:center; justify-content:center; position:relative; }
+.ba-half.before{ background:linear-gradient(160deg, #E8D8D2, #D9BDB8); }
+.ba-half.after{ background:linear-gradient(160deg, var(--blush-soft), var(--rosegold-soft)); }
+.ba-label{ position:absolute; top:8px; right:8px; font-family:var(--font-mono); font-size:8.5px; background:rgba(255,255,255,0.8); padding:2px 7px; border-radius:20px; }
+.ba-body{ padding:14px 16px; } .ba-body b{ font-family:var(--font-display); font-size:14.5px; } .ba-body span{ display:block; font-size:10.5px; color:var(--muted); margin-top:2px; }
+
+.testi-grid{ max-width:1140px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.testi-card{ padding:24px; } .testi-stars{ display:flex; gap:3px; margin-bottom:12px; } .testi-stars svg{ width:13px; height:13px; color:var(--rosegold); }
+.testi-card p{ font-family:var(--font-display); font-size:14.5px; line-height:1.6; }
+.testi-author{ display:flex; align-items:center; gap:10px; margin-top:16px; }
+.t-avatar{ width:34px; height:34px; border-radius:50%; background:var(--rosegold); color:#fff; display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:13px; }
+.t-avatar-name b{ font-size:12px; display:block; } .t-avatar-name span{ font-size:10px; color:var(--muted); }
+
+.footer{ padding:44px 32px 24px; border-top:1px solid var(--border); text-align:center; } .footer p{ font-size:11px; color:var(--faint); }
+
+@media (max-width:1000px){ .hero-grid{ grid-template-columns:1fr; } .services-grid{ grid-template-columns:1fr 1fr; } .before-after, .testi-grid{ grid-template-columns:1fr 1fr; } .nav-links{ display:none; } }
+@media (max-width:620px){ .nav, .hero, .section{ padding-left:18px; padding-right:18px; } .hero h1{ font-size:28px; } .services-grid, .before-after, .testi-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<nav class="nav">
+  <div class="nav-brand"><div class="nav-mark">نه</div><div class="nav-name">د. نور الهدى</div></div>
+  <div class="nav-links"><a href="#services">الخدمات</a><a href="#results">النتائج</a><a href="#testimonials">آراء العميلات</a></div>
+  <a href="#" class="btn btn-primary">احجزي استشارة</a>
+</nav>
+
+<section class="hero">
+  <div class="hero-grid">
+    <div>
+      <span class="eyebrow">استشارية الجلدية والتجميل · دكتوراه الأمراض الجلدية</span>
+      <h1>بشرتك تستاهل<br><span>لمسة خبيرة</span>.</h1>
+      <p>رعاية جلدية وتجميلية متخصصة، من علاج حب الشباب لأحدث تقنيات مكافحة الشيخوخة، بخطة مخصصة لكل حالة.</p>
+      <div class="hero-actions"><a href="#" class="btn btn-primary">احجزي استشارتك</a><a href="#services" class="btn btn-outline">شوفي خدماتي</a></div>
+      <div class="cred-row">
+        <div class="cred-item"><b>١٢+</b><span>سنة خبرة</span></div>
+        <div class="cred-item"><b>٤,١٠٠</b><span>عميلة سعيدة</span></div>
+        <div class="cred-item"><b>٤.٩</b><span>تقييم العميلات</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-photo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><circle cx="12" cy="12" r="9"/><path d="M9 9h.01M15 9h.01M8 15c1.5 1.5 6.5 1.5 8 0"/></svg></div>
+      <div class="float-chip c1"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 17.3l-6.2 3.6 1.6-6.9L2 9.2l7-.6L12 2l3 6.6 7 .6-5.4 4.8 1.6 6.9z"/></svg><div><b>٤.٩ / ٥</b><span>٤٨٠ تقييم</span></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="services">
+  <div class="section-head"><span class="eyebrow">خدماتي</span><h2>عناية جلدية وتجميلية شاملة</h2></div>
+  <div class="services-grid" id="servicesGrid"></div>
+</section>
+
+<section class="section" id="results">
+  <div class="section-head"><span class="eyebrow">نتائج حقيقية</span><h2>قبل وبعد</h2><p>نتائج فعلية من عميلاتي، بموافقتهن الكاملة على النشر</p></div>
+  <div class="before-after" id="baGrid"></div>
+</section>
+
+<section class="section" id="testimonials">
+  <div class="section-head"><span class="eyebrow">آراء العميلات</span><h2>تجارب حقيقية</h2></div>
+  <div class="testi-grid" id="testiGrid"></div>
+</section>
+
+<footer class="footer"><p>عيادة د. نور الهدى © 2026 · مشروع بورتفوليو للعرض فقط</p></footer>
+
+<script>
+const services = [
+  {n:'علاج حب الشباب', icon:'<circle cx="12" cy="12" r="9"/><path d="M9 9h.01M15 9h.01"/>'},
+  {n:'حقن الفيلر والبوتوكس', icon:'<path d="M12 2v20M17 6H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/>'},
+  {n:'تقشير كيميائي', icon:'<circle cx="12" cy="12" r="9"/><path d="M8 15c1.5 1.5 6.5 1.5 8 0"/>'},
+  {n:'ليزر إزالة الشعر', icon:'<path d="M13 2L4 14h6l-1 8 9-12h-6z"/>'},
+];
+document.getElementById('servicesGrid').innerHTML = services.map(s=>`<div class="card service-card"><div class="service-ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">${s.icon}</svg></div><h3>${s.n}</h3></div>`).join('');
+
+const ba = [ {t:'شد الوجه بالخيوط', m:'بعد ٤ أسابيع'}, {t:'علاج تصبغات البشرة', m:'بعد ٦ جلسات'}, {t:'نضارة البشرة', m:'بعد جلستين'} ];
+document.getElementById('baGrid').innerHTML = ba.map(b=>`
+  <div class="card ba-card"><div class="ba-strip"><div class="ba-half before"><span class="ba-label">قبل</span></div><div class="ba-half after"><span class="ba-label">بعد</span></div></div>
+  <div class="ba-body"><b>${b.t}</b><span>${b.m}</span></div></div>`).join('');
+
+const testis = [ {q:'حسيت ببشرتي أحسن بكتير من أول شهر، والدكتورة بتشرح كل خطوة.', n:'أ. ياسمين علاء'}, {q:'نتيجة الفيلر طبيعية جدًا، مش حسيت إني عملت حاجة.', n:'أ. دينا رمزي'}, {q:'أخيرًا لاقيت دكتورة بتسمع لمشكلتي مش بس بتوصف كريمات.', n:'أ. سلمى حمدي'} ];
+document.getElementById('testiGrid').innerHTML = testis.map(t=>`<div class="card testi-card"><div class="testi-stars">${'<svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 17.3l-6.2 3.6 1.6-6.9L2 9.2l7-.6L12 2l3 6.6 7 .6-5.4 4.8 1.6 6.9z"/></svg>'.repeat(5)}</div><p>"${t.q}"</p><div class="testi-author"><div class="t-avatar">${t.n.charAt(3)}</div><div class="t-avatar-name"><b>${t.n}</b><span>عميلة منذ 2024</span></div></div></div>`).join('');
+
+const io = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); }); }, {threshold:.1});
+document.querySelectorAll('.section').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

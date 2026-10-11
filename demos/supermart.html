@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SuperMart — نظام إدارة السوبر ماركت</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --green:#2E9E4F; --green-dark:#1F7A3B; --green-soft:#E7F7EC;
+  --red:#E0393C; --red-soft:#FCE9E9;
+  --bg:#F7FAF7; --surface:#FFFFFF;
+  --text:#1A241C; --text-secondary:#3E4B40; --muted:#849285; --faint:#CBDBCE;
+  --border:#E4EFE5; --border-strong:#CFE1D1;
+  --success:#2E9E4F; --success-soft:#E7F7EC;
+  --warning:#D9932E; --warning-soft:#FBF1DF;
+  --danger:#E0393C; --danger-soft:#FCE9E9;
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:26px;
+  --shadow-sm:0 2px 10px rgba(46,158,79,0.07);
+  --shadow-md:0 12px 30px rgba(46,158,79,0.10);
+  --shadow-lg:0 26px 56px rgba(46,158,79,0.20);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;font-weight:900;margin:0;color:var(--text);letter-spacing:-.01em;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 258px;min-height:100vh;}
+.sidebar{background:#fff;border-left:1px solid var(--border);padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:28px;}
+.brand-mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--green),#4CBE6E);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;box-shadow:var(--shadow-sm);}
+.brand-name{font-weight:900;font-size:17px;color:var(--green-dark);}
+.brand-sub{font-size:10.5px;color:var(--muted);}
+.nav-sec{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.06em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:12px;color:var(--text-secondary);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;}
+.nav-item:hover{background:var(--green-soft);}
+.nav-item.active{background:var(--green);color:#fff;}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:var(--red);color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--border);}
+.foot-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:12px;background:var(--green-soft);}
+.foot-card img{width:36px;height:36px;border-radius:10px;object-fit:cover;}
+.foot-card .name{font-size:12.5px;font-weight:800;} .foot-card .role{font-size:10.5px;color:var(--muted);}
+
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(247,250,247,0.88);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15.5px;}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:var(--green);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:var(--green-dark);transform:translateY(-1px);}
+.btn-red{background:var(--red);color:#fff;}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--green-soft);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.instock{background:var(--success-soft);color:var(--success);}
+.badge.low{background:var(--warning-soft);color:var(--warning);}
+.badge.out{background:var(--danger-soft);color:var(--danger);}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;}
+.stat .value{font-size:24px;font-weight:900;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--success);margin-top:6px;display:inline-block;}
+
+/* Category inventory heatmap */
+.cat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;}
+.cat-tile{border-radius:var(--r-lg);padding:16px;text-align:center;color:#fff;}
+.cat-tile .n{font-size:22px;font-weight:900;} .cat-tile .l{font-size:11px;margin-top:4px;opacity:0.9;}
+
+/* POS */
+.pos-layout{display:grid;grid-template-columns:1fr 360px;gap:20px;align-items:start;}
+.pos-item{display:flex;align-items:center;justify-content:space-between;padding:12px 14px;border:1px solid var(--border);border-radius:12px;margin-bottom:10px;background:#fff;cursor:pointer;}
+.pos-item:hover{border-color:var(--green);}
+.cart-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px dashed var(--border);font-size:13px;}
+.cart-total{display:flex;justify-content:space-between;padding:14px 0;font-size:19px;font-weight:900;color:var(--green-dark);}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--green-soft);}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--green-dark);color:#fff;padding:11px 17px;border-radius:12px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);}
+
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 78px;} .brand-name,.brand-sub,.nav-item span:not(.ic),.nav-sec,.foot-card .name,.foot-card .role,.nav-badge{display:none;} .cat-grid{grid-template-columns:repeat(2,1fr);} .pos-layout{grid-template-columns:1fr;} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">SuperMart — فرع المهندسين</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-primary" onclick="switchView('v-pos')">🧾 عملية بيع جديدة</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-inventory"></section>
+      <section class="view" id="v-pos"></section>
+      <section class="view" id="v-delivery"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🛒</div>
+      <div><div class="brand-name">SuperMart</div><div class="brand-sub">إدارة السوبر ماركت</div></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-pos"><span class="ic">🧾</span><span>نقطة البيع</span></div>
+      <div class="nav-item" data-view="v-delivery"><span class="ic">🚚</span><span>التوصيل</span><span class="nav-badge">4</span></div>
+      <div class="nav-sec">الإدارة</div>
+      <div class="nav-item" data-view="v-inventory"><span class="ic">📦</span><span>المخزون</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="foot-card"><img src="https://i.pravatar.cc/72?img=18"><div><div class="name">أ. هيثم عادل</div><div class="role">مدير الفرع</div></div></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const categories = [
+  {name:"ألبان وأجبان", count:142, color:"var(--green)"},
+  {name:"خضروات وفاكهة", count:98, color:"#4CBE6E"},
+  {name:"مواد غذائية", count:210, color:"#2E9E4F"},
+  {name:"مشروبات", count:76, color:"#1F7A3B"},
+];
+const inventory = [
+  {name:"لبن جهينة كامل الدسم", cat:"ألبان وأجبان", stock:120, price:22, emoji:"🥛"},
+  {name:"طماطم بلدي (كجم)", cat:"خضروات وفاكهة", stock:8, price:14, emoji:"🍅"},
+  {name:"أرز مصري (كيس 5 كجم)", cat:"مواد غذائية", stock:64, price:145, emoji:"🍚"},
+  {name:"زيت عباد الشمس (لتر)", cat:"مواد غذائية", stock:5, price:68, emoji:"🫗"},
+  {name:"مياه معدنية (كرتونة)", cat:"مشروبات", stock:200, price:36, emoji:"💧"},
+  {name:"جبنة رومي (كجم)", cat:"ألبان وأجبان", stock:0, price:210, emoji:"🧀"},
+  {name:"موز (كجم)", cat:"خضروات وفاكهة", stock:45, price:28, emoji:"🍌"},
+  {name:"عصير قناوي (لتر)", cat:"مشروبات", stock:12, price:24, emoji:"🧃"},
+];
+const deliveries = [
+  {order:"#SM-1201", customer:"أ. رانيا حسني", area:"المهندسين", status:"جاري التحضير"},
+  {order:"#SM-1202", customer:"م. عمرو فهمي", area:"الدقي", status:"في الطريق"},
+  {order:"#SM-1203", customer:"أ. هبة سامي", area:"الزمالك", status:"في الطريق"},
+  {order:"#SM-1204", customer:"د. وليد نبيل", area:"العجوزة", status:"تم التسليم"},
+];
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','SuperMart — فرع المهندسين'],
+    'v-inventory':['المخزون', inventory.length+' صنف'],
+    'v-pos':['نقطة البيع','أنشئي عملية بيع جديدة'],
+    'v-delivery':['التوصيل', deliveries.length+' طلب توصيل'],
+    'v-settings':['الإعدادات','بيانات الفرع'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+function stockBadge(i){
+  if(i.stock===0) return ['out','نفاد'];
+  if(i.stock<15) return ['low','منخفض'];
+  return ['instock','متوفر'];
+}
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  const lowStock = inventory.filter(i=>i.stock<15);
+  el.innerHTML = `
+    <div class="view-head"><div><h1>أهلاً، أستاذ هيثم 🛒</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦</p></div>
+      <button class="btn btn-outline" onclick="switchView('v-inventory')">مراجعة المخزون</button></div>
+    <div class="cat-grid" style="margin-bottom:18px">
+      ${categories.map(c=>`<div class="cat-tile" style="background:${c.color}"><div class="n">${c.count}</div><div class="l">${c.name}</div></div>`).join('')}
+    </div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('مبيعات اليوم','٤٨٬٦٠٠ ج.م','💰','var(--green)','+9% عن أمس')}
+      ${stat('عدد الفواتير','312 فاتورة','🧾','var(--red)','متوسط 156 ج.م')}
+      ${stat('أصناف منخفضة المخزون',lowStock.length+' صنف','📦','var(--warning)','بحاجة لإعادة طلب')}
+      ${stat('طلبات توصيل اليوم',deliveries.length+' طلب','🚚','var(--success)','2 في الطريق')}
+    </div>
+    <div class="card card-pad">
+      <div class="card-title" style="margin-bottom:16px">تنبيهات المخزون</div>
+      ${lowStock.map(i=>`
+        <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+          <div class="flex items-center gap3"><span style="font-size:18px">${i.emoji}</span><div><b style="font-size:13px">${i.name}</b><div class="muted" style="font-size:11px">الكمية المتبقية: ${i.stock}</div></div></div>
+          <span class="badge ${stockBadge(i)[0]}">${stockBadge(i)[1]}</span>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderInventory(){
+  const el = document.getElementById('v-inventory');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>المخزون</h1><p class="sub">${inventory.length} صنف</p></div>
+      <button class="btn btn-primary">+ إضافة صنف</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>الصنف</th><th>القسم</th><th>الكمية</th><th>السعر</th><th>الحالة</th></tr></thead>
+      <tbody>${inventory.map(i=>`
+        <tr onclick="UI.toast('${i.name} — عرض التفاصيل')">
+          <td><div class="cell-name">${i.emoji} ${i.name}</div></td>
+          <td>${i.cat}</td><td>${i.stock}</td><td>${i.price} ج.م</td>
+          <td><span class="badge ${stockBadge(i)[0]}">${stockBadge(i)[1]}</span></td>
+        </tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+let cart = [];
+function renderPOS(){
+  const el = document.getElementById('v-pos');
+  cart = [];
+  el.innerHTML = `
+    <div class="view-head"><div><h1>نقطة البيع</h1><p class="sub">امسحي أو اختاري الأصناف لإضافتها للفاتورة</p></div></div>
+    <div class="pos-layout">
+      <div class="card card-pad">
+        <div class="card-title" style="margin-bottom:14px">اختاري الأصناف</div>
+        ${inventory.map((i,idx)=>`
+          <div class="pos-item" onclick="addToCart(${idx})">
+            <div class="flex items-center gap3"><span style="font-size:20px">${i.emoji}</span><div><b style="font-size:13.5px">${i.name}</b><div class="muted" style="font-size:11px">متوفر: ${i.stock}</div></div></div>
+            <b style="color:var(--green-dark)">${i.price} ج.م</b>
+          </div>`).join('')}
+      </div>
+      <div class="card card-pad" style="position:sticky;top:96px">
+        <div class="card-title" style="margin-bottom:14px">الفاتورة</div>
+        <div id="cartRows"><p class="muted" style="font-size:13px;padding:10px 0">السلة فارغة</p></div>
+        <div class="cart-total"><span>الإجمالي</span><span id="cartTotal">0 ج.م</span></div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center" onclick="UI.toast('تم إصدار الفاتورة')">إتمام البيع</button>
+      </div>
+    </div>
+  `;
+}
+function addToCart(idx){ cart.push(inventory[idx]); renderCart(); UI.toast(inventory[idx].name+' أُضيف للفاتورة'); }
+function renderCart(){
+  const rows = document.getElementById('cartRows');
+  rows.innerHTML = cart.map((c,i)=>`<div class="cart-row"><span>${c.name}</span><span>${c.price} ج.م <span style="color:var(--danger);cursor:pointer;margin-right:6px" onclick="removeCart(${i})">✕</span></span></div>`).join('') || '<p class="muted" style="font-size:13px;padding:10px 0">السلة فارغة</p>';
+  document.getElementById('cartTotal').textContent = cart.reduce((s,c)=>s+c.price,0).toLocaleString('ar-EG')+' ج.م';
+}
+function removeCart(i){ cart.splice(i,1); renderCart(); }
+
+function renderDelivery(){
+  const el = document.getElementById('v-delivery');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>التوصيل</h1><p class="sub">${deliveries.length} طلب توصيل</p></div>
+      <button class="btn btn-primary">+ جدولة توصيل</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>رقم الطلب</th><th>العميل</th><th>المنطقة</th><th>الحالة</th></tr></thead>
+      <tbody>${deliveries.map(d=>`
+        <tr><td><b>${d.order}</b></td><td>${d.customer}</td><td>${d.area}</td>
+        <td><span class="badge ${d.status==='تم التسليم'?'instock':d.status==='في الطريق'?'low':'out'}">${d.status}</span></td></tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1>الإعدادات</h1><p class="sub">بيانات الفرع</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات اسم الفرع، مناطق التوصيل، وحدود إعادة الطلب التلقائي.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderInventory(); renderPOS(); renderDelivery(); renderSettings();
+</script>
+</body>
+</html>

@@ -1,0 +1,712 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>العطّار — منصة الصيدلية الذكية</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F8F4EA;
+  --surface:#FFFFFF;
+  --surface-2:#F1ECDC;
+  --surface-3:#EAE2C9;
+  --ink:#20281F;
+  --ink-soft:#5E6B54;
+  --ink-faint:#9AA48C;
+  --line:#E8E0C9;
+  --line-soft:#F0EADA;
+  --green:#1B4332;
+  --green-deep:#12301F;
+  --green-pale:#E4EBE1;
+  --gold:#C9A227;
+  --gold-deep:#9C7C18;
+  --gold-pale:#F6EDD3;
+  --terracotta:#B5651D;
+  --terracotta-pale:#F5E3D3;
+  --wine:#7B2D3B;
+  --wine-pale:#F3E3E6;
+  --success:#2E7D4F;
+  --shadow-sm: 0 1px 2px rgba(27,67,50,0.06), 0 1px 1px rgba(27,67,50,0.04);
+  --shadow-md: 0 6px 20px rgba(27,67,50,0.10), 0 1px 3px rgba(27,67,50,0.05);
+  --shadow-lg: 0 16px 40px rgba(18,48,31,0.18), 0 2px 8px rgba(18,48,31,0.08);
+  --radius-md: 16px; --radius-lg:22px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ background:var(--paper); color:var(--ink); font-family:'Cairo', sans-serif; -webkit-font-smoothing:antialiased; overflow:hidden; }
+::selection{ background:var(--green); color:#fff; }
+::-webkit-scrollbar{ width:8px; height:8px; }
+::-webkit-scrollbar-thumb{ background:var(--line); border-radius:8px; }
+.mono{ font-family:'IBM Plex Mono', monospace; direction:ltr; display:inline-block; }
+button{ font-family:inherit; cursor:pointer; }
+a{ color:inherit; text-decoration:none; }
+
+.shell{ display:grid; grid-template-columns:252px 1fr; height:100vh; }
+
+/* Sidebar */
+.sidebar{ background:var(--green-deep); border-left:1px solid rgba(255,255,255,.06); display:flex; flex-direction:column; padding:22px 16px; color:#EFE9D6; position:relative; overflow:hidden;}
+.sidebar::before{ content:''; position:absolute; top:-60px; left:-60px; width:220px; height:220px; border-radius:50%; background:radial-gradient(circle, rgba(201,162,39,0.15), transparent 70%); }
+.brand{ display:flex; align-items:center; gap:11px; padding:6px 8px 24px; position:relative; z-index:1;}
+.brand-mark{ width:38px; height:38px; flex-shrink:0; }
+.brand-name{ font-weight:800; font-size:20px; letter-spacing:.5px; color:#fff; }
+.brand-sub{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:9px; letter-spacing:2px; color:var(--gold); text-transform:uppercase; margin-top:2px; }
+
+.nav-group-label{ font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:rgba(239,233,214,0.45); padding:16px 12px 7px; font-weight:700; position:relative; z-index:1;}
+.nav-item{ display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:12px; color:rgba(239,233,214,0.75); font-size:14.5px; font-weight:600; transition:all .18s ease; position:relative; z-index:1; margin-bottom:2px;}
+.nav-item svg{ width:18px; height:18px; flex-shrink:0; opacity:.85; }
+.nav-item:hover{ background:rgba(255,255,255,0.06); color:#fff; }
+.nav-item.active{ background:linear-gradient(90deg, rgba(201,162,39,0.22), rgba(201,162,39,0.06)); color:#fff; }
+.nav-item.active svg{ opacity:1; color:var(--gold); }
+.sidebar-foot{ margin-top:auto; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); position:relative; z-index:1;}
+
+/* Header */
+.header{ height:76px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 30px; background:var(--paper); flex-shrink:0;}
+.header-title h1{ font-weight:800; font-size:22px; }
+.header-title span{ font-size:12.5px; color:var(--ink-faint); font-weight:500; }
+.header-right{ display:flex; align-items:center; gap:14px; }
+.search-box{ display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:10px 15px; width:260px; }
+.search-box:focus-within{ border-color:var(--gold); box-shadow:0 0 0 3px var(--gold-pale); }
+.search-box svg{ width:16px; height:16px; color:var(--ink-faint); flex-shrink:0; }
+.search-box input{ border:none; outline:none; font-size:13.5px; width:100%; background:transparent; color:var(--ink); font-family:inherit; }
+.icon-btn{ width:40px; height:40px; border-radius:12px; border:1px solid var(--line); background:var(--surface); display:flex; align-items:center; justify-content:center; position:relative; transition:all .15s ease;}
+.icon-btn:hover{ background:var(--surface-2); }
+.icon-btn svg{ width:17px; height:17px; color:var(--ink-soft); }
+.dot-badge{ position:absolute; top:8px; left:9px; width:7px; height:7px; border-radius:50%; background:var(--terracotta); border:1.5px solid var(--surface); }
+.profile-chip{ display:flex; align-items:center; gap:10px; padding:5px 12px 5px 5px; border-radius:15px; border:1px solid var(--line); background:var(--surface); }
+.avatar{ width:34px; height:34px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; color:#fff; flex-shrink:0;}
+.profile-chip .name{ font-size:13px; font-weight:700; }
+.profile-chip .role{ font-size:11px; color:var(--ink-faint); }
+
+.main{ display:flex; flex-direction:column; overflow:hidden; }
+.content{ flex:1; overflow-y:auto; padding:26px 30px 60px; }
+.view{ display:none; animation:fadeUp .4s cubic-bezier(.2,.7,.3,1); }
+.view.active{ display:block; }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+.section-title{ display:flex; align-items:center; gap:10px; margin:32px 0 16px; }
+.section-title h2{ font-weight:800; font-size:17.5px; }
+.section-title:first-child{ margin-top:0; }
+.count-pill{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:11px; background:var(--surface-2); color:var(--ink-soft); padding:3px 10px; border-radius:20px; }
+
+.grid{ display:grid; gap:16px; }
+.grid-4{ grid-template-columns:repeat(4,1fr); }
+.grid-3{ grid-template-columns:repeat(3,1fr); }
+.grid-2{ grid-template-columns:repeat(2,1fr); }
+
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:20px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden; transition:all .2s ease; }
+.card.hoverable:hover{ box-shadow:var(--shadow-md); transform:translateY(-2px); border-color:var(--gold); }
+
+.kpi-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.kpi-icon{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; }
+.kpi-icon svg{ width:19px; height:19px; }
+.kpi-trend{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:20px; }
+.trend-up{ color:var(--success); background:#E5F2E9; }
+.trend-down{ color:var(--terracotta); background:var(--terracotta-pale); }
+.kpi-value{ font-weight:800; font-size:29px; letter-spacing:-.5px; }
+.kpi-label{ font-size:12.5px; color:var(--ink-soft); margin-top:4px; font-weight:600;}
+
+.btn{ display:inline-flex; align-items:center; gap:7px; padding:11px 18px; border-radius:12px; font-size:13.5px; font-weight:700; border:1px solid transparent; transition:all .16s ease; }
+.btn svg{ width:15px; height:15px; }
+.btn-primary{ background:var(--green); color:#fff; }
+.btn-primary:hover{ background:var(--green-deep); box-shadow:var(--shadow-md); }
+.btn-gold{ background:var(--gold); color:#2B2100; }
+.btn-gold:hover{ background:var(--gold-deep); color:#fff;}
+.btn-ghost{ background:var(--surface); border-color:var(--line); color:var(--ink); }
+.btn-ghost:hover{ background:var(--surface-2); }
+
+.tabs{ display:flex; gap:4px; background:var(--surface-2); padding:4px; border-radius:13px; width:fit-content; }
+.tab{ padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700; color:var(--ink-soft); border:none; background:transparent; transition:all .15s ease; }
+.tab.active{ background:var(--surface); color:var(--green); box-shadow:var(--shadow-sm); }
+
+.table-wrap{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); }
+table{ width:100%; border-collapse:collapse; }
+thead th{ text-align:right; font-size:11.5px; letter-spacing:.3px; color:var(--ink-faint); font-weight:700; padding:14px 18px; border-bottom:1px solid var(--line); background:var(--surface-2); }
+tbody td{ padding:14px 18px; font-size:13.5px; border-bottom:1px solid var(--line-soft); font-weight:500;}
+tbody tr{ transition:background .15s ease; cursor:pointer; }
+tbody tr:hover{ background:var(--surface-2); }
+tbody tr:last-child td{ border-bottom:none; }
+
+.chip{ display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:20px; font-size:11.5px; font-weight:700; }
+.chip::before{ content:''; width:6px; height:6px; border-radius:50%; }
+.chip-ok{ background:var(--green-pale); color:var(--green); } .chip-ok::before{ background:var(--green); }
+.chip-warn{ background:var(--gold-pale); color:var(--gold-deep); } .chip-warn::before{ background:var(--gold); }
+.chip-danger{ background:var(--terracotta-pale); color:var(--terracotta); } .chip-danger::before{ background:var(--terracotta); }
+.chip-wine{ background:var(--wine-pale); color:var(--wine); } .chip-wine::before{ background:var(--wine); }
+
+.pat-cell{ display:flex; align-items:center; gap:10px; }
+.pat-cell .avatar{ width:32px; height:32px; font-size:11.5px; border-radius:10px;}
+.pat-name{ font-weight:700; font-size:13.5px; }
+.pat-sub{ font-size:11.5px; color:var(--ink-faint); }
+
+.pbar{ width:100%; height:7px; background:var(--surface-2); border-radius:20px; overflow:hidden; }
+.pbar-fill{ height:100%; border-radius:20px; background:linear-gradient(90deg, var(--green), #3E7A5C); transition:width 1s cubic-bezier(.2,.8,.3,1); }
+.pbar-fill.gold{ background:linear-gradient(90deg, var(--gold-deep), var(--gold)); }
+.pbar-fill.danger{ background:linear-gradient(90deg, #8a3a12, var(--terracotta)); }
+
+.timeline{ position:relative; padding-right:22px; }
+.timeline::before{ content:''; position:absolute; right:5px; top:4px; bottom:4px; width:2px; background:var(--line); }
+.t-item{ position:relative; padding-bottom:20px; }
+.t-item:last-child{ padding-bottom:0; }
+.t-dot{ position:absolute; right:-22px; top:2px; width:12px; height:12px; border-radius:50%; background:var(--surface); border:2.5px solid var(--gold); }
+.t-dot.muted{ border-color:var(--ink-faint); }
+.t-time{ font-family:'IBM Plex Mono', monospace; direction:ltr; text-align:right; font-size:10.5px; color:var(--ink-faint); }
+.t-text{ font-size:13px; margin-top:2px; }
+.t-text b{ font-weight:800; }
+
+.qa-btn{ display:flex; flex-direction:column; gap:11px; align-items:flex-start; padding:17px; border-radius:15px; border:1px solid var(--line); background:var(--surface); transition:all .18s ease; }
+.qa-btn:hover{ border-color:var(--gold); box-shadow:var(--shadow-md); transform:translateY(-2px); }
+.qa-icon{ width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center; }
+.qa-icon svg{ width:17px; height:17px; }
+.qa-label{ font-size:12.5px; font-weight:800; }
+
+.empty-state{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:54px 20px; color:var(--ink-faint); }
+.empty-state svg{ width:46px; height:46px; margin-bottom:14px; opacity:.5; }
+.empty-state h3{ font-size:15px; color:var(--ink); margin-bottom:4px; font-weight:800; }
+.empty-state p{ font-size:12.5px; max-width:280px; }
+
+.overlay{ position:fixed; inset:0; background:rgba(18,48,31,0.5); backdrop-filter:blur(2px); z-index:100; opacity:0; pointer-events:none; transition:opacity .22s ease; }
+.overlay.active{ opacity:1; pointer-events:all; }
+.modal{ position:fixed; top:50%; right:50%; transform:translate(50%,-46%); width:520px; max-width:90vw; max-height:86vh; overflow-y:auto; background:var(--surface); border-radius:22px; box-shadow:var(--shadow-lg); z-index:101; opacity:0; pointer-events:none; transition:all .26s cubic-bezier(.2,.8,.3,1); padding:26px; }
+.modal.active{ opacity:1; transform:translate(50%,-50%); pointer-events:all; }
+.drawer{ position:fixed; top:0; left:-440px; width:440px; max-width:92vw; height:100%; background:var(--surface); box-shadow:var(--shadow-lg); z-index:101; transition:left .3s cubic-bezier(.2,.8,.3,1); padding:26px; overflow-y:auto; }
+.drawer.active{ left:0; }
+.modal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+.modal-head h3{ font-weight:800; font-size:19px; }
+.close-x{ width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:var(--surface-2); flex-shrink:0; }
+.close-x svg{ width:15px; height:15px; }
+
+.field-label{ font-size:12.5px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; display:block; }
+.field-input, .field-select{ width:100%; padding:11px 14px; border-radius:11px; border:1px solid var(--line); font-size:13.5px; font-family:inherit; background:var(--paper); outline:none; transition:border-color .15s ease; }
+.field-input:focus, .field-select:focus{ border-color:var(--gold); }
+.field-row{ margin-bottom:14px; }
+
+.toast-wrap{ position:fixed; bottom:24px; left:24px; z-index:200; display:flex; flex-direction:column; gap:10px; }
+.toast{ display:flex; align-items:center; gap:10px; background:var(--green-deep); color:#fff; padding:14px 19px; border-radius:14px; box-shadow:var(--shadow-lg); font-size:13px; font-weight:600; transform:translateY(12px); opacity:0; transition:all .3s cubic-bezier(.2,.8,.3,1); }
+.toast.show{ transform:translateY(0); opacity:1; }
+.toast svg{ width:16px; height:16px; color:var(--gold); flex-shrink:0; }
+
+.settings-row{ display:flex; align-items:center; justify-content:space-between; padding:15px 0; border-bottom:1px solid var(--line-soft); }
+.settings-row:last-child{ border-bottom:none; }
+.settings-row .lab{ font-size:13.5px; font-weight:700; }
+.settings-row .sub{ font-size:11.5px; color:var(--ink-faint); margin-top:2px; }
+.switch{ width:42px; height:24px; border-radius:20px; background:var(--surface-2); position:relative; border:1px solid var(--line); transition:background .2s ease; flex-shrink:0; }
+.switch.on{ background:var(--green); border-color:var(--green); }
+.switch::after{ content:''; position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%; background:#fff; transition:right .2s ease; box-shadow:0 1px 3px rgba(0,0,0,.2); }
+.switch.on::after{ right:20px; }
+
+.expiry-bar{ display:flex; align-items:center; gap:6px; font-size:11px; color:var(--terracotta); font-weight:700;}
+
+@media (max-width:1100px){ .grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 44 44" fill="none">
+        <circle cx="22" cy="22" r="20" fill="rgba(201,162,39,0.12)"/>
+        <path d="M22 8c-6 4-9 9-9 15a9 9 0 0 0 18 0c0-6-3-11-9-15z" fill="#C9A227" opacity="0.9"/>
+        <rect x="19.5" y="10" width="5" height="7" rx="1.5" fill="#12301F"/>
+      </svg>
+      <div>
+        <div class="brand-name">العطّار</div>
+        <div class="brand-sub">PHARMACY OS</div>
+      </div>
+    </div>
+
+    <div class="nav-group-label">نظرة عامة</div>
+    <div class="nav-item active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+      لوحة التحكم
+    </div>
+
+    <div class="nav-group-label">التشغيل</div>
+    <div class="nav-item" data-view="inventory">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M21 8L12 3 3 8v8l9 5 9-5V8z"/><path d="M3 8l9 5 9-5M12 13v8"/></svg>
+      المخزون
+    </div>
+    <div class="nav-item" data-view="prescriptions">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6l3 3v14a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M9 10h6M9 14h4"/></svg>
+      الروشتات
+    </div>
+    <div class="nav-item" data-view="pos">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="7" width="20" height="13" rx="2"/><path d="M2 11h20M7 16h3"/><path d="M8 7V5a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+      نقطة البيع
+    </div>
+
+    <div class="nav-group-label">العلاقات</div>
+    <div class="nav-item" data-view="customers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.4"/><path d="M3 21c0-4.4 2.7-7 6-7s6 2.6 6 7"/><circle cx="17.5" cy="8.5" r="2.4"/><path d="M15.5 12.2c2.7.3 4.5 2.6 4.5 5.8"/></svg>
+      العملاء
+    </div>
+    <div class="nav-item" data-view="suppliers">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="10" width="18" height="9" rx="2"/><path d="M7 10V7a5 5 0 0 1 10 0v3"/></svg>
+      الموردين
+    </div>
+
+    <div class="nav-group-label">الإدارة</div>
+    <div class="nav-item" data-view="reports">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+      التقارير
+    </div>
+    <div class="nav-item" data-view="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2.1-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2.1 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2.1 1.2L10 21h4l.5-2.6a7 7 0 0 0 2.1-1.2l2.3.9 2-3.4-2-1.5c.067-.396.1-.797.1-1.2z"/></svg>
+      الإعدادات
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="nav-item" style="color:rgba(239,233,214,0.5);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        تسجيل الخروج
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="header-title" id="headerTitle">
+        <h1>صباح الخير يا أستاذ كريم</h1>
+        <span>الثلاثاء، ١٤ يوليو · فرع المعادي</span>
+      </div>
+      <div class="header-right">
+        <div class="search-box">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+          <input type="text" placeholder="دوّر على دواء، عميل، أو روشتة…" oninput="handleSearch(this.value)">
+        </div>
+        <button class="icon-btn" onclick="toggleNotif()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>
+          <span class="dot-badge"></span>
+        </button>
+        <div class="profile-chip">
+          <div class="avatar" style="background:linear-gradient(135deg,#1B4332,#3E7A5C);">كس</div>
+          <div>
+            <div class="name">كريم الصادق</div>
+            <div class="role">صيدلي أول</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <!-- DASHBOARD -->
+      <section class="view active" id="view-dashboard">
+        <div class="grid grid-4" id="kpiGrid"></div>
+
+        <div class="section-title"><h2>المبيعات خلال الأسبوع</h2></div>
+        <div class="grid" style="grid-template-columns:1.6fr 1fr;">
+          <div class="card">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div>
+                <div style="font-size:12.5px; color:var(--ink-soft); font-weight:700;">إجمالي المبيعات</div>
+                <div style="font-size:22px; font-weight:800; margin-top:2px;">٤٢,٨٥٠ ج.م <span class="mono" style="font-size:12px; color:var(--success); font-weight:600;">+٩.٢٪</span></div>
+              </div>
+              <div class="tabs"><button class="tab active">أسبوع</button><button class="tab">شهر</button></div>
+            </div>
+            <div id="salesChart" style="margin-top:14px;"></div>
+          </div>
+          <div class="card">
+            <div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:14px;">أكثر الأدوية مبيعًا</div>
+            <div id="topMeds"></div>
+          </div>
+        </div>
+
+        <div class="section-title"><h2>تنبيهات المخزون</h2><span class="count-pill" id="alertCount"></span></div>
+        <div class="grid" style="grid-template-columns:1.4fr 1fr;">
+          <div class="card">
+            <div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:12px;">أدوية قاربت على النفاد أو الصلاحية</div>
+            <div id="stockAlerts"></div>
+          </div>
+          <div class="card">
+            <div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:12px;">آخر الحركات</div>
+            <div class="timeline" id="activityTimeline"></div>
+          </div>
+        </div>
+
+        <div class="section-title"><h2>روشتات اليوم</h2></div>
+        <div class="grid grid-3" id="rxToday"></div>
+
+        <div class="section-title"><h2>إجراءات سريعة</h2></div>
+        <div class="grid grid-4">
+          <button class="qa-btn" onclick="switchView('pos'); showToast('تم فتح نقطة البيع')">
+            <div class="qa-icon" style="background:var(--green-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#1B4332" stroke-width="2"><rect x="2" y="7" width="20" height="13" rx="2"/></svg></div>
+            <span class="qa-label">بيع جديد</span>
+          </button>
+          <button class="qa-btn" onclick="switchView('prescriptions'); showToast('تم فتح شاشة الروشتات')">
+            <div class="qa-icon" style="background:var(--gold-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#9C7C18" stroke-width="2"><path d="M9 3h6l3 3v14H6V4z"/></svg></div>
+            <span class="qa-label">صرف روشتة</span>
+          </button>
+          <button class="qa-btn" onclick="switchView('inventory'); showToast('تمت إضافة دواء جديد')">
+            <div class="qa-icon" style="background:var(--wine-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#7B2D3B" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div>
+            <span class="qa-label">إضافة صنف</span>
+          </button>
+          <button class="qa-btn" onclick="switchView('reports')">
+            <div class="qa-icon" style="background:var(--terracotta-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#B5651D" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></div>
+            <span class="qa-label">عرض التقارير</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- INVENTORY -->
+      <section class="view" id="view-inventory">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+          <div class="tabs" id="invFilterTabs">
+            <button class="tab active" data-filter="all">كل الأصناف</button>
+            <button class="tab" data-filter="low">وشيك النفاد</button>
+            <button class="tab" data-filter="expiry">قرب الصلاحية</button>
+          </div>
+          <button class="btn btn-primary" onclick="showToast('تمت إضافة صنف جديد للمخزون')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>إضافة صنف</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>الصنف</th><th>الفئة</th><th>الكمية</th><th>تاريخ الصلاحية</th><th>السعر</th><th>الحالة</th></tr></thead>
+            <tbody id="inventoryTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PRESCRIPTIONS -->
+      <section class="view" id="view-prescriptions">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+          <div class="tabs" id="rxFilterTabs">
+            <button class="tab active" data-filter="all">الكل</button>
+            <button class="tab" data-filter="pending">معلّقة</button>
+            <button class="tab" data-filter="done">مصروفة</button>
+          </div>
+          <button class="btn btn-gold" onclick="showToast('تم إنشاء روشتة جديدة')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>روشتة جديدة</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>المريض</th><th>الطبيب المُحيل</th><th>عدد الأصناف</th><th>التاريخ</th><th>الحالة</th></tr></thead>
+            <tbody id="rxTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- POS -->
+      <section class="view" id="view-pos">
+        <div class="grid" style="grid-template-columns:1.6fr 1fr;">
+          <div class="card">
+            <div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:14px;">دوّر على صنف لإضافته للفاتورة</div>
+            <div class="search-box" style="width:100%; margin-bottom:16px;">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+              <input type="text" placeholder="اكتب اسم الدواء…">
+            </div>
+            <div class="grid grid-3" id="posMeds"></div>
+          </div>
+          <div class="card">
+            <div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:14px;">الفاتورة الحالية</div>
+            <div id="posCart"></div>
+            <div style="border-top:1px solid var(--line-soft); margin-top:14px; padding-top:14px; display:flex; justify-content:space-between; font-weight:800; font-size:16px;">
+              <span>الإجمالي</span><span class="mono">١٤٧ ج.م</span>
+            </div>
+            <button class="btn btn-primary" style="width:100%; justify-content:center; margin-top:14px;" onclick="showToast('تم إتمام عملية البيع بنجاح')">إتمام البيع</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- CUSTOMERS -->
+      <section class="view" id="view-customers">
+        <div class="grid grid-3" id="customersGrid"></div>
+      </section>
+
+      <!-- SUPPLIERS -->
+      <section class="view" id="view-suppliers">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>المورد</th><th>الأصناف المُوردة</th><th>آخر توريد</th><th>المستحقات</th><th>الحالة</th></tr></thead>
+            <tbody id="suppliersTableBody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- REPORTS -->
+      <section class="view" id="view-reports">
+        <div class="grid grid-2">
+          <div class="card"><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:6px;">نمو المبيعات الشهري</div><div id="growthChart"></div></div>
+          <div class="card"><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:6px;">توزيع المبيعات حسب الفئة</div><div id="donutChart" style="display:flex; align-items:center; gap:22px;"></div></div>
+        </div>
+        <div class="section-title"><h2>أداء الفروع</h2></div>
+        <div class="grid grid-4" id="branchPerf"></div>
+      </section>
+
+      <!-- SETTINGS -->
+      <section class="view" id="view-settings">
+        <div class="grid grid-2">
+          <div class="card">
+            <div style="font-weight:800; font-size:16px; margin-bottom:12px;">بيانات الصيدلية</div>
+            <div class="field-row"><label class="field-label">اسم الصيدلية</label><input class="field-input" value="صيدلية العطّار — فرع المعادي"></div>
+            <div class="field-row"><label class="field-label">العنوان</label><input class="field-input" value="١٨ شارع النصر، المعادي، القاهرة"></div>
+            <div class="field-row"><label class="field-label">رقم الترخيص</label><input class="field-input" value="PH-4471-CAI"></div>
+            <button class="btn btn-primary" onclick="showToast('تم حفظ البيانات')">حفظ التعديلات</button>
+          </div>
+          <div class="card">
+            <div style="font-weight:800; font-size:16px; margin-bottom:6px;">التفضيلات</div>
+            <div class="settings-row"><div><div class="lab">تنبيه انتهاء الصلاحية</div><div class="sub">إشعار قبل ٣٠ يوم من انتهاء صلاحية أي صنف</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="settings-row"><div><div class="lab">تنبيه انخفاض المخزون</div><div class="sub">إشعار عند وصول الكمية لأقل من الحد الأدنى</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="settings-row"><div><div class="lab">الوضع الليلي</div><div class="sub">تفعيل الواجهة الداكنة لموظفي الشِفت المسائي</div></div><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="overlay" id="notifOverlay" onclick="toggleNotif()"></div>
+<div class="drawer" id="notifDrawer">
+  <div class="modal-head"><h3>الإشعارات</h3><div class="close-x" onclick="toggleNotif()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div></div>
+  <div class="timeline" id="notifList"></div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+function fmtEG(n){ return n.toLocaleString('en-US')+' ج.م'; }
+function avatar(name,color){
+  const initials = name.split(' ').slice(0,2).map(w=>w[0]).join('');
+  return `<div class="avatar" style="background:${color||'linear-gradient(135deg,#1B4332,#3E7A5C)'}">${initials}</div>`;
+}
+
+/* ---------------- DATA ---------------- */
+const medicines = [
+  {name:'باراسيتامول ٥٠٠ مج', cat:'مسكنات', qty:420, expiry:'مارس ٢٠٢٧', price:12, status:'ok'},
+  {name:'أوجمنتين ١ جم', cat:'مضادات حيوية', qty:18, expiry:'أغسطس ٢٠٢٦', price:65, status:'low'},
+  {name:'كونجستال', cat:'برد وأنفلونزا', qty:96, expiry:'يوليو ٢٠٢٦', status:'expiry', price:22},
+  {name:'فولتارين جيل', cat:'مسكنات موضعية', qty:54, expiry:'يناير ٢٠٢٧', price:48, status:'ok'},
+  {name:'انسولين لانتوس', cat:'سكر', qty:9, expiry:'سبتمبر ٢٠٢٦', price:310, status:'low'},
+  {name:'زيرتك أقراص', cat:'حساسية', qty:130, expiry:'ديسمبر ٢٠٢٦', price:28, status:'ok'},
+  {name:'نيوروبيون أمبولات', cat:'فيتامينات', qty:41, expiry:'يوليو ٢٠٢٦', price:75, status:'expiry'},
+];
+const statusChip = {ok:'<span class="chip chip-ok">متوفر</span>', low:'<span class="chip chip-danger">وشيك النفاد</span>', expiry:'<span class="chip chip-warn">قرب الصلاحية</span>'};
+
+const prescriptions = [
+  {patient:'منى عبد الرحمن', doctor:'د. هشام فوزي', items:4, date:'١٤ يوليو', status:'pending'},
+  {patient:'أحمد جلال', doctor:'د. سارة نبيل', items:2, date:'١٤ يوليو', status:'done'},
+  {patient:'ياسمين طارق', doctor:'د. هشام فوزي', items:6, date:'١٣ يوليو', status:'pending'},
+  {patient:'محمود عزت', doctor:'د. رامي عادل', items:3, date:'١٣ يوليو', status:'done'},
+  {patient:'نور الهدى سيد', doctor:'د. سارة نبيل', items:1, date:'١٢ يوليو', status:'done'},
+];
+const rxChip = {pending:'<span class="chip chip-warn">معلّقة</span>', done:'<span class="chip chip-ok">مصروفة</span>'};
+
+const customers = [
+  {name:'منى عبد الرحمن', visits:14, spent:1240, tier:'عميل ذهبي'},
+  {name:'أحمد جلال', visits:6, spent:420, tier:'عميل عادي'},
+  {name:'ياسمين طارق', visits:22, spent:2870, tier:'عميل ذهبي'},
+  {name:'محمود عزت', visits:3, spent:180, tier:'عميل جديد'},
+  {name:'نور الهدى سيد', visits:9, spent:610, tier:'عميل عادي'},
+  {name:'كريم منصور', visits:31, spent:4120, tier:'عميل ذهبي'},
+];
+
+const suppliers = [
+  {name:'شركة إيبيكو للأدوية', items:132, last:'١٠ يوليو ٢٠٢٦', due:'٤٢,٠٠٠ ج.م', status:'ok'},
+  {name:'مجموعة النساجي للأدوية', items:87, last:'٥ يوليو ٢٠٢٦', due:'١٨,٥٠٠ ج.م', status:'ok'},
+  {name:'شركة أموريا فارما', items:54, last:'٢٨ يونيو ٢٠٢٦', due:'٦٧,٢٠٠ ج.م', status:'warn'},
+];
+
+/* ---------------- NAV ---------------- */
+document.querySelectorAll('.nav-item[data-view]').forEach(item=>{
+  item.addEventListener('click', ()=> switchView(item.dataset.view));
+});
+const headerCopy = {
+  dashboard:['صباح الخير يا أستاذ كريم','الثلاثاء، ١٤ يوليو · فرع المعادي'],
+  inventory:['المخزون','٧٤٤ صنف مسجّل في النظام'],
+  prescriptions:['الروشتات','٥ روشتات اليوم — ٢ معلّقة'],
+  pos:['نقطة البيع','ابدأ عملية بيع جديدة'],
+  customers:['العملاء','٤٨٦ عميل مسجّل'],
+  suppliers:['الموردين','٣ موردين نشطين'],
+  reports:['التقارير','أداء الصيدلية خلال آخر ٦ أشهر'],
+  settings:['الإعدادات','بيانات الصيدلية والتفضيلات'],
+};
+function switchView(id){
+  document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  const [h,s] = headerCopy[id];
+  document.getElementById('headerTitle').innerHTML = `<h1>${h}</h1><span>${s}</span>`;
+}
+
+/* ---------------- DASHBOARD ---------------- */
+function renderKPIs(){
+  const kpis = [
+    {label:'مبيعات اليوم', value:8420, suffix:' ج.م', trend:'+٩٪', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#1B4332" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`, bg:'var(--green-pale)'},
+    {label:'روشتات معلّقة', value:2, trend:'+1', up:false, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#9C7C18" stroke-width="2"><path d="M9 3h6l3 3v14H6V4z"/></svg>`, bg:'var(--gold-pale)'},
+    {label:'عملاء جدد هذا الأسبوع', value:17, trend:'+٢٤٪', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#7B2D3B" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>`, bg:'var(--wine-pale)'},
+    {label:'أصناف تحتاج تنبيه', value:3, trend:'ثابت', up:false, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#B5651D" stroke-width="2"><path d="M12 9v4M12 17h.01M10.3 3.9L2.6 18a1.5 1.5 0 0 0 1.3 2.2h16.2a1.5 1.5 0 0 0 1.3-2.2L13.7 3.9a1.5 1.5 0 0 0-2.6 0z"/></svg>`, bg:'var(--terracotta-pale)'},
+  ];
+  document.getElementById('kpiGrid').innerHTML = kpis.map(k=>`
+    <div class="card hoverable">
+      <div class="kpi-top">
+        <div class="kpi-icon" style="background:${k.bg}">${k.icon}</div>
+        <div class="kpi-trend ${k.up?'trend-up':'trend-down'}">${k.trend}</div>
+      </div>
+      <div class="kpi-value" data-count="${k.value}" data-suffix="${k.suffix||''}">0${k.suffix||''}</div>
+      <div class="kpi-label">${k.label}</div>
+    </div>`).join('');
+  animateCounters();
+}
+function animateCounters(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target = parseFloat(el.dataset.count); const suffix = el.dataset.suffix||'';
+    let start=performance.now(); const dur=900;
+    function tick(now){
+      const p=Math.min(1,(now-start)/dur); const eased=1-Math.pow(1-p,3);
+      el.textContent = Math.round(target*eased).toLocaleString('en-US')+suffix;
+      if(p<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+}
+function renderSalesChart(){
+  const data=[5200,6100,4800,7300,8420,7100,8900];
+  const w=460,h=150,pad=10; const max=Math.max(...data)*1.15;
+  const pts = data.map((v,i)=>{ const x=pad+i*((w-2*pad)/(data.length-1)); const y=h-pad-(v/max)*(h-2*pad); return [x,y]; });
+  const line = pts.map((p,i)=>(i===0?'M':'L')+p[0]+','+p[1]).join(' ');
+  const area = line+` L${pts[pts.length-1][0]},${h-pad} L${pts[0][0]},${h-pad} Z`;
+  const days=['سبت','أحد','إثن','ثلا','أرب','خمي','جمعة'];
+  const dots = pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#C9A227" stroke="#fff" stroke-width="1.5"/>`).join('');
+  const labels = pts.map((p,i)=>`<text x="${p[0]}" y="${h+14}" font-size="10" fill="var(--ink-faint)" text-anchor="middle">${days[i]}</text>`).join('');
+  document.getElementById('salesChart').innerHTML = `<svg viewBox="0 0 ${w} ${h+24}" width="100%" height="200">
+    <defs><linearGradient id="salesGrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#1B4332" stop-opacity="0.3"/><stop offset="100%" stop-color="#1B4332" stop-opacity="0"/></linearGradient></defs>
+    <path d="${area}" fill="url(#salesGrad)"/><path d="${line}" fill="none" stroke="#1B4332" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
+}
+function renderTopMeds(){
+  const meds = [{n:'باراسيتامول ٥٠٠ مج', pct:82},{n:'كونجستال', pct:64},{n:'فولتارين جيل', pct:47}];
+  document.getElementById('topMeds').innerHTML = meds.map((m,i)=>`
+    <div style="margin-bottom:${i<2?'14px':'0'};">
+      <div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:6px;"><span style="font-weight:700;">${m.n}</span><span class="mono" style="color:var(--ink-faint);">${m.pct}%</span></div>
+      <div class="pbar"><div class="pbar-fill gold" style="width:0%" data-w="${m.pct}"></div></div>
+    </div>`).join('');
+  setTimeout(()=> document.querySelectorAll('#topMeds .pbar-fill').forEach(el=>el.style.width=el.dataset.w+'%'),100);
+}
+function renderStockAlerts(){
+  const alerts = medicines.filter(m=>m.status!=='ok');
+  document.getElementById('alertCount').textContent = alerts.length+' تنبيهات';
+  document.getElementById('stockAlerts').innerHTML = alerts.map(m=>`
+    <div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--line-soft);">
+      <div style="flex:1;"><div style="font-size:13px; font-weight:700;">${m.name}</div><div class="expiry-bar">${m.status==='low'?'الكمية المتبقية: '+m.qty:'ينتهي في '+m.expiry}</div></div>
+      ${statusChip[m.status]}
+    </div>`).join('');
+}
+function renderActivityTimeline(){
+  const items = [
+    {time:'٩:١٥ ص', text:'تم صرف روشتة لـ<b>أحمد جلال</b> — ٢ أصناف'},
+    {time:'١٠:٠٠ ص', text:'وصل توريد جديد من <b>شركة إيبيكو</b>'},
+    {time:'١٠:٤٠ ص', text:'عملية بيع بقيمة ١٤٧ ج.م تمت بنجاح'},
+    {time:'١١:٢٠ ص', text:'تنبيه: <b>انسولين لانتوس</b> وصل للحد الأدنى'},
+  ];
+  document.getElementById('activityTimeline').innerHTML = items.map((it,i)=>`<div class="t-item"><div class="t-dot ${i>1?'muted':''}"></div><div class="t-time">${it.time}</div><div class="t-text">${it.text}</div></div>`).join('');
+}
+function renderRxToday(){
+  document.getElementById('rxToday').innerHTML = prescriptions.slice(0,3).map(r=>`
+    <div class="card hoverable">
+      <div style="display:flex; align-items:center; gap:12px;">${avatar(r.patient)}<div><div class="pat-name">${r.patient}</div><div class="pat-sub">${r.doctor}</div></div></div>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px;">${rxChip[r.status]}<span class="mono" style="font-size:11px; color:var(--ink-faint);">${r.items} أصناف</span></div>
+    </div>`).join('');
+}
+
+/* ---------------- INVENTORY ---------------- */
+function renderInventory(filter='all'){
+  const rows = medicines.filter(m=> filter==='all' || m.status===filter);
+  document.getElementById('inventoryTableBody').innerHTML = rows.length ? rows.map(m=>`
+    <tr><td style="font-weight:700;">${m.name}</td><td>${m.cat}</td><td class="mono">${m.qty}</td><td class="mono">${m.expiry}</td><td class="mono">${m.price} ج.م</td><td>${statusChip[m.status]}</td></tr>
+  `).join('') : `<tr><td colspan="6"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></svg><h3>لا توجد أصناف مطابقة</h3><p>جرّب فلتر مختلف أو امسح البحث.</p></div></td></tr>`;
+}
+document.querySelectorAll('#invFilterTabs .tab').forEach(t=>{
+  t.addEventListener('click', ()=>{ document.querySelectorAll('#invFilterTabs .tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderInventory(t.dataset.filter); });
+});
+
+/* ---------------- PRESCRIPTIONS ---------------- */
+function renderRx(filter='all'){
+  const rows = prescriptions.filter(r=> filter==='all' || r.status===filter);
+  document.getElementById('rxTableBody').innerHTML = rows.map(r=>`
+    <tr><td><div class="pat-cell">${avatar(r.patient)}<span class="pat-name">${r.patient}</span></div></td><td>${r.doctor}</td><td class="mono">${r.items}</td><td class="mono">${r.date}</td><td>${rxChip[r.status]}</td></tr>
+  `).join('');
+}
+document.querySelectorAll('#rxFilterTabs .tab').forEach(t=>{
+  t.addEventListener('click', ()=>{ document.querySelectorAll('#rxFilterTabs .tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderRx(t.dataset.filter); });
+});
+
+/* ---------------- POS ---------------- */
+function renderPos(){
+  document.getElementById('posMeds').innerHTML = medicines.slice(0,6).map(m=>`
+    <div class="card hoverable" style="padding:14px; text-align:center;" onclick="showToast('تمت إضافة ${m.name} للفاتورة')">
+      <div style="font-size:12.5px; font-weight:700;">${m.name}</div>
+      <div class="mono" style="font-size:13px; color:var(--green); font-weight:700; margin-top:6px;">${m.price} ج.م</div>
+    </div>`).join('');
+  document.getElementById('posCart').innerHTML = [
+    {n:'باراسيتامول ٥٠٠ مج', q:2, p:24},{n:'زيرتك أقراص', q:1, p:28},{n:'فولتارين جيل', q:2, p:96 - 48}
+  ].map(c=>`<div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid var(--line-soft); font-size:13px;"><span>${c.n} × ${c.q}</span><span class="mono">${c.p} ج.م</span></div>`).join('');
+}
+
+/* ---------------- CUSTOMERS ---------------- */
+function renderCustomers(){
+  const tierChip = {'عميل ذهبي':'chip-warn','عميل عادي':'chip-ok','عميل جديد':'chip-wine'};
+  document.getElementById('customersGrid').innerHTML = customers.map(c=>`
+    <div class="card hoverable">
+      <div style="display:flex; align-items:center; gap:12px;">${avatar(c.name)}<div><div class="pat-name">${c.name}</div><div class="pat-sub">${c.visits} زيارة</div></div></div>
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-top:14px;"><span class="chip ${tierChip[c.tier]}">${c.tier}</span><span class="mono" style="font-size:12px; font-weight:700;">${c.spent} ج.م</span></div>
+    </div>`).join('');
+}
+
+/* ---------------- SUPPLIERS ---------------- */
+function renderSuppliers(){
+  document.getElementById('suppliersTableBody').innerHTML = suppliers.map(s=>`
+    <tr><td style="font-weight:700;">${s.name}</td><td class="mono">${s.items}</td><td class="mono">${s.last}</td><td class="mono">${s.due}</td><td>${s.status==='ok'?'<span class="chip chip-ok">مسدد</span>':'<span class="chip chip-warn">مستحق</span>'}</td></tr>
+  `).join('');
+}
+
+/* ---------------- REPORTS ---------------- */
+function renderGrowthChart(){
+  const data=[28,31,29,36,39,42.8];
+  const w=380,h=140,pad=10; const max=Math.max(...data)*1.1; const barW=(w-2*pad)/data.length-8;
+  const bars = data.map((v,i)=>{ const x=pad+i*((w-2*pad)/data.length); const bh=(v/max)*(h-2*pad); const y=h-pad-bh; return `<rect x="${x}" y="${y}" width="${barW}" height="${bh}" rx="6" fill="${i===data.length-1?'#1B4332':'#D8E4DC'}"/>`; }).join('');
+  const months=['فبر','مار','أبر','ماي','يون','يول'];
+  const labels = data.map((v,i)=>{ const x=pad+i*((w-2*pad)/data.length)+barW/2; return `<text x="${x}" y="${h+13}" font-size="10" fill="var(--ink-faint)" text-anchor="middle">${months[i]}</text>`; }).join('');
+  document.getElementById('growthChart').innerHTML = `<svg viewBox="0 0 ${w} ${h+22}" width="100%" height="180">${bars}${labels}</svg>
+  <div style="font-weight:800; font-size:20px; margin-top:6px;">٤٢,٨٠٠ ج.م <span class="mono" style="font-size:12px; color:var(--success); font-weight:600;">+٩.٦٪ عن الشهر السابق</span></div>`;
+}
+function renderDonutChart(){
+  const data=[{l:'مسكنات',v:30,c:'#1B4332'},{l:'مضادات حيوية',v:22,c:'#3E7A5C'},{l:'فيتامينات',v:18,c:'#C9A227'},{l:'حساسية',v:16,c:'#B5651D'},{l:'أخرى',v:14,c:'#7B2D3B'}];
+  const total=data.reduce((s,d)=>s+d.v,0); let acc=0; const r=52,cx=60,cy=60,circ=2*Math.PI*r;
+  const arcs = data.map(d=>{ const frac=d.v/total; const dash=frac*circ; const el=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${d.c}" stroke-width="16" stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="${-acc}" transform="rotate(-90 ${cx} ${cy})"/>`; acc+=dash; return el; }).join('');
+  document.getElementById('donutChart').innerHTML = `<svg viewBox="0 0 120 120" width="150" height="150">${arcs}</svg>
+  <div style="display:flex; flex-direction:column; gap:9px;">${data.map(d=>`<div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink-soft);"><span style="width:8px;height:8px;border-radius:50%;background:${d.c}"></span>${d.l} <span class="mono" style="color:var(--ink-faint);">${d.v}%</span></div>`).join('')}</div>`;
+}
+function renderBranchPerf(){
+  const data=[{l:'فرع المعادي',v:'٤٢,٨٠٠ ج.م',t:'+٩٪',up:true},{l:'فرع مصر الجديدة',v:'٣١,١٠٠ ج.م',t:'+٤٪',up:true},{l:'فرع الدقي',v:'٢٦,٤٠٠ ج.م',t:'-٢٪',up:false},{l:'رضا العملاء',v:'٩٤٪',t:'+١٪',up:true}];
+  document.getElementById('branchPerf').innerHTML = data.map(m=>`
+    <div class="card"><div class="kpi-label">${m.l}</div><div class="kpi-value" style="font-size:22px; margin-top:6px;">${m.v}</div><div class="kpi-trend ${m.up?'trend-up':'trend-down'}" style="margin-top:10px; width:fit-content;">${m.t}</div></div>`).join('');
+}
+
+/* ---------------- NOTIFICATIONS ---------------- */
+function toggleNotif(){ document.getElementById('notifDrawer').classList.toggle('active'); document.getElementById('notifOverlay').classList.toggle('active'); }
+function renderNotifList(){
+  const items=[{time:'منذ ٥ دقايق', text:'روشتة جديدة من <b>د. سارة نبيل</b>'},{time:'منذ ٣٠ دقيقة', text:'<b>انسولين لانتوس</b> وصل للحد الأدنى'},{time:'منذ ساعة', text:'تم سداد مستحقات <b>مجموعة النساجي</b>'},{time:'أمس', text:'<b>كونجستال</b> ينتهي خلال ٧ أيام'}];
+  document.getElementById('notifList').innerHTML = items.map((it,i)=>`<div class="t-item"><div class="t-dot ${i>1?'muted':''}"></div><div class="t-time">${it.time}</div><div class="t-text">${it.text}</div></div>`).join('');
+}
+
+/* ---------------- TOAST / SEARCH ---------------- */
+function showToast(msg){
+  const wrap=document.getElementById('toastWrap'); const t=document.createElement('div'); t.className='toast';
+  t.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>${msg}`;
+  wrap.appendChild(t); requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },3200);
+}
+function handleSearch(q){
+  if(q.length>1){ switchView('inventory'); const results = medicines.filter(m=>m.name.includes(q));
+    document.getElementById('inventoryTableBody').innerHTML = results.length ? results.map(m=>`<tr><td style="font-weight:700;">${m.name}</td><td>${m.cat}</td><td class="mono">${m.qty}</td><td class="mono">${m.expiry}</td><td class="mono">${m.price} ج.م</td><td>${statusChip[m.status]}</td></tr>`).join('') : `<tr><td colspan="6"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><h3>لا نتائج لـ"${q}"</h3><p>جرّب اسم دواء آخر.</p></div></td></tr>`;
+  } else if(q.length===0){ renderInventory('all'); }
+}
+
+/* ---------------- INIT ---------------- */
+renderKPIs(); renderSalesChart(); renderTopMeds(); renderStockAlerts(); renderActivityTimeline(); renderRxToday();
+renderInventory(); renderRx(); renderPos(); renderCustomers(); renderSuppliers();
+renderGrowthChart(); renderDonutChart(); renderBranchPerf(); renderNotifList();
+setTimeout(()=> showToast('أهلاً بيك — عندك روشتتين معلّقين النهاردة'), 700);
+</script>
+</body>
+</html>

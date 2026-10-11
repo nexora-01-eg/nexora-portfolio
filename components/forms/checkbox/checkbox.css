@@ -1,0 +1,74 @@
+/* ============================================================
+   NEXORA — Checkbox
+   Real <input type="checkbox"> visually hidden but present for
+   native keyboard/AT support; custom box painted via CSS.
+   ============================================================ */
+
+.nx-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nx-space-3);
+  cursor: pointer;
+  font-size: var(--nx-fs-300);
+}
+
+.nx-checkbox__input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.nx-checkbox__box {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+  border: 1px solid var(--nx-border-strong);
+  border-radius: var(--nx-radius-sm);
+  background: var(--nx-bg-elevated);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: var(--nx-transition-base);
+}
+
+.nx-checkbox__box::after {
+  content: "";
+  width: 10px;
+  height: 6px;
+  border-left: 2px solid var(--nx-color-black);
+  border-bottom: 2px solid var(--nx-color-black);
+  transform: rotate(-45deg) scale(0);
+  transition: transform var(--nx-duration-fast) var(--nx-ease-out);
+}
+
+.nx-checkbox__input:checked + .nx-checkbox__box {
+  background: var(--nx-accent-primary);
+  border-color: var(--nx-accent-primary);
+}
+.nx-checkbox__input:checked + .nx-checkbox__box::after {
+  transform: rotate(-45deg) scale(1);
+}
+
+.nx-checkbox__input:indeterminate + .nx-checkbox__box {
+  background: var(--nx-accent-primary);
+  border-color: var(--nx-accent-primary);
+}
+.nx-checkbox__input:indeterminate + .nx-checkbox__box::after {
+  content: "";
+  width: 10px;
+  height: 2px;
+  border: none;
+  background: var(--nx-color-black);
+  transform: scale(1) rotate(0);
+}
+
+.nx-checkbox__input:focus-visible + .nx-checkbox__box {
+  outline: 2px solid var(--nx-accent-primary);
+  outline-offset: 2px;
+}
+
+.nx-checkbox__input:disabled ~ * {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

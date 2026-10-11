@@ -1,0 +1,54 @@
+{
+  "id": "flowbot-automation",
+  "slug": "flowbot-automation",
+  "industry": "automation",
+  "designSystem": "automation",
+  "title": "FlowBot Automation",
+  "tagline": "No-code workflow automation between everyday business tools.",
+  "description": "A visual workflow builder that connects everyday business tools \u2014 no code required.",
+  "version": "1.4.0",
+  "status": "live",
+  "tier": "growth",
+  "difficulty": "intermediate",
+  "service": "Workflow Automation",
+  "tags": [
+    "automation",
+    "workflow",
+    "integration"
+  ],
+  "technologies": [
+    "React",
+    "n8n",
+    "Node.js"
+  ],
+  "componentsUsed": [
+    "dropdown",
+    "card",
+    "toggle"
+  ],
+  "features": [
+    "Visual drag-and-drop workflow builder",
+    "Prebuilt integration templates",
+    "Run history and error logs"
+  ],
+  "timeline": [
+    {
+      "date": "2026-03-15",
+      "label": "Project started",
+      "description": "Workflow builder canvas prototyped."
+    },
+    {
+      "date": "2026-06-20",
+      "label": "v1.4.0 released",
+      "description": "Run history added."
+    }
+  ],
+  "relatedProjects": [
+    "sentinel-ai"
+  ],
+  "views": 298,
+  "featured": false,
+  "popular": true,
+  "createdAt": "2026-03-15",
+  "updatedAt": "2026-06-20"
+}

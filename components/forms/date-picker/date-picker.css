@@ -1,0 +1,46 @@
+/* ============================================================
+   NEXORA — Date Picker (UI only)
+   Native <input type="date"> is styled to match the design
+   system tokens. Custom variant provides the trigger+panel
+   shell only — pair its panel with the Calendar component.
+   ============================================================ */
+
+.nx-date-input {
+  color-scheme: dark;
+}
+[data-theme="light"] .nx-date-input {
+  color-scheme: light;
+}
+
+.nx-date-picker { position: relative; }
+
+.nx-date-picker__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--nx-space-3) var(--nx-space-4);
+  font-size: var(--nx-fs-300);
+  color: var(--nx-text-primary);
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+}
+.nx-date-picker__trigger:focus-visible {
+  border-color: var(--nx-accent-primary);
+  box-shadow: var(--nx-shadow-gold-glow);
+}
+
+.nx-date-picker__panel {
+  position: absolute;
+  top: calc(100% + var(--nx-space-2));
+  left: 0;
+  z-index: var(--nx-z-overlay);
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-lg);
+  box-shadow: var(--nx-shadow-lg);
+  padding: var(--nx-space-4);
+  animation: nx-scale-in var(--nx-duration-fast) var(--nx-ease-out) both;
+}
+.nx-date-picker__panel[hidden] { display: none; }

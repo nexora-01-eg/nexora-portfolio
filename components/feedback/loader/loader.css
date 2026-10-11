@@ -1,0 +1,30 @@
+/* ============================================================
+   NEXORA — Loader (spinner)
+   Sizes: sm, md, lg.
+   ============================================================ */
+
+.nx-loader {
+  display: inline-block;
+  border: 2px solid var(--nx-bg-elevated-2);
+  border-top-color: var(--nx-accent-primary);
+  border-radius: 50%;
+  animation: nx-loader-spin 0.7s linear infinite;
+}
+
+.nx-loader--sm { width: 16px; height: 16px; border-width: 2px; }
+.nx-loader--md { width: 28px; height: 28px; border-width: 3px; }
+.nx-loader--lg { width: 44px; height: 44px; border-width: 4px; }
+
+@keyframes nx-loader-spin {
+  to { transform: rotate(360deg); }
+}
+
+.nx-loader-inline {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nx-space-2);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-loader { animation-duration: 1.4s; }
+}

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Review Portal — NEXORA</title>
+  <meta name="description" content="One place to visually review every page in the platform." />
+
+  <link rel="stylesheet" href="../../core/css/tokens.css" />
+  <link rel="stylesheet" href="../../core/css/base.css" />
+  <link rel="stylesheet" href="../../core/css/typography.css" />
+  <link rel="stylesheet" href="../../core/css/layout.css" />
+  <link rel="stylesheet" href="../../core/css/utilities.css" />
+  <link rel="stylesheet" href="../../core/css/shell.css" />
+
+  <link rel="stylesheet" href="../../components/ui/button/button.css" />
+  <link rel="stylesheet" href="../../components/ui/badge/badge.css" />
+  <link rel="stylesheet" href="../../components/cards/card/card.css" />
+  <link rel="stylesheet" href="../../components/navigation/section-header/section-header.css" />
+
+  <link rel="stylesheet" href="review.css" />
+</head>
+<body>
+  <main class="nx-container" style="padding-block: var(--nx-space-7);">
+    <p class="nx-caption nx-text-accent">Internal tool — not part of the live site</p>
+    <div class="nx-section-header">
+      <div>
+        <h1 class="nx-h2">Review Portal</h1>
+        <p class="nx-body-lg nx-text-secondary">Every page in the platform, previewed live, in one place — nothing to hunt through folders for.</p>
+      </div>
+    </div>
+
+    <div class="nx-grid nx-grid--2 rv-grid" id="review-grid">
+      <!-- Each card's iframe is lazy-loaded and non-interactive — it's a
+           preview, not a working copy of the page. Click "Open" (or the
+           title) to actually use the page. -->
+
+      <article class="nx-card nx-card--flush rv-card">
+        <a class="rv-card__frame" href="../../index.html">
+          <iframe src="../../index.html" title="Home preview" loading="lazy" tabindex="-1"></iframe>
+        </a>
+        <div class="rv-card__body">
+          <div class="rv-card__meta">
+            <h2 class="nx-h4">Home</h2>
+            <span class="nx-badge nx-badge--success">Live</span>
+          </div>
+          <p class="nx-small nx-text-secondary">Hero, statistics, featured/latest/popular projects, industries, design systems, component library, updates, collections.</p>
+          <a class="nx-btn nx-btn--primary nx-btn--sm" href="../../index.html">Open</a>
+        </div>
+      </article>
+
+      <article class="nx-card nx-card--flush rv-card">
+        <a class="rv-card__frame" href="../projects/index.html">
+          <iframe src="../projects/index.html" title="Projects preview" loading="lazy" tabindex="-1"></iframe>
+        </a>
+        <div class="rv-card__body">
+          <div class="rv-card__meta">
+            <h2 class="nx-h4">Projects</h2>
+            <span class="nx-badge nx-badge--success">Live</span>
+          </div>
+          <p class="nx-small nx-text-secondary">The full catalog — search, all 10 filters, sort, grid/list view, pagination, Quick Preview.</p>
+          <a class="nx-btn nx-btn--primary nx-btn--sm" href="../projects/index.html">Open</a>
+        </div>
+      </article>
+
+      <article class="nx-card nx-card--flush rv-card">
+        <a class="rv-card__frame" href="../projects/detail/index.html?slug=aurora-crm">
+          <iframe src="../projects/detail/index.html?slug=aurora-crm" title="Project Detail preview" loading="lazy" tabindex="-1"></iframe>
+        </a>
+        <div class="rv-card__body">
+          <div class="rv-card__meta">
+            <h2 class="nx-h4">Project Detail</h2>
+            <span class="nx-badge nx-badge--success">Live</span>
+          </div>
+          <p class="nx-small nx-text-secondary">Hero, gallery, overview, features, tech stack, timeline, related projects — shown here for "Aurora CRM".</p>
+          <a class="nx-btn nx-btn--primary nx-btn--sm" href="../projects/detail/index.html?slug=aurora-crm">Open</a>
+        </div>
+      </article>
+
+      <article class="nx-card nx-card--flush rv-card">
+        <a class="rv-card__frame" href="../industries/index.html">
+          <iframe src="../industries/index.html" title="Industries preview" loading="lazy" tabindex="-1"></iframe>
+        </a>
+        <div class="rv-card__body">
+          <div class="rv-card__meta">
+            <h2 class="nx-h4">Industries</h2>
+            <span class="nx-badge nx-badge--success">Live</span>
+          </div>
+          <p class="nx-small nx-text-secondary">All 14 industries, plus a spotlight section for every industry with real projects.</p>
+          <a class="nx-btn nx-btn--primary nx-btn--sm" href="../industries/index.html">Open</a>
+        </div>
+      </article>
+
+      <article class="nx-card nx-card--flush rv-card">
+        <a class="rv-card__frame" href="../design-systems/index.html">
+          <iframe src="../design-systems/index.html" title="Design Systems preview" loading="lazy" tabindex="-1"></iframe>
+        </a>
+        <div class="rv-card__body">
+          <div class="rv-card__meta">
+            <h2 class="nx-h4">Design Systems</h2>
+            <span class="nx-badge nx-badge--success">Live</span>
+          </div>
+          <p class="nx-small nx-text-secondary">All 14 isolated design systems, with a colors/typography/components detail drawer.</p>
+          <a class="nx-btn nx-btn--primary nx-btn--sm" href="../design-systems/index.html">Open</a>
+        </div>
+      </article>
+
+      <article class="nx-card nx-card--flush rv-card">
+        <a class="rv-card__frame" href="../component-explorer/index.html">
+          <iframe src="../component-explorer/index.html" title="Component Explorer preview" loading="lazy" tabindex="-1"></iframe>
+        </a>
+        <div class="rv-card__body">
+          <div class="rv-card__meta">
+            <h2 class="nx-h4">Component Explorer</h2>
+            <span class="nx-badge nx-badge--success">Live</span>
+          </div>
+          <p class="nx-small nx-text-secondary">All 55 components — searchable, filterable by category, with live preview/usage/docs tabs.</p>
+          <a class="nx-btn nx-btn--primary nx-btn--sm" href="../component-explorer/index.html">Open</a>
+        </div>
+      </article>
+
+      <article class="nx-card nx-card--flush rv-card">
+        <a class="rv-card__frame" href="../collections/index.html">
+          <iframe src="../collections/index.html" title="Collections preview" loading="lazy" tabindex="-1"></iframe>
+        </a>
+        <div class="rv-card__body">
+          <div class="rv-card__meta">
+            <h2 class="nx-h4">Collections</h2>
+            <span class="nx-badge nx-badge--success">Live</span>
+          </div>
+          <p class="nx-small nx-text-secondary">All 16 data-driven collections (Featured, Latest, Popular, industries, CRM, Dashboard, and more).</p>
+          <a class="nx-btn nx-btn--primary nx-btn--sm" href="../collections/index.html">Open</a>
+        </div>
+      </article>
+
+      <article class="nx-card nx-card--flush rv-card">
+        <a class="rv-card__frame" href="../debug/index.html">
+          <iframe src="../debug/index.html" title="Debug Dashboard preview" loading="lazy" tabindex="-1"></iframe>
+        </a>
+        <div class="rv-card__body">
+          <div class="rv-card__meta">
+            <h2 class="nx-h4">Debug Dashboard</h2>
+            <span class="nx-badge nx-badge--neutral">Tool</span>
+          </div>
+          <p class="nx-small nx-text-secondary">What the Import Engine and Manifest are actually doing — stats, validation, automated checks, build report.</p>
+          <a class="nx-btn nx-btn--primary nx-btn--sm" href="../debug/index.html">Open</a>
+        </div>
+      </article>
+
+      <article class="nx-card nx-card--flush rv-card">
+        <a class="rv-card__frame" href="../../tools/import.html">
+          <iframe src="../../tools/import.html" title="Import Tool preview" loading="lazy" tabindex="-1"></iframe>
+        </a>
+        <div class="rv-card__body">
+          <div class="rv-card__meta">
+            <h2 class="nx-h4">Import Tool</h2>
+            <span class="nx-badge nx-badge--neutral">Tool</span>
+          </div>
+          <p class="nx-small nx-text-secondary">Scans demos/ and generates the mass-import catalog — no per-file metadata needed.</p>
+          <a class="nx-btn nx-btn--primary nx-btn--sm" href="../../tools/import.html">Open</a>
+        </div>
+      </article>
+    </div>
+  </main>
+</body>
+</html>

@@ -1,0 +1,244 @@
+/* ============================================================
+   NEXORA PORTFOLIO PLATFORM — DESIGN TOKENS
+   Single source of truth for all visual primitives.
+   Every other CSS file consumes these variables only —
+   never hardcode a raw color, size, or timing value elsewhere.
+   ============================================================ */
+
+:root {
+  /* ---------- COLOR — BRAND PRIMITIVES ---------- */
+  --nx-color-black: #0a0a0a;
+  --nx-color-black-soft: #121212;
+  --nx-color-dark-gray-900: #1a1a1a;
+  --nx-color-dark-gray-800: #232323;
+  --nx-color-dark-gray-700: #2e2e2e;
+  --nx-color-dark-gray-600: #3d3d3d;
+  --nx-color-gray-500: #6b6b6b;
+  --nx-color-gray-400: #9a9a9a;
+  --nx-color-gray-300: #c4c4c4;
+  --nx-color-gray-200: #e0e0e0;
+  --nx-color-white: #ffffff;
+  --nx-color-white-soft: #fafafa;
+
+  --nx-color-gold-900: #7a5c1e;
+  --nx-color-gold-700: #a8802e;
+  --nx-color-gold-500: #cda449;
+  --nx-color-gold-400: #d9b968;
+  --nx-color-gold-300: #e6cd8f;
+  --nx-color-gold-100: #f4e8c9;
+
+  /* ---------- COLOR — SEMANTIC (THEME-INDEPENDENT) ---------- */
+  --nx-color-success: #3d9a6a;
+  --nx-color-warning: #c98a2c;
+  --nx-color-danger: #b3453f;
+  --nx-color-info: #3d7a9a;
+
+  /* ---------- THEME TOKENS — DARK (default) ---------- */
+  --nx-bg-primary: var(--nx-color-black);
+  --nx-bg-secondary: var(--nx-color-black-soft);
+  --nx-bg-elevated: var(--nx-color-dark-gray-900);
+  --nx-bg-elevated-2: var(--nx-color-dark-gray-800);
+  --nx-border-subtle: var(--nx-color-dark-gray-700);
+  --nx-border-strong: var(--nx-color-dark-gray-600);
+  --nx-text-primary: var(--nx-color-white);
+  --nx-text-secondary: var(--nx-color-gray-300);
+  --nx-text-muted: var(--nx-color-gray-500);
+  --nx-accent-primary: var(--nx-color-gold-500);
+  --nx-accent-hover: var(--nx-color-gold-400);
+  --nx-accent-muted: var(--nx-color-gold-900);
+
+  /* ---------- TYPOGRAPHY ---------- */
+  --nx-font-display: "Neue Montreal", "Inter", -apple-system, sans-serif;
+  --nx-font-body: "Inter", -apple-system, sans-serif;
+  --nx-font-mono: "JetBrains Mono", "SF Mono", monospace;
+
+  --nx-fs-100: 0.75rem;   /* 12px — caption */
+  --nx-fs-200: 0.875rem;  /* 14px — small */
+  --nx-fs-300: 1rem;      /* 16px — body */
+  --nx-fs-400: 1.25rem;   /* 20px — body large */
+  --nx-fs-500: 1.75rem;   /* 28px — h4 */
+  --nx-fs-600: 2.5rem;    /* 40px — h3 */
+  --nx-fs-700: 3.5rem;    /* 56px — h2 */
+  --nx-fs-800: 5rem;      /* 80px — h1 */
+  --nx-fs-900: 7rem;      /* 112px — display */
+
+  --nx-fw-regular: 400;
+  --nx-fw-medium: 500;
+  --nx-fw-semibold: 600;
+  --nx-fw-bold: 700;
+
+  --nx-lh-tight: 1.1;
+  --nx-lh-snug: 1.3;
+  --nx-lh-normal: 1.5;
+  --nx-lh-relaxed: 1.7;
+
+  --nx-ls-tight: -0.02em;
+  --nx-ls-normal: 0;
+  --nx-ls-wide: 0.08em;
+
+  /* ---------- SPACING SCALE (4px base) ---------- */
+  --nx-space-0: 0;
+  --nx-space-1: 0.25rem;  /* 4px */
+  --nx-space-2: 0.5rem;   /* 8px */
+  --nx-space-3: 0.75rem;  /* 12px */
+  --nx-space-4: 1rem;     /* 16px */
+  --nx-space-5: 1.5rem;   /* 24px */
+  --nx-space-6: 2rem;     /* 32px */
+  --nx-space-7: 3rem;     /* 48px */
+  --nx-space-8: 4rem;     /* 64px */
+  --nx-space-9: 6rem;     /* 96px */
+  --nx-space-10: 8rem;    /* 128px */
+  --nx-space-11: 12rem;   /* 192px */
+
+  /* ---------- RADIUS SCALE ---------- */
+  --nx-radius-none: 0;
+  --nx-radius-sm: 4px;
+  --nx-radius-md: 8px;
+  --nx-radius-lg: 16px;
+  --nx-radius-xl: 24px;
+  --nx-radius-full: 999px;
+
+  /* ---------- SHADOW SCALE ---------- */
+  --nx-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --nx-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.45);
+  --nx-shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.5);
+  --nx-shadow-xl: 0 24px 64px rgba(0, 0, 0, 0.55);
+  --nx-shadow-gold-glow: 0 0 24px rgba(205, 164, 73, 0.25);
+
+  /* ---------- ELEVATION SCALE (Experience Layer) ----------
+     Layered shadows (ambient + direct light) for surfaces that
+     need to read as physically raised, not just "has a shadow." */
+  --nx-elevation-1: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 1px rgba(0, 0, 0, 0.2);
+  --nx-elevation-2: 0 2px 6px rgba(0, 0, 0, 0.35), 0 1px 2px rgba(0, 0, 0, 0.25);
+  --nx-elevation-3: 0 8px 20px rgba(0, 0, 0, 0.4), 0 2px 6px rgba(0, 0, 0, 0.3);
+  --nx-elevation-4: 0 20px 48px rgba(0, 0, 0, 0.48), 0 6px 16px rgba(0, 0, 0, 0.32);
+  --nx-elevation-5: 0 32px 80px rgba(0, 0, 0, 0.55), 0 12px 28px rgba(0, 0, 0, 0.35);
+
+  /* ---------- SHADOW ENGINE (named, semantic uses) ---------- */
+  --nx-shadow-ambient: 0 2px 12px rgba(0, 0, 0, 0.25);
+  --nx-shadow-floating: 0 16px 40px rgba(0, 0, 0, 0.4), 0 4px 10px rgba(0, 0, 0, 0.25);
+  --nx-shadow-luxury: 0 24px 64px rgba(0, 0, 0, 0.5), 0 2px 0 rgba(255, 255, 255, 0.03) inset;
+  --nx-shadow-glass: 0 8px 32px rgba(0, 0, 0, 0.35), 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+  --nx-shadow-golden: 0 12px 32px rgba(205, 164, 73, 0.16), 0 2px 8px rgba(0, 0, 0, 0.35);
+  --nx-shadow-inner-soft: inset 0 1px 2px rgba(0, 0, 0, 0.3);
+  --nx-shadow-soft-edge: 0 0 0 1px rgba(255, 255, 255, 0.04), 0 8px 24px rgba(0, 0, 0, 0.35);
+
+  /* ---------- GLOW SCALE ---------- */
+  --nx-glow-gold-sm: 0 0 12px rgba(205, 164, 73, 0.18);
+  --nx-glow-gold-md: 0 0 32px rgba(205, 164, 73, 0.28);
+  --nx-glow-gold-lg: 0 0 64px rgba(205, 164, 73, 0.32);
+  --nx-glow-white-sm: 0 0 16px rgba(255, 255, 255, 0.08);
+
+  /* ---------- GLASS SURFACE TOKENS ----------
+     For panels over moving/complex backgrounds (nav, overlays,
+     floating cards) rather than a flat --nx-bg-elevated. */
+  --nx-glass-bg: rgba(18, 18, 18, 0.62);
+  --nx-glass-bg-strong: rgba(10, 10, 10, 0.82);
+  --nx-glass-border: rgba(255, 255, 255, 0.08);
+  --nx-glass-blur: 20px;
+  --nx-glass-saturate: 160%;
+
+  /* ---------- GLASS ENGINE — levels (Experience Layer) ---------- */
+  --nx-glass-thin-bg: rgba(18, 18, 18, 0.35);
+  --nx-glass-thin-blur: 8px;
+  --nx-glass-medium-bg: rgba(18, 18, 18, 0.55);
+  --nx-glass-medium-blur: 16px;
+  --nx-glass-heavy-bg: rgba(14, 14, 14, 0.78);
+  --nx-glass-heavy-blur: 32px;
+  --nx-glass-black-bg: rgba(5, 5, 5, 0.88);
+  --nx-glass-gold-bg: rgba(60, 47, 20, 0.28);
+  --nx-glass-gold-border: rgba(205, 164, 73, 0.28);
+  --nx-glass-reflection: linear-gradient(180deg, rgba(255, 255, 255, 0.06) 0%, transparent 50%);
+  --nx-glass-micro-border: 1px solid rgba(255, 255, 255, 0.06);
+
+  /* ---------- GRADIENT MESH / ATMOSPHERE TOKENS ----------
+     Ambient background depth — never a flat black surface. */
+  --nx-mesh-gold: radial-gradient(ellipse 800px 600px at 20% -10%, rgba(205, 164, 73, 0.10), transparent 60%);
+  --nx-mesh-cool: radial-gradient(ellipse 700px 500px at 100% 20%, rgba(61, 122, 154, 0.07), transparent 55%);
+  --nx-mesh-warm: radial-gradient(ellipse 900px 700px at 50% 100%, rgba(179, 69, 63, 0.05), transparent 60%);
+  --nx-noise-overlay: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+
+  /* ---------- LIGHTING ENGINE ----------
+     Subtle ambient light sources — Apple-keynote quality, never
+     neon/game-like. Applied as background-image layers. */
+  --nx-light-top: radial-gradient(ellipse 1000px 400px at 50% 0%, rgba(255, 255, 255, 0.05), transparent 70%);
+  --nx-light-bottom: radial-gradient(ellipse 900px 400px at 50% 100%, rgba(205, 164, 73, 0.06), transparent 70%);
+  --nx-light-corner: radial-gradient(ellipse 700px 500px at 100% 0%, rgba(205, 164, 73, 0.08), transparent 65%);
+  --nx-light-halo: radial-gradient(circle 340px at 50% 40%, rgba(205, 164, 73, 0.14), transparent 70%);
+  --nx-light-radial: radial-gradient(circle 600px at var(--nx-light-x, 50%) var(--nx-light-y, 50%), rgba(255, 255, 255, 0.04), transparent 60%);
+  --nx-light-beam: linear-gradient(115deg, transparent 40%, rgba(255, 255, 255, 0.05) 50%, transparent 60%);
+  --nx-light-reflection: linear-gradient(180deg, rgba(255, 255, 255, 0.08) 0%, transparent 45%);
+
+  /* ---------- GOLD SYSTEM (metallic, never a flat/saturated yellow) ---------- */
+  --nx-gold-soft: linear-gradient(135deg, #cda449 0%, #e6cd8f 50%, #a8802e 100%);
+  --nx-gold-bright: #e0b95a;
+  --nx-gold-warm: #d9b968;
+  --nx-gold-glass: rgba(205, 164, 73, 0.14);
+  --nx-gold-glow: rgba(205, 164, 73, 0.35);
+  --nx-gold-border: rgba(205, 164, 73, 0.4);
+  --nx-gold-reflection: linear-gradient(180deg, rgba(255, 255, 255, 0.25) 0%, transparent 40%);
+  --nx-gold-interactive: var(--nx-gold-500);
+  --nx-gold-interactive-hover: var(--nx-gold-bright);
+
+  /* ---------- ANIMATION / TRANSITION TOKENS ---------- */
+  --nx-duration-fast: 120ms;
+  --nx-duration-base: 220ms;
+  --nx-duration-slow: 420ms;
+  --nx-duration-slower: 700ms;
+  --nx-duration-instant: 80ms;
+
+  --nx-ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
+  --nx-ease-out: cubic-bezier(0, 0, 0.2, 1);
+  --nx-ease-in: cubic-bezier(0.4, 0, 1, 1);
+  --nx-ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --nx-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --nx-ease-spring-soft: cubic-bezier(0.25, 1.2, 0.5, 1);
+
+  --nx-transition-base: all var(--nx-duration-base) var(--nx-ease-standard);
+
+  /* ---------- BREAKPOINT TOKENS (reference only — use in JS matchMedia) ---------- */
+  --nx-bp-sm: 480px;
+  --nx-bp-md: 768px;
+  --nx-bp-lg: 1024px;
+  --nx-bp-xl: 1440px;
+  --nx-bp-2xl: 1920px;
+
+  /* ---------- Z-INDEX TOKENS ---------- */
+  --nx-z-base: 0;
+  --nx-z-raised: 10;
+  --nx-z-sticky: 100;
+  --nx-z-overlay: 500;
+  --nx-z-modal: 1000;
+  --nx-z-toast: 1100;
+  --nx-z-tooltip: 1200;
+
+  /* ---------- LAYOUT ---------- */
+  --nx-container-max: 1440px;
+  --nx-gutter: var(--nx-space-6);
+}
+
+/* ---------- THEME TOKENS — LIGHT (opt-in via [data-theme="light"]) ---------- */
+[data-theme="light"] {
+  --nx-bg-primary: var(--nx-color-white);
+  --nx-bg-secondary: var(--nx-color-white-soft);
+  --nx-bg-elevated: var(--nx-color-gray-200);
+  --nx-bg-elevated-2: var(--nx-color-gray-200);
+  --nx-border-subtle: var(--nx-color-gray-200);
+  --nx-border-strong: var(--nx-color-gray-300);
+  --nx-text-primary: var(--nx-color-black);
+  --nx-text-secondary: var(--nx-color-dark-gray-700);
+  --nx-text-muted: var(--nx-color-gray-500);
+  --nx-accent-primary: var(--nx-color-gold-700);
+  --nx-accent-hover: var(--nx-color-gold-900);
+  --nx-accent-muted: var(--nx-color-gold-100);
+}
+
+/* ---------- REDUCED MOTION ---------- */
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --nx-duration-fast: 0ms;
+    --nx-duration-base: 0ms;
+    --nx-duration-slow: 0ms;
+    --nx-duration-slower: 0ms;
+  }
+}

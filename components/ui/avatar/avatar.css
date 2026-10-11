@@ -1,0 +1,51 @@
+/* ============================================================
+   NEXORA — Avatar
+   Sizes: sm, md, lg. Variants: image, initials. Optional
+   presence status dot.
+   ============================================================ */
+
+.nx-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  border-radius: var(--nx-radius-full);
+  object-fit: cover;
+  font-weight: var(--nx-fw-medium);
+  color: var(--nx-color-black);
+  background: var(--nx-accent-primary);
+  flex-shrink: 0;
+}
+
+.nx-avatar--sm { width: 28px; height: 28px; font-size: var(--nx-fs-100); }
+.nx-avatar--md { width: 40px; height: 40px; font-size: var(--nx-fs-200); }
+.nx-avatar--lg { width: 56px; height: 56px; font-size: var(--nx-fs-400); }
+
+.nx-avatar--initials {
+  text-transform: uppercase;
+  letter-spacing: var(--nx-ls-normal);
+}
+
+.nx-avatar__status {
+  position: absolute;
+  bottom: -1px;
+  right: -1px;
+  width: 10px;
+  height: 10px;
+  border-radius: var(--nx-radius-full);
+  border: 2px solid var(--nx-bg-primary);
+  background: var(--nx-color-gray-500);
+}
+
+.nx-avatar[data-status="online"] .nx-avatar__status { background: var(--nx-color-success); }
+.nx-avatar[data-status="away"] .nx-avatar__status { background: var(--nx-color-warning); }
+.nx-avatar[data-status="offline"] .nx-avatar__status { background: var(--nx-color-gray-500); }
+
+.nx-avatar-group {
+  display: flex;
+}
+.nx-avatar-group .nx-avatar {
+  margin-left: -8px;
+  border: 2px solid var(--nx-bg-primary);
+}
+.nx-avatar-group .nx-avatar:first-child { margin-left: 0; }

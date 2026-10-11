@@ -1,0 +1,68 @@
+/* ============================================================
+   NEXORA — LAYOUT PRIMITIVES
+   Structural building blocks. Components compose these
+   rather than each reinventing flex/grid rules.
+   ============================================================ */
+
+.nx-container {
+  width: 100%;
+  max-width: var(--nx-container-max);
+  margin-inline: auto;
+  padding-inline: var(--nx-gutter);
+}
+
+.nx-section {
+  padding-block: var(--nx-space-9);
+}
+
+.nx-stack {
+  display: flex;
+  flex-direction: column;
+}
+
+.nx-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+
+.nx-gap-1 { gap: var(--nx-space-1); }
+.nx-gap-2 { gap: var(--nx-space-2); }
+.nx-gap-3 { gap: var(--nx-space-3); }
+.nx-gap-4 { gap: var(--nx-space-4); }
+.nx-gap-5 { gap: var(--nx-space-5); }
+.nx-gap-6 { gap: var(--nx-space-6); }
+
+.nx-grid {
+  display: grid;
+  gap: var(--nx-space-5);
+}
+
+.nx-grid--2 { grid-template-columns: repeat(2, 1fr); }
+.nx-grid--3 { grid-template-columns: repeat(3, 1fr); }
+.nx-grid--4 { grid-template-columns: repeat(4, 1fr); }
+
+.nx-grid--auto {
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+@media (max-width: 1024px) {
+  .nx-grid--4 { grid-template-columns: repeat(2, 1fr); }
+  .nx-grid--3 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 768px) {
+  .nx-grid--2,
+  .nx-grid--3,
+  .nx-grid--4 {
+    grid-template-columns: 1fr;
+  }
+
+  .nx-container {
+    padding-inline: var(--nx-space-4);
+  }
+
+  .nx-section {
+    padding-block: var(--nx-space-7);
+  }
+}

@@ -1,0 +1,24 @@
+/* ============================================================
+   NEXORA — Section Header
+   Eyebrow + heading + description + optional trailing action,
+   used to introduce any major page section.
+   ============================================================ */
+
+.nx-section-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--nx-space-6);
+  margin-bottom: var(--nx-space-7);
+}
+
+.nx-section-header .nx-caption { margin-bottom: var(--nx-space-2); }
+.nx-section-header .nx-h2 { margin-bottom: var(--nx-space-3); }
+.nx-section-header .nx-body-lg { max-width: 560px; }
+
+@media (max-width: 768px) {
+  .nx-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

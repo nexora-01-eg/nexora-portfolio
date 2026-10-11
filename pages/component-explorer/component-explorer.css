@@ -1,0 +1,156 @@
+/* ============================================================
+   NEXORA — Component Explorer
+   Page-specific layout only. All visual primitives (cards,
+   tabs, drawer, sidebar, badges, buttons) are the actual
+   components being cataloged — reused here, not reimplemented.
+   ============================================================ */
+
+.nx-explorer-header {
+  position: sticky;
+  top: 0;
+  z-index: var(--nx-z-sticky);
+  background: var(--nx-bg-primary);
+  border-bottom: 1px solid var(--nx-border-subtle);
+}
+
+.nx-explorer-header__inner {
+  display: flex;
+  align-items: center;
+  gap: var(--nx-space-6);
+  height: 72px;
+}
+
+.nx-explorer-header__brand {
+  font-family: var(--nx-font-display);
+  font-weight: var(--nx-fw-bold);
+  font-size: var(--nx-fs-400);
+  color: var(--nx-text-primary);
+}
+
+.nx-explorer-header__title {
+  flex: 1;
+  color: var(--nx-text-secondary);
+  font-size: var(--nx-fs-200);
+}
+
+.nx-explorer-layout {
+  display: flex;
+  gap: var(--nx-space-8);
+  align-items: flex-start;
+  padding-block: var(--nx-space-7);
+}
+
+.nx-explorer-sidebar {
+  position: sticky;
+  top: 96px;
+}
+
+.nx-explorer-sidebar button.nx-sidebar__link {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border-left: 2px solid transparent;
+  cursor: pointer;
+}
+
+.nx-explorer-main {
+  flex: 1;
+  min-width: 0;
+}
+
+.nx-empty-state-inline {
+  text-align: center;
+  padding: var(--nx-space-9) 0;
+}
+
+/* Drawer content sizing */
+.nx-explorer-detail {
+  max-width: 640px;
+}
+
+.nx-explorer-detail__body {
+  padding: var(--nx-space-6);
+  height: calc(100% - 120px);
+  overflow-y: auto;
+}
+.nx-tabs__panel.nx-explorer-detail__body { padding-top: var(--nx-space-5); }
+.nx-tabs__list { padding-inline: var(--nx-space-6); }
+
+.nx-explorer-preview-frame {
+  width: 100%;
+  min-height: 320px;
+  height: 100%;
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+  background: var(--nx-bg-primary);
+}
+
+.nx-explorer-code {
+  font-family: var(--nx-font-mono);
+  font-size: var(--nx-fs-100);
+  line-height: var(--nx-lh-relaxed);
+  color: var(--nx-text-secondary);
+  background: var(--nx-bg-elevated-2);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+  padding: var(--nx-space-4);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.nx-explorer-docs h1,
+.nx-explorer-docs h2 {
+  font-family: var(--nx-font-display);
+  font-size: var(--nx-fs-400);
+  font-weight: var(--nx-fw-semibold);
+  margin-top: var(--nx-space-5);
+  margin-bottom: var(--nx-space-2);
+}
+.nx-explorer-docs h1:first-child,
+.nx-explorer-docs h2:first-child { margin-top: 0; }
+
+.nx-explorer-docs p {
+  font-size: var(--nx-fs-200);
+  color: var(--nx-text-secondary);
+  line-height: var(--nx-lh-relaxed);
+  margin-bottom: var(--nx-space-3);
+}
+
+.nx-explorer-docs ul {
+  list-style: disc;
+  padding-left: var(--nx-space-5);
+  margin-bottom: var(--nx-space-3);
+}
+.nx-explorer-docs li {
+  font-size: var(--nx-fs-200);
+  color: var(--nx-text-secondary);
+  margin-bottom: var(--nx-space-1);
+}
+
+.nx-explorer-docs code {
+  font-family: var(--nx-font-mono);
+  font-size: 0.85em;
+  background: var(--nx-bg-elevated-2);
+  padding: 2px 6px;
+  border-radius: var(--nx-radius-sm);
+  color: var(--nx-text-primary);
+}
+
+.nx-explorer-docs pre {
+  font-family: var(--nx-font-mono);
+  font-size: var(--nx-fs-100);
+  background: var(--nx-bg-elevated-2);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+  padding: var(--nx-space-4);
+  overflow-x: auto;
+  margin-bottom: var(--nx-space-3);
+}
+.nx-explorer-docs pre code { background: none; padding: 0; }
+
+.nx-explorer-docs strong { color: var(--nx-text-primary); }
+
+@media (max-width: 1024px) {
+  .nx-explorer-layout { flex-direction: column; }
+  .nx-explorer-sidebar { position: static; width: 100%; }
+}

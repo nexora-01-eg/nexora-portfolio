@@ -1,0 +1,82 @@
+/* ============================================================
+   NEXORA — Navbar
+   Sticky top navigation. Collapses to a hamburger menu on
+   narrow viewports.
+   ============================================================ */
+
+.nx-navbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--nx-z-sticky);
+  background: var(--nx-bg-primary);
+  border-bottom: 1px solid var(--nx-border-subtle);
+}
+
+.nx-navbar__inner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nx-space-6);
+  height: 72px;
+}
+
+.nx-navbar__brand {
+  font-family: var(--nx-font-display);
+  font-weight: var(--nx-fw-bold);
+  font-size: var(--nx-fs-400);
+  letter-spacing: var(--nx-ls-wide);
+  color: var(--nx-text-primary);
+}
+
+.nx-navbar__links {
+  display: flex;
+  gap: var(--nx-space-6);
+  flex: 1;
+}
+
+.nx-navbar__link {
+  font-size: var(--nx-fs-200);
+  color: var(--nx-text-secondary);
+  padding-block: var(--nx-space-2);
+  border-bottom: 2px solid transparent;
+  transition: var(--nx-transition-base);
+}
+.nx-navbar__link:hover { color: var(--nx-text-primary); }
+.nx-navbar__link--active,
+.nx-navbar__link[aria-current="page"] {
+  color: var(--nx-text-primary);
+  border-bottom-color: var(--nx-accent-primary);
+}
+
+.nx-navbar__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--nx-space-4);
+}
+
+.nx-navbar__menu-toggle {
+  display: none;
+  flex-direction: column;
+  gap: 4px;
+  width: 24px;
+}
+.nx-navbar__menu-toggle span {
+  height: 2px;
+  background: var(--nx-text-primary);
+  border-radius: var(--nx-radius-full);
+}
+
+.nx-navbar__mobile {
+  display: flex;
+  flex-direction: column;
+  padding: var(--nx-space-4) var(--nx-gutter);
+  border-top: 1px solid var(--nx-border-subtle);
+}
+.nx-navbar__mobile[hidden] { display: none; }
+.nx-navbar__mobile .nx-navbar__link { padding-block: var(--nx-space-3); border-bottom: none; }
+
+@media (max-width: 1024px) {
+  .nx-navbar__links,
+  .nx-navbar__actions .nx-search-box { display: none; }
+  .nx-navbar__menu-toggle { display: flex; }
+}

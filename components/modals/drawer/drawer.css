@@ -1,0 +1,74 @@
+/* ============================================================
+   NEXORA — Drawer (side panel)
+   Same dialog semantics as Modal, but slides in from an edge
+   instead of centering — used for filters, details, settings.
+   ============================================================ */
+
+.nx-drawer-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--nx-z-modal);
+  background: rgba(10, 10, 10, 0.7);
+  animation: nx-fade-in var(--nx-duration-base) var(--nx-ease-out) both;
+}
+.nx-drawer-overlay[hidden] { display: none; }
+
+.nx-drawer {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  max-width: 400px;
+  background: var(--nx-bg-elevated);
+  box-shadow: var(--nx-shadow-xl);
+  display: flex;
+  flex-direction: column;
+}
+
+.nx-drawer--right {
+  right: 0;
+  animation: nx-drawer-in-right var(--nx-duration-slow) var(--nx-ease-emphasized) both;
+}
+.nx-drawer--left {
+  left: 0;
+  animation: nx-drawer-in-left var(--nx-duration-slow) var(--nx-ease-emphasized) both;
+}
+
+@keyframes nx-drawer-in-right {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes nx-drawer-in-left {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+
+.nx-drawer__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--nx-space-4);
+  padding: var(--nx-space-5) var(--nx-space-6);
+  border-bottom: 1px solid var(--nx-border-subtle);
+}
+
+.nx-drawer__close {
+  color: var(--nx-text-muted);
+  font-size: var(--nx-fs-500);
+  line-height: 1;
+}
+.nx-drawer__close:hover { color: var(--nx-text-primary); }
+
+.nx-drawer__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--nx-space-6);
+}
+
+@media (max-width: 480px) {
+  .nx-drawer { max-width: 100%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-drawer-overlay, .nx-drawer { animation: none; }
+}

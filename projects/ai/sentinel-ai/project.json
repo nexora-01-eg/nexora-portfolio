@@ -1,0 +1,54 @@
+{
+  "id": "sentinel-ai",
+  "slug": "sentinel-ai",
+  "industry": "ai",
+  "designSystem": "ai",
+  "title": "Sentinel AI",
+  "tagline": "AI-powered support ticket triage agent.",
+  "description": "An AI agent that classifies, prioritizes, and routes incoming support tickets before a human ever sees them.",
+  "version": "0.9.0",
+  "status": "draft",
+  "tier": "enterprise",
+  "difficulty": "advanced",
+  "service": "AI Agents",
+  "tags": [
+    "ai",
+    "automation",
+    "support"
+  ],
+  "technologies": [
+    "Python",
+    "FastAPI",
+    "OpenAI"
+  ],
+  "componentsUsed": [
+    "badge",
+    "timeline",
+    "data-table"
+  ],
+  "features": [
+    "Automatic ticket classification",
+    "Priority scoring",
+    "Suggested response drafting"
+  ],
+  "timeline": [
+    {
+      "date": "2026-06-10",
+      "label": "Project started",
+      "description": "Classification model selected."
+    },
+    {
+      "date": "2026-07-09",
+      "label": "v0.9.0 released",
+      "description": "Beta triage accuracy testing."
+    }
+  ],
+  "relatedProjects": [
+    "flowbot-automation"
+  ],
+  "views": 167,
+  "featured": true,
+  "popular": false,
+  "createdAt": "2026-06-10",
+  "updatedAt": "2026-07-09"
+}

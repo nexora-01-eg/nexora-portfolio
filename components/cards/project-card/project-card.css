@@ -1,0 +1,38 @@
+/* ============================================================
+   NEXORA — Project Card
+   Thumbnail + metadata for the 500+ project library grid.
+   Extends .nx-card (flush + interactive variants).
+   ============================================================ */
+
+.nx-project-card__media {
+  position: relative;
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  background: var(--nx-bg-elevated-2);
+}
+.nx-project-card__media img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--nx-duration-slow) var(--nx-ease-out);
+}
+.nx-project-card--interactive:hover .nx-project-card__media img,
+.nx-card--interactive:hover .nx-project-card__media img {
+  transform: scale(1.05);
+}
+
+.nx-project-card__status {
+  position: absolute;
+  top: var(--nx-space-3);
+  left: var(--nx-space-3);
+}
+
+.nx-project-card__body {
+  padding: var(--nx-space-5);
+}
+.nx-project-card__body .nx-caption { margin-bottom: var(--nx-space-1); }
+.nx-project-card__body .nx-h4 { margin-bottom: var(--nx-space-2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .nx-card--interactive:hover .nx-project-card__media img { transform: none; }
+}

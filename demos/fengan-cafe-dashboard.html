@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فنجان — منصة إدارة الكافيه</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F7F1E8; --surface:#FFFFFF; --surface-2:#EFE4D3; --surface-3:#E6D6BC;
+  --ink:#2E2117; --ink-soft:#6B5A46; --ink-faint:#A5947C;
+  --line:#E9DDC6; --line-soft:#F2E9D9;
+  --coffee:#4A3222; --coffee-deep:#33210F; --coffee-pale:#EAE0D2;
+  --burnt:#C1622B; --burnt-deep:#9C4C1E; --burnt-pale:#F6E3D2;
+  --olive:#7C8B4A; --olive-pale:#EAEEDD;
+  --cream:#E7B65C; --cream-pale:#FBEFD4;
+  --success:#6E8A3E;
+  --shadow-sm: 0 1px 2px rgba(46,33,23,0.06);
+  --shadow-md: 0 8px 24px rgba(46,33,23,0.10);
+  --shadow-lg: 0 20px 50px rgba(46,33,23,0.22);
+  --radius-md:16px; --radius-lg:22px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ background:var(--paper); color:var(--ink); font-family:'Cairo', sans-serif; -webkit-font-smoothing:antialiased; overflow:hidden; }
+::selection{ background:var(--burnt); color:#fff; }
+::-webkit-scrollbar{ width:8px; height:8px; }
+::-webkit-scrollbar-thumb{ background:var(--surface-3); border-radius:8px; }
+.mono{ font-family:'IBM Plex Mono', monospace; direction:ltr; display:inline-block; }
+button{ font-family:inherit; cursor:pointer; }
+a{ color:inherit; text-decoration:none; }
+
+.shell{ display:grid; grid-template-columns:252px 1fr; height:100vh; }
+
+.sidebar{ background:var(--coffee-deep); border-left:1px solid rgba(255,255,255,.06); display:flex; flex-direction:column; padding:24px 16px; color:#F3EADC; position:relative; overflow:hidden;}
+.sidebar::before{ content:''; position:absolute; top:-70px; left:-60px; width:230px; height:230px; border-radius:50%; background:radial-gradient(circle, rgba(193,98,43,0.18), transparent 70%); }
+.brand{ display:flex; align-items:center; gap:11px; padding:6px 8px 26px; position:relative; z-index:1;}
+.brand-mark{ width:40px; height:40px; flex-shrink:0; }
+.brand-name{ font-weight:800; font-size:21px; letter-spacing:.5px; color:#fff; }
+.brand-sub{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:9px; letter-spacing:2px; color:var(--cream); text-transform:uppercase; margin-top:2px; }
+
+.nav-group-label{ font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:rgba(243,234,220,0.4); padding:16px 12px 7px; font-weight:700; position:relative; z-index:1;}
+.nav-item{ display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:12px; color:rgba(243,234,220,0.75); font-size:14.5px; font-weight:600; transition:all .18s ease; position:relative; z-index:1; margin-bottom:2px;}
+.nav-item svg{ width:18px; height:18px; flex-shrink:0; opacity:.85; }
+.nav-item:hover{ background:rgba(255,255,255,0.06); color:#fff; }
+.nav-item.active{ background:linear-gradient(90deg, rgba(193,98,43,0.28), rgba(193,98,43,0.05)); color:#fff; }
+.nav-item.active svg{ opacity:1; color:var(--burnt); }
+.sidebar-foot{ margin-top:auto; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); position:relative; z-index:1;}
+
+.header{ height:76px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 30px; background:var(--paper); flex-shrink:0;}
+.header-title h1{ font-weight:800; font-size:22px; }
+.header-title span{ font-size:12.5px; color:var(--ink-faint); font-weight:500; }
+.header-right{ display:flex; align-items:center; gap:14px; }
+.search-box{ display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:10px 15px; width:270px; }
+.search-box:focus-within{ border-color:var(--burnt); box-shadow:0 0 0 3px var(--burnt-pale); }
+.search-box svg{ width:16px; height:16px; color:var(--ink-faint); flex-shrink:0; }
+.search-box input{ border:none; outline:none; font-size:13.5px; width:100%; background:transparent; color:var(--ink); font-family:inherit; }
+.icon-btn{ width:40px; height:40px; border-radius:12px; border:1px solid var(--line); background:var(--surface); display:flex; align-items:center; justify-content:center; position:relative; transition:all .15s ease;}
+.icon-btn:hover{ background:var(--surface-2); }
+.icon-btn svg{ width:17px; height:17px; color:var(--ink-soft); }
+.dot-badge{ position:absolute; top:8px; left:9px; width:7px; height:7px; border-radius:50%; background:var(--burnt); border:1.5px solid var(--surface); }
+.profile-chip{ display:flex; align-items:center; gap:10px; padding:5px 12px 5px 5px; border-radius:15px; border:1px solid var(--line); background:var(--surface); }
+.avatar{ width:34px; height:34px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; color:#fff; flex-shrink:0;}
+.profile-chip .name{ font-size:13px; font-weight:700; }
+.profile-chip .role{ font-size:11px; color:var(--ink-faint); }
+
+.main{ display:flex; flex-direction:column; overflow:hidden; }
+.content{ flex:1; overflow-y:auto; padding:26px 30px 60px; }
+.view{ display:none; animation:fadeUp .4s cubic-bezier(.2,.7,.3,1); }
+.view.active{ display:block; }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+.section-title{ display:flex; align-items:center; gap:10px; margin:32px 0 16px; }
+.section-title h2{ font-weight:800; font-size:17.5px; }
+.section-title:first-child{ margin-top:0; }
+.count-pill{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:11px; background:var(--surface-2); color:var(--ink-soft); padding:3px 10px; border-radius:20px; }
+
+.grid{ display:grid; gap:16px; }
+.grid-4{ grid-template-columns:repeat(4,1fr); }
+.grid-3{ grid-template-columns:repeat(3,1fr); }
+.grid-2{ grid-template-columns:repeat(2,1fr); }
+
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:20px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden; transition:all .2s ease; }
+.card.hoverable:hover{ box-shadow:var(--shadow-md); transform:translateY(-2px); border-color:var(--burnt); }
+
+.kpi-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.kpi-icon{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; }
+.kpi-icon svg{ width:19px; height:19px; }
+.kpi-trend{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:20px; }
+.trend-up{ color:var(--success); background:var(--olive-pale); }
+.trend-down{ color:var(--burnt); background:var(--burnt-pale); }
+.kpi-value{ font-weight:800; font-size:28px; letter-spacing:-.5px; }
+.kpi-label{ font-size:12.5px; color:var(--ink-soft); margin-top:4px; font-weight:600;}
+
+.btn{ display:inline-flex; align-items:center; gap:7px; padding:11px 18px; border-radius:12px; font-size:13.5px; font-weight:700; border:1px solid transparent; transition:all .16s ease; }
+.btn svg{ width:15px; height:15px; }
+.btn-primary{ background:var(--coffee); color:#fff; }
+.btn-primary:hover{ background:var(--coffee-deep); box-shadow:var(--shadow-md); }
+.btn-burnt{ background:var(--burnt); color:#fff; }
+.btn-burnt:hover{ background:var(--burnt-deep); }
+.btn-ghost{ background:var(--surface); border-color:var(--line); color:var(--ink); }
+.btn-ghost:hover{ background:var(--surface-2); }
+
+.tabs{ display:flex; gap:4px; background:var(--surface-2); padding:4px; border-radius:13px; width:fit-content; }
+.tab{ padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700; color:var(--ink-soft); border:none; background:transparent; transition:all .15s ease; }
+.tab.active{ background:var(--surface); color:var(--coffee); box-shadow:var(--shadow-sm); }
+
+.table-wrap{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); }
+table{ width:100%; border-collapse:collapse; }
+thead th{ text-align:right; font-size:11.5px; letter-spacing:.3px; color:var(--ink-faint); font-weight:700; padding:14px 18px; border-bottom:1px solid var(--line); background:var(--surface-2); }
+tbody td{ padding:14px 18px; font-size:13.5px; border-bottom:1px solid var(--line-soft); font-weight:500;}
+tbody tr{ transition:background .15s ease; cursor:pointer; }
+tbody tr:hover{ background:var(--surface-2); }
+tbody tr:last-child td{ border-bottom:none; }
+
+.chip{ display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:20px; font-size:11.5px; font-weight:700; }
+.chip::before{ content:''; width:6px; height:6px; border-radius:50%; }
+.chip-ok{ background:var(--olive-pale); color:var(--olive); } .chip-ok::before{ background:var(--olive); }
+.chip-warn{ background:var(--cream-pale); color:#8A6410; } .chip-warn::before{ background:var(--cream); }
+.chip-danger{ background:var(--burnt-pale); color:var(--burnt); } .chip-danger::before{ background:var(--burnt); }
+.chip-coffee{ background:var(--coffee-pale); color:var(--coffee); } .chip-coffee::before{ background:var(--coffee); }
+
+.pat-cell{ display:flex; align-items:center; gap:10px; }
+.pat-cell .avatar{ width:32px; height:32px; font-size:11.5px; border-radius:10px;}
+.pat-name{ font-weight:700; font-size:13.5px; }
+.pat-sub{ font-size:11.5px; color:var(--ink-faint); }
+
+.pbar{ width:100%; height:7px; background:var(--surface-2); border-radius:20px; overflow:hidden; }
+.pbar-fill{ height:100%; border-radius:20px; background:linear-gradient(90deg, var(--coffee), var(--burnt)); transition:width 1s cubic-bezier(.2,.8,.3,1); }
+
+.timeline{ position:relative; padding-right:22px; }
+.timeline::before{ content:''; position:absolute; right:5px; top:4px; bottom:4px; width:2px; background:var(--line); }
+.t-item{ position:relative; padding-bottom:20px; }
+.t-item:last-child{ padding-bottom:0; }
+.t-dot{ position:absolute; right:-22px; top:2px; width:12px; height:12px; border-radius:50%; background:var(--surface); border:2.5px solid var(--burnt); }
+.t-dot.muted{ border-color:var(--ink-faint); }
+.t-time{ font-family:'IBM Plex Mono', monospace; direction:ltr; text-align:right; font-size:10.5px; color:var(--ink-faint); }
+.t-text{ font-size:13px; margin-top:2px; }
+.t-text b{ font-weight:800; }
+
+.qa-btn{ display:flex; flex-direction:column; gap:11px; align-items:flex-start; padding:17px; border-radius:15px; border:1px solid var(--line); background:var(--surface); transition:all .18s ease; }
+.qa-btn:hover{ border-color:var(--burnt); box-shadow:var(--shadow-md); transform:translateY(-2px); }
+.qa-icon{ width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center; }
+.qa-icon svg{ width:17px; height:17px; }
+.qa-label{ font-size:12.5px; font-weight:800; }
+
+.empty-state{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:54px 20px; color:var(--ink-faint); }
+.empty-state svg{ width:46px; height:46px; margin-bottom:14px; opacity:.5; }
+.empty-state h3{ font-size:15px; color:var(--ink); margin-bottom:4px; font-weight:800; }
+.empty-state p{ font-size:12.5px; max-width:280px; }
+
+.overlay{ position:fixed; inset:0; background:rgba(46,33,23,0.5); backdrop-filter:blur(2px); z-index:100; opacity:0; pointer-events:none; transition:opacity .22s ease; }
+.overlay.active{ opacity:1; pointer-events:all; }
+.drawer{ position:fixed; top:0; left:-440px; width:440px; max-width:92vw; height:100%; background:var(--surface); box-shadow:var(--shadow-lg); z-index:101; transition:left .3s cubic-bezier(.2,.8,.3,1); padding:26px; overflow-y:auto; }
+.drawer.active{ left:0; }
+.modal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+.modal-head h3{ font-weight:800; font-size:19px; }
+.close-x{ width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:var(--surface-2); flex-shrink:0; }
+.close-x svg{ width:15px; height:15px; }
+
+.field-label{ font-size:12.5px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; display:block; }
+.field-input{ width:100%; padding:11px 14px; border-radius:11px; border:1px solid var(--line); font-size:13.5px; font-family:inherit; background:var(--paper); outline:none; }
+.field-input:focus{ border-color:var(--burnt); }
+.field-row{ margin-bottom:14px; }
+
+.settings-row{ display:flex; align-items:center; justify-content:space-between; padding:15px 0; border-bottom:1px solid var(--line-soft); }
+.settings-row:last-child{ border-bottom:none; }
+.settings-row .lab{ font-size:13.5px; font-weight:700; }
+.settings-row .sub{ font-size:11.5px; color:var(--ink-faint); margin-top:2px; }
+.switch{ width:42px; height:24px; border-radius:20px; background:var(--surface-2); position:relative; border:1px solid var(--line); transition:background .2s ease; flex-shrink:0; }
+.switch.on{ background:var(--coffee); border-color:var(--coffee); }
+.switch::after{ content:''; position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%; background:#fff; transition:right .2s ease; }
+.switch.on::after{ right:20px; }
+
+.toast-wrap{ position:fixed; bottom:24px; left:24px; z-index:200; display:flex; flex-direction:column; gap:10px; }
+.toast{ display:flex; align-items:center; gap:10px; background:var(--coffee-deep); color:#fff; padding:14px 19px; border-radius:14px; box-shadow:var(--shadow-lg); font-size:13px; font-weight:600; transform:translateY(12px); opacity:0; transition:all .3s cubic-bezier(.2,.8,.3,1); }
+.toast.show{ transform:translateY(0); opacity:1; }
+.toast svg{ width:16px; height:16px; color:var(--cream); flex-shrink:0; }
+
+/* Table layout (floor plan) */
+.floor-grid{ display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+.table-tile{ aspect-ratio:1; border-radius:16px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px; border:2px solid var(--line); background:var(--surface); transition:all .16s ease; cursor:pointer;}
+.table-tile.occupied{ background:var(--burnt-pale); border-color:var(--burnt); }
+.table-tile.reserved{ background:var(--cream-pale); border-color:var(--cream); }
+.table-tile.free{ background:var(--olive-pale); border-color:var(--olive); }
+.table-tile:hover{ transform:translateY(-3px); box-shadow:var(--shadow-md); }
+.table-tile .tnum{ font-weight:800; font-size:15px; }
+.table-tile .tstat{ font-size:10px; font-weight:700; }
+
+/* Menu item */
+.menu-icon{ width:44px; height:44px; border-radius:14px; display:flex; align-items:center; justify-content:center; flex-shrink:0;}
+
+@media (max-width:1100px){ .grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} .floor-grid{grid-template-columns:repeat(3,1fr);} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 44 44" fill="none">
+        <circle cx="22" cy="22" r="20" fill="rgba(193,98,43,0.14)"/>
+        <path d="M12 18h16v9a8 8 0 0 1-16 0v-9z" stroke="#C1622B" stroke-width="2.2" fill="none" stroke-linejoin="round"/>
+        <path d="M28 20h3a3 3 0 0 1 0 6h-3" stroke="#C1622B" stroke-width="2.2" fill="none"/>
+        <path d="M16 13c1-2 0-3-1-4M21 13c1-2 0-3-1-4" stroke="#E7B65C" stroke-width="1.8" stroke-linecap="round"/>
+      </svg>
+      <div><div class="brand-name">فنجان</div><div class="brand-sub">CAFE OS</div></div>
+    </div>
+
+    <div class="nav-group-label">نظرة عامة</div>
+    <div class="nav-item active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+      لوحة التحكم
+    </div>
+
+    <div class="nav-group-label">التشغيل</div>
+    <div class="nav-item" data-view="orders">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6l3 3v14H6V4z"/><path d="M9 10h6M9 14h4"/></svg>
+      الطلبات
+    </div>
+    <div class="nav-item" data-view="tables">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="3" width="8" height="8" rx="2"/><rect x="3" y="13" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>
+      الطاولات
+    </div>
+    <div class="nav-item" data-view="menu">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14l-3-2-3 2-3-2-3 2-3-2z"/></svg>
+      المنيو
+    </div>
+    <div class="nav-item" data-view="staff">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3v5a3 3 0 0 0 6 0V3"/><path d="M12 13v3a5 5 0 0 0 10 0v-2"/><circle cx="4" cy="17" r="3"/></svg>
+      الموظفين
+    </div>
+
+    <div class="nav-group-label">الإدارة</div>
+    <div class="nav-item" data-view="reports">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+      التقارير
+    </div>
+    <div class="nav-item" data-view="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2.1-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2.1 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2.1 1.2L10 21h4l.5-2.6a7 7 0 0 0 2.1-1.2l2.3.9 2-3.4-2-1.5c.067-.396.1-.797.1-1.2z"/></svg>
+      الإعدادات
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="nav-item" style="color:rgba(243,234,220,0.5);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+        تسجيل الخروج
+      </div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="header-title" id="headerTitle">
+        <h1>صباح الخير يا شيف مينا ☕</h1>
+        <span>الثلاثاء، ١٤ يوليو · فرع وسط البلد</span>
+      </div>
+      <div class="header-right">
+        <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input type="text" placeholder="دوّر على طلب، صنف، أو طاولة…" oninput="handleSearch(this.value)"></div>
+        <button class="icon-btn" onclick="toggleNotif()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot-badge"></span></button>
+        <div class="profile-chip"><div class="avatar" style="background:linear-gradient(135deg,#4A3222,#C1622B);">مج</div><div><div class="name">مينا جرجس</div><div class="role">مدير الفرع</div></div></div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <section class="view active" id="view-dashboard">
+        <div class="grid grid-4" id="kpiGrid"></div>
+
+        <div class="section-title"><h2>المبيعات اليومية</h2></div>
+        <div class="grid" style="grid-template-columns:1.6fr 1fr;">
+          <div class="card">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700;">إجمالي المبيعات</div><div style="font-size:22px; font-weight:800; margin-top:2px;">١٨,٩٠٠ ج.م <span class="mono" style="font-size:12px; color:var(--success); font-weight:600;">+٧٪</span></div></div>
+              <div class="tabs"><button class="tab active">أسبوع</button><button class="tab">شهر</button></div>
+            </div>
+            <div id="salesChart" style="margin-top:14px;"></div>
+          </div>
+          <div class="card">
+            <div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:14px;">أكثر الأصناف مبيعًا</div>
+            <div id="topItems"></div>
+          </div>
+        </div>
+
+        <div class="section-title"><h2>حالة الطاولات الآن</h2></div>
+        <div class="floor-grid" id="dashFloor"></div>
+
+        <div class="section-title"><h2>متابعات</h2></div>
+        <div class="grid" style="grid-template-columns:1.4fr 1fr;">
+          <div class="card"><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:12px;">طلبات قيد التحضير</div><div id="prepOrders"></div></div>
+          <div class="card"><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:12px;">آخر الحركات</div><div class="timeline" id="activityTimeline"></div></div>
+        </div>
+
+        <div class="section-title"><h2>إجراءات سريعة</h2></div>
+        <div class="grid grid-4">
+          <button class="qa-btn" onclick="switchView('orders'); showToast('تم فتح طلب جديد')"><div class="qa-icon" style="background:var(--coffee-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#4A3222" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div><span class="qa-label">طلب جديد</span></button>
+          <button class="qa-btn" onclick="switchView('tables'); showToast('تم فتح شاشة الطاولات')"><div class="qa-icon" style="background:var(--olive-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#7C8B4A" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg></div><span class="qa-label">إدارة الطاولات</span></button>
+          <button class="qa-btn" onclick="switchView('menu'); showToast('تمت إضافة صنف جديد')"><div class="qa-icon" style="background:var(--cream-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#8A6410" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg></div><span class="qa-label">إضافة صنف</span></button>
+          <button class="qa-btn" onclick="switchView('reports')"><div class="qa-icon" style="background:var(--burnt-pale);"><svg viewBox="0 0 24 24" fill="none" stroke="#C1622B" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg></div><span class="qa-label">عرض التقارير</span></button>
+        </div>
+      </section>
+
+      <section class="view" id="view-orders">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+          <div class="tabs" id="orderFilterTabs"><button class="tab active" data-filter="all">الكل</button><button class="tab" data-filter="prep">قيد التحضير</button><button class="tab" data-filter="ready">جاهز</button><button class="tab" data-filter="done">تم التسليم</button></div>
+          <button class="btn btn-primary" onclick="showToast('تم إنشاء طلب جديد')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>طلب جديد</button>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>رقم الطلب</th><th>الطاولة</th><th>الأصناف</th><th>القيمة</th><th>الحالة</th></tr></thead><tbody id="ordersTableBody"></tbody></table></div>
+      </section>
+
+      <section class="view" id="view-tables">
+        <div class="floor-grid" id="fullFloor"></div>
+      </section>
+
+      <section class="view" id="view-menu">
+        <div class="grid grid-3" id="menuGrid"></div>
+      </section>
+
+      <section class="view" id="view-staff">
+        <div class="table-wrap"><table><thead><tr><th>الموظف</th><th>الوظيفة</th><th>الشِفت</th><th>الأداء</th></tr></thead><tbody id="staffTableBody"></tbody></table></div>
+      </section>
+
+      <section class="view" id="view-reports">
+        <div class="grid grid-2">
+          <div class="card"><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:6px;">نمو المبيعات الشهري</div><div id="growthChart"></div></div>
+          <div class="card"><div style="font-size:12.5px; color:var(--ink-soft); font-weight:700; margin-bottom:6px;">توزيع المبيعات حسب الفئة</div><div id="donutChart" style="display:flex; align-items:center; gap:22px;"></div></div>
+        </div>
+        <div class="section-title"><h2>أداء عام</h2></div>
+        <div class="grid grid-4" id="perfGrid"></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="grid grid-2">
+          <div class="card"><div style="font-weight:800; font-size:16px; margin-bottom:12px;">بيانات الكافيه</div>
+            <div class="field-row"><label class="field-label">اسم الكافيه</label><input class="field-input" value="فنجان — فرع وسط البلد"></div>
+            <div class="field-row"><label class="field-label">العنوان</label><input class="field-input" value="شارع شريف، وسط البلد، القاهرة"></div>
+            <button class="btn btn-primary" onclick="showToast('تم حفظ البيانات')">حفظ التعديلات</button>
+          </div>
+          <div class="card"><div style="font-weight:800; font-size:16px; margin-bottom:6px;">التفضيلات</div>
+            <div class="settings-row"><div><div class="lab">طباعة إيصال تلقائي</div><div class="sub">طباعة الفاتورة فور إتمام الطلب</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="settings-row"><div><div class="lab">تنبيه نقص المخزون</div><div class="sub">إشعار عند وصول أي صنف للحد الأدنى</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="settings-row"><div><div class="lab">طلبات أونلاين</div><div class="sub">استقبال طلبات توصيل من التطبيق</div></div><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="overlay" id="notifOverlay" onclick="toggleNotif()"></div>
+<div class="drawer" id="notifDrawer">
+  <div class="modal-head"><h3>الإشعارات</h3><div class="close-x" onclick="toggleNotif()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div></div>
+  <div class="timeline" id="notifList"></div>
+</div>
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+function avatar(name,color){ const initials=name.split(' ').slice(0,2).map(w=>w[0]).join(''); return `<div class="avatar" style="background:${color||'linear-gradient(135deg,#4A3222,#C1622B)'}">${initials}</div>`; }
+
+const tablesData = [
+  {n:1,status:'occupied'},{n:2,status:'free'},{n:3,status:'reserved'},{n:4,status:'occupied'},
+  {n:5,status:'free'},{n:6,status:'occupied'},{n:7,status:'free'},{n:8,status:'reserved'},
+  {n:9,status:'occupied'},{n:10,status:'free'},{n:11,status:'free'},{n:12,status:'occupied'},
+];
+const tableStatusLabel={occupied:'مشغولة',reserved:'محجوزة',free:'متاحة'};
+
+const orders = [
+  {no:'#3312', table:'طاولة ٤', items:'٢ كابتشينو، ١ كرواسون', total:'١٤٠ ج.م', status:'prep'},
+  {no:'#3313', table:'طاولة ١', items:'١ أمريكانو، ١ تشيز كيك', total:'٩٥ ج.م', status:'ready'},
+  {no:'#3314', table:'طاولة ٩', items:'٣ لاتيه، ٢ ساندوتش', total:'٢٦٠ ج.م', status:'prep'},
+  {no:'#3315', table:'تيك أواي', items:'١ فلات وايت', total:'٥٥ ج.م', status:'done'},
+  {no:'#3316', table:'طاولة ٦', items:'٢ ماتشا، ١ براوني', total:'١٨٠ ج.م', status:'ready'},
+  {no:'#3317', table:'طاولة ١٢', items:'١ اسبريسو، ١ كنافة', total:'٩٠ ج.م', status:'done'},
+];
+const orderChip={prep:'<span class="chip chip-warn">قيد التحضير</span>', ready:'<span class="chip chip-danger">جاهز</span>', done:'<span class="chip chip-ok">تم التسليم</span>'};
+
+const menu = [
+  {name:'كابتشينو', cat:'مشروبات ساخنة', price:'٦٥ ج.م', color:'var(--coffee-pale)', ic:'#4A3222'},
+  {name:'آيس لاتيه', cat:'مشروبات باردة', price:'٧٥ ج.م', color:'var(--burnt-pale)', ic:'#C1622B'},
+  {name:'تشيز كيك', cat:'حلويات', price:'٨٥ ج.م', color:'var(--cream-pale)', ic:'#8A6410'},
+  {name:'كرواسون زبدة', cat:'مخبوزات', price:'٤٥ ج.م', color:'var(--olive-pale)', ic:'#7C8B4A'},
+  {name:'ساندوتش حلومي', cat:'مأكولات', price:'١١٠ ج.م', color:'var(--coffee-pale)', ic:'#4A3222'},
+  {name:'ماتشا لاتيه', cat:'مشروبات ساخنة', price:'٨٠ ج.م', color:'var(--burnt-pale)', ic:'#C1622B'},
+];
+
+const staff = [
+  {name:'مينا جرجس', role:'مدير الفرع', shift:'صباحي', perf:96},
+  {name:'يوستينا عادل', role:'باريستا', shift:'صباحي', perf:91},
+  {name:'كيرلس سمير', role:'باريستا', shift:'مسائي', perf:88},
+  {name:'مريم فايز', role:'كاشير', shift:'مسائي', perf:94},
+];
+
+document.querySelectorAll('.nav-item[data-view]').forEach(item=> item.addEventListener('click', ()=> switchView(item.dataset.view)));
+const headerCopy = {
+  dashboard:['صباح الخير يا شيف مينا ☕','الثلاثاء، ١٤ يوليو · فرع وسط البلد'],
+  orders:['الطلبات','٦ طلبات نشطة الآن'],
+  tables:['الطاولات','١٢ طاولة — ٥ متاحة'],
+  menu:['المنيو','٣٢ صنف على المنيو'],
+  staff:['الموظفين','٤ موظفين في الشِفت'],
+  reports:['التقارير','أداء الفرع خلال آخر ٦ أشهر'],
+  settings:['الإعدادات','بيانات الكافيه والتفضيلات'],
+};
+function switchView(id){
+  document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  const [h,s]=headerCopy[id]; document.getElementById('headerTitle').innerHTML=`<h1>${h}</h1><span>${s}</span>`;
+}
+
+function renderKPIs(){
+  const kpis=[
+    {label:'مبيعات اليوم', value:18900, suffix:' ج.م', trend:'+٧٪', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#4A3222" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>`, bg:'var(--coffee-pale)'},
+    {label:'طلبات نشطة', value:6, trend:'+٢', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#C1622B" stroke-width="2"><path d="M9 3h6l3 3v14H6V4z"/></svg>`, bg:'var(--burnt-pale)'},
+    {label:'طاولات مشغولة', value:5, suffix:'/12', trend:'ثابت', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#7C8B4A" stroke-width="2"><rect x="3" y="3" width="8" height="8" rx="2"/><rect x="13" y="13" width="8" height="8" rx="2"/></svg>`, bg:'var(--olive-pale)'},
+    {label:'متوسط وقت التحضير', value:6, suffix:' د', trend:'-١ د', up:true, icon:`<svg viewBox="0 0 24 24" fill="none" stroke="#8A6410" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.5 2"/></svg>`, bg:'var(--cream-pale)'},
+  ];
+  document.getElementById('kpiGrid').innerHTML = kpis.map(k=>`<div class="card hoverable"><div class="kpi-top"><div class="kpi-icon" style="background:${k.bg}">${k.icon}</div><div class="kpi-trend ${k.up?'trend-up':'trend-down'}">${k.trend}</div></div><div class="kpi-value" data-count="${k.value}" data-suffix="${k.suffix||''}">0${k.suffix||''}</div><div class="kpi-label">${k.label}</div></div>`).join('');
+  animateCounters();
+}
+function animateCounters(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target=parseFloat(el.dataset.count); const suffix=el.dataset.suffix||''; const start=performance.now(); const dur=900;
+    function tick(now){ const p=Math.min(1,(now-start)/dur); const eased=1-Math.pow(1-p,3); el.textContent=Math.round(target*eased).toLocaleString('en-US')+suffix; if(p<1) requestAnimationFrame(tick); }
+    requestAnimationFrame(tick);
+  });
+}
+function renderSalesChart(){
+  const data=[2400,2900,2100,3400,3800,2600,3700];
+  const w=460,h=150,pad=10; const max=Math.max(...data)*1.15;
+  const pts=data.map((v,i)=>{ const x=pad+i*((w-2*pad)/(data.length-1)); const y=h-pad-(v/max)*(h-2*pad); return [x,y]; });
+  const line=pts.map((p,i)=>(i===0?'M':'L')+p[0]+','+p[1]).join(' ');
+  const area=line+` L${pts[pts.length-1][0]},${h-pad} L${pts[0][0]},${h-pad} Z`;
+  const days=['سبت','أحد','إثن','ثلا','أرب','خمي','جمعة'];
+  const dots=pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#C1622B" stroke="#fff" stroke-width="1.5"/>`).join('');
+  const labels=pts.map((p,i)=>`<text x="${p[0]}" y="${h+14}" font-size="10" fill="var(--ink-faint)" text-anchor="middle">${days[i]}</text>`).join('');
+  document.getElementById('salesChart').innerHTML = `<svg viewBox="0 0 ${w} ${h+24}" width="100%" height="200"><defs><linearGradient id="scg" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#C1622B" stop-opacity="0.3"/><stop offset="100%" stop-color="#C1622B" stop-opacity="0"/></linearGradient></defs><path d="${area}" fill="url(#scg)"/><path d="${line}" fill="none" stroke="#4A3222" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${dots}${labels}</svg>`;
+}
+function renderTopItems(){
+  const data=[{n:'كابتشينو',pct:84},{n:'آيس لاتيه',pct:71},{n:'تشيز كيك',pct:58}];
+  document.getElementById('topItems').innerHTML = data.map((d,i)=>`<div style="margin-bottom:${i<2?'14px':'0'};"><div style="display:flex; justify-content:space-between; font-size:12.5px; margin-bottom:6px;"><span style="font-weight:700;">${d.n}</span><span class="mono" style="color:var(--ink-faint);">${d.pct}%</span></div><div class="pbar"><div class="pbar-fill" style="width:0%" data-w="${d.pct}"></div></div></div>`).join('');
+  setTimeout(()=> document.querySelectorAll('#topItems .pbar-fill').forEach(el=>el.style.width=el.dataset.w+'%'),100);
+}
+function tileHTML(t){ return `<div class="table-tile ${t.status}"><div class="tnum">${t.n}</div><div class="tstat">${tableStatusLabel[t.status]}</div></div>`; }
+function renderDashFloor(){ document.getElementById('dashFloor').innerHTML = tablesData.slice(0,8).map(tileHTML).join(''); }
+function renderFullFloor(){ document.getElementById('fullFloor').innerHTML = tablesData.map(tileHTML).join(''); }
+function renderPrepOrders(){
+  const rows = orders.filter(o=>o.status==='prep');
+  document.getElementById('prepOrders').innerHTML = rows.map(o=>`<div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--line-soft);"><div style="flex:1;"><div class="pat-name">${o.no} — ${o.table}</div><div class="pat-sub">${o.items}</div></div>${orderChip[o.status]}</div>`).join('');
+}
+function renderActivityTimeline(){
+  const items=[{time:'٩:١٠ ص', text:'طلب جديد <b>#٣٣١٧</b> على طاولة ١٢'},{time:'٩:٤٥ ص', text:'تم تسليم طلب <b>#٣٣١٥</b> — تيك أواي'},{time:'١٠:٢٠ ص', text:'طاولة ٣ تم حجزها للساعة ١'},{time:'١١:٠٠ ص', text:'<b>يوستينا</b> بدأت شِفت الصباح'}];
+  document.getElementById('activityTimeline').innerHTML = items.map((it,i)=>`<div class="t-item"><div class="t-dot ${i>1?'muted':''}"></div><div class="t-time">${it.time}</div><div class="t-text">${it.text}</div></div>`).join('');
+}
+
+function renderOrders(filter='all'){
+  const rows = orders.filter(o=> filter==='all'||o.status===filter);
+  document.getElementById('ordersTableBody').innerHTML = rows.length ? rows.map(o=>`<tr><td class="mono">${o.no}</td><td>${o.table}</td><td>${o.items}</td><td class="mono">${o.total}</td><td>${orderChip[o.status]}</td></tr>`).join('') : `<tr><td colspan="5"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></svg><h3>لا توجد طلبات مطابقة</h3><p>جرّب فلتر مختلف.</p></div></td></tr>`;
+}
+document.querySelectorAll('#orderFilterTabs .tab').forEach(t=> t.addEventListener('click', ()=>{ document.querySelectorAll('#orderFilterTabs .tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderOrders(t.dataset.filter); }));
+
+function renderMenu(){
+  document.getElementById('menuGrid').innerHTML = menu.map(m=>`<div class="card hoverable"><div style="display:flex; align-items:center; gap:12px;"><div class="menu-icon" style="background:${m.color}"><svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="${m.ic}" stroke-width="2"><path d="M4 19V5a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v14l-3-2-3 2-3-2-3 2-3-2z"/></svg></div><div><div class="pat-name">${m.name}</div><div class="pat-sub">${m.cat}</div></div></div><div class="mono" style="font-weight:800; font-size:15px; margin-top:14px; color:var(--coffee);">${m.price}</div></div>`).join('');
+}
+function renderStaff(){
+  document.getElementById('staffTableBody').innerHTML = staff.map(s=>`<tr><td><div class="pat-cell">${avatar(s.name)}<span class="pat-name">${s.name}</span></div></td><td>${s.role}</td><td>${s.shift}</td><td><div style="display:flex; align-items:center; gap:8px;"><div class="pbar" style="width:70px;"><div class="pbar-fill" style="width:${s.perf}%"></div></div><span class="mono" style="font-size:11.5px;">${s.perf}%</span></div></td></tr>`).join('');
+}
+
+function renderGrowthChart(){
+  const data=[14.2,15.8,16.1,17.4,17.9,18.9];
+  const w=380,h=140,pad=10; const max=Math.max(...data)*1.1; const barW=(w-2*pad)/data.length-8;
+  const bars=data.map((v,i)=>{ const x=pad+i*((w-2*pad)/data.length); const bh=(v/max)*(h-2*pad); const y=h-pad-bh; return `<rect x="${x}" y="${y}" width="${barW}" height="${bh}" rx="6" fill="${i===data.length-1?'#4A3222':'#E9DDC6'}"/>`; }).join('');
+  const months=['فبر','مار','أبر','ماي','يون','يول'];
+  const labels=data.map((v,i)=>{ const x=pad+i*((w-2*pad)/data.length)+barW/2; return `<text x="${x}" y="${h+13}" font-size="10" fill="var(--ink-faint)" text-anchor="middle">${months[i]}</text>`; }).join('');
+  document.getElementById('growthChart').innerHTML = `<svg viewBox="0 0 ${w} ${h+22}" width="100%" height="180">${bars}${labels}</svg><div style="font-weight:800; font-size:20px; margin-top:6px;">١٨,٩٠٠ ج.م <span class="mono" style="font-size:12px; color:var(--success); font-weight:600;">+٥.٦٪ عن الشهر السابق</span></div>`;
+}
+function renderDonutChart(){
+  const data=[{l:'مشروبات ساخنة',v:36,c:'#4A3222'},{l:'مشروبات باردة',v:24,c:'#C1622B'},{l:'حلويات',v:18,c:'#E7B65C'},{l:'مخبوزات',v:14,c:'#7C8B4A'},{l:'مأكولات',v:8,c:'#9C4C1E'}];
+  const total=data.reduce((s,d)=>s+d.v,0); let acc=0; const r=52,cx=60,cy=60,circ=2*Math.PI*r;
+  const arcs=data.map(d=>{ const frac=d.v/total; const dash=frac*circ; const el=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${d.c}" stroke-width="16" stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="${-acc}" transform="rotate(-90 ${cx} ${cy})"/>`; acc+=dash; return el; }).join('');
+  document.getElementById('donutChart').innerHTML = `<svg viewBox="0 0 120 120" width="150" height="150">${arcs}</svg><div style="display:flex; flex-direction:column; gap:9px;">${data.map(d=>`<div style="display:flex; align-items:center; gap:6px; font-size:11.5px; color:var(--ink-soft);"><span style="width:8px;height:8px;border-radius:50%;background:${d.c}"></span>${d.l} <span class="mono" style="color:var(--ink-faint);">${d.v}%</span></div>`).join('')}</div>`;
+}
+function renderPerf(){
+  const data=[{l:'متوسط الفاتورة',v:'١٢٥ ج.م',t:'+٤٪',up:true},{l:'معدل دوران الطاولة',v:'٣٨ د',t:'-٣ د',up:true},{l:'رضا العملاء',v:'٩٥٪',t:'+٢٪',up:true},{l:'هدر المخزون',v:'٢٪',t:'-١٪',up:true}];
+  document.getElementById('perfGrid').innerHTML = data.map(m=>`<div class="card"><div class="kpi-label">${m.l}</div><div class="kpi-value" style="font-size:21px; margin-top:6px;">${m.v}</div><div class="kpi-trend trend-up" style="margin-top:10px; width:fit-content;">${m.t}</div></div>`).join('');
+}
+
+function toggleNotif(){ document.getElementById('notifDrawer').classList.toggle('active'); document.getElementById('notifOverlay').classList.toggle('active'); }
+function renderNotifList(){
+  const items=[{time:'منذ ٥ دقايق', text:'طلب جديد <b>#٣٣١٧</b> على طاولة ١٢'},{time:'منذ ٢٥ دقيقة', text:'مخزون <b>حبوب الإسبريسو</b> وصل للحد الأدنى'},{time:'منذ ساعة', text:'حجز جديد لطاولة ٨ الساعة ٧ م'},{time:'أمس', text:'<b>يوستينا عادل</b> حققت أعلى تقييم هذا الأسبوع'}];
+  document.getElementById('notifList').innerHTML = items.map((it,i)=>`<div class="t-item"><div class="t-dot ${i>1?'muted':''}"></div><div class="t-time">${it.time}</div><div class="t-text">${it.text}</div></div>`).join('');
+}
+function showToast(msg){
+  const wrap=document.getElementById('toastWrap'); const t=document.createElement('div'); t.className='toast';
+  t.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>${msg}`;
+  wrap.appendChild(t); requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },3200);
+}
+function handleSearch(q){
+  if(q.length>1){ switchView('orders'); const results=orders.filter(o=>o.items.includes(q)||o.no.includes(q));
+    document.getElementById('ordersTableBody').innerHTML = results.length ? results.map(o=>`<tr><td class="mono">${o.no}</td><td>${o.table}</td><td>${o.items}</td><td class="mono">${o.total}</td><td>${orderChip[o.status]}</td></tr>`).join('') : `<tr><td colspan="5"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><h3>لا نتائج لـ"${q}"</h3><p>جرّب كلمة بحث مختلفة.</p></div></td></tr>`;
+  } else if(q.length===0){ renderOrders('all'); }
+}
+
+renderKPIs(); renderSalesChart(); renderTopItems(); renderDashFloor(); renderPrepOrders(); renderActivityTimeline();
+renderOrders(); renderFullFloor(); renderMenu(); renderStaff();
+renderGrowthChart(); renderDonutChart(); renderPerf(); renderNotifList();
+setTimeout(()=> showToast('يلا بينا — ٦ طلبات نشطة دلوقتي'), 700);
+</script>
+</body>
+</html>

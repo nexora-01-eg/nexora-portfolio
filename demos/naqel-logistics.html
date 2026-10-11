@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ناقل — نظام إدارة الشحن والتوصيل</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --steel:#1D3557; --steel-dark:#132743; --steel-soft:#E9EEF5;
+  --orange:#F4A100; --orange-dark:#C97F00; --orange-soft:#FFF2DA;
+  --bg:#F4F6F8; --surface:#FFFFFF; --surface-2:#F0F3F6;
+  --text:#1B2733; --text-2:#42505E; --muted:#7C8A98; --faint:#CBD5DF;
+  --border:#E2E7EC; --border-strong:#D1D9E0;
+  --danger:#C0392B; --danger-soft:#FAE6E3;
+  --success:#1E7A4C; --success-soft:#E3F3EA;
+  --r-sm:8px; --r-md:12px; --r-lg:16px; --r-xl:20px;
+  --shadow-sm:0 1px 3px rgba(19,39,67,0.08);
+  --shadow-md:0 10px 24px rgba(19,39,67,0.10);
+  --shadow-lg:0 24px 50px rgba(19,39,67,0.18);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Tajawal',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;font-weight:900;margin:0;color:var(--steel);letter-spacing:-.01em;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+.mono{font-family:'Cairo';direction:ltr;display:inline-block;}
+
+.shell{display:grid;grid-template-columns:1fr 258px;min-height:100vh;}
+.sidebar{background:var(--steel-dark);color:#fff;padding:24px 16px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:22px;padding:0 4px;}
+.brand-mark{width:42px;height:42px;border-radius:10px;background:var(--orange);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.brand-name{font-family:'Cairo';font-weight:900;font-size:20px;color:#fff;}
+.brand-sub{font-size:10px;color:rgba(255,255,255,0.45);}
+.nav-sec{font-size:10px;color:rgba(255,255,255,0.3);text-transform:uppercase;letter-spacing:.08em;margin:16px 10px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:10px;color:rgba(255,255,255,0.7);font-weight:700;font-size:13.5px;margin-bottom:3px;transition:all .15s;}
+.nav-item:hover{background:rgba(255,255,255,0.06);color:#fff;}
+.nav-item.active{background:var(--orange);color:var(--steel-dark);}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:var(--danger);color:#fff;font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.nav-item.active .nav-badge{background:rgba(19,39,67,0.2);color:var(--steel-dark);}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.1);}
+.foot-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:12px;background:rgba(255,255,255,0.06);}
+.foot-card .avatar{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,var(--orange),var(--orange-dark));display:flex;align-items:center;justify-content:center;font-weight:800;color:#fff;font-size:12px;}
+.foot-card .name{font-size:12.5px;font-weight:800;color:#fff;} .foot-card .role{font-size:10.5px;color:rgba(255,255,255,0.5);}
+
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(244,246,248,0.88);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;font-family:'Tajawal';}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.search-box{display:flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--border);border-radius:10px;padding:9px 14px;font-size:12px;color:var(--muted);width:200px;}
+.icon-btn{width:40px;height:40px;border-radius:11px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;font-family:'Tajawal';}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15px;font-family:'Tajawal';color:var(--steel);}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:10px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:var(--steel);color:#fff;}
+.btn-primary:hover{transform:translateY(-1px);box-shadow:var(--shadow-md);}
+.btn-orange{background:var(--orange);color:var(--steel-dark);}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--steel-soft);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:7px;font-size:10.5px;font-weight:800;}
+.badge-transit{background:var(--orange-soft);color:var(--orange-dark);}
+.badge-delivered{background:var(--success-soft);color:var(--success);}
+.badge-delayed{background:var(--danger-soft);color:var(--danger);}
+.badge-pending{background:var(--steel-soft);color:var(--steel);}
+
+.kpi{padding:20px 22px;position:relative;overflow:hidden;}
+.kpi .lbl{font-size:12px;color:var(--muted);font-weight:700;}
+.kpi .val{font-family:'Cairo';font-weight:900;font-size:30px;color:var(--steel);margin-top:6px;}
+.kpi .delta{font-size:11.5px;font-weight:800;margin-top:6px;display:inline-flex;align-items:center;gap:4px;}
+.delta.up{color:var(--success);} .delta.down{color:var(--danger);}
+.kpi .ic-corner{position:absolute;top:16px;left:16px;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;background:var(--orange-soft);}
+
+/* live tracking */
+.track-map{background:linear-gradient(135deg,var(--steel-soft),#DCE5EF);border-radius:var(--r-lg);height:260px;position:relative;overflow:hidden;}
+.track-path{position:absolute;inset:0;}
+.track-dot{position:absolute;width:14px;height:14px;border-radius:50%;background:var(--orange);border:3px solid #fff;box-shadow:0 0 0 4px rgba(244,161,0,0.25);animation:moveDot 6s linear infinite;}
+@keyframes moveDot{
+  0%{offset-distance:0%;} 100%{offset-distance:100%;}
+}
+.track-dot{offset-path:path('M 30,220 C 120,60 220,240 320,120 S 480,40 560,140');offset-rotate:0deg;}
+.track-node{position:absolute;width:10px;height:10px;border-radius:50%;background:var(--steel);border:2px solid #fff;}
+
+table{width:100%;border-collapse:collapse;}
+th{text-align:right;font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;font-weight:800;padding:10px 14px;border-bottom:1px solid var(--border);}
+td{padding:13px 14px;font-size:13px;border-bottom:1px solid var(--border);}
+tr:last-child td{border-bottom:none;}
+tr.row-hover:hover{background:var(--surface-2);}
+.avatar-sm{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,var(--steel),var(--steel-dark));color:#fff;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;}
+
+.driver-card{display:flex;align-items:center;gap:12px;padding:14px;border:1px solid var(--border);border-radius:14px;background:#fff;}
+.driver-card .stat{margin-right:auto;text-align:left;}
+.driver-card .stat b{display:block;font-size:14px;color:var(--steel);}
+.driver-card .stat span{font-size:10.5px;color:var(--muted);}
+
+.progress-bar{height:7px;background:var(--steel-soft);border-radius:99px;overflow:hidden;}
+.progress-bar .fill{height:100%;background:linear-gradient(90deg,var(--orange),var(--steel));border-radius:99px;transition:width 1s var(--ease);}
+
+.bars{display:flex;align-items:flex-end;gap:10px;height:150px;padding-top:10px;}
+.bar-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:6px;height:100%;}
+.bar{width:100%;border-radius:6px 6px 2px 2px;background:linear-gradient(180deg,var(--orange),var(--steel));transition:height 1s var(--ease);}
+.bar-col .lbl{font-size:10px;color:var(--muted);font-weight:700;}
+
+.overlay{position:fixed;inset:0;background:rgba(19,39,67,0.55);display:none;align-items:center;justify-content:center;z-index:100;backdrop-filter:blur(2px);}
+.overlay.active{display:flex;}
+.modal{background:#fff;border-radius:var(--r-xl);width:440px;max-width:92vw;box-shadow:var(--shadow-lg);overflow:hidden;animation:pop .25s var(--ease);}
+@keyframes pop{from{transform:scale(.94);opacity:0}to{transform:scale(1);opacity:1}}
+.modal-head{padding:20px 22px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.modal-body{padding:20px 22px;display:flex;flex-direction:column;gap:14px;}
+.field label{font-size:12px;font-weight:800;color:var(--text-2);margin-bottom:6px;display:block;}
+.field input,.field select{width:100%;padding:10px 12px;border:1px solid var(--border-strong);border-radius:9px;font-family:inherit;font-size:13px;background:var(--surface-2);}
+.modal-foot{padding:16px 22px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
+.close-x{width:30px;height:30px;border-radius:9px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;}
+
+.toast-wrap{position:fixed;bottom:24px;left:24px;z-index:200;display:flex;flex-direction:column;gap:10px;}
+.toast{background:var(--steel-dark);color:#fff;padding:13px 18px;border-radius:11px;font-size:12.5px;font-weight:700;box-shadow:var(--shadow-lg);display:flex;align-items:center;gap:10px;animation:slidein .3s var(--ease);}
+@keyframes slidein{from{transform:translateX(-30px);opacity:0}to{transform:translateX(0);opacity:1}}
+
+.demo-tag{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--steel-dark);color:rgba(255,255,255,0.7);font-size:10.5px;padding:6px 14px;border-radius:99px;z-index:150;pointer-events:none;}
+
+@media(max-width:1000px){.shell{grid-template-columns:1fr;}.sidebar{display:none;}.g4,.g3,.g2{grid-template-columns:1fr 1fr;}}
+</style>
+</head>
+<body>
+<div class="shell">
+  <div class="main">
+    <div class="topbar">
+      <div><h2 id="pageTitle">لوحة التحكم</h2><div class="sub" id="pageSub">أداء عمليات الشحن اليوم</div></div>
+      <div class="top-actions">
+        <div class="search-box">🔍 تتبع شحنة برقم...</div>
+        <div class="icon-btn">🔔<span class="icon-dot"></span></div>
+        <button class="btn btn-primary btn-sm" onclick="openModal()">+ شحنة جديدة</button>
+      </div>
+    </div>
+    <div class="content">
+
+      <div class="view active" id="view-dashboard">
+        <div class="view-head"><div><h1>عمليات اليوم</h1><div class="sub">312 شحنة قيد المعالجة عبر 4 مدن</div></div></div>
+        <div class="grid g4" style="margin-bottom:18px;">
+          <div class="card kpi"><div class="ic-corner">📦</div><div class="lbl">شحنات اليوم</div><div class="val mono">312</div><div class="delta up">▲ 15%</div></div>
+          <div class="card kpi"><div class="ic-corner">🚚</div><div class="lbl">قيد التوصيل</div><div class="val mono">86</div><div class="delta up">نشطة الآن</div></div>
+          <div class="card kpi"><div class="ic-corner">✅</div><div class="lbl">تم التسليم</div><div class="val mono">218</div><div class="delta up">▲ 9%</div></div>
+          <div class="card kpi"><div class="ic-corner">⚠️</div><div class="lbl">متأخرة</div><div class="val mono">8</div><div class="delta down">تحتاج متابعة</div></div>
+        </div>
+        <div class="grid g3">
+          <div class="card card-pad" style="grid-column:span 2;">
+            <div class="flex justify-between items-center" style="margin-bottom:16px;"><div class="card-title">حجم الشحنات — آخر 7 أيام</div><div class="badge badge-transit">متوسط 298/يوم</div></div>
+            <div class="bars" id="volBars"></div>
+          </div>
+          <div class="card card-pad">
+            <div class="card-title" style="margin-bottom:14px;">أفضل السائقين اليوم</div>
+            <div id="topDrivers"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="view-shipments">
+        <div class="view-head"><div><h1>الشحنات</h1><div class="sub">312 شحنة نشطة عبر جميع المناطق</div></div>
+          <button class="btn btn-orange" onclick="openModal()">+ شحنة جديدة</button></div>
+        <div class="card">
+          <table><thead><tr><th>رقم التتبع</th><th>العميل</th><th>الوجهة</th><th>السائق</th><th>الحالة</th><th></th></tr></thead>
+          <tbody id="shipBody"></tbody></table>
+        </div>
+      </div>
+
+      <div class="view" id="view-tracking">
+        <div class="view-head"><div><h1>التتبع الحي</h1><div class="sub">شحنة NQ-88213 — من مستودع القاهرة إلى الإسكندرية</div></div></div>
+        <div class="card card-pad" style="margin-bottom:18px;">
+          <div class="track-map">
+            <svg class="track-path" viewBox="0 0 600 260" width="100%" height="100%">
+              <path d="M 30,220 C 120,60 220,240 320,120 S 480,40 560,140" fill="none" stroke="#1D3557" stroke-width="3" stroke-dasharray="2 10" stroke-linecap="round" opacity="0.35"/>
+            </svg>
+            <div class="track-node" style="top:214px;right:24px;"></div>
+            <div class="track-node" style="top:134px;right:534px;"></div>
+            <div class="track-dot"></div>
+          </div>
+          <div class="flex justify-between items-center" style="margin-top:16px;">
+            <div><div style="font-weight:800;font-size:13px;">الحالة الحالية: <span style="color:var(--orange-dark);">في الطريق — سيصل خلال 45 دقيقة</span></div></div>
+            <div class="progress-bar" style="width:200px;"><div class="fill" style="width:64%;"></div></div>
+          </div>
+        </div>
+        <div class="grid g2">
+          <div class="card card-pad">
+            <div class="card-title" style="margin-bottom:14px;">سجل الأحداث</div>
+            <div id="trackEvents"></div>
+          </div>
+          <div class="card card-pad">
+            <div class="card-title" style="margin-bottom:14px;">بيانات المندوب</div>
+            <div class="driver-card"><div class="avatar-sm">مح</div><div><div style="font-weight:800;font-size:13px;">محمود جابر</div><div class="muted" style="font-size:11px;">دراجة نارية · تويوتا هايس</div></div><div class="stat"><b class="mono">4.9 ⭐</b><span>تقييم</span></div></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="view" id="view-drivers">
+        <div class="view-head"><div><h1>السائقون</h1><div class="sub">أسطول التوصيل ومعدلات الأداء</div></div></div>
+        <div class="grid g3" id="driversGrid"></div>
+      </div>
+
+      <div class="view" id="view-reports">
+        <div class="view-head"><div><h1>التقارير</h1><div class="sub">أداء التوصيل حسب المنطقة</div></div></div>
+        <div class="card card-pad">
+          <div class="card-title" style="margin-bottom:14px;">معدل التسليم في الوقت المحدد حسب المدينة</div>
+          <div id="regionRank"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="sidebar">
+    <div class="brand"><div class="brand-mark">🚚</div><div><div class="brand-name">ناقل</div><div class="brand-sub">نظام إدارة الشحن</div></div></div>
+    <div class="nav-sec">الرئيسية</div>
+    <div class="nav-item active" data-view="dashboard"><span class="ic">📊</span> لوحة التحكم</div>
+    <div class="nav-item" data-view="shipments"><span class="ic">📦</span> الشحنات</div>
+    <div class="nav-item" data-view="tracking"><span class="ic">📍</span> التتبع الحي</div>
+    <div class="nav-sec">الفريق</div>
+    <div class="nav-item" data-view="drivers"><span class="ic">🚗</span> السائقون</div>
+    <div class="nav-sec">التحليلات</div>
+    <div class="nav-item" data-view="reports"><span class="ic">📈</span> التقارير <span class="nav-badge">8</span></div>
+    <div class="sidebar-foot">
+      <div class="foot-card"><div class="avatar">عم</div><div><div class="name">عمر الفار</div><div class="role">مدير العمليات</div></div></div>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <div class="modal-head"><h3 style="font-family:'Tajawal';font-size:17px;font-weight:800;">إنشاء شحنة جديدة</h3><div class="close-x" onclick="closeModal()">✕</div></div>
+    <div class="modal-body">
+      <div class="field"><label>اسم العميل</label><input placeholder="متجر النور للإلكترونيات"></div>
+      <div class="field"><label>الوجهة</label><select><option>الإسكندرية</option><option>الجيزة</option><option>المنصورة</option><option>أسوان</option></select></div>
+      <div class="field"><label>الوزن التقريبي</label><input placeholder="4.5 كجم"></div>
+    </div>
+    <div class="modal-foot"><button class="btn btn-outline" onclick="closeModal()">إلغاء</button><button class="btn btn-primary" onclick="addShipment()">إنشاء الشحنة</button></div>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+<div class="demo-tag">🎨 عرض تصميم تفاعلي — بيانات وهمية بالكامل، بدون نظام حقيقي</div>
+
+<script>
+const shipments = [
+  ['NQ-88213','متجر النور','الإسكندرية','محمود جابر','transit'],
+  ['NQ-88198','هدى للأزياء','الجيزة','أسامة رفعت','delivered'],
+  ['NQ-88176','مكتبة الأمل','المنصورة','—','pending'],
+  ['NQ-88150','سوبر ماركت الخير','أسوان','كريم وهبة','delayed'],
+  ['NQ-88121','صيدلية الشفاء','طنطا','محمود جابر','delivered'],
+];
+const shipStatus={transit:['في الطريق','badge-transit'],delivered:['تم التسليم','badge-delivered'],pending:['قيد التجهيز','badge-pending'],delayed:['متأخرة','badge-delayed']};
+
+function renderShipments(){
+  document.getElementById('shipBody').innerHTML = shipments.map(s=>{
+    const [txt,cls]=shipStatus[s[4]];
+    return `<tr class="row-hover"><td class="mono" style="font-weight:800;">${s[0]}</td><td>${s[1]}</td><td>${s[2]}</td><td>${s[3]}</td><td><span class="badge ${cls}">${txt}</span></td><td><button class="btn btn-outline btn-sm">تتبع</button></td></tr>`;
+  }).join('');
+}
+
+function renderBars(){
+  const vals=[65,72,58,90,80,95,72];
+  const days=['سبت','أحد','اثنين','ثلاثاء','أربعاء','خميس','جمعة'];
+  const el=document.getElementById('volBars');
+  el.innerHTML = vals.map((v,i)=>`<div class="bar-col"><div class="bar" style="height:0%" data-h="${v}%"></div><div class="lbl">${days[i]}</div></div>`).join('');
+  setTimeout(()=>{document.querySelectorAll('.bar').forEach(b=>b.style.height=b.dataset.h);},100);
+}
+
+function renderTopDrivers(){
+  const d=[['محمود جابر',48],['أسامة رفعت',41],['كريم وهبة',35]];
+  document.getElementById('topDrivers').innerHTML = d.map(x=>`
+    <div class="flex items-center gap3" style="padding:9px 0;border-bottom:1px solid var(--border);">
+      <div class="avatar-sm">${x[0][0]}</div>
+      <div style="flex:1;"><div style="font-weight:800;font-size:12.5px;">${x[0]}</div><div class="muted" style="font-size:10.5px;">سائق توصيل</div></div>
+      <span class="badge badge-delivered mono">${x[1]}</span>
+    </div>`).join('');
+}
+
+function renderTrackEvents(){
+  const events=[['📍','غادرت مستودع القاهرة','10:12 ص'],['🛣️','في الطريق نحو الإسكندرية','11:40 ص'],['⏳','متوقع الوصول','12:35 م']];
+  document.getElementById('trackEvents').innerHTML = events.map(e=>`
+    <div class="flex gap3" style="padding:10px 0;border-bottom:1px solid var(--border);align-items:flex-start;">
+      <div style="width:32px;height:32px;border-radius:9px;background:var(--orange-soft);display:flex;align-items:center;justify-content:center;">${e[0]}</div>
+      <div><div style="font-weight:800;font-size:12.5px;">${e[1]}</div><div class="muted mono" style="font-size:10.5px;">${e[2]}</div></div>
+    </div>`).join('');
+}
+
+const drivers = [
+  ['محمود جابر','دراجة نارية','48 شحنة','4.9'],
+  ['أسامة رفعت','فان تويوتا','41 شحنة','4.8'],
+  ['كريم وهبة','دراجة نارية','35 شحنة','4.6'],
+  ['سيف الدين','فان هايس','52 شحنة','4.9'],
+  ['أيمن رضا','دراجة نارية','29 شحنة','4.7'],
+  ['هيثم صبري','فان تويوتا','44 شحنة','4.8'],
+];
+function renderDrivers(){
+  document.getElementById('driversGrid').innerHTML = drivers.map(d=>`
+    <div class="card card-pad driver-card">
+      <div class="avatar-sm" style="width:44px;height:44px;font-size:14px;border-radius:12px;">${d[0][0]}</div>
+      <div><div style="font-weight:800;font-size:13.5px;">${d[0]}</div><div class="muted" style="font-size:11px;">${d[1]}</div></div>
+      <div class="stat"><b class="mono">${d[3]} ⭐</b><span class="mono">${d[2]}</span></div>
+    </div>`).join('');
+}
+
+function renderRegions(){
+  const regions=[['القاهرة',96],['الجيزة',91],['الإسكندرية',88],['المنصورة',79],['أسوان',71]];
+  document.getElementById('regionRank').innerHTML = regions.map(r=>`
+    <div style="margin-bottom:14px;">
+      <div class="flex justify-between" style="font-size:12.5px;font-weight:700;margin-bottom:5px;"><span>${r[0]}</span><span class="muted mono">${r[1]}%</span></div>
+      <div class="progress-bar"><div class="fill" style="width:${r[1]}%;"></div></div>
+    </div>`).join('');
+}
+
+document.querySelectorAll('.nav-item').forEach(item=>{
+  item.addEventListener('click',()=>{
+    document.querySelectorAll('.nav-item').forEach(i=>i.classList.remove('active'));
+    item.classList.add('active');
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+item.dataset.view).classList.add('active');
+    const titles={dashboard:['لوحة التحكم','أداء عمليات الشحن اليوم'],shipments:['الشحنات','جميع الشحنات النشطة'],tracking:['التتبع الحي','متابعة الشحنة لحظة بلحظة'],drivers:['السائقون','أسطول التوصيل ومعدلات الأداء'],reports:['التقارير','أداء التوصيل حسب المنطقة']};
+    document.getElementById('pageTitle').textContent = titles[item.dataset.view][0];
+    document.getElementById('pageSub').textContent = titles[item.dataset.view][1];
+  });
+});
+
+function openModal(){document.getElementById('overlay').classList.add('active');}
+function closeModal(){document.getElementById('overlay').classList.remove('active');}
+function addShipment(){closeModal();showToast('✅ تم إنشاء الشحنة بنجاح ورقم التتبع جاهز');}
+function showToast(msg){
+  const w=document.getElementById('toastWrap');
+  const t=document.createElement('div'); t.className='toast'; t.textContent=msg;
+  w.appendChild(t); setTimeout(()=>t.remove(),3200);
+}
+
+renderShipments(); renderBars(); renderTopDrivers(); renderTrackEvents(); renderDrivers(); renderRegions();
+</script>
+</body>
+</html>

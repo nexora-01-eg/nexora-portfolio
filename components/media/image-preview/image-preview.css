@@ -1,0 +1,68 @@
+/* ============================================================
+   NEXORA — Image Preview
+   Thumbnail with expand-to-lightbox interaction.
+   ============================================================ */
+
+.nx-image-preview {
+  position: relative;
+  border-radius: var(--nx-radius-md);
+  overflow: hidden;
+  background: var(--nx-bg-elevated);
+}
+
+.nx-image-preview__img {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  display: block;
+}
+
+.nx-image-preview__expand {
+  position: absolute;
+  top: var(--nx-space-3);
+  right: var(--nx-space-3);
+  width: 32px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 10, 10, 0.6);
+  color: var(--nx-color-white);
+  border-radius: var(--nx-radius-full);
+  opacity: 0;
+  transition: var(--nx-transition-base);
+}
+
+.nx-image-preview:hover .nx-image-preview__expand,
+.nx-image-preview__expand:focus-visible {
+  opacity: 1;
+}
+
+.nx-lightbox {
+  position: fixed;
+  inset: 0;
+  z-index: var(--nx-z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.85);
+  padding: var(--nx-space-6);
+  animation: nx-fade-in var(--nx-duration-base) var(--nx-ease-out) both;
+}
+.nx-lightbox[hidden] { display: none; }
+
+.nx-lightbox__img {
+  max-width: 100%;
+  max-height: 90vh;
+  border-radius: var(--nx-radius-md);
+}
+
+.nx-lightbox__close {
+  position: absolute;
+  top: var(--nx-space-6);
+  right: var(--nx-space-6);
+  width: 40px;
+  height: 40px;
+  font-size: var(--nx-fs-500);
+  color: var(--nx-color-white);
+}

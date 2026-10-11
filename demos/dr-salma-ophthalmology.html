@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مركز رؤية للعيون — د. سلمى عزت</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --purple:#5B3E96; --purple-dark:#402C6E; --purple-soft:#EFEAFA;
+  --teal:#2BC4B8; --teal-soft:#E4FAF7;
+  --bg:#FAF9FC; --surface:#FFFFFF;
+  --text:#211A32; --text-secondary:#473C5C; --muted:#8B81A0; --faint:#D2C9E3;
+  --border:#EDE9F5; --border-strong:#DCD3ED;
+  --success:#1F9D5C; --success-soft:#E7F7EE;
+  --warning:#D9932E; --warning-soft:#FBF1DF;
+  --danger:#DC3E4A; --danger-soft:#FCEAEC;
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:26px;
+  --shadow-sm:0 2px 10px rgba(91,62,150,0.08);
+  --shadow-md:0 12px 30px rgba(91,62,150,0.12);
+  --shadow-lg:0 26px 56px rgba(91,62,150,0.22);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;font-weight:900;margin:0;color:var(--text);letter-spacing:-.01em;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 268px;min-height:100vh;}
+.sidebar{background:linear-gradient(185deg,var(--purple) 0%, var(--purple-dark) 100%);color:#fff;padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid rgba(255,255,255,0.15);}
+.brand img{width:52px;height:52px;border-radius:50%;object-fit:cover;border:2px solid var(--teal);}
+.brand-name{font-weight:900;font-size:15px;}
+.brand-sub{font-size:10.5px;color:rgba(255,255,255,0.68);margin-top:1px;}
+.vip-tag{display:inline-flex;align-items:center;gap:4px;background:var(--teal);color:var(--purple-dark);font-size:9px;font-weight:900;padding:2px 8px;border-radius:99px;margin-top:6px;}
+.nav-sec{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.07em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:12px;color:rgba(255,255,255,0.8);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.nav-item.active{background:var(--teal);color:var(--purple-dark);}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:#fff;color:var(--purple);font-size:10px;font-weight:900;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.15);}
+.trust-box{background:rgba(255,255,255,0.08);border-radius:14px;padding:12px;text-align:center;}
+.trust-box .n{font-size:20px;font-weight:900;color:var(--teal);}
+.trust-box .l{font-size:9.5px;color:rgba(255,255,255,0.7);margin-top:2px;}
+
+.topbar{height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(250,249,252,0.9);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15.5px;}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:var(--purple);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:var(--purple-dark);transform:translateY(-1px);}
+.btn-teal{background:var(--teal);color:var(--purple-dark);}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--purple-soft);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.stable{background:var(--success-soft);color:var(--success);}
+.badge.watch{background:var(--warning-soft);color:var(--warning);}
+.badge.urgent{background:var(--danger-soft);color:var(--danger);}
+.badge.teal{background:var(--teal-soft);color:#0C7A70;}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;}
+.stat .value{font-size:24px;font-weight:900;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--success);margin-top:6px;display:inline-block;}
+
+.vision-strip{position:relative;overflow:hidden;border-radius:var(--r-xl);background:linear-gradient(120deg,#2A1B4C,var(--purple),#2BC4B8);padding:26px 28px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.vision-left h2{color:#fff;font-size:21px;margin-bottom:5px;} .vision-left p{color:rgba(255,255,255,0.8);font-size:12.5px;}
+.vision-stats{display:flex;gap:22px;flex-shrink:0;}
+.vision-stat{text-align:center;} .vision-stat .v{font-size:22px;font-weight:900;} .vision-stat .l{font-size:9.5px;color:rgba(255,255,255,0.65);text-transform:uppercase;margin-top:2px;}
+
+/* Vision test module (signature) — Snellen-like acuity chart per eye */
+.eye-test{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.eye-box{border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;text-align:center;}
+.eye-box .eye-icon{font-size:26px;margin-bottom:8px;}
+.acuity-score{font-size:28px;font-weight:900;color:var(--purple);margin:8px 0 4px;}
+.acuity-bar{height:8px;background:var(--purple-soft);border-radius:99px;overflow:hidden;margin-top:8px;}
+.acuity-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--purple),var(--teal));}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--purple-soft);}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;}
+.avatar{border-radius:50%;object-fit:cover;flex-shrink:0;}
+
+.cal-wrap{display:grid;grid-template-columns:64px repeat(5,1fr);gap:0;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#fff;}
+.cal-head{padding:14px 8px;text-align:center;font-weight:800;font-size:12.5px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);background:var(--purple-soft);}
+.cal-time{font-size:10px;color:var(--faint);text-align:center;padding-top:8px;border-left:1px solid var(--border);height:70px;}
+.cal-col{border-right:1px solid var(--border);position:relative;}
+.cal-slot{height:70px;border-bottom:1px dashed var(--border);}
+.appt-block{position:absolute;right:4px;left:4px;border-radius:10px;padding:7px 9px;font-size:10.5px;color:#fff;background:var(--purple);cursor:pointer;}
+.appt-block b{display:block;font-size:11px;color:var(--teal);}
+
+.testi-card{background:var(--purple-soft);border-radius:var(--r-lg);padding:16px;}
+.testi-card p{font-size:12.5px;color:var(--text-secondary);line-height:1.7;font-style:italic;}
+.testi-stars{color:var(--teal);margin-bottom:8px;filter:drop-shadow(0 0 0 #0C7A70);}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--purple-dark);color:#fff;padding:11px 17px;border-radius:12px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);}
+
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 78px;} .brand-name,.brand-sub,.vip-tag,.nav-item span:not(.ic),.nav-sec,.trust-box .l,.nav-badge{display:none;} .cal-wrap{grid-template-columns:50px repeat(5,minmax(110px,1fr));overflow-x:auto;} .eye-test{grid-template-columns:1fr;} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} .vision-strip{flex-direction:column;align-items:flex-start;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">مركز رؤية للعيون — د. سلمى عزت</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-teal" onclick="switchView('v-appointments')">+ حجز موعد</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-patients"></section>
+      <section class="view" id="v-appointments"></section>
+      <section class="view" id="v-vision"></section>
+      <section class="view" id="v-profile"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="https://i.pravatar.cc/104?img=45">
+      <div><div class="brand-name">د. سلمى عزت</div><div class="brand-sub">استشارية طب وجراحة العيون</div><span class="vip-tag">👁️ مركز رؤية VIP</span></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-appointments"><span class="ic">🗓️</span><span>المواعيد</span></div>
+      <div class="nav-item" data-view="v-vision"><span class="ic">👁️</span><span>فحوصات النظر</span></div>
+      <div class="nav-sec">المرضى</div>
+      <div class="nav-item" data-view="v-patients"><span class="ic">🕶️</span><span>ملفات المرضى</span><span class="nav-badge">2</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-profile"><span class="ic">🧑‍⚕️</span><span>الملف الشخصي</span></div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="trust-box">
+        <div class="n">+5,300</div>
+        <div class="l">فحص نظر تم إجراؤه</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const patients = [
+  {name:"منير جلال", age:56, condition:"مياه بيضاء — العين اليمنى", status:"watch", va:70, img:63},
+  {name:"عبير سليمان", age:33, condition:"قصر نظر تقدمي", status:"stable", va:88, img:37},
+  {name:"وائل عصام", age:64, condition:"جلوكوما (المياه الزرقاء)", status:"urgent", va:45, img:65},
+  {name:"دعاء حلمي", age:27, condition:"جفاف العين المزمن", status:"stable", va:95, img:40},
+  {name:"إيهاب توفيق", age:49, condition:"استعادة بصر بعد عملية الليزك", status:"stable", va:98, img:67},
+];
+const appointments = [
+  {patient:"منير جلال", type:"متابعة المياه البيضاء", day:0, start:0, span:1},
+  {patient:"عبير سليمان", type:"فحص نظارة جديدة", day:1, start:1, span:1},
+  {patient:"وائل عصام", type:"قياس ضغط العين العاجل", day:1, start:2, span:1},
+  {patient:"دعاء حلمي", type:"متابعة جفاف العين", day:3, start:0, span:1},
+  {patient:"إيهاب توفيق", type:"فحص ما بعد الليزك", day:4, start:3, span:1},
+];
+const days = ['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء'];
+const hours = ['9:00 ص','11:00 ص','1:00 م','3:00 م'];
+const testimonials = [
+  {name:"إيهاب توفيق", text:"عملية الليزك غيرت حياتي، بشوف تمام من غير نظارة لأول مرة من 20 سنة.", rating:5},
+  {name:"عبير سليمان", text:"دكتورة سلمى بتشرح كل حاجة بمنتهى الصبر، وفريق العيادة محترم جدًا.", rating:5},
+];
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','مركز رؤية للعيون — د. سلمى عزت'],
+    'v-patients':['ملفات المرضى', patients.length+' مريض تحت المتابعة'],
+    'v-appointments':['المواعيد','الأسبوع الحالي'],
+    'v-vision':['فحوصات النظر','نتائج حدة الإبصار لكل عين'],
+    'v-profile':['الملف الشخصي','السيرة المهنية لـ د. سلمى عزت'],
+    'v-settings':['الإعدادات','بيانات المركز'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+const statusMap = {stable:'مستقر',watch:'تحت الملاحظة',urgent:'عاجل'};
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>أهلاً، دكتورة سلمى 👁️</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦ — مركز رؤية للعيون</p></div>
+      <button class="btn btn-outline" onclick="switchView('v-appointments')">عرض جدول اليوم</button></div>
+    <div class="vision-strip" style="margin-bottom:18px">
+      <div class="vision-left"><h2>وضوح اليوم 👁️</h2><p>لمحة سريعة على نشاط المركز الآن</p></div>
+      <div class="vision-stats">
+        <div class="vision-stat"><div class="v">${appointments.length}</div><div class="l">مواعيد اليوم</div></div>
+        <div class="vision-stat"><div class="v">98%</div><div class="l">رضا المرضى</div></div>
+        <div class="vision-stat"><div class="v">2</div><div class="l">عمليات ليزك</div></div>
+      </div>
+    </div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('مواعيد اليوم', appointments.length+' موعد','🗓️','var(--purple)','+1 عن أمس')}
+      ${stat('حالات تحت الملاحظة',patients.filter(p=>p.status==='watch').length+' حالة','👁️','var(--warning)','متابعة أسبوعية')}
+      ${stat('إيراد الشهر','٢٩٤٬٧٠٠ ج.م','💰','var(--success)','+10.2%')}
+      ${stat('حالات عاجلة',patients.filter(p=>p.status==='urgent').length+' حالة','🚨','var(--danger)','بحاجة لتدخل سريع')}
+    </div>
+    <div class="grid g3">
+      <div class="card card-pad" style="grid-column:span 2">
+        <div class="card-title" style="margin-bottom:16px">حالات المرضى الحالية</div>
+        ${patients.map(p=>`
+          <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+            <div class="flex items-center gap3"><img class="avatar" width="36" height="36" src="https://i.pravatar.cc/72?img=${p.img}"><div><b style="font-size:13px">${p.name}</b><div class="muted" style="font-size:11px">${p.condition}</div></div></div>
+            <span class="badge ${p.status}">${statusMap[p.status]}</span>
+          </div>`).join('')}
+      </div>
+      <div class="card card-pad">
+        <div class="card-title" style="margin-bottom:12px">آراء المرضى</div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p>"${testimonials[0].text}"</p>
+          <div style="margin-top:10px;font-weight:800;font-size:12px">— ${testimonials[0].name}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderPatients(){
+  const el = document.getElementById('v-patients');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>ملفات المرضى</h1><p class="sub">${patients.length} مريض تحت المتابعة</p></div>
+      <button class="btn btn-primary">+ مريض جديد</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>المريض</th><th>الحالة الطبية</th><th>حدة الإبصار</th><th>الحالة</th></tr></thead>
+      <tbody>${patients.map(p=>`
+        <tr onclick="UI.toast('ملف ${p.name}')">
+          <td><div class="cell-name"><img class="avatar" width="34" height="34" src="https://i.pravatar.cc/68?img=${p.img}">${p.name} <span class="muted" style="font-weight:500">(${p.age})</span></div></td>
+          <td>${p.condition}</td><td>${p.va}%</td>
+          <td><span class="badge ${p.status}">${statusMap[p.status]}</span></td>
+        </tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderAppointments(){
+  const el = document.getElementById('v-appointments');
+  el.innerHTML = `<div class="view-head"><div><h1>المواعيد</h1><p class="sub">الأسبوع الحالي</p></div>
+    <button class="btn btn-teal">+ حجز موعد</button></div>
+    <div class="cal-wrap" id="calWrap"></div>`;
+  let html = `<div class="cal-head" style="background:#fff"></div>`;
+  days.forEach(d=> html += `<div class="cal-head">${d}</div>`);
+  html += `<div>`+hours.map(h=>`<div class="cal-time">${h}</div>`).join('')+`</div>`;
+  for(let d=0; d<5; d++){
+    html += `<div class="cal-col">`;
+    hours.forEach(()=> html += `<div class="cal-slot"></div>`);
+    appointments.filter(a=>a.day===d).forEach(a=>{
+      html += `<div class="appt-block" style="top:${a.start*70+4}px;height:${a.span*70-8}px" onclick="UI.toast('${a.patient} — ${a.type}')">
+        <b>${a.patient}</b>${a.type}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  document.getElementById('calWrap').innerHTML = html;
+}
+
+function renderVision(){
+  const el = document.getElementById('v-vision');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>فحوصات النظر</h1><p class="sub">منير جلال — نتائج حدة الإبصار لكل عين</p></div>
+      <button class="btn btn-primary">+ تسجيل فحص جديد</button></div>
+    <div class="eye-test">
+      <div class="eye-box">
+        <div class="eye-icon">👁️</div>
+        <b style="font-size:13px">العين اليمنى</b>
+        <div class="acuity-score">6/12</div>
+        <div class="muted" style="font-size:11px">70% من الرؤية الطبيعية</div>
+        <div class="acuity-bar"><div class="acuity-fill" style="width:70%"></div></div>
+      </div>
+      <div class="eye-box">
+        <div class="eye-icon">👁️</div>
+        <b style="font-size:13px">العين اليسرى</b>
+        <div class="acuity-score">6/9</div>
+        <div class="muted" style="font-size:11px">85% من الرؤية الطبيعية</div>
+        <div class="acuity-bar"><div class="acuity-fill" style="width:85%"></div></div>
+      </div>
+    </div>
+    <div class="card card-pad" style="margin-top:18px">
+      <div class="card-title" style="margin-bottom:12px">حدة الإبصار — كل المرضى</div>
+      ${patients.map(p=>`
+        <div class="flex justify-between items-center" style="padding:10px 0;border-bottom:1px dashed var(--border)">
+          <div class="flex items-center gap3"><img class="avatar" width="30" height="30" src="https://i.pravatar.cc/60?img=${p.img}"><b style="font-size:12.5px">${p.name}</b></div>
+          <div style="width:140px" class="flex items-center gap2"><div class="acuity-bar" style="flex:1;margin:0"><div class="acuity-fill" style="width:${p.va}%"></div></div><b style="font-size:11px">${p.va}%</b></div>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderProfile(){
+  const el = document.getElementById('v-profile');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>الملف الشخصي</h1><p class="sub">السيرة المهنية المعروضة للمرضى</p></div>
+      <button class="btn btn-outline">تعديل الملف</button></div>
+    <div class="grid g3">
+      <div class="card card-pad" style="grid-column:span 2">
+        <div class="flex items-center gap3" style="margin-bottom:16px">
+          <img src="https://i.pravatar.cc/120?img=45" width="72" height="72" style="border-radius:50%">
+          <div><h3 style="font-size:19px">د. سلمى عزت</h3><div class="muted" style="font-size:12.5px;margin-top:3px">استشارية طب وجراحة العيون</div><div class="testi-stars" style="margin-top:6px">★★★★★ <span class="muted" style="font-size:11px">(4.9 من 356 تقييم)</span></div></div>
+        </div>
+        <p class="muted" style="font-size:13px;line-height:1.8;margin-bottom:16px">استشارية طب وجراحة العيون، متخصصة في عمليات الليزك والمياه البيضاء، خبرة 14 عامًا، حاصلة على زمالة جراحة الشبكية من فرنسا.</p>
+        <div class="grid g3">
+          <div><div class="muted" style="font-size:10.5px">التخصص</div><b style="font-size:12.5px">طب وجراحة العيون</b></div>
+          <div><div class="muted" style="font-size:10.5px">سنوات الخبرة</div><b style="font-size:12.5px">14+ سنة</b></div>
+          <div><div class="muted" style="font-size:10.5px">اللغات</div><b style="font-size:12.5px">عربي، إنجليزي، فرنسي</b></div>
+        </div>
+      </div>
+      <div class="flex-col gap3">
+        ${testimonials.map(t=>`
+          <div class="testi-card" style="margin-bottom:12px">
+            <div class="testi-stars">${'★'.repeat(t.rating)}</div>
+            <p>"${t.text}"</p>
+            <div style="margin-top:10px;font-weight:800;font-size:12px">— ${t.name}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1>الإعدادات</h1><p class="sub">بيانات المركز</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات اسم المركز، أجهزة الفحص المتاحة، ومواعيد العمل.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderPatients(); renderAppointments(); renderVision(); renderProfile(); renderSettings();
+</script>
+</body>
+</html>

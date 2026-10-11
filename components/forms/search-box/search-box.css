@@ -1,0 +1,58 @@
+/* ============================================================
+   NEXORA — Search Box
+   Standalone search input (page-embedded). For the full
+   keyboard-driven overlay, see the Command Palette component.
+   ============================================================ */
+
+.nx-search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 480px;
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+  padding-inline: var(--nx-space-4);
+  transition: var(--nx-transition-base);
+}
+
+.nx-search-box:focus-within {
+  border-color: var(--nx-accent-primary);
+  box-shadow: var(--nx-shadow-gold-glow);
+}
+
+.nx-search-box__icon { color: var(--nx-text-muted); margin-right: var(--nx-space-3); }
+
+.nx-search-box__input {
+  flex: 1;
+  padding-block: var(--nx-space-3);
+  font-size: var(--nx-fs-300);
+  color: var(--nx-text-primary);
+  background: transparent;
+}
+.nx-search-box__input::placeholder { color: var(--nx-text-muted); }
+.nx-search-box__input::-webkit-search-cancel-button { display: none; }
+
+.nx-search-box__clear {
+  color: var(--nx-text-muted);
+  font-size: var(--nx-fs-400);
+  line-height: 1;
+  padding: var(--nx-space-1);
+}
+.nx-search-box__clear:hover { color: var(--nx-text-primary); }
+
+.nx-search-box__shortcut {
+  font-family: var(--nx-font-mono);
+  font-size: var(--nx-fs-100);
+  color: var(--nx-text-muted);
+  background: var(--nx-bg-elevated-2);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-sm);
+  padding: 2px var(--nx-space-2);
+  margin-left: var(--nx-space-2);
+}
+
+@media (max-width: 480px) {
+  .nx-search-box__shortcut { display: none; }
+}

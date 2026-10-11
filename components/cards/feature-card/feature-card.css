@@ -1,0 +1,20 @@
+/* ============================================================
+   NEXORA — Feature Card
+   Icon + title + description, for service/feature grids
+   (e.g. NEXORA's own "Main Services" list). Extends .nx-card.
+   ============================================================ */
+
+.nx-feature-card__icon {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--nx-fs-400);
+  border-radius: var(--nx-radius-md);
+  background: var(--nx-accent-muted);
+  color: var(--nx-accent-primary);
+  margin-bottom: var(--nx-space-4);
+}
+
+.nx-feature-card .nx-h4 { margin-bottom: var(--nx-space-2); }

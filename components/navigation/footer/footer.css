@@ -1,0 +1,49 @@
+/* ============================================================
+   NEXORA — Footer
+   ============================================================ */
+
+.nx-footer {
+  border-top: 1px solid var(--nx-border-subtle);
+  padding-top: var(--nx-space-9);
+  margin-top: var(--nx-space-10);
+}
+
+.nx-footer__inner {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: var(--nx-space-6);
+  padding-bottom: var(--nx-space-8);
+}
+
+.nx-footer__brand p:last-child { margin-top: var(--nx-space-2); }
+
+.nx-footer__col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nx-space-3);
+}
+
+.nx-footer__col .nx-caption { margin-bottom: var(--nx-space-1); }
+
+.nx-footer__col a {
+  font-size: var(--nx-fs-200);
+  color: var(--nx-text-secondary);
+}
+.nx-footer__col a:hover { color: var(--nx-text-primary); }
+
+.nx-footer__bottom {
+  padding-block: var(--nx-space-5);
+  border-top: 1px solid var(--nx-border-subtle);
+}
+
+@media (max-width: 768px) {
+  .nx-footer__inner {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 480px) {
+  .nx-footer__inner {
+    grid-template-columns: 1fr;
+  }
+}

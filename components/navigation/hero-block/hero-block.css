@@ -1,0 +1,30 @@
+/* ============================================================
+   NEXORA — Hero Block
+   Full-bleed introductory section. Uses [data-nx-reveal] +
+   core/js/animations.js for a staggered entrance if desired.
+   ============================================================ */
+
+.nx-hero {
+  padding-block: var(--nx-space-11) var(--nx-space-9);
+  text-align: center;
+}
+
+.nx-hero__inner {
+  max-width: 780px;
+}
+
+.nx-hero .nx-display { margin-block: var(--nx-space-4); }
+
+.nx-hero__lead {
+  max-width: 520px;
+  margin-inline: auto;
+  margin-bottom: var(--nx-space-7);
+}
+
+.nx-hero .nx-row { justify-content: center; }
+
+@media (max-width: 768px) {
+  .nx-hero { padding-block: var(--nx-space-8) var(--nx-space-7); }
+  .nx-hero .nx-row { flex-direction: column; align-items: stretch; }
+  .nx-hero .nx-btn--lg { width: 100%; }
+}

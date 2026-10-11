@@ -1,0 +1,52 @@
+{
+  "id": "classline-lms",
+  "slug": "classline-lms",
+  "industry": "education",
+  "designSystem": "education",
+  "title": "ClassLine LMS",
+  "tagline": "Course delivery and grading for online academies.",
+  "description": "A learning management system for online academies \u2014 course delivery, assignments, and grading in one place.",
+  "version": "1.3.0",
+  "status": "live",
+  "tier": "growth",
+  "difficulty": "intermediate",
+  "service": "SaaS Development",
+  "tags": [
+    "education",
+    "lms",
+    "courses",
+    "dashboard"
+  ],
+  "technologies": [
+    "Next.js",
+    "Supabase"
+  ],
+  "componentsUsed": [
+    "progress",
+    "card",
+    "tabs"
+  ],
+  "features": [
+    "Course progress tracking",
+    "Assignment submission and grading",
+    "Student performance dashboard"
+  ],
+  "timeline": [
+    {
+      "date": "2026-02-27",
+      "label": "Project started",
+      "description": "Course delivery flow scoped."
+    },
+    {
+      "date": "2026-06-18",
+      "label": "v1.3.0 released",
+      "description": "Grading dashboard added."
+    }
+  ],
+  "relatedProjects": [],
+  "views": 278,
+  "featured": false,
+  "popular": true,
+  "createdAt": "2026-02-27",
+  "updatedAt": "2026-06-18"
+}

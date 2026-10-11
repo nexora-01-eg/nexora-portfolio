@@ -1,0 +1,52 @@
+{
+  "id": "siteflow-tracker",
+  "slug": "siteflow-tracker",
+  "industry": "construction",
+  "designSystem": "construction",
+  "title": "SiteFlow Tracker",
+  "tagline": "Project tracking for construction site teams.",
+  "description": "A field-friendly progress tracker for construction crews \u2014 daily logs, punch lists, and photo documentation.",
+  "version": "1.0.0",
+  "status": "draft",
+  "tier": "starter",
+  "difficulty": "beginner",
+  "service": "Workflow Automation",
+  "tags": [
+    "construction",
+    "tracking",
+    "mobile",
+    "automation"
+  ],
+  "technologies": [
+    "React",
+    "Firebase"
+  ],
+  "componentsUsed": [
+    "timeline",
+    "card",
+    "badge"
+  ],
+  "features": [
+    "Daily site log entries",
+    "Photo-documented punch lists",
+    "Crew assignment board"
+  ],
+  "timeline": [
+    {
+      "date": "2026-07-02",
+      "label": "Project started",
+      "description": "Field requirements gathered from crews."
+    },
+    {
+      "date": "2026-07-12",
+      "label": "v1.0.0 released",
+      "description": "First usable build."
+    }
+  ],
+  "relatedProjects": [],
+  "views": 54,
+  "featured": false,
+  "popular": false,
+  "createdAt": "2026-07-02",
+  "updatedAt": "2026-07-12"
+}

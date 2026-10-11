@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فريم — استوديو تصوير احترافي</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#131211; --card:#1C1A18; --border:rgba(255,255,255,0.08); --border-strong:rgba(255,255,255,0.16);
+  --amber:#E8A33D; --amber-soft:rgba(232,163,61,0.15); --sky:#5AA9C7; --sky-soft:rgba(90,169,199,0.14);
+  --rose:#C7807A; --rose-soft:rgba(199,128,122,0.14); --text:#F4F1EB; --muted:#A19A8E; --faint:#5C564C;
+  --r-lg:22px; --ease:cubic-bezier(.22,1,.36,1); --shadow:0 24px 50px -26px rgba(0,0,0,0.6);
+  --font-display:'IBM Plex Sans Arabic', sans-serif; --font-body:'IBM Plex Sans Arabic', sans-serif; --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{ scroll-behavior:smooth; } body{ background:var(--bg); color:var(--text); font-family:var(--font-body); }
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; cursor:pointer; color:inherit;}
+.eyebrow{ font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; color:var(--amber); text-transform:uppercase; }
+.card{ background:var(--card); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow); transition:all .3s var(--ease); }
+.card:hover{ transform:translateY(-5px); border-color:var(--border-strong); }
+.btn{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; padding:12px 24px; border-radius:12px; transition:all .2s var(--ease); }
+.btn-primary{ background:var(--amber); color:#131211; } .btn-primary:hover{ transform:translateY(-2px); }
+.btn-outline{ border:1px solid var(--border-strong); color:var(--text); }
+
+.nav{ position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:20px 32px; background:rgba(19,18,17,0.8); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+.nav-brand{ display:flex; align-items:center; gap:10px; } .nav-mark{ width:36px; height:36px; border-radius:10px; background:var(--amber); display:flex; align-items:center; justify-content:center; color:#131211; font-weight:700; font-size:16px; }
+.nav-name{ font-weight:700; font-size:19px; } .nav-links{ display:flex; gap:26px; font-size:13px; color:var(--muted); } .nav-links a:hover{ color:var(--amber); }
+
+.hero{ padding:70px 32px 30px; text-align:center; } .hero h1{ font-size:44px; font-weight:700; max-width:700px; margin:14px auto 0; line-height:1.3; } .hero h1 span{ color:var(--amber); }
+.hero p{ font-size:14px; color:var(--muted); margin-top:14px; }
+.hero-actions{ display:flex; justify-content:center; gap:12px; margin-top:26px; }
+
+.section{ padding:56px 32px; opacity:0; transform:translateY(18px); transition:all .6s var(--ease); } .section.in{ opacity:1; transform:none; }
+.section-head{ display:flex; justify-content:space-between; align-items:baseline; max-width:1140px; margin:0 auto 24px; }
+.section-head h2{ font-size:26px; font-weight:700; } .section-head .more{ font-size:12px; color:var(--amber); font-weight:700; }
+
+.gallery-grid{ max-width:1140px; margin:0 auto; column-count:3; column-gap:16px; }
+.gallery-item{ break-inside:avoid; margin-bottom:16px; overflow:hidden; position:relative; }
+.gallery-item .thumb{ display:flex; align-items:center; justify-content:center; }
+.gallery-item .thumb svg{ width:36px; height:36px; opacity:.5; }
+.gallery-tag{ position:absolute; bottom:10px; right:10px; font-family:var(--font-mono); font-size:9px; background:rgba(0,0,0,0.5); padding:3px 8px; border-radius:20px; }
+
+.packages-grid{ max-width:1000px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.pkg-card{ padding:26px; text-align:center; }
+.pkg-card.featured{ border-color:var(--amber); }
+.pkg-card h3{ font-size:18px; font-weight:700; } .pkg-card .price{ font-size:32px; font-weight:700; color:var(--amber); margin-top:10px; } .pkg-card .price small{ font-size:12px; color:var(--muted); }
+.pkg-card ul{ list-style:none; margin-top:16px; display:flex; flex-direction:column; gap:8px; }
+.pkg-card li{ font-size:12px; color:var(--muted); display:flex; align-items:center; gap:6px; justify-content:center; }
+.pkg-card li svg{ width:13px; height:13px; color:var(--sky); }
+.pkg-card .btn{ width:100%; justify-content:center; margin-top:18px; }
+
+.testi-grid{ max-width:1140px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:16px; }
+.testi-card{ padding:22px; } .testi-card p{ font-size:13px; line-height:1.65; color:var(--muted); }
+.testi-author{ margin-top:14px; font-size:12px; font-weight:700; }
+
+.footer{ padding:44px 32px 24px; border-top:1px solid var(--border); text-align:center; } .footer p{ font-size:11px; color:var(--faint); }
+@media (max-width:1000px){ .gallery-grid{ column-count:2; } .packages-grid, .testi-grid{ grid-template-columns:1fr 1fr; } .nav-links{ display:none; } }
+@media (max-width:620px){ .nav, .hero, .section{ padding-left:18px; padding-right:18px; } .hero h1{ font-size:30px; } .gallery-grid{ column-count:1; } .packages-grid, .testi-grid{ grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+<nav class="nav"><div class="nav-brand"><div class="nav-mark">ف</div><div class="nav-name">فريم</div></div><div class="nav-links"><a href="#gallery">الأعمال</a><a href="#packages">الباقات</a><a href="#testimonials">آراء العملا</a></div><a href="#packages" class="btn btn-primary">احجز جلسة</a></nav>
+
+<section class="hero">
+  <span class="eyebrow">استوديو تصوير احترافي</span>
+  <h1>لحظاتك تستاهل<br>تتحفظ <span>بأحسن شكل</span></h1>
+  <p>تصوير أفراح، منتجات تجارية، وبورتريه شخصي — بلمسة سينمائية مميزة</p>
+  <div class="hero-actions"><a href="#packages" class="btn btn-primary">احجز جلستك</a><a href="#gallery" class="btn btn-outline">شوف الأعمال</a></div>
+</section>
+
+<section class="section" id="gallery">
+  <div class="section-head"><h2>أحدث الأعمال</h2><span class="more">الألبوم كامل</span></div>
+  <div class="gallery-grid" id="galleryGrid"></div>
+</section>
+
+<section class="section" id="packages">
+  <div class="section-head" style="justify-content:center;"><h2>الباقات</h2></div>
+  <div class="packages-grid" id="pkgGrid"></div>
+</section>
+
+<section class="section" id="testimonials">
+  <div class="section-head"><h2>آراء العملا</h2></div>
+  <div class="testi-grid" id="testiGrid"></div>
+</section>
+
+<footer class="footer"><p>فريم © 2026 · مشروع بورتفوليو للعرض فقط</p></footer>
+
+<script>
+const heights = [220,280,190,260,210,240,180,250];
+const icons = ['<circle cx="12" cy="12" r="4"/><path d="M3 8a2 2 0 012-2h2l2-2h6l2 2h2a2 2 0 012 2v10a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>','<path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/>','<rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="M21 15l-5-5L5 21"/>'];
+document.getElementById('galleryGrid').innerHTML = heights.map((h,i)=>`
+  <div class="card gallery-item"><div class="thumb" style="height:${h}px; background:linear-gradient(155deg, var(--amber-soft), var(--sky-soft));"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.3">${icons[i%3]}</svg></div><span class="gallery-tag">${['أفراح','بورتريه','منتجات'][i%3]}</span></div>`).join('');
+
+const packs = [
+  {n:'باقة البورتريه', price:'١,٥٠٠', per:'جلسة', feats:['ساعة تصوير','١٥ صورة معدلة','موقع واحد'], featured:false},
+  {n:'باقة الفرح', price:'٨,٥٠٠', per:'اليوم كامل', feats:['تغطية كاملة لليوم','١٥٠+ صورة معدلة','فيديو هايلايت ٣ دقايق'], featured:true},
+  {n:'باقة المنتجات', price:'٢,٢٠٠', per:'جلسة', feats:['حتى ٢٠ منتج','خلفيات متنوعة','تسليم خلال ٤٨ ساعة'], featured:false},
+];
+document.getElementById('pkgGrid').innerHTML = packs.map(p=>`
+  <div class="card pkg-card ${p.featured?'featured':''}"><h3>${p.n}</h3><div class="price">${p.price} <small>ج.م / ${p.per}</small></div>
+  <ul>${p.feats.map(f=>`<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>${f}</li>`).join('')}</ul>
+  <button class="btn ${p.featured?'btn-primary':'btn-outline'}">احجز الباقة</button></div>`).join('');
+
+const testis = [ {q:'الاستوديو فهم اللوك اللي عايزينه بالظبط، والنتيجة فاقت التوقعات.', n:'أ. سارة ووليد'}, {q:'صور المنتجات رفعت مبيعاتنا فورًا بعد ما استخدمناها في الإعلانات.', n:'براند أزياء محلي'}, {q:'جلسة البورتريه كانت مريحة جدًا والفريق محترف للغاية.', n:'أ. كريم صلاح'} ];
+document.getElementById('testiGrid').innerHTML = testis.map(t=>`<div class="card testi-card"><p>"${t.q}"</p><div class="testi-author">${t.n}</div></div>`).join('');
+
+const io = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); }); }, {threshold:.1});
+document.querySelectorAll('.section').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

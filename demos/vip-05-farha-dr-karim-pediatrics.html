@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فرحة — د. كريم فؤاد | استشاري طب الأطفال</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+
+:root{
+  --paper:#FBF8EC; --surface:#FFFFFF; --surface-2:#F5EDC8; --surface-3:#EDE1A8;
+  --ink:#28241A; --ink-soft:#6E6449; --ink-faint:#AA9F7C;
+  --line:#F0E6BE; --line-soft:#F7F0D8;
+  --pri:#4FBF8F; --pri-deep:#379A6E; --pri-pale:#DEF2E9;
+  --acc:#F2A93B; --acc-deep:#C4831F; --acc-pale:#FCEACB;
+  --success:#379A6E;
+  --sidebar-bg:#2B4A3E; --sidebar-ink:#F2F5EC;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.07);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.12);
+  --shadow-lg: 0 22px 50px rgba(0,0,0,0.22);
+  --radius-md:16px; --radius-lg:22px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ background:var(--paper); color:var(--ink); font-family:'Cairo', sans-serif; -webkit-font-smoothing:antialiased; overflow:hidden; }
+::selection{ background:var(--pri); color:#fff; }
+::-webkit-scrollbar{ width:8px; height:8px; }
+::-webkit-scrollbar-thumb{ background:var(--line); border-radius:8px; }
+.mono{ font-family:'IBM Plex Mono', monospace; direction:ltr; display:inline-block; }
+button{ font-family:inherit; cursor:pointer; }
+a{ color:inherit; text-decoration:none; }
+
+.shell{ display:grid; grid-template-columns:256px 1fr; height:100vh; }
+
+.sidebar{ background:var(--sidebar-bg); border-left:1px solid rgba(255,255,255,.06); display:flex; flex-direction:column; padding:24px 16px; color:var(--sidebar-ink); position:relative; overflow:hidden;}
+.sidebar::before{ content:''; position:absolute; top:-80px; right:-60px; width:230px; height:230px; border-radius:50%; background:radial-gradient(circle, rgba(242,169,59,0.24), transparent 70%); }
+.brand{ display:flex; align-items:center; gap:11px; padding:6px 8px 20px; position:relative; z-index:1;}
+.brand-mark{ width:40px; height:40px; flex-shrink:0; }
+.brand-name{ font-weight:900; font-size:20px; letter-spacing:.3px; color:#fff;}
+.brand-sub{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:8.5px; letter-spacing:1.8px; color:var(--acc); text-transform:uppercase; margin-top:2px; font-weight:600;}
+
+.doc-id-card{ display:flex; align-items:center; gap:10px; padding:12px; border-radius:16px; background:rgba(255,255,255,0.06); margin-bottom:16px; position:relative; z-index:1; border:1px solid rgba(255,255,255,0.08);}
+.doc-id-avatar{ width:42px; height:42px; border-radius:12px; background:linear-gradient(135deg, var(--acc), var(--pri)); display:flex; align-items:center; justify-content:center; font-weight:800; color:#fff; font-size:14px; flex-shrink:0;}
+.doc-id-name{ font-size:12.5px; font-weight:800; color:#fff; }
+.doc-id-role{ font-size:10px; opacity:.7; margin-top:1px;}
+
+.nav-group-label{ font-size:10px; letter-spacing:1px; text-transform:uppercase; color:rgba(255,255,255,0.35); padding:14px 12px 6px; font-weight:700; position:relative; z-index:1;}
+.nav-item{ display:flex; align-items:center; gap:11px; padding:10.5px 13px; border-radius:12px; color:rgba(255,255,255,0.72); font-size:14px; font-weight:600; transition:all .18s ease; position:relative; z-index:1; margin-bottom:2px;}
+.nav-item svg{ width:18px; height:18px; flex-shrink:0; opacity:.85; }
+.nav-item:hover{ background:rgba(255,255,255,0.06); color:#fff; }
+.nav-item.active{ background:linear-gradient(90deg, rgba(79,191,143,0.26), transparent); color:#fff; }
+.nav-item.active svg{ opacity:1; color:var(--acc); }
+.sidebar-foot{ margin-top:auto; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); position:relative; z-index:1;}
+
+.vip-card{ background:linear-gradient(135deg, var(--acc), var(--pri)); border-radius:18px; padding:15px; color:#fff; margin-top:8px;}
+.vip-card .t{ font-size:12.5px; font-weight:800; }
+.vip-card .s{ font-size:10.5px; opacity:.9; margin-top:3px;}
+
+.header{ height:76px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 30px; background:var(--paper); flex-shrink:0;}
+.header-title h1{ font-weight:900; font-size:21px; }
+.header-title span{ font-size:12px; color:var(--ink-faint); font-weight:500; }
+.header-right{ display:flex; align-items:center; gap:14px; }
+.search-box{ display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:10px 15px; width:270px; }
+.search-box:focus-within{ border-color:var(--pri); box-shadow:0 0 0 3px var(--pri-pale); }
+.search-box svg{ width:16px; height:16px; color:var(--ink-faint); flex-shrink:0; }
+.search-box input{ border:none; outline:none; font-size:13.5px; width:100%; background:transparent; color:var(--ink); font-family:inherit; }
+.icon-btn{ width:40px; height:40px; border-radius:12px; border:1px solid var(--line); background:var(--surface); display:flex; align-items:center; justify-content:center; position:relative; transition:all .15s ease;}
+.icon-btn:hover{ background:var(--surface-2); }
+.icon-btn svg{ width:17px; height:17px; color:var(--ink-soft); }
+.dot-badge{ position:absolute; top:8px; left:9px; width:7px; height:7px; border-radius:50%; background:var(--acc); border:1.5px solid var(--surface); }
+.profile-chip{ display:flex; align-items:center; gap:10px; padding:5px 12px 5px 5px; border-radius:15px; border:1px solid var(--line); background:var(--surface); }
+.avatar{ width:34px; height:34px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; color:#fff; flex-shrink:0;}
+.profile-chip .name{ font-size:13px; font-weight:700; }
+.profile-chip .role{ font-size:11px; color:var(--ink-faint); }
+
+.main{ display:flex; flex-direction:column; overflow:hidden; }
+.content{ flex:1; overflow-y:auto; padding:26px 30px 60px; }
+.view{ display:none; animation:fadeUp .4s cubic-bezier(.2,.7,.3,1); }
+.view.active{ display:block; }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+.section-title{ display:flex; align-items:center; gap:10px; margin:30px 0 16px; }
+.section-title h2{ font-weight:800; font-size:17px; }
+.section-title:first-child{ margin-top:0; }
+.count-pill{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:11px; background:var(--surface-2); color:var(--ink-soft); padding:3px 10px; border-radius:20px; }
+
+.grid{ display:grid; gap:16px; }
+.grid-4{ grid-template-columns:repeat(4,1fr); }
+.grid-3{ grid-template-columns:repeat(3,1fr); }
+.grid-2{ grid-template-columns:repeat(2,1fr); }
+
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:20px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden; transition:all .2s ease; }
+.card.hoverable:hover{ box-shadow:var(--shadow-md); transform:translateY(-2px); border-color:var(--pri); }
+
+.kpi-top{ display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.kpi-icon{ width:40px; height:40px; border-radius:12px; display:flex; align-items:center; justify-content:center; }
+.kpi-icon svg{ width:19px; height:19px; }
+.kpi-trend{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:11.5px; font-weight:600; padding:3px 9px; border-radius:20px; color:var(--success); background:var(--acc-pale); }
+.kpi-value{ font-weight:800; font-size:27px; letter-spacing:-.5px; }
+.kpi-label{ font-size:12.5px; color:var(--ink-soft); margin-top:4px; font-weight:600;}
+
+.btn{ display:inline-flex; align-items:center; gap:7px; padding:11px 18px; border-radius:12px; font-size:13.5px; font-weight:700; border:1px solid transparent; transition:all .16s ease; }
+.btn svg{ width:15px; height:15px; }
+.btn-primary{ background:var(--pri); color:#fff; }
+.btn-primary:hover{ background:var(--pri-deep); box-shadow:var(--shadow-md); }
+.btn-acc{ background:var(--acc); color:#fff; }
+.btn-acc:hover{ background:var(--acc-deep); }
+.btn-ghost{ background:var(--surface); border-color:var(--line); color:var(--ink); }
+.btn-ghost:hover{ background:var(--surface-2); }
+
+.tabs{ display:flex; gap:4px; background:var(--surface-2); padding:4px; border-radius:13px; width:fit-content; }
+.tab{ padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700; color:var(--ink-soft); border:none; background:transparent; transition:all .15s ease; }
+.tab.active{ background:var(--surface); color:var(--pri); box-shadow:var(--shadow-sm); }
+
+.table-wrap{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); }
+table{ width:100%; border-collapse:collapse; }
+thead th{ text-align:right; font-size:11px; letter-spacing:.3px; color:var(--ink-faint); font-weight:700; padding:13px 18px; border-bottom:1px solid var(--line); background:var(--surface-2); }
+tbody td{ padding:13px 18px; font-size:13px; border-bottom:1px solid var(--line-soft); font-weight:500;}
+tbody tr{ transition:background .15s ease; cursor:pointer; }
+tbody tr:hover{ background:var(--surface-2); }
+tbody tr:last-child td{ border-bottom:none; }
+
+.chip{ display:inline-flex; align-items:center; gap:5px; padding:4px 10px; border-radius:20px; font-size:11px; font-weight:700; }
+.chip::before{ content:''; width:6px; height:6px; border-radius:50%; }
+.chip-ok{ background:var(--acc-pale); color:var(--success); } .chip-ok::before{ background:var(--success); }
+.chip-warn{ background:#FBEED0; color:#8A661E; } .chip-warn::before{ background:#D9A441; }
+.chip-danger{ background:#FBE2DF; color:#C0392B; } .chip-danger::before{ background:#DB4C3F; }
+.chip-pri{ background:var(--pri-pale); color:var(--pri-deep); } .chip-pri::before{ background:var(--pri); }
+
+.pat-cell{ display:flex; align-items:center; gap:10px; }
+.pat-cell .avatar{ width:32px; height:32px; font-size:11px; border-radius:10px;}
+.pat-name{ font-weight:700; font-size:13.5px; }
+.pat-sub{ font-size:11px; color:var(--ink-faint); }
+
+.pbar{ width:100%; height:7px; background:var(--surface-2); border-radius:20px; overflow:hidden; }
+.pbar-fill{ height:100%; border-radius:20px; background:linear-gradient(90deg, var(--pri), var(--acc)); transition:width 1s cubic-bezier(.2,.8,.3,1); }
+
+.timeline{ position:relative; padding-right:22px; }
+.timeline::before{ content:''; position:absolute; right:5px; top:4px; bottom:4px; width:2px; background:var(--line); }
+.t-item{ position:relative; padding-bottom:18px; }
+.t-item:last-child{ padding-bottom:0; }
+.t-dot{ position:absolute; right:-22px; top:2px; width:12px; height:12px; border-radius:50%; background:var(--surface); border:2.5px solid var(--acc); }
+.t-dot.muted{ border-color:var(--ink-faint); }
+.t-time{ font-family:'IBM Plex Mono', monospace; direction:ltr; text-align:right; font-size:10px; color:var(--ink-faint); }
+.t-text{ font-size:12.5px; margin-top:2px; }
+.t-text b{ font-weight:800; }
+
+.qa-btn{ display:flex; flex-direction:column; gap:11px; align-items:flex-start; padding:16px; border-radius:15px; border:1px solid var(--line); background:var(--surface); transition:all .18s ease; }
+.qa-btn:hover{ border-color:var(--pri); box-shadow:var(--shadow-md); transform:translateY(-2px); }
+.qa-icon{ width:36px; height:36px; border-radius:11px; display:flex; align-items:center; justify-content:center; }
+.qa-icon svg{ width:17px; height:17px; }
+.qa-label{ font-size:12px; font-weight:800; }
+
+.empty-state{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:50px 20px; color:var(--ink-faint); }
+.empty-state svg{ width:44px; height:44px; margin-bottom:14px; opacity:.5; }
+.empty-state h3{ font-size:15px; color:var(--ink); margin-bottom:4px; font-weight:800; }
+.empty-state p{ font-size:12px; max-width:280px; }
+
+.overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.4); z-index:100; opacity:0; pointer-events:none; transition:opacity .22s ease;}
+.overlay.active{ opacity:1; pointer-events:all; }
+.drawer{ position:fixed; top:0; left:-440px; width:440px; max-width:92vw; height:100%; background:var(--surface); box-shadow:var(--shadow-lg); z-index:101; transition:left .3s cubic-bezier(.2,.8,.3,1); padding:26px; overflow-y:auto; }
+.drawer.active{ left:0; }
+.modal-head{ display:flex; align-items:center; justify-content:space-between; margin-bottom:18px; }
+.modal-head h3{ font-weight:800; font-size:18px; }
+.close-x{ width:32px; height:32px; border-radius:10px; display:flex; align-items:center; justify-content:center; background:var(--surface-2); flex-shrink:0; }
+.close-x svg{ width:15px; height:15px; }
+
+.settings-row{ display:flex; align-items:center; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line-soft); }
+.settings-row:last-child{ border-bottom:none; }
+.settings-row .lab{ font-size:13px; font-weight:700; }
+.settings-row .sub{ font-size:11px; color:var(--ink-faint); margin-top:2px; }
+.switch{ width:42px; height:24px; border-radius:20px; background:var(--surface-2); position:relative; border:1px solid var(--line); transition:background .2s ease; flex-shrink:0; }
+.switch.on{ background:var(--pri); border-color:var(--pri); }
+.switch::after{ content:''; position:absolute; top:2px; right:2px; width:18px; height:18px; border-radius:50%; background:#fff; transition:right .2s ease; }
+.switch.on::after{ right:20px; }
+.field-label{ font-size:12px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; display:block; }
+.field-input{ width:100%; padding:11px 14px; border-radius:11px; border:1px solid var(--line); font-size:13px; font-family:inherit; background:var(--paper); outline:none; }
+.field-input:focus{ border-color:var(--pri); }
+.field-row{ margin-bottom:14px; }
+
+.toast-wrap{ position:fixed; bottom:24px; left:24px; z-index:200; display:flex; flex-direction:column; gap:10px; }
+.toast{ display:flex; align-items:center; gap:10px; background:var(--sidebar-bg); color:#fff; padding:14px 19px; border-radius:14px; box-shadow:var(--shadow-lg); font-size:13px; font-weight:600; transform:translateY(12px); opacity:0; transition:all .3s cubic-bezier(.2,.8,.3,1); }
+.toast.show{ transform:translateY(0); opacity:1; }
+.toast svg{ width:16px; height:16px; color:var(--acc); flex-shrink:0; }
+
+.vip-badge{ display:inline-flex; align-items:center; gap:5px; background:linear-gradient(90deg, var(--acc), var(--pri)); color:#fff; font-size:10.5px; font-weight:800; padding:4px 11px; border-radius:20px; }
+
+@media (max-width:1100px){ .grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} }
+
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 44 44" fill="none"><circle cx="22" cy="22" r="20" fill="rgba(242,169,59,0.2)"/><circle cx="16" cy="18" r="3" fill="#4FBF8F"/><circle cx="28" cy="18" r="3" fill="#F2A93B"/><path d="M14 27c2 4 6 6 8 6s6-2 8-6" stroke="#379A6E" stroke-width="2.2" fill="none" stroke-linecap="round"/></svg>
+      <div><div class="brand-name">فرحة</div><div class="brand-sub">PEDIATRIC CARE VIP</div></div>
+    </div>
+
+    <div class="doc-id-card">
+      <div class="doc-id-avatar">كف</div>
+      <div><div class="doc-id-name">د. كريم فؤاد</div><div class="doc-id-role">استشاري طب الأطفال — استشاري طب الأطفال — ١٦ عام خبرة</div></div>
+    </div>
+
+    <div class="nav-group-label">نظرة عامة</div>
+    <div class="nav-item active" data-view="dashboard">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+      لوحة التحكم
+    </div>
+
+    <div class="nav-group-label">الرعاية</div>
+    <div class="nav-item" data-view="patients">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="9" cy="8" r="3.4"/><path d="M3 21c0-4.4 2.7-7 6-7s6 2.6 6 7"/><circle cx="17.5" cy="8.5" r="2.4"/><path d="M15.5 12.2c2.7.3 4.5 2.6 4.5 5.8"/></svg>
+      المرضى
+    </div>
+    <div class="nav-item" data-view="appointments">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>
+      المواعيد
+    </div>
+    <div class="nav-item" data-view="specialty">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>
+      منحنى النمو
+    </div>
+
+    <div class="nav-group-label">الإدارة</div>
+    <div class="nav-item" data-view="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2.1-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2.1 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2.1 1.2L10 21h4l.5-2.6a7 7 0 0 0 2.1-1.2l2.3.9 2-3.4-2-1.5c.067-.396.1-.797.1-1.2z"/></svg>
+      الإعدادات
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="vip-card"><div class="t">عيادة أطفال مميزة 🎈</div><div class="s">متابعة نمو وتطور كل طفل بعناية خاصة</div></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="header-title" id="headerTitle">
+        <h1>مساء الخير يا دكتور كريم</h1>
+        <span>الثلاثاء، ١٤ يوليو · عيادة فرحة للأطفال — مدينة نصر</span>
+      </div>
+      <div class="header-right">
+        <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input type="text" placeholder="دوّر على طفل أو ولي أمر…" oninput="handleSearch(this.value)"></div>
+        <button class="icon-btn" onclick="toggleNotif()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot-badge"></span></button>
+        <div class="profile-chip"><div class="avatar" style="background:linear-gradient(135deg,var(--pri),var(--acc));">كف</div><div><div class="name">د. كريم فؤاد</div><div class="role">استشاري طب الأطفال</div></div></div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <section class="view active" id="view-dashboard">
+        <div style="display:flex; align-items:center; gap:10px; margin-bottom:20px;"><span class="vip-badge">✦ عيادة VIP</span><span style="font-size:12px; color:var(--ink-faint);">نظام إدارة خاص بعيادة د. كريم فؤاد</span></div>
+        <div class="grid grid-4" id="kpiGrid"></div>
+
+        <div class="section-title"><h2>الكشوفات هذا الأسبوع</h2></div>
+        <div class="grid" style="grid-template-columns:1.6fr 1fr;">
+          <div class="card">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+              <div><div style="font-size:12px; color:var(--ink-soft); font-weight:700;">كشوفات دورية وحالات طارئة</div><div style="font-size:21px; font-weight:800; margin-top:2px;">٥٨ كشف <span class="mono" style="font-size:11.5px; color:var(--success); font-weight:600;">+١٢٪</span></div></div>
+              <div class="tabs"><button class="tab active">أسبوع</button><button class="tab">شهر</button></div>
+            </div>
+            <div id="mainChart" style="margin-top:14px;"></div>
+          </div>
+          <div class="card">
+            <div style="font-size:12px; color:var(--ink-soft); font-weight:700; margin-bottom:14px;">توزيع الزيارات</div>
+            <div id="sideCard"></div>
+          </div>
+        </div>
+
+        <div class="section-title"><h2>مواعيد اليوم</h2><span class="count-pill" id="apptCount"></span></div>
+        <div class="grid grid-3" id="todayAppts"></div>
+
+        <div class="section-title"><h2>تطعيمات مستحقة</h2></div>
+        <div class="grid" style="grid-template-columns:1.4fr 1fr;">
+          <div class="card"><div style="font-size:12px; color:var(--ink-soft); font-weight:700; margin-bottom:12px;">أطفال محتاجين جرعة تطعيم قريبًا</div><div id="alertsList"></div></div>
+          <div class="card"><div style="font-size:12px; color:var(--ink-soft); font-weight:700; margin-bottom:12px;">آخر الحركات</div><div class="timeline" id="activityTimeline"></div></div>
+        </div>
+      </section>
+
+      <section class="view" id="view-patients">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+          <div class="tabs" id="patientFilterTabs"><button class="tab active" data-filter="all">الكل</button><button class="tab" data-filter="infant">رضّع</button><button class="tab" data-filter="toddler">أطفال صغار</button><button class="tab" data-filter="child">أطفال</button></div>
+          <button class="btn btn-primary" onclick="showToast('تم تسجيل مريض جديد')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 5v14M5 12h14"/></svg>مريض جديد</button>
+        </div>
+        <div class="table-wrap"><table><thead><tr><th>الطفل</th><th>العمر</th><th>ولي الأمر</th><th>آخر زيارة</th><th>الحالة</th></tr></thead><tbody id="patientsTableBody"></tbody></table></div>
+      </section>
+
+      <section class="view" id="view-appointments">
+        <div class="grid grid-3" id="apptGrid"></div>
+      </section>
+
+      <section class="view" id="view-specialty">
+        
+<div class="grid" style="grid-template-columns:300px 1fr; align-items:start;">
+  <div class="table-wrap">
+    <div style="padding:14px 16px; font-size:12px; font-weight:700; color:var(--ink-soft); border-bottom:1px solid var(--line);">منحنيات النمو</div>
+    <div id="growthList"></div>
+  </div>
+  <div class="card" id="growthDetailCard"></div>
+</div>
+
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="grid grid-2">
+          <div class="card"><div style="font-weight:800; font-size:16px; margin-bottom:12px;">بيانات العيادة</div>
+            <div class="field-row"><label class="field-label">اسم العيادة</label><input class="field-input" value="فرحة — د. كريم فؤاد"></div>
+            <div class="field-row"><label class="field-label">العنوان</label><input class="field-input" value="٥ شارع مكرم عبيد، مدينة نصر، القاهرة"></div>
+            <button class="btn btn-primary" onclick="showToast('تم حفظ البيانات')">حفظ التعديلات</button>
+          </div>
+          <div class="card"><div style="font-weight:800; font-size:16px; margin-bottom:6px;">التفضيلات</div>
+            <div class="settings-row"><div><div class="lab">تذكير التطعيمات</div><div class="sub">إشعار لولي الأمر قبل أسبوع من موعد التطعيم</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="settings-row"><div><div class="lab">تقرير النمو الشهري</div><div class="sub">إرسال تقرير نمو تلقائي لولي الأمر</div></div><div class="switch on" onclick="this.classList.toggle('on')"></div></div>
+            <div class="settings-row"><div><div class="lab">وضع العرض الليلي</div><div class="sub">تفعيل الواجهة الداكنة للشِفت المسائي</div></div><div class="switch" onclick="this.classList.toggle('on')"></div></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="overlay" id="notifOverlay" onclick="toggleNotif()"></div>
+<div class="drawer" id="notifDrawer">
+  <div class="modal-head"><h3>الإشعارات</h3><div class="close-x" onclick="toggleNotif()"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg></div></div>
+  <div class="timeline" id="notifList"></div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+function avatar(name,color){ const initials=name.split(' ').slice(0,2).map(w=>w[0]).join(''); return `<div class="avatar" style="background:${color||'linear-gradient(135deg,var(--pri),var(--acc))'}">${initials}</div>`; }
+const patients = [
+  {name:'زياد أحمد', age:'٨ شهور', ageGroup:'infant', parent:'أحمد فريد', last:'اليوم', status:'ok'},
+  {name:'جنى محمود', age:'سنتين ونص', ageGroup:'toddler', parent:'محمود سعيد', last:'أمس', status:'vaccine'},
+  {name:'يوسف كريم', age:'٥ سنين', ageGroup:'child', parent:'كريم عادل', last:'٣ أيام', status:'ok'},
+  {name:'مريم وليد', age:'١٤ شهر', ageGroup:'toddler', parent:'وليد حسن', last:'أسبوع', status:'vaccine'},
+  {name:'آدم طارق', age:'٧ سنين', ageGroup:'child', parent:'طارق فوزي', last:'يومين', status:'ok'},
+];
+const statusChip = {ok:'<span class="chip chip-ok">نمو طبيعي</span>', vaccine:'<span class="chip chip-warn">تطعيم مستحق</span>'};
+
+function renderKPIs(){
+  const kpis=[
+    {label:'كشوفات هذا الأسبوع', value:58, icon:'<svg viewBox="0 0 24 24" fill="none" stroke="var(--pri)" stroke-width="2"><path d="M4 19V9M10 19V5M16 19v-7M22 19H2"/></svg>', bg:'var(--pri-pale)', trend:'+١٢٪'},
+    {label:'تطعيمات مستحقة', value:9, icon:'<svg viewBox="0 0 24 24" fill="none" stroke="var(--acc)" stroke-width="2"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94"/></svg>', bg:'var(--acc-pale)', trend:'هذا الأسبوع'},
+    {label:'أطفال مسجّلين', value:610, icon:'<svg viewBox="0 0 24 24" fill="none" stroke="var(--success)" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8"/></svg>', bg:'var(--pri-pale)', trend:'+٢٤'},
+    {label:'معدل نمو طبيعي', value:96, suffix:'٪', icon:'<svg viewBox="0 0 24 24" fill="none" stroke="var(--pri)" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>', bg:'var(--pri-pale)', trend:'+١٪'},
+  ];
+  document.getElementById('kpiGrid').innerHTML = kpis.map(k=>`<div class="card hoverable"><div class="kpi-top"><div class="kpi-icon" style="background:${k.bg}">${k.icon}</div><div class="kpi-trend">${k.trend}</div></div><div class="kpi-value" data-count="${k.value}" data-suffix="${k.suffix||''}">0${k.suffix||''}</div><div class="kpi-label">${k.label}</div></div>`).join('');
+  animateCounters();
+}
+
+function render_main(){
+  const data=[9,11,8,13,10,4,3];
+  const w=460,h=150,pad=10; const max=Math.max(...data)*1.15;
+  const pts=data.map((v,i)=>{ const x=pad+i*((w-2*pad)/(data.length-1)); const y=h-pad-(v/max)*(h-2*pad); return [x,y]; });
+  const line=pts.map((p,i)=>(i===0?'M':'L')+p[0]+','+p[1]).join(' ');
+  const area=line+` L${pts[pts.length-1][0]},${h-pad} L${pts[0][0]},${h-pad} Z`;
+  const labels=['سبت','أحد','إثن','ثلا','أرب','خمي','جمعة'];
+  const dots=pts.map(p=>`<circle cx="${p[0]}" cy="${p[1]}" r="3.5" fill="#4FBF8F" stroke="#fff" stroke-width="1.5"/>`).join('');
+  const lbls=pts.map((p,i)=>`<text x="${p[0]}" y="${h+14}" font-size="10" fill="var(--ink-faint)" text-anchor="middle">${labels[i]}</text>`).join('');
+  document.getElementById('mainChart').innerHTML = `<svg viewBox="0 0 ${w} ${h+24}" width="100%" height="200"><defs><linearGradient id="mg1" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="#4FBF8F" stop-opacity="0.3"/><stop offset="100%" stop-color="#4FBF8F" stop-opacity="0"/></linearGradient></defs><path d="${area}" fill="url(#mg1)"/><path d="${line}" fill="none" stroke="#4FBF8F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${dots}${lbls}</svg>`;
+}
+render_main();
+
+function renderSideCard(){
+  const data=[{l:'كشف دوري',v:44,c:'#4FBF8F'},{l:'تطعيمات',v:26,c:'#F2A93B'},{l:'حالات طارئة',v:16,c:'#379A6E'},{l:'استشارات تغذية',v:14,c:'#C4831F'}];
+  const total=data.reduce((s,d)=>s+d.v,0); let acc=0; const r=48,cx=56,cy=56,circ=2*Math.PI*r;
+  const arcs=data.map(d=>{ const frac=d.v/total; const dash=frac*circ; const el=`<circle cx="${cx}" cy="${cy}" r="${r}" fill="none" stroke="${d.c}" stroke-width="14" stroke-dasharray="${dash} ${circ-dash}" stroke-dashoffset="${-acc}" transform="rotate(-90 ${cx} ${cy})"/>`; acc+=dash; return el; }).join('');
+  document.getElementById('sideCard').innerHTML = `<div style="display:flex; align-items:center; gap:18px;"><svg viewBox="0 0 112 112" width="130" height="130">${arcs}</svg><div style="display:flex; flex-direction:column; gap:9px;">${data.map(d=>`<div style="display:flex; align-items:center; gap:6px; font-size:11px; color:var(--ink-soft);"><span style="width:8px;height:8px;border-radius:50%;background:${d.c}"></span>${d.l} <span class="mono" style="color:var(--ink-faint);">${d.v}%</span></div>`).join('')}</div></div>`;
+}
+renderSideCard();
+function renderTodayAppts(){
+  const appts=[{time:'٩:٠٠ ص', name:'زياد أحمد', type:'كشف دوري ٨ شهور'},{time:'١٠:٣٠ ص', name:'جنى محمود', type:'جرعة تطعيم'},{time:'١٢:٠٠ م', name:'يوسف كريم', type:'متابعة نمو سنوية'}];
+  document.getElementById('apptCount').textContent = appts.length+' مواعيد';
+  document.getElementById('todayAppts').innerHTML = appts.map(a=>`<div class="card hoverable"><span class="mono" style="font-size:12px; color:var(--pri); font-weight:700;">${a.time}</span><div style="display:flex; align-items:center; gap:10px; margin-top:12px;">${avatar(a.name)}<div><div class="pat-name">${a.name}</div><div class="pat-sub">${a.type}</div></div></div></div>`).join('');
+}
+function renderAlerts(){
+  const rows = patients.filter(p=>p.status==='vaccine');
+  document.getElementById('alertsList').innerHTML = rows.map(p=>`<div style="display:flex; align-items:center; gap:12px; padding:10px 0; border-bottom:1px solid var(--line-soft);">${avatar(p.name)}<div style="flex:1;"><div class="pat-name">${p.name}</div><div class="pat-sub">${p.age} · ${p.parent}</div></div>${statusChip[p.status]}</div>`).join('');
+}
+function renderActivity(){
+  const items=[{time:'٩:١٥ ص', text:'<b>زياد أحمد</b> تم كشفه الدوري بنجاح'},{time:'١٠:٠٠ ص', text:'تطعيم جديد لـ<b>جنى محمود</b> — تم التسجيل'},{time:'١١:٠٠ ص', text:'<b>د. كريم</b> حدّث منحنى نمو <b>يوسف كريم</b>'}];
+  document.getElementById('activityTimeline').innerHTML = items.map((it,i)=>`<div class="t-item"><div class="t-dot ${i>1?'muted':''}"></div><div class="t-time">${it.time}</div><div class="t-text">${it.text}</div></div>`).join('');
+}
+function renderPatients(filter='all'){
+  const rows = patients.filter(p=> filter==='all'||p.ageGroup===filter);
+  document.getElementById('patientsTableBody').innerHTML = rows.length ? rows.map(p=>`<tr><td><div class="pat-cell">${avatar(p.name)}<span class="pat-name">${p.name}</span></div></td><td class="mono">${p.age}</td><td>${p.parent}</td><td class="mono">${p.last}</td><td>${statusChip[p.status]}</td></tr>`).join('') : `<tr><td colspan="5"><div class="empty-state"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></svg><h3>لا يوجد أطفال مطابقين</h3></div></td></tr>`;
+}
+document.querySelectorAll('#patientFilterTabs .tab').forEach(t=> t.addEventListener('click', ()=>{ document.querySelectorAll('#patientFilterTabs .tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderPatients(t.dataset.filter); }));
+function renderApptGrid(){
+  const appts=[{time:'٩:٠٠ ص', name:'زياد أحمد', type:'كشف دوري ٨ شهور'},{time:'١٠:٣٠ ص', name:'جنى محمود', type:'جرعة تطعيم'},{time:'١٢:٠٠ م', name:'يوسف كريم', type:'متابعة نمو سنوية'},{time:'١:٣٠ م', name:'آدم طارق', type:'كشف عارض (كحة)'}];
+  document.getElementById('apptGrid').innerHTML = appts.map(a=>`<div class="card hoverable"><span class="mono" style="font-size:12px; color:var(--pri); font-weight:700;">${a.time}</span><div style="display:flex; align-items:center; gap:10px; margin-top:12px;">${avatar(a.name)}<div><div class="pat-name">${a.name}</div><div class="pat-sub">${a.type}</div></div></div></div>`).join('');
+}
+const growthCharts = {
+  'زياد أحمد':[45,50,55,60,64,68,70,72],
+  'جنى محمود':[48,55,62,68,74,79,83,86],
+  'يوسف كريم':[55,62,70,78,86,93,99,104],
+};
+function growthBars(data){
+  const w=280,h=120,pad=8; const max=Math.max(...data)*1.1; const barW=(w-2*pad)/data.length-6;
+  const bars = data.map((v,i)=>{ const x=pad+i*((w-2*pad)/data.length); const bh=(v/max)*(h-2*pad); const y=h-pad-bh; return `<rect x="${x}" y="${y}" width="${barW}" height="${bh}" rx="4" fill="${i===data.length-1?'#4FBF8F':'#DEF2E9'}"/>`; }).join('');
+  return `<svg viewBox="0 0 ${w} ${h}" width="100%" height="140">${bars}</svg>`;
+}
+function renderGrowthList(activeIdx=0){
+  const names = Object.keys(growthCharts);
+  document.getElementById('growthList').innerHTML = names.map((n,i)=>`<div onclick="renderGrowthDetail(${i})" style="padding:13px 16px; border-bottom:1px solid var(--line-soft); cursor:pointer; background:${i===activeIdx?'var(--pri-pale)':'transparent'};"><div style="font-size:13px; font-weight:700; color:${i===activeIdx?'var(--pri-deep)':'var(--ink)'}">${n}</div></div>`).join('');
+}
+function renderGrowthDetail(i){
+  renderGrowthList(i);
+  const names = Object.keys(growthCharts); const n = names[i]; const data = growthCharts[n];
+  document.getElementById('growthDetailCard').innerHTML = `<div style="font-weight:800; font-size:16px;">منحنى نمو الطول (سم) — ${n}</div><div style="font-size:12px; color:var(--ink-faint); margin-top:4px;">آخر ٨ زيارات</div>${growthBars(data)}
+  <div style="background:var(--pri-pale); padding:14px; border-radius:12px; margin-top:14px; font-size:13px; color:var(--pri-deep); font-weight:700;">النمو ضمن النسبة المئوية الطبيعية (٥٠-٧٥٪) — لا يوجد قلق حاليًا.</div>
+  <button class="btn btn-primary" style="margin-top:16px;" onclick="showToast('تم إرسال تقرير النمو لولي الأمر')">إرسال تقرير لولي الأمر</button>`;
+}
+function renderNotifs(){
+  const items=[{time:'منذ ١٠ دقايق', text:'<b>جنى محمود</b> — تطعيم مستحق خلال ٣ أيام'},{time:'منذ ساعة', text:'<b>يوسف كريم</b> أنهى كشف المتابعة السنوي'},{time:'أمس', text:'استفسار جديد من ولي أمر <b>آدم طارق</b>'}];
+  document.getElementById('notifList').innerHTML = items.map((it,i)=>`<div class="t-item"><div class="t-dot ${i>1?'muted':''}"></div><div class="t-time">${it.time}</div><div class="t-text">${it.text}</div></div>`).join('');
+}
+
+document.querySelectorAll('.nav-item[data-view]').forEach(item=> item.addEventListener('click', ()=> switchView(item.dataset.view)));
+const headerCopy = {dashboard:['مساء الخير يا دكتور كريم','الثلاثاء، ١٤ يوليو · عيادة فرحة للأطفال — مدينة نصر'],patients:['الأطفال','٦١٠ طفل مسجّل'],appointments:['المواعيد','٤ مواعيد اليوم'],specialty:['منحنى النمو','متابعة نمو الطول والوزن لكل طفل'],settings:['الإعدادات','بيانات العيادة والتفضيلات']};
+function switchView(id){
+  document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  const [h,s]=headerCopy[id]; document.getElementById('headerTitle').innerHTML=`<h1>${h}</h1><span>${s}</span>`;
+}
+function animateCounters(){
+  document.querySelectorAll('[data-count]').forEach(el=>{
+    const target=parseFloat(el.dataset.count); const suffix=el.dataset.suffix||''; const start=performance.now(); const dur=900;
+    const isDec = target%1!==0;
+    function tick(now){ const p=Math.min(1,(now-start)/dur); const eased=1-Math.pow(1-p,3); const val=target*eased; el.textContent=(isDec?val.toFixed(1):Math.round(val)).toLocaleString('en-US')+suffix; if(p<1) requestAnimationFrame(tick); }
+    requestAnimationFrame(tick);
+  });
+}
+function toggleNotif(){ document.getElementById('notifDrawer').classList.toggle('active'); document.getElementById('notifOverlay').classList.toggle('active'); }
+function showToast(msg){
+  const wrap=document.getElementById('toastWrap'); const t=document.createElement('div'); t.className='toast';
+  t.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>${msg}`;
+  wrap.appendChild(t); requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },3200);
+}
+function handleSearch(q){ if(q.length>1){ switchView('patients'); const r=patients.filter(p=>p.name.includes(q)); document.getElementById('patientsTableBody').innerHTML = r.map(p=>`<tr><td><div class=\"pat-cell\">${avatar(p.name)}<span class=\"pat-name\">${p.name}</span></div></td><td class=\"mono\">${p.age}</td><td>${p.parent}</td><td class=\"mono\">${p.last}</td><td>${statusChip[p.status]}</td></tr>`).join(''); } }
+
+renderKPIs(); renderTodayAppts(); renderAlerts(); renderActivity(); renderPatients(); renderApptGrid(); renderGrowthList(0); renderGrowthDetail(0); renderNotifs();
+setTimeout(()=> showToast('عندك ٩ تطعيمات مستحقة الأسبوع ده'), 700);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,25 @@
+/* ============================================================
+   NEXORA — KPI Card
+   Single headline metric + trend badge. Extends .nx-card.
+   ============================================================ */
+
+.nx-kpi-card__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--nx-space-4);
+}
+
+.nx-kpi-card__value {
+  font-family: var(--nx-font-display);
+  font-size: var(--nx-fs-700);
+  font-weight: var(--nx-fw-bold);
+  line-height: var(--nx-lh-tight);
+  margin-bottom: var(--nx-space-2);
+}
+
+.nx-kpi-card__unit {
+  font-size: var(--nx-fs-400);
+  color: var(--nx-text-secondary);
+  margin-left: var(--nx-space-1);
+}

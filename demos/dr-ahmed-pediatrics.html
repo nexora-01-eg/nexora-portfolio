@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عيادة د. أحمد راغب — استشاري طب الأطفال</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sky:#3B9AE1; --sky-dark:#2678BD; --sky-soft:#E7F3FC;
+  --sunny:#FFC93C; --sunny-soft:#FFF6DE;
+  --coral:#FF8066; --coral-soft:#FFEDE8;
+  --bg:#F8FBFE; --surface:#FFFFFF;
+  --text:#17293A; --text-secondary:#3D5468; --muted:#84979F; --faint:#C7DAE3;
+  --border:#E4EFF8; --border-strong:#CEE1EE;
+  --success:#2FAE6B; --success-soft:#E9F9F0;
+  --warning:#D9932E; --warning-soft:#FBF1DF;
+  --danger:#DC3E4A; --danger-soft:#FCEAEC;
+  --r-sm:12px; --r-md:16px; --r-lg:22px; --r-xl:28px;
+  --shadow-sm:0 3px 12px rgba(59,154,225,0.08);
+  --shadow-md:0 14px 32px rgba(59,154,225,0.12);
+  --shadow-lg:0 28px 60px rgba(59,154,225,0.20);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;font-weight:900;margin:0;color:var(--text);letter-spacing:-.01em;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 268px;min-height:100vh;}
+.sidebar{background:#fff;border-left:1px solid var(--border);padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:20px;border-bottom:1px solid var(--border);}
+.brand img{width:52px;height:52px;border-radius:16px;object-fit:cover;border:2px solid var(--sky);}
+.brand-name{font-weight:900;font-size:15px;color:var(--sky-dark);}
+.brand-sub{font-size:10.5px;color:var(--muted);margin-top:1px;}
+.vip-tag{display:inline-flex;align-items:center;gap:4px;background:var(--sunny);color:#7A5A00;font-size:9px;font-weight:900;padding:2px 8px;border-radius:99px;margin-top:6px;}
+.nav-sec{font-size:10px;color:var(--faint);text-transform:uppercase;letter-spacing:.07em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:14px;color:var(--text-secondary);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;}
+.nav-item:hover{background:var(--sky-soft);}
+.nav-item.active{background:var(--sky);color:#fff;}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:var(--coral);color:#fff;font-size:10px;font-weight:900;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid var(--border);}
+.trust-box{background:var(--sunny-soft);border-radius:16px;padding:12px;text-align:center;}
+.trust-box .n{font-size:20px;font-weight:900;color:#B8860B;}
+.trust-box .l{font-size:9.5px;color:var(--muted);margin-top:2px;}
+
+.topbar{height:74px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(248,251,254,0.9);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:14px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15.5px;}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:14px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:var(--sky);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:var(--sky-dark);transform:translateY(-1px);}
+.btn-sunny{background:var(--sunny);color:#7A5A00;}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--sky-soft);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.healthy{background:var(--success-soft);color:var(--success);}
+.badge.watch{background:var(--warning-soft);color:var(--warning);}
+.badge.urgent{background:var(--danger-soft);color:var(--danger);}
+.badge.sunny{background:var(--sunny-soft);color:#B8860B;}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:13px;display:flex;align-items:center;justify-content:center;font-size:17px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;}
+.stat .value{font-size:24px;font-weight:900;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--success);margin-top:6px;display:inline-block;}
+
+.play-strip{position:relative;overflow:hidden;border-radius:var(--r-xl);background:linear-gradient(120deg,#1F5A8C,var(--sky),#6EC6FF);padding:26px 28px;color:#fff;display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.play-left h2{color:#fff;font-size:21px;margin-bottom:5px;} .play-left p{color:rgba(255,255,255,0.82);font-size:12.5px;}
+.play-stats{display:flex;gap:22px;flex-shrink:0;}
+.play-stat{text-align:center;} .play-stat .v{font-size:22px;font-weight:900;} .play-stat .l{font-size:9.5px;color:rgba(255,255,255,0.72);text-transform:uppercase;margin-top:2px;}
+
+/* Growth chart (signature) */
+.growth-chart{padding:6px 0;}
+.growth-svg{width:100%;height:180px;}
+.growth-line{fill:none;stroke:var(--sky);stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+.growth-area{fill:url(#growthGrad);}
+.growth-dot{fill:var(--sky);stroke:#fff;stroke-width:2;}
+.percentile-band{fill:var(--sky-soft);opacity:0.6;}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--sky-soft);}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;}
+.avatar{border-radius:50%;object-fit:cover;flex-shrink:0;}
+
+.cal-wrap{display:grid;grid-template-columns:64px repeat(5,1fr);gap:0;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#fff;}
+.cal-head{padding:14px 8px;text-align:center;font-weight:800;font-size:12.5px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);background:var(--sky-soft);}
+.cal-time{font-size:10px;color:var(--faint);text-align:center;padding-top:8px;border-left:1px solid var(--border);height:70px;}
+.cal-col{border-right:1px solid var(--border);position:relative;}
+.cal-slot{height:70px;border-bottom:1px dashed var(--border);}
+.appt-block{position:absolute;right:4px;left:4px;border-radius:10px;padding:7px 9px;font-size:10.5px;color:#fff;background:var(--sky);cursor:pointer;}
+.appt-block b{display:block;font-size:11px;}
+
+.testi-card{background:var(--sky-soft);border-radius:var(--r-lg);padding:16px;}
+.testi-card p{font-size:12.5px;color:var(--text-secondary);line-height:1.7;font-style:italic;}
+.testi-stars{color:var(--sunny);margin-bottom:8px;filter:drop-shadow(0 0 0 #B8860B);}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--sky-dark);color:#fff;padding:11px 17px;border-radius:14px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);}
+
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 78px;} .brand-name,.brand-sub,.vip-tag,.nav-item span:not(.ic),.nav-sec,.trust-box .l,.nav-badge{display:none;} .cal-wrap{grid-template-columns:50px repeat(5,minmax(110px,1fr));overflow-x:auto;} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} .play-strip{flex-direction:column;align-items:flex-start;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">عيادة براعم الأطفال — د. أحمد راغب</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-sunny" onclick="switchView('v-appointments')">+ حجز موعد</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-patients"></section>
+      <section class="view" id="v-appointments"></section>
+      <section class="view" id="v-growth"></section>
+      <section class="view" id="v-profile"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <img src="https://i.pravatar.cc/104?img=12">
+      <div><div class="brand-name">د. أحمد راغب</div><div class="brand-sub">استشاري طب الأطفال</div><span class="vip-tag">🌟 براعم الأطفال VIP</span></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-appointments"><span class="ic">🗓️</span><span>المواعيد</span></div>
+      <div class="nav-item" data-view="v-growth"><span class="ic">📈</span><span>منحنى النمو</span></div>
+      <div class="nav-sec">الأطفال</div>
+      <div class="nav-item" data-view="v-patients"><span class="ic">🧸</span><span>ملفات الأطفال</span><span class="nav-badge">2</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-profile"><span class="ic">🧑‍⚕️</span><span>الملف الشخصي</span></div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="trust-box">
+        <div class="n">+7,200</div>
+        <div class="l">طفل تحت المتابعة</div>
+      </div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const patients = [
+  {name:"مالك خالد", age:"3 سنوات", parent:"أ. خالد سامي", condition:"متابعة نمو دورية", status:"healthy", weight:14.2, img:2},
+  {name:"جوري عمرو", age:"5 شهور", parent:"د. عمرو زكي", condition:"تطعيمات دورية", status:"healthy", weight:6.8, img:24},
+  {name:"آدم وليد", age:"6 سنوات", parent:"م. وليد حسن", condition:"حساسية صدرية", status:"watch", weight:19.5, img:4},
+  {name:"لينا شريف", age:"2 سنة", parent:"أ. شريف عادل", condition:"ارتفاع حرارة مستمر", status:"urgent", weight:11.3, img:26},
+  {name:"يوسف ماجد", age:"4 سنوات", parent:"د. ماجد فوزي", condition:"متابعة نمو دورية", status:"healthy", weight:16.8, img:6},
+];
+const appointments = [
+  {patient:"مالك خالد", type:"فحص دوري", day:0, start:0, span:1},
+  {patient:"جوري عمرو", type:"تطعيم شهري", day:1, start:1, span:1},
+  {patient:"آدم وليد", type:"متابعة حساسية", day:1, start:2, span:1},
+  {patient:"لينا شريف", type:"كشف عاجل", day:2, start:0, span:1},
+  {patient:"يوسف ماجد", type:"فحص دوري", day:4, start:3, span:1},
+];
+const days = ['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء'];
+const hours = ['9:00 ص','11:00 ص','1:00 م','3:00 م'];
+const testimonials = [
+  {name:"أ. خالد سامي", text:"دكتور أحمد بيتعامل مع الأطفال بمنتهى الحنان، ابني بقى يحب زيارة الدكتور!", rating:5},
+  {name:"د. عمرو زكي", text:"متابعة دقيقة جدًا لجدول التطعيمات، وشرح مبسط لكل حاجة.", rating:5},
+];
+const growthData = [3.2, 5.8, 7.9, 9.6, 11.2, 12.8, 14.2];
+const growthMonths = ['0 شهر','3 شهور','6 شهور','9 شهور','سنة','سنة ونصف','سنتين'];
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','عيادة براعم الأطفال — د. أحمد راغب'],
+    'v-patients':['ملفات الأطفال', patients.length+' طفل تحت المتابعة'],
+    'v-appointments':['المواعيد','الأسبوع الحالي'],
+    'v-growth':['منحنى النمو','متابعة الوزن والطول حسب العمر'],
+    'v-profile':['الملف الشخصي','السيرة المهنية لـ د. أحمد راغب'],
+    'v-settings':['الإعدادات','بيانات العيادة'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+const statusMap = {healthy:'بصحة جيدة',watch:'تحت الملاحظة',urgent:'عاجل'};
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>أهلاً، دكتور أحمد 🧸</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦ — عيادة براعم الأطفال</p></div>
+      <button class="btn btn-outline" onclick="switchView('v-appointments')">عرض جدول اليوم</button></div>
+    <div class="play-strip" style="margin-bottom:18px">
+      <div class="play-left"><h2>يوم مليان براءة 🧸</h2><p>لمحة سريعة على نشاط العيادة الآن</p></div>
+      <div class="play-stats">
+        <div class="play-stat"><div class="v">${appointments.length}</div><div class="l">مواعيد اليوم</div></div>
+        <div class="play-stat"><div class="v">99%</div><div class="l">رضا الأهالي</div></div>
+        <div class="play-stat"><div class="v">3</div><div class="l">تطعيمات اليوم</div></div>
+      </div>
+    </div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('مواعيد اليوم', appointments.length+' موعد','🗓️','var(--sky)','+1 عن أمس')}
+      ${stat('حالات تحت الملاحظة',patients.filter(p=>p.status==='watch').length+' حالة','👁️','var(--warning)','متابعة أسبوعية')}
+      ${stat('إيراد الشهر','١٦٤٬٨٠٠ ج.م','💰','var(--success)','+8%')}
+      ${stat('حالات عاجلة',patients.filter(p=>p.status==='urgent').length+' حالة','🚨','var(--danger)','بحاجة لكشف سريع')}
+    </div>
+    <div class="grid g3">
+      <div class="card card-pad" style="grid-column:span 2">
+        <div class="card-title" style="margin-bottom:16px">حالات الأطفال الحالية</div>
+        ${patients.map(p=>`
+          <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+            <div class="flex items-center gap3"><img class="avatar" width="36" height="36" src="https://i.pravatar.cc/72?img=${p.img}"><div><b style="font-size:13px">${p.name}</b><div class="muted" style="font-size:11px">${p.condition} — ${p.age}</div></div></div>
+            <span class="badge ${p.status}">${statusMap[p.status]}</span>
+          </div>`).join('')}
+      </div>
+      <div class="card card-pad">
+        <div class="card-title" style="margin-bottom:12px">آراء أولياء الأمور</div>
+        <div class="testi-card">
+          <div class="testi-stars">★★★★★</div>
+          <p>"${testimonials[0].text}"</p>
+          <div style="margin-top:10px;font-weight:800;font-size:12px">— ${testimonials[0].name}</div>
+        </div>
+      </div>
+    </div>
+  `;
+}
+
+function renderPatients(){
+  const el = document.getElementById('v-patients');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>ملفات الأطفال</h1><p class="sub">${patients.length} طفل تحت المتابعة</p></div>
+      <button class="btn btn-primary">+ طفل جديد</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>الطفل</th><th>العمر</th><th>ولي الأمر</th><th>الحالة الطبية</th><th>الوزن</th><th>الحالة</th></tr></thead>
+      <tbody>${patients.map(p=>`
+        <tr onclick="UI.toast('ملف ${p.name}')">
+          <td><div class="cell-name"><img class="avatar" width="34" height="34" src="https://i.pravatar.cc/68?img=${p.img}">${p.name}</div></td>
+          <td>${p.age}</td><td>${p.parent}</td><td>${p.condition}</td><td>${p.weight} كجم</td>
+          <td><span class="badge ${p.status}">${statusMap[p.status]}</span></td>
+        </tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderAppointments(){
+  const el = document.getElementById('v-appointments');
+  el.innerHTML = `<div class="view-head"><div><h1>المواعيد</h1><p class="sub">الأسبوع الحالي</p></div>
+    <button class="btn btn-sunny">+ حجز موعد</button></div>
+    <div class="cal-wrap" id="calWrap"></div>`;
+  let html = `<div class="cal-head" style="background:#fff"></div>`;
+  days.forEach(d=> html += `<div class="cal-head">${d}</div>`);
+  html += `<div>`+hours.map(h=>`<div class="cal-time">${h}</div>`).join('')+`</div>`;
+  for(let d=0; d<5; d++){
+    html += `<div class="cal-col">`;
+    hours.forEach(()=> html += `<div class="cal-slot"></div>`);
+    appointments.filter(a=>a.day===d).forEach(a=>{
+      html += `<div class="appt-block" style="top:${a.start*70+4}px;height:${a.span*70-8}px" onclick="UI.toast('${a.patient} — ${a.type}')">
+        <b>${a.patient}</b>${a.type}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  document.getElementById('calWrap').innerHTML = html;
+}
+
+function renderGrowth(){
+  const el = document.getElementById('v-growth');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>منحنى النمو</h1><p class="sub">مالك خالد — متابعة الوزن حسب العمر</p></div>
+      <button class="btn btn-primary">+ تسجيل قياس جديد</button></div>
+    <div class="card card-pad">
+      <div class="growth-chart" id="growthHolder"></div>
+    </div>
+  `;
+  const w=680, h=180, pad=30;
+  const max = Math.max(...growthData)*1.2, min=0;
+  const stepX = (w-pad*2)/(growthData.length-1);
+  const pts = growthData.map((v,i)=>{
+    const x = pad+i*stepX; const y = h-pad-((v-min)/(max-min))*(h-pad*2);
+    return [x,y];
+  });
+  const path = pts.map((p,i)=>(i===0?'M':'L')+p[0].toFixed(1)+','+p[1].toFixed(1)).join(' ');
+  const area = path+` L${pts[pts.length-1][0]},${h-pad} L${pts[0][0]},${h-pad} Z`;
+  const dots = pts.map(p=>`<circle class="growth-dot" cx="${p[0]}" cy="${p[1]}" r="4"></circle>`).join('');
+  const labels = growthMonths.map((m,i)=>`<text x="${pts[i][0]}" y="${h-8}" font-size="9" fill="var(--muted)" text-anchor="middle">${m}</text>`).join('');
+  document.getElementById('growthHolder').innerHTML = `
+    <svg class="growth-svg" viewBox="0 0 ${w} ${h}">
+      <defs><linearGradient id="growthGrad" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="var(--sky)" stop-opacity="0.3"/>
+        <stop offset="100%" stop-color="var(--sky)" stop-opacity="0"/>
+      </linearGradient></defs>
+      <path class="growth-area" d="${area}"/>
+      <path class="growth-line" d="${path}"/>
+      ${dots}${labels}
+    </svg>
+    <div class="flex justify-between" style="margin-top:10px;font-size:12px">
+      <span class="muted">الوزن الحالي: <b style="color:var(--text)">14.2 كجم</b></span>
+      <span class="badge healthy">ضمن المعدل الطبيعي (النسبة المئوية 65)</span>
+    </div>
+  `;
+}
+
+function renderProfile(){
+  const el = document.getElementById('v-profile');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>الملف الشخصي</h1><p class="sub">السيرة المهنية المعروضة للأهالي</p></div>
+      <button class="btn btn-outline">تعديل الملف</button></div>
+    <div class="grid g3">
+      <div class="card card-pad" style="grid-column:span 2">
+        <div class="flex items-center gap3" style="margin-bottom:16px">
+          <img src="https://i.pravatar.cc/120?img=12" width="72" height="72" style="border-radius:16px">
+          <div><h3 style="font-size:19px">د. أحمد راغب</h3><div class="muted" style="font-size:12.5px;margin-top:3px">استشاري طب الأطفال وحديثي الولادة</div><div class="testi-stars" style="margin-top:6px">★★★★★ <span class="muted" style="font-size:11px">(4.9 من 520 تقييم)</span></div></div>
+        </div>
+        <p class="muted" style="font-size:13px;line-height:1.8;margin-bottom:16px">استشاري طب الأطفال وحديثي الولادة، خبرة 13 عامًا في متابعة النمو والتطعيمات، عضو الجمعية المصرية لطب الأطفال، محبوب جدًا من الأطفال بأسلوبه الودود.</p>
+        <div class="grid g3">
+          <div><div class="muted" style="font-size:10.5px">التخصص</div><b style="font-size:12.5px">طب الأطفال</b></div>
+          <div><div class="muted" style="font-size:10.5px">سنوات الخبرة</div><b style="font-size:12.5px">13+ سنة</b></div>
+          <div><div class="muted" style="font-size:10.5px">اللغات</div><b style="font-size:12.5px">عربي، إنجليزي</b></div>
+        </div>
+      </div>
+      <div class="flex-col gap3">
+        ${testimonials.map(t=>`
+          <div class="testi-card" style="margin-bottom:12px">
+            <div class="testi-stars">${'★'.repeat(t.rating)}</div>
+            <p>"${t.text}"</p>
+            <div style="margin-top:10px;font-weight:800;font-size:12px">— ${t.name}</div>
+          </div>`).join('')}
+      </div>
+    </div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1>الإعدادات</h1><p class="sub">بيانات العيادة</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات اسم العيادة، جدول التطعيمات الافتراضي، ومواعيد العمل.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderPatients(); renderAppointments(); renderGrowth(); renderProfile(); renderSettings();
+</script>
+</body>
+</html>

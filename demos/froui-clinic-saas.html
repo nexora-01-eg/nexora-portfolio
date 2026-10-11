@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>فروعي — النظام اللي يكبر مع عيادتك</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Katibeh&family=Tajawal:wght@400;500;700;800&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#132322;
+  --bg-deep: radial-gradient(ellipse 1000px 700px at 85% -10%, rgba(217,125,84,0.14), transparent 60%),
+             radial-gradient(ellipse 800px 600px at 0% 100%, rgba(227,178,60,0.08), transparent 55%),
+             #132322;
+  --raised:#1B322F;
+  --card:#1E3733;
+  --border: rgba(255,255,255,0.08);
+  --border-strong: rgba(255,255,255,0.16);
+  --terra:#D97D54;
+  --terra-soft: rgba(217,125,84,0.14);
+  --gold:#E3B23C;
+  --gold-soft: rgba(227,178,60,0.14);
+  --mint:#6FCBAE;
+  --mint-soft: rgba(111,203,174,0.14);
+  --cream:#F5EFE2;
+  --muted:#A7B8B3;
+  --faint:#5F726D;
+  --r-md:16px; --r-lg:24px; --r-pill:999px;
+  --ease: cubic-bezier(.22,1,.36,1);
+  --shadow: 0 26px 56px -26px rgba(0,0,0,0.55);
+  --font-display:'Katibeh', sans-serif;
+  --font-body:'Tajawal', sans-serif;
+  --font-mono:'IBM Plex Mono', monospace;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{ scroll-behavior:smooth; }
+body{ background:var(--bg-deep); color:var(--cream); font-family:var(--font-body); }
+a{color:inherit; text-decoration:none;} button{font-family:inherit; border:none; background:none; cursor:pointer; color:inherit;}
+:focus-visible{ outline:2px solid var(--terra); outline-offset:3px; border-radius:8px; }
+.eyebrow{ font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; color:var(--terra); }
+.glass{ background:linear-gradient(180deg, rgba(255,255,255,0.045), rgba(255,255,255,0.015)); border:1px solid var(--border); border-radius:var(--r-lg); box-shadow:var(--shadow); }
+
+/* nav */
+.nav{ position:sticky; top:0; z-index:100; display:flex; align-items:center; justify-content:space-between; padding:20px 32px; background:rgba(19,35,34,0.8); backdrop-filter:blur(14px); border-bottom:1px solid var(--border); }
+.nav-brand{ display:flex; align-items:center; gap:10px; }
+.nav-mark{ width:36px; height:36px; border-radius:11px; background:linear-gradient(150deg, var(--terra), var(--gold)); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:20px; color:#132322; }
+.nav-name{ font-family:var(--font-display); font-size:23px; }
+.nav-links{ display:flex; gap:28px; font-size:13.5px; color:var(--muted); }
+.nav-links a:hover{ color:var(--terra); }
+.btn{ display:inline-flex; align-items:center; gap:8px; font-size:13px; font-weight:700; padding:11px 22px; border-radius:var(--r-pill); transition:all .2s var(--ease); }
+.btn-primary{ background:linear-gradient(150deg, var(--terra), #b8592f); color:#fff; box-shadow:0 10px 24px -10px rgba(217,125,84,0.5); }
+.btn-primary:hover{ transform:translateY(-2px); }
+.btn-outline{ border:1px solid var(--border-strong); color:var(--cream); }
+.btn-outline:hover{ border-color:var(--terra); }
+
+/* hero */
+.hero{ padding:80px 32px 40px; text-align:center; }
+.hero .eyebrow{ display:block; }
+.hero h1{ font-family:var(--font-display); font-size:56px; line-height:1.15; max-width:820px; margin:16px auto 0; }
+.hero h1 span{ color:var(--terra); }
+.hero p{ font-size:15px; color:var(--muted); max-width:520px; margin:20px auto 0; line-height:1.75; }
+.hero-actions{ display:flex; justify-content:center; gap:14px; margin-top:30px; }
+
+/* dashboard preview */
+.preview-wrap{ max-width:1000px; margin:56px auto 0; padding:0 32px; }
+.preview-card{ padding:16px; }
+.preview-topbar{ display:flex; align-items:center; gap:8px; padding:10px 14px; border-bottom:1px solid var(--border); margin-bottom:14px; }
+.preview-dot{ width:9px; height:9px; border-radius:50%; }
+.mini-dashboard{ display:grid; grid-template-columns:180px 1fr; gap:14px; padding:0 6px 6px; }
+.mini-sidebar{ background:var(--raised); border-radius:14px; padding:16px 12px; display:flex; flex-direction:column; gap:8px; }
+.mini-nav-item{ display:flex; align-items:center; gap:8px; padding:8px 10px; border-radius:9px; font-size:11px; color:var(--muted); }
+.mini-nav-item.active{ background:var(--terra); color:#fff; }
+.mini-nav-item .dot-ic{ width:6px; height:6px; border-radius:50%; background:currentColor; }
+.mini-main{ display:flex; flex-direction:column; gap:12px; }
+.mini-kpi-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+.mini-kpi{ background:var(--raised); border-radius:12px; padding:12px; }
+.mini-kpi b{ font-family:var(--font-display); font-size:22px; display:block; color:var(--gold); }
+.mini-kpi span{ font-size:10px; color:var(--faint); }
+.mini-chart-row{ display:grid; grid-template-columns:1.4fr 1fr; gap:10px; flex:1; }
+.mini-chart-box{ background:var(--raised); border-radius:12px; padding:12px; min-height:120px; }
+.mini-chart-box b{ font-size:11px; color:var(--muted); display:block; margin-bottom:8px; }
+
+/* stats bar */
+.stats-bar{ padding:60px 32px; border-top:1px solid var(--border); border-bottom:1px solid var(--border); }
+.stats-row{ max-width:1100px; margin:0 auto; display:flex; justify-content:space-around; flex-wrap:wrap; gap:24px; }
+.stat-item{ text-align:center; }
+.stat-item b{ font-family:var(--font-display); font-size:38px; color:var(--gold); display:block; }
+.stat-item span{ font-size:12px; color:var(--muted); }
+
+/* section head */
+.section{ padding:86px 32px; opacity:0; transform:translateY(20px); transition:all .7s var(--ease); }
+.section.in{ opacity:1; transform:none; }
+.section-head{ max-width:600px; margin:0 auto 46px; text-align:center; }
+.section-head h2{ font-family:var(--font-display); font-size:38px; margin-top:10px; }
+.section-head p{ font-size:14px; color:var(--muted); margin-top:12px; line-height:1.6; }
+
+/* features */
+.features-grid{ max-width:1140px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+.feature-card{ padding:28px 24px; border-radius:var(--r-lg); border:1px solid var(--border); transition:all .3s var(--ease); }
+.feature-card:hover{ transform:translateY(-6px); border-color:var(--terra); }
+.feature-ic{ width:46px; height:46px; border-radius:13px; display:flex; align-items:center; justify-content:center; margin-bottom:16px; }
+.feature-ic svg{ width:21px; height:21px; }
+.feature-card h3{ font-family:var(--font-display); font-size:22px; }
+.feature-card p{ font-size:12.5px; color:var(--muted); line-height:1.65; margin-top:8px; }
+
+/* testimonials */
+.testi-strip{ background:var(--raised); }
+.testi-grid{ max-width:1140px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+.testi-card{ padding:26px; }
+.testi-card p{ font-size:14px; line-height:1.7; }
+.testi-author{ display:flex; align-items:center; gap:11px; margin-top:18px; }
+.t-avatar{ width:38px; height:38px; border-radius:50%; background:linear-gradient(150deg, var(--terra), var(--gold)); display:flex; align-items:center; justify-content:center; font-family:var(--font-display); font-size:15px; color:#132322; }
+.testi-author b{ font-size:12.5px; display:block; } .testi-author span{ font-size:10.5px; color:var(--muted); }
+
+/* pricing */
+.pricing-grid{ max-width:1000px; margin:0 auto; display:grid; grid-template-columns:repeat(3,1fr); gap:18px; }
+.price-card{ padding:30px 24px; text-align:center; position:relative; }
+.price-card.featured{ border-color:var(--terra); box-shadow:0 0 0 1px var(--terra), var(--shadow); }
+.price-tag{ position:absolute; top:-12px; right:50%; transform:translateX(50%); background:var(--terra); color:#fff; font-size:10px; font-weight:700; padding:4px 14px; border-radius:20px; }
+.price-card h3{ font-family:var(--font-display); font-size:24px; }
+.price-card .price{ font-family:var(--font-display); font-size:44px; margin-top:12px; color:var(--gold); }
+.price-card .price small{ font-size:13px; color:var(--muted); font-family:var(--font-body); }
+.price-card ul{ list-style:none; margin-top:20px; display:flex; flex-direction:column; gap:10px; text-align:right; }
+.price-card li{ font-size:12.5px; color:var(--muted); display:flex; align-items:center; gap:8px; }
+.price-card li svg{ width:14px; height:14px; color:var(--mint); flex-shrink:0; }
+.price-card .btn{ width:100%; justify-content:center; margin-top:22px; }
+
+/* CTA */
+.cta-band{ padding:0 32px; }
+.cta-inner{ max-width:1140px; margin:0 auto; padding:64px 50px; border-radius:36px; background:linear-gradient(150deg, var(--terra), #a8461f); text-align:center; position:relative; overflow:hidden; }
+.cta-inner::after{ content:''; position:absolute; inset:0; background:radial-gradient(circle at 85% 0%, rgba(227,178,60,0.3), transparent 55%); pointer-events:none; }
+.cta-inner h2{ font-family:var(--font-display); font-size:38px; color:#fff; position:relative; z-index:1; }
+.cta-inner p{ font-size:14px; color:rgba(255,255,255,0.85); margin-top:12px; max-width:440px; margin-left:auto; margin-right:auto; position:relative; z-index:1; }
+.cta-inner .hero-actions{ margin-top:26px; position:relative; z-index:1; }
+.cta-inner .btn-outline{ border-color:rgba(255,255,255,0.5); color:#fff; }
+
+/* footer */
+.footer{ padding:50px 32px 26px; border-top:1px solid var(--border); text-align:center; }
+.footer p{ font-size:11.5px; color:var(--faint); }
+
+@media (max-width:1000px){
+  .nav-links{ display:none; }
+  .hero h1{ font-size:38px; }
+  .mini-dashboard{ grid-template-columns:1fr; } .mini-sidebar{ display:none; }
+  .features-grid, .testi-grid{ grid-template-columns:1fr 1fr; }
+  .pricing-grid{ grid-template-columns:1fr; }
+  .mini-kpi-row{ grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:620px){
+  .nav, .hero, .section, .stats-bar, .cta-band{ padding-left:18px; padding-right:18px; }
+  .features-grid, .testi-grid{ grid-template-columns:1fr; }
+  .hero h1{ font-size:30px; }
+  .mini-chart-row{ grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion:reduce){ *{ animation-duration:.01ms !important; transition-duration:.01ms !important; } }
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand"><div class="nav-mark">ف</div><div class="nav-name">فروعي</div></div>
+  <div class="nav-links"><a href="#features">المميزات</a><a href="#preview">لوحة التحكم</a><a href="#pricing">الأسعار</a><a href="#testimonials">قصص نجاح</a></div>
+  <div style="display:flex; gap:10px;"><a href="#pricing" class="btn btn-outline">الأسعار</a><a href="#cta" class="btn btn-primary">ابدأ مجانًا</a></div>
+</nav>
+
+<section class="hero">
+  <span class="eyebrow">نظام إدارة عيادات متعددة الفروع</span>
+  <h1>عيادتك بتكبر؟<br>خلّي <span>فروعي</span> يكبر معاها.</h1>
+  <p>من فرع واحد لعشرة، من دكتور لفريق كامل — فروعي بيديك رؤية واحدة على كل حاجة: المواعيد، التحصيل، الأداء، والفريق، في مكان واحد.</p>
+  <div class="hero-actions">
+    <a href="#cta" class="btn btn-primary">جرّب مجانًا ١٤ يوم</a>
+    <a href="#preview" class="btn btn-outline">شوف لوحة التحكم</a>
+  </div>
+</section>
+
+<div class="preview-wrap" id="preview">
+  <div class="glass preview-card">
+    <div class="preview-topbar"><span class="preview-dot" style="background:var(--terra);"></span><span class="preview-dot" style="background:var(--gold);"></span><span class="preview-dot" style="background:var(--mint);"></span></div>
+    <div class="mini-dashboard">
+      <div class="mini-sidebar">
+        <div class="mini-nav-item active"><span class="dot-ic"></span>نظرة عامة</div>
+        <div class="mini-nav-item"><span class="dot-ic"></span>الفروع</div>
+        <div class="mini-nav-item"><span class="dot-ic"></span>المواعيد</div>
+        <div class="mini-nav-item"><span class="dot-ic"></span>الفريق</div>
+        <div class="mini-nav-item"><span class="dot-ic"></span>التقارير</div>
+      </div>
+      <div class="mini-main">
+        <div class="mini-kpi-row" id="miniKpis"></div>
+        <div class="mini-chart-row">
+          <div class="mini-chart-box"><b>الإيرادات — كل الفروع</b><svg id="previewChart" viewBox="0 0 300 80" style="width:100%; height:80px;"></svg></div>
+          <div class="mini-chart-box"><b>أداء الفروع</b><div id="branchBars" style="display:flex; flex-direction:column; gap:8px; margin-top:4px;"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section class="stats-bar">
+  <div class="stats-row">
+    <div class="stat-item"><b id="cClinics">0</b><span>عيادة بتستخدم فروعي</span></div>
+    <div class="stat-item"><b id="cBranches">0</b><span>فرع متصل</span></div>
+    <div class="stat-item"><b id="cAppts">0</b><span>موعد شهريًا</span></div>
+    <div class="stat-item"><b id="cGrowth">0</b><span>نسبة نمو العملا الشهري</span></div>
+  </div>
+</section>
+
+<section class="section" id="features">
+  <div class="section-head"><span class="eyebrow">ليه فروعي</span><h2>كل حاجة محتاجها عشان تدير وتنمو.</h2><p>مبني عشان الطبيب أو صاحب العيادة اللي شغله بيكبر، مش نظام معقد لمستشفى ضخم.</p></div>
+  <div class="features-grid" id="featuresGrid"></div>
+</section>
+
+<section class="section testi-strip" id="testimonials">
+  <div class="section-head"><span class="eyebrow">قصص نجاح</span><h2>دكاترة زيك جربوا فروعي.</h2></div>
+  <div class="testi-grid" id="testiGrid"></div>
+</section>
+
+<section class="section" id="pricing">
+  <div class="section-head"><span class="eyebrow">الأسعار</span><h2>خطة تكبر معاك، مش تكبر عليك.</h2></div>
+  <div class="pricing-grid" id="pricingGrid"></div>
+</section>
+
+<section class="section" id="cta">
+  <div class="cta-band">
+    <div class="cta-inner">
+      <h2>يلا نبدأ نكبر عيادتك سوا.</h2>
+      <p>جرّب فروعي مجانًا ١٤ يوم، من غير أي بطاقة ائتمان.</p>
+      <div class="hero-actions">
+        <a href="#" class="btn" style="background:#fff; color:var(--terra);">ابدأ التجربة المجانية</a>
+        <a href="#" class="btn btn-outline">احجز عرض تجريبي</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>فروعي © 2026 · مشروع بورتفوليو للعرض فقط · مش نظام حقيقي متصل ببيانات فعلية</p>
+</footer>
+
+<script>
+function animateCount(el,target,dur=1200,suffix=''){ const start=performance.now();
+  function frame(t){ const p=Math.min(1,(t-start)/dur); const e=1-Math.pow(1-p,3); el.textContent=Math.round(target*e).toLocaleString('ar-EG')+suffix; if(p<1) requestAnimationFrame(frame); }
+  requestAnimationFrame(frame); }
+window.addEventListener('load', ()=>{
+  animateCount(document.getElementById('cClinics'), 340);
+  animateCount(document.getElementById('cBranches'), 890);
+  animateCount(document.getElementById('cAppts'), 42000);
+  animateCount(document.getElementById('cGrowth'), 24, 1200, '٪');
+});
+
+/* mini dashboard preview data */
+const miniKpis = [ {v:'١٤٠', l:'موعد اليوم'}, {v:'٦', l:'فروع نشطة'}, {v:'٤٢ك', l:'تحصيل ج.م'}, {v:'٩٨٪', l:'رضا العملا'} ];
+document.getElementById('miniKpis').innerHTML = miniKpis.map(k=>`<div class="mini-kpi"><b>${k.v}</b><span>${k.l}</span></div>`).join('');
+
+(function(){
+  const svg=document.getElementById('previewChart'); const vals=[20,26,24,32,30,38,42];
+  const W=300,H=80,pad=4,max=48,stepX=(W-pad*2)/(vals.length-1);
+  let d=`M ${pad} ${H-pad-(vals[0]/max)*(H-pad*2)}`; vals.forEach((v,i)=>{ if(i===0) return; d+=` L ${pad+i*stepX} ${H-pad-(v/max)*(H-pad*2)}`; });
+  const fillD=d+` L ${pad+(vals.length-1)*stepX} ${H-pad} L ${pad} ${H-pad} Z`;
+  svg.innerHTML=`<defs><linearGradient id="pgrad" x1="0" y1="0" x2="0" y2="1"><stop offset="0%" stop-color="var(--terra)" stop-opacity="0.3"/><stop offset="100%" stop-color="var(--terra)" stop-opacity="0"/></linearGradient></defs>
+  <path d="${fillD}" fill="url(#pgrad)" stroke="none"/><path d="${d}" fill="none" stroke="var(--terra)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>`;
+})();
+
+const branches = [ {n:'فرع المعادي', p:88}, {n:'فرع مدينة نصر', p:72}, {n:'فرع الشيخ زايد', p:60} ];
+document.getElementById('branchBars').innerHTML = branches.map(b=>`
+  <div style="font-size:10px; color:var(--muted);">${b.n}
+    <div style="height:5px; border-radius:5px; background:rgba(255,255,255,0.08); margin-top:4px; overflow:hidden;">
+      <div style="height:100%; border-radius:5px; background:var(--gold); width:${b.p}%;"></div>
+    </div>
+  </div>`).join('');
+
+/* features */
+const features = [
+  {n:'رؤية موحدة لكل الفروع', d:'شوف مواعيد وتحصيل وأداء كل فرع من شاشة واحدة، مهما زاد عدد العيادات.', color:'terra', icon:'<rect x="3" y="3" width="7" height="7" rx="2"/><rect x="14" y="3" width="7" height="7" rx="2"/><rect x="3" y="14" width="7" height="7" rx="2"/><rect x="14" y="14" width="7" height="7" rx="2"/>'},
+  {n:'إدارة الفريق والصلاحيات', d:'حدد لكل موظف الصلاحية المناسبة — سكرتارية، دكتور، أو مدير فرع.', color:'gold', icon:'<circle cx="9" cy="7" r="3"/><path d="M2 21v-1a6 6 0 016-6h2a6 6 0 016 6v1"/>'},
+  {n:'تحصيل وفواتير أوتوماتيك', d:'فروعي بيحسبلك التحصيل اليومي والشهري لكل فرع، ويصدرلك تقرير جاهز.', color:'mint', icon:'<rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/>'},
+  {n:'تكامل مع واتساب', d:'تذكير المواعيد، الفواتير، والمتابعة كله بيتبعت لعملائك على واتساب مباشرة.', color:'terra', icon:'<path d="M17.5 14c.4 1.1.5 2.2.3 3.2-.7.3-1.9.2-3-.4-2.6-1.4-4.8-3.6-6.2-6.2-.6-1.1-.7-2.3-.4-3 1-.2 2.1-.1 3.2.3"/><circle cx="12" cy="12" r="9"/>'},
+  {n:'تقارير نمو أسبوعية', d:'يوصلك تقرير كل أسبوع يوريك مين أكتر فرع بينمو، ومين محتاج دعم.', color:'gold', icon:'<path d="M3 12h4l2-7 4 14 2-7h6"/>'},
+  {n:'تطبيق موبايل لكل فرع', d:'كل مدير فرع له تطبيقه الخاص، وانت شايف الصورة الكاملة من فوق.', color:'mint', icon:'<rect x="7" y="2" width="10" height="20" rx="2"/><path d="M11 18h2"/>'},
+];
+document.getElementById('featuresGrid').innerHTML = features.map(f=>`
+  <div class="glass feature-card"><div class="feature-ic" style="background:var(--${f.color}-soft); color:var(--${f.color});"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7">${f.icon}</svg></div><h3>${f.n}</h3><p>${f.d}</p></div>`).join('');
+
+/* testimonials */
+const testis = [
+  {q:'كنت تايه بين ٣ فروع وكل واحد له دفتر لوحده. دلوقتي كل حاجة قدامي في شاشة واحدة.', n:'د. عمرو صبحي', role:'عيادات أسنان — ٤ فروع'},
+  {q:'التقرير الأسبوعي لوحده وفرلي وقت كبير كنت بضيعه في المتابعة اليدوية.', n:'د. رشا فهمي', role:'مركز تجميل — فرعين'},
+  {q:'أهم حاجة إن فريقي بقى بيستخدمه بسهولة من غير تدريب معقد.', n:'د. هيثم لطفي', role:'عيادة عظام — ٣ فروع'},
+];
+document.getElementById('testiGrid').innerHTML = testis.map(t=>`
+  <div class="glass testi-card"><p>"${t.q}"</p><div class="testi-author"><div class="t-avatar">${t.n.split(' ')[1]?.charAt(0)||'د'}</div><div><b>${t.n}</b><span>${t.role}</span></div></div></div>`).join('');
+
+/* pricing */
+const check = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>';
+const plans = [
+  {n:'بداية', price:'٤٩٩', per:'شهريًا · فرع واحد', feats:['مواعيد ومرضى غير محدودين','تذكير واتساب أوتوماتيك','تقرير شهري'], featured:false},
+  {n:'نمو', price:'١,٢٩٩', per:'شهريًا · حتى ٥ فروع', feats:['كل مميزات باقة البداية','رؤية موحدة لكل الفروع','إدارة فريق وصلاحيات','تقارير أسبوعية'], featured:true},
+  {n:'إنتربرايز', price:'حسب الطلب', per:'أكتر من ٥ فروع', feats:['كل مميزات باقة النمو','مدير حساب مخصص','تكامل مع أنظمة تانية'], featured:false},
+];
+document.getElementById('pricingGrid').innerHTML = plans.map(p=>`
+  <div class="glass price-card ${p.featured?'featured':''}">${p.featured?'<span class="price-tag">الأكتر طلبًا</span>':''}
+  <h3>${p.n}</h3><div class="price">${p.price} <small>${p.price!=='حسب الطلب'?'ج.م':''}</small></div><div style="font-size:11px; color:var(--muted); margin-top:4px;">${p.per}</div>
+  <ul>${p.feats.map(f=>`<li>${check}${f}</li>`).join('')}</ul>
+  <button class="btn ${p.featured?'btn-primary':'btn-outline'}">ابدأ الآن</button></div>`).join('');
+
+/* reveal */
+const io = new IntersectionObserver(entries=>{ entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('in'); }); }, {threshold:.1});
+document.querySelectorAll('.section').forEach(s=>io.observe(s));
+</script>
+</body>
+</html>

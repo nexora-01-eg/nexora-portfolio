@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>أكاديمية نغم — نظام إدارة أكاديميات الموسيقى والفنون</title>
+<meta name="description" content="عرض تصميم فقط — لا يوجد باكيند حقيقي، بيانات وهمية بالكامل">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+:root{
+  --wine:#7A2048; --wine-dark:#571633; --wine-soft:#F5E7ED;
+  --gold:#D3A94A; --gold-soft:#FBF3DF;
+  --bg:#FBF8F7; --surface:#FFFFFF;
+  --text:#26141C; --text-secondary:#4E323D; --muted:#8F7580; --faint:#DCC7CE;
+  --border:#F1E3E7; --border-strong:#E2CBD1;
+  --success:#3F9151; --success-soft:#EAF6EC;
+  --warning:#C9932E; --warning-soft:#FBF1DF;
+  --danger:#B3413A; --danger-soft:#F8EBEA;
+  --r-sm:10px; --r-md:14px; --r-lg:20px; --r-xl:26px;
+  --shadow-sm:0 2px 10px rgba(122,32,72,0.08);
+  --shadow-md:0 12px 30px rgba(122,32,72,0.10);
+  --shadow-lg:0 26px 56px rgba(122,32,72,0.20);
+  --ease:cubic-bezier(.16,1,.3,1);
+}
+*,*::before,*::after{box-sizing:border-box;}
+body{margin:0;font-family:'Cairo',sans-serif;background:var(--bg);color:var(--text);font-size:15px;-webkit-font-smoothing:antialiased;}
+h1,h2,h3,h4{font-family:'Cairo',sans-serif;font-weight:900;margin:0;color:var(--wine-dark);letter-spacing:-.01em;}
+ul{margin:0;padding:0;list-style:none;} button{font-family:inherit;cursor:pointer;}
+::-webkit-scrollbar{width:8px;height:8px;} ::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:99px;}
+
+.shell{display:grid;grid-template-columns:1fr 260px;min-height:100vh;}
+.sidebar{background:linear-gradient(185deg,var(--wine) 0%, var(--wine-dark) 100%);color:#fff;padding:24px 18px;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;}
+.brand{display:flex;align-items:center;gap:11px;margin-bottom:28px;}
+.brand-mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,var(--gold),#E8CC70);display:flex;align-items:center;justify-content:center;font-size:19px;flex-shrink:0;}
+.brand-name{font-weight:900;font-size:17px;color:var(--gold);}
+.brand-sub{font-size:10.5px;color:rgba(255,255,255,0.62);}
+.nav-sec{font-size:10px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:.07em;margin:16px 6px 8px;font-weight:800;}
+.nav-item{display:flex;align-items:center;gap:11px;padding:11px 13px;border-radius:12px;color:rgba(255,255,255,0.8);font-weight:700;font-size:13.5px;cursor:pointer;margin-bottom:3px;}
+.nav-item:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.nav-item.active{background:var(--gold);color:var(--wine-dark);}
+.nav-item .ic{font-size:16px;width:20px;text-align:center;}
+.nav-badge{margin-right:auto;background:#fff;color:var(--wine);font-size:10px;font-weight:800;padding:1px 7px;border-radius:99px;}
+.sidebar-foot{margin-top:auto;padding-top:14px;border-top:1px solid rgba(255,255,255,0.15);}
+.foot-card{display:flex;align-items:center;gap:9px;padding:9px;border-radius:12px;background:rgba(255,255,255,0.07);}
+.foot-card img{width:36px;height:36px;border-radius:10px;object-fit:cover;}
+.foot-card .name{font-size:12.5px;font-weight:800;} .foot-card .role{font-size:10.5px;color:rgba(255,255,255,0.55);}
+
+.topbar{height:72px;display:flex;align-items:center;justify-content:space-between;padding:0 28px;position:sticky;top:0;background:rgba(251,248,247,0.88);backdrop-filter:blur(10px);z-index:20;border-bottom:1px solid var(--border);}
+.topbar h2{font-size:20px;} .topbar .sub{font-size:12px;color:var(--muted);margin-top:2px;}
+.top-actions{display:flex;gap:10px;align-items:center;}
+.icon-btn{width:40px;height:40px;border-radius:12px;border:1px solid var(--border);background:#fff;display:flex;align-items:center;justify-content:center;position:relative;}
+.icon-dot{position:absolute;top:7px;left:8px;width:8px;height:8px;background:var(--danger);border-radius:50%;border:2px solid #fff;}
+
+.content{padding:26px 28px;}
+.view{display:none;} .view.active{display:block;animation:fade .3s var(--ease);}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1}}
+.view-head{display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:20px;flex-wrap:wrap;gap:12px;}
+.view-head h1{font-size:26px;} .view-head .sub{color:var(--muted);font-size:12.5px;margin-top:4px;}
+
+.card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);box-shadow:var(--shadow-sm);}
+.card-pad{padding:20px;}
+.card-title{font-weight:800;font-size:15.5px;}
+.grid{display:grid;gap:16px;}
+.g4{grid-template-columns:repeat(4,1fr);} .g3{grid-template-columns:repeat(3,1fr);} .g2{grid-template-columns:repeat(2,1fr);}
+.flex{display:flex;} .items-center{align-items:center;} .justify-between{justify-content:space-between;}
+.gap2{gap:8px;} .gap3{gap:12px;} .muted{color:var(--muted);}
+
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 18px;border-radius:12px;font-weight:800;font-size:13px;border:1px solid transparent;transition:all .15s var(--ease);}
+.btn-primary{background:var(--wine);color:#fff;box-shadow:var(--shadow-sm);}
+.btn-primary:hover{background:var(--wine-dark);transform:translateY(-1px);}
+.btn-gold{background:var(--gold);color:var(--wine-dark);}
+.btn-outline{background:#fff;border-color:var(--border-strong);color:var(--text);}
+.btn-outline:hover{background:var(--wine-soft);}
+.btn-sm{padding:6px 12px;font-size:11.5px;}
+
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 11px;border-radius:99px;font-size:10.5px;font-weight:800;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge.excellent{background:var(--success-soft);color:var(--success);}
+.badge.good{background:var(--warning-soft);color:var(--warning);}
+.badge.beginner{background:var(--danger-soft);color:var(--danger);}
+.badge.gold{background:var(--gold-soft);color:#8A6425;}
+
+.stat{padding:18px 20px;}
+.stat .top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.stat .icon{width:38px;height:38px;border-radius:11px;display:flex;align-items:center;justify-content:center;font-size:16px;}
+.stat .label{font-size:11.5px;color:var(--muted);font-weight:700;}
+.stat .value{font-size:24px;font-weight:900;}
+.stat .trend{font-size:10.5px;font-weight:800;color:var(--success);margin-top:6px;display:inline-block;}
+
+/* Student practice progress (signature) */
+.student-card{border:1px solid var(--border);border-radius:var(--r-lg);padding:16px;background:#fff;}
+.instrument-row{display:flex;align-items:center;gap:12px;padding:10px 0;border-bottom:1px dashed var(--border);}
+.instrument-icon{width:38px;height:38px;border-radius:10px;background:var(--wine-soft);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0;}
+.practice-track{flex:1;height:8px;background:var(--wine-soft);border-radius:99px;overflow:hidden;}
+.practice-fill{height:100%;border-radius:99px;background:linear-gradient(90deg,var(--wine),var(--gold));}
+
+/* Weekly schedule */
+.sched-grid{display:grid;grid-template-columns:64px repeat(5,1fr);gap:0;border:1px solid var(--border);border-radius:var(--r-lg);overflow:hidden;background:#fff;}
+.sched-head{padding:14px 8px;text-align:center;font-weight:800;font-size:12.5px;border-bottom:1px solid var(--border);border-right:1px solid var(--border);background:var(--wine-soft);}
+.sched-time{font-size:10px;color:var(--faint);text-align:center;padding-top:8px;border-left:1px solid var(--border);height:70px;}
+.sched-col{border-right:1px solid var(--border);position:relative;}
+.sched-slot{height:70px;border-bottom:1px dashed var(--border);}
+.class-block{position:absolute;right:4px;left:4px;border-radius:10px;padding:7px 9px;font-size:10.5px;color:#fff;background:var(--wine);cursor:pointer;}
+.class-block b{display:block;font-size:11px;color:var(--gold);}
+
+table{width:100%;border-collapse:collapse;font-size:13px;}
+thead th{text-align:right;font-size:10.5px;color:var(--faint);text-transform:uppercase;padding:0 12px 10px;border-bottom:1px solid var(--border);font-weight:800;}
+tbody td{padding:12px;border-bottom:1px solid var(--border);}
+tbody tr:hover{background:var(--wine-soft);}
+.cell-name{display:flex;align-items:center;gap:10px;font-weight:700;}
+.avatar{border-radius:50%;object-fit:cover;flex-shrink:0;}
+
+.toast-stack{position:fixed;bottom:20px;left:20px;z-index:200;display:flex;flex-direction:column;gap:9px;}
+.toast{background:var(--wine-dark);color:#fff;padding:11px 17px;border-radius:12px;font-size:12.5px;font-weight:800;box-shadow:var(--shadow-lg);}
+
+@media (max-width:1150px){ .shell{grid-template-columns:1fr 78px;} .brand-name,.brand-sub,.nav-item span:not(.ic),.nav-sec,.foot-card .name,.foot-card .role,.nav-badge{display:none;} .sched-grid{grid-template-columns:50px repeat(5,minmax(110px,1fr));overflow-x:auto;} }
+@media (max-width:760px){ .g4,.g3,.g2{grid-template-columns:1fr;} .content{padding:14px;} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <div class="main">
+    <header class="topbar">
+      <div><h2 id="topTitle">لوحة التحكم</h2><div class="sub" id="topSub">أكاديمية نغم للموسيقى والفنون</div></div>
+      <div class="top-actions">
+        <button class="icon-btn" onclick="UI.toast('لا توجد تنبيهات جديدة')">🔔<span class="icon-dot"></span></button>
+        <button class="btn btn-gold" onclick="switchView('v-schedule')">+ حجز حصة</button>
+      </div>
+    </header>
+    <main class="content">
+      <section class="view active" id="v-dashboard"></section>
+      <section class="view" id="v-schedule"></section>
+      <section class="view" id="v-students"></section>
+      <section class="view" id="v-teachers"></section>
+      <section class="view" id="v-settings"></section>
+    </main>
+  </div>
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-mark">🎵</div>
+      <div><div class="brand-name">أكاديمية نغم</div><div class="brand-sub">موسيقى وفنون</div></div>
+    </div>
+    <nav>
+      <div class="nav-sec">التشغيل</div>
+      <div class="nav-item active" data-view="v-dashboard"><span class="ic">📊</span><span>لوحة التحكم</span></div>
+      <div class="nav-item" data-view="v-schedule"><span class="ic">🗓️</span><span>جدول الحصص</span></div>
+      <div class="nav-sec">الطلاب</div>
+      <div class="nav-item" data-view="v-students"><span class="ic">🎼</span><span>الطلاب وتقدمهم</span><span class="nav-badge">2</span></div>
+      <div class="nav-item" data-view="v-teachers"><span class="ic">🎻</span><span>المدرسين</span></div>
+      <div class="nav-sec">الحساب</div>
+      <div class="nav-item" data-view="v-settings"><span class="ic">⚙️</span><span>الإعدادات</span></div>
+    </nav>
+    <div class="sidebar-foot">
+      <div class="foot-card"><img src="https://i.pravatar.cc/72?img=41"><div><div class="name">أ. نادر شفيق</div><div class="role">مدير الأكاديمية</div></div></div>
+    </div>
+  </aside>
+</div>
+
+<script>
+/* بيانات وهمية بالكامل — عرض تصميم فقط */
+const students = [
+  {name:"مايا سليمان", age:9, instruments:[{name:"بيانو",progress:78,icon:"🎹"},{name:"غناء",progress:60,icon:"🎤"}], level:"good", img:24},
+  {name:"كريم عادل", age:14, instruments:[{name:"جيتار",progress:92,icon:"🎸"}], level:"excellent", img:6},
+  {name:"لمى وليد", age:7, instruments:[{name:"كمان",progress:35,icon:"🎻"}], level:"beginner", img:27},
+  {name:"يوسف حسام", age:11, instruments:[{name:"درامز",progress:70,icon:"🥁"},{name:"بيانو",progress:45,icon:"🎹"}], level:"good", img:8},
+];
+const teachers = [
+  {name:"أ. رامي عاطف", instrument:"بيانو وكيبورد", students:14, rating:4.9, img:47},
+  {name:"أ. سهير كامل", instrument:"غناء وأوبرا", students:9, rating:5.0, img:39},
+  {name:"أ. طارق منير", instrument:"جيتار وعود", students:16, rating:4.8, img:49},
+  {name:"أ. مريم صبحي", instrument:"كمان وتشيلو", students:11, rating:4.9, img:31},
+];
+const classesWeek = [
+  {student:"مايا سليمان", instrument:"بيانو", teacher:0, day:0, start:0, span:1},
+  {student:"كريم عادل", instrument:"جيتار", teacher:2, day:1, start:1, span:1},
+  {student:"لمى وليد", instrument:"كمان", teacher:3, day:1, start:2, span:1},
+  {student:"يوسف حسام", instrument:"درامز", teacher:0, day:3, start:0, span:1},
+  {student:"مايا سليمان", instrument:"غناء", teacher:1, day:4, start:3, span:1},
+];
+const days = ['السبت','الأحد','الإثنين','الثلاثاء','الأربعاء'];
+const hours = ['4:00 م','5:00 م','6:00 م','7:00 م'];
+
+const UI = { toast(msg){
+  let stack=document.querySelector('.toast-stack');
+  if(!stack){ stack=document.createElement('div'); stack.className='toast-stack'; document.body.appendChild(stack); }
+  const t=document.createElement('div'); t.className='toast'; t.textContent='✓ '+msg;
+  stack.appendChild(t); setTimeout(()=>{t.style.opacity='0';t.style.transition='.3s';setTimeout(()=>t.remove(),300)},2300);
+}};
+
+function switchView(id){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const t = {
+    'v-dashboard':['لوحة التحكم','أكاديمية نغم للموسيقى والفنون'],
+    'v-schedule':['جدول الحصص','الأسبوع الحالي'],
+    'v-students':['الطلاب وتقدمهم', students.length+' طالب'],
+    'v-teachers':['المدرسين', teachers.length+' مدرس'],
+    'v-settings':['الإعدادات','بيانات الأكاديمية والآلات المتاحة'],
+  }[id];
+  document.getElementById('topTitle').textContent=t[0];
+  document.getElementById('topSub').textContent=t[1];
+}
+document.querySelectorAll('.nav-item').forEach(n=>n.addEventListener('click',()=>switchView(n.dataset.view)));
+
+function stat(label,value,icon,color,trend){
+  return `<div class="card stat">
+    <div class="top"><span class="label">${label}</span><span class="icon" style="background:${color}22;color:${color}">${icon}</span></div>
+    <div class="value">${value}</div><div class="trend">${trend}</div>
+  </div>`;
+}
+const levelMap = {excellent:'ممتاز',good:'جيد',beginner:'مبتدئ'};
+
+function renderDashboard(){
+  const el = document.getElementById('v-dashboard');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>أهلاً، أستاذ نادر 🎵</h1><p class="sub">السبت ١١ يوليو ٢٠٢٦</p></div>
+      <button class="btn btn-outline" onclick="switchView('v-schedule')">عرض جدول اليوم</button></div>
+    <div class="grid g4" style="margin-bottom:18px">
+      ${stat('طلاب مسجلين',students.length+' طالب','🎼','var(--wine)','+3 هذا الشهر')}
+      ${stat('حصص هذا الأسبوع',classesWeek.length+' حصة','🗓️','var(--gold)','5 آلات مختلفة')}
+      ${stat('إيراد الشهر','١١٤٬٦٠٠ ج.م','💰','var(--success)','+10%')}
+      ${stat('حفلات قادمة','1 حفل ختامي','🎤','var(--warning)','بعد 3 أسابيع')}
+    </div>
+    <div class="card card-pad">
+      <div class="card-title" style="margin-bottom:16px">تقدم الطلاب هذا الأسبوع</div>
+      ${students.map(s=>`
+        <div class="flex justify-between items-center" style="padding:11px 0;border-bottom:1px dashed var(--border)">
+          <div class="flex items-center gap3"><img class="avatar" width="36" height="36" src="https://i.pravatar.cc/72?img=${s.img}"><div><b style="font-size:13px">${s.name}</b><div class="muted" style="font-size:11px">${s.instruments.map(i=>i.name).join('، ')}</div></div></div>
+          <span class="badge ${s.level}">${levelMap[s.level]}</span>
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderSchedule(){
+  const el = document.getElementById('v-schedule');
+  el.innerHTML = `<div class="view-head"><div><h1>جدول الحصص</h1><p class="sub">الأسبوع الحالي</p></div>
+    <button class="btn btn-gold">+ حجز حصة</button></div>
+    <div class="sched-grid" id="schedGrid"></div>`;
+  let html = `<div class="sched-head" style="background:#fff"></div>`;
+  days.forEach(d=> html += `<div class="sched-head">${d}</div>`);
+  html += `<div>`+hours.map(h=>`<div class="sched-time">${h}</div>`).join('')+`</div>`;
+  for(let d=0; d<5; d++){
+    html += `<div class="sched-col">`;
+    hours.forEach(()=> html += `<div class="sched-slot"></div>`);
+    classesWeek.filter(c=>c.day===d).forEach(c=>{
+      html += `<div class="class-block" style="top:${c.start*70+4}px;height:${c.span*70-8}px" onclick="UI.toast('${c.student} — ${c.instrument} مع ${teachers[c.teacher].name}')">
+        <b>${c.student}</b>${c.instrument}
+      </div>`;
+    });
+    html += `</div>`;
+  }
+  document.getElementById('schedGrid').innerHTML = html;
+}
+
+function renderStudents(){
+  const el = document.getElementById('v-students');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>الطلاب وتقدمهم</h1><p class="sub">${students.length} طالب</p></div>
+      <button class="btn btn-primary">+ طالب جديد</button></div>
+    <div class="grid g2">
+      ${students.map(s=>`
+        <div class="student-card">
+          <div class="flex items-center gap3" style="margin-bottom:10px">
+            <img class="avatar" width="46" height="46" src="https://i.pravatar.cc/92?img=${s.img}">
+            <div><b style="font-size:14px">${s.name}</b><div class="muted" style="font-size:11px">${s.age} سنوات — <span class="badge ${s.level}">${levelMap[s.level]}</span></div></div>
+          </div>
+          ${s.instruments.map(i=>`
+            <div class="instrument-row">
+              <span class="instrument-icon">${i.icon}</span>
+              <div style="flex:1">
+                <div class="flex justify-between" style="margin-bottom:5px;font-size:12px"><span>${i.name}</span><b>${i.progress}%</b></div>
+                <div class="practice-track"><div class="practice-fill" style="width:${i.progress}%"></div></div>
+              </div>
+            </div>`).join('')}
+        </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderTeachers(){
+  const el = document.getElementById('v-teachers');
+  el.innerHTML = `
+    <div class="view-head"><div><h1>المدرسين</h1><p class="sub">${teachers.length} مدرس</p></div>
+      <button class="btn btn-primary">+ إضافة مدرس</button></div>
+    <div class="card"><div style="overflow-x:auto"><table>
+      <thead><tr><th>المدرس</th><th>التخصص</th><th>عدد الطلاب</th><th>التقييم</th></tr></thead>
+      <tbody>${teachers.map(t=>`
+        <tr><td><div class="cell-name"><img class="avatar" width="34" height="34" src="https://i.pravatar.cc/68?img=${t.img}">${t.name}</div></td>
+        <td>${t.instrument}</td><td>${t.students} طالب</td><td>⭐ ${t.rating}</td></tr>`).join('')}</tbody>
+    </table></div></div>
+  `;
+}
+
+function renderSettings(){
+  document.getElementById('v-settings').innerHTML = `
+    <div class="view-head"><div><h1>الإعدادات</h1><p class="sub">بيانات الأكاديمية والآلات المتاحة</p></div></div>
+    <div class="card card-pad" style="max-width:560px">
+      <p class="muted" style="font-size:13px;margin-bottom:16px">إعدادات اسم الأكاديمية، الآلات الموسيقية المتاحة للإيجار، وأسعار الحصص.</p>
+      <button class="btn btn-primary" onclick="UI.toast('تم حفظ الإعدادات')">حفظ التغييرات</button>
+    </div>
+  `;
+}
+
+renderDashboard(); renderSchedule(); renderStudents(); renderTeachers(); renderSettings();
+</script>
+</body>
+</html>

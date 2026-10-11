@@ -1,0 +1,24 @@
+/* ============================================================
+   NEXORA — Industry Card
+   Compact icon-led card for the industries index grid.
+   Extends .nx-card.
+   ============================================================ */
+
+.nx-industry-card {
+  text-align: center;
+}
+
+.nx-industry-card__icon {
+  width: 56px;
+  height: 56px;
+  margin-inline: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--nx-fs-500);
+  border-radius: var(--nx-radius-full);
+  background: var(--nx-bg-elevated-2);
+  margin-bottom: var(--nx-space-4);
+}
+
+.nx-industry-card .nx-h4 { margin-bottom: var(--nx-space-1); }

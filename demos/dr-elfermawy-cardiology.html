@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>د. أحمد الفرماوي — عيادة القلب VIP</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%E2%9D%A4%EF%B8%8F%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Cairo', 'ui-sans-serif', 'system-ui'] },
+      }
+    }
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root { --accent: #C6403F; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    opacity: 0;
+    animation: vip-fade-in .5s ease forwards;
+  }
+  @keyframes vip-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent; }
+  button, a, [role="button"] { transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+  button:active { transform: scale(0.97); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #root { min-height: 100vh; }
+  #vip-loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: #0a0a0a; z-index: 9999; transition: opacity .4s ease;
+  }
+  #vip-loading .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-top-color: var(--accent);
+    animation: vip-spin .8s linear infinite;
+  }
+  @keyframes vip-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="vip-loading"><div class="spinner"></div></div>
+<div id="root"></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import * as ReactDOM from "react-dom/client";
+import React, { useState } from "react";
+import {
+  HeartPulse, Search, Bell, Plus, X, Users, CalendarDays, AlertTriangle, ChevronRight, Award,
+} from "lucide-react";
+
+const BG = "#0B0808";
+const PANEL = "#151011";
+const CARD = "#1A1414";
+const BORDER = "#2C2222";
+const TEXT = "#F3EEEC";
+const MUTED = "#9C8E8C";
+const GOLD = "#C9A227";
+const GOLD_SOFT = "rgba(201,162,39,0.14)";
+const RED = "#C6403F";
+const RED_SOFT = "rgba(198,64,63,0.16)";
+const GREEN = "#3FA66B";
+
+const NAV = [
+  { icon: HeartPulse, label: "نظرة عامة" }, { icon: Users, label: "المرضى" },
+  { icon: AlertTriangle, label: "الحالات الحرجة" }, { icon: CalendarDays, label: "المواعيد" },
+];
+
+const career = [
+  { label: "سنوات الخبرة", value: "١٧" }, { label: "قسطرة قلبية أُجريت", value: "٢,٤٠٠+" },
+  { label: "نسبة نجاح العمليات", value: "٪٩٨.٢" }, { label: "مرضى تحت المتابعة", value: "٦١٨" },
+];
+
+const initialPatients = [
+  { name: "فتحي عبد الجواد", age: 58, condition: "ضغط دم مرتفع", risk: "متوسط", lastVisit: "٩ يوليو" },
+  { name: "منى الحديدي", age: 46, condition: "خفقان قلب", risk: "منخفض", lastVisit: "٥ يوليو" },
+  { name: "سامي توفيق", age: 64, condition: "بعد قسطرة", risk: "مرتفع", lastVisit: "١١ يوليو" },
+];
+
+const critical = [
+  { name: "سامي توفيق", note: "متابعة ما بعد القسطرة خلال ٢٤ ساعة", level: "حرجة" },
+  { name: "عادل نجيب", note: "ارتفاع مفاجئ في ضغط الدم", level: "عاجلة" },
+];
+
+const appointments = [
+  { time: "١٠:٠٠ ص", patient: "فتحي عبد الجواد", type: "متابعة دورية" },
+  { time: "١١:٣٠ ص", patient: "منى الحديدي", type: "رسم قلب" },
+  { time: "١:٠٠ م", patient: "سامي توفيق", type: "متابعة ما بعد قسطرة" },
+];
+
+function ECGLine() {
+  return (
+    <svg viewBox="0 0 400 60" className="w-full h-14">
+      <polyline
+        points="0,30 40,30 55,10 70,50 85,30 130,30 145,15 160,45 175,30 220,30 235,8 250,52 265,30 400,30"
+        fill="none" stroke={RED} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round"
+      />
+    </svg>
+  );
+}
+
+function Card({ children, className = "", style = {} }) {
+  return <div className={`rounded-2xl border ${className}`} style={{ background: CARD, borderColor: BORDER, ...style }}>{children}</div>;
+}
+function TopBar({ title, subtitle, onAdd, addLabel }) {
+  return (
+    <div className="flex items-center justify-between mb-8">
+      <div><h1 className="text-2xl font-semibold tracking-tight">{title}</h1>{subtitle && <p className="text-sm mt-1" style={{ color: MUTED }}>{subtitle}</p>}</div>
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl border" style={{ borderColor: BORDER, background: PANEL }}><Search size={15} style={{ color: MUTED }} /><span className="text-sm" style={{ color: MUTED }}>بحث عن مريض...</span></div>
+        {onAdd && <button onClick={onAdd} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm" style={{ background: RED, color: "#150808" }}><Plus size={15} />{addLabel}</button>}
+        <div className="w-10 h-10 rounded-xl border flex items-center justify-center" style={{ borderColor: BORDER, background: PANEL }}><Bell size={17} style={{ color: MUTED }} /></div>
+      </div>
+    </div>
+  );
+}
+function Modal({ title, note, onClose, children }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24" style={{ background: "rgba(0,0,0,0.55)" }}>
+      <Card className="w-full max-w-md p-7 relative" style={{ borderColor: RED }}>
+        <button onClick={onClose} className="absolute left-5 top-5" style={{ color: MUTED }}><X size={18} /></button>
+        <div className="text-lg font-semibold mb-1">{title}</div>
+        <div className="text-xs mb-6" style={{ color: MUTED }}>{note}</div>
+        {children}
+      </Card>
+    </div>
+  );
+}
+const inputStyle = { background: "#120D0D", borderColor: BORDER, color: TEXT };
+const Field = ({ label, ...props }) => (
+  <div className="mb-4">
+    <label className="text-xs" style={{ color: MUTED }}>{label}</label>
+    <input {...props} className="w-full mt-1.5 px-3.5 py-2.5 rounded-xl border text-sm outline-none" style={inputStyle} />
+  </div>
+);
+function NewPatientModal({ onClose, onCreate }) {
+  const [name, setName] = useState(""); const [age, setAge] = useState(""); const [condition, setCondition] = useState("");
+  return (
+    <Modal title="إضافة مريض جديد" note="بيانات محاكاة أمامية فقط" onClose={onClose}>
+      <Field label="اسم المريض" value={name} onChange={(e) => setName(e.target.value)} placeholder="مثال: عماد رشدي" />
+      <Field label="السن" value={age} onChange={(e) => setAge(e.target.value)} placeholder="مثال: 52" />
+      <Field label="الحالة" value={condition} onChange={(e) => setCondition(e.target.value)} placeholder="مثال: عدم انتظام ضربات القلب" />
+      <button onClick={() => name.trim() && onCreate({ name, age: age || "—", condition: condition || "فحص عام", risk: "منخفض", lastVisit: "اليوم" })}
+        className="w-full py-3 rounded-xl text-sm font-medium" style={{ background: RED, color: "#150808" }}>إضافة المريض</button>
+    </Modal>
+  );
+}
+
+function OverviewScreen({ onAdd }) {
+  return (
+    <>
+      <div className="flex items-center justify-between mb-2">
+        <div className="flex items-center gap-1.5 text-xs" style={{ color: GOLD }}><Award size={13} />استشاري معتمد — عضو الجمعية المصرية لأمراض القلب</div>
+      </div>
+      <TopBar title="د. أحمد الفرماوي" subtitle="استشاري القلب والأوعية الدموية والقسطرة العلاجية" onAdd={onAdd} addLabel="مريض جديد" />
+      <Card className="p-6 mb-7" style={{ borderColor: RED }}>
+        <ECGLine />
+      </Card>
+      <div className="grid grid-cols-4 gap-5 mb-7">
+        {career.map((k) => (
+          <Card key={k.label} className="p-5"><div className="text-xs mb-3" style={{ color: MUTED }}>{k.label}</div><div className="text-2xl font-semibold tracking-tight" style={{ color: RED }}>{k.value}</div></Card>
+        ))}
+      </div>
+      <Card className="p-6">
+        <div className="flex items-center gap-2 mb-5"><AlertTriangle size={15} style={{ color: RED }} /><span className="text-sm font-semibold">حالات تحتاج انتباه اليوم</span></div>
+        {critical.map((c, i) => (
+          <div key={c.name} className="flex items-center justify-between py-3" style={{ borderBottom: i !== critical.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div><div className="text-sm font-medium">{c.name}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{c.note}</div></div>
+            <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: RED, background: RED_SOFT, border: `1px solid ${RED}` }}>{c.level}</span>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function PatientsScreen({ patients, onAdd }) {
+  return (
+    <>
+      <TopBar title="المرضى" subtitle={`${patients.length} مريضًا تحت المتابعة`} onAdd={onAdd} addLabel="مريض جديد" />
+      <Card className="p-2">
+        {patients.map((p, i) => (
+          <div key={p.name} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== patients.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div className="flex items-center gap-4"><div className="w-10 h-10 rounded-full" style={{ background: RED_SOFT, border: `1px solid ${RED}` }} /><div><div className="text-sm font-medium">{p.name}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>السن {p.age} · {p.condition}</div></div></div>
+            <div className="flex items-center gap-4">
+              <span className="text-xs" style={{ color: MUTED }}>آخر زيارة: {p.lastVisit}</span>
+              <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: p.risk === "مرتفع" ? RED : p.risk === "متوسط" ? GOLD : GREEN, background: `${p.risk === "مرتفع" ? RED : p.risk === "متوسط" ? GOLD : GREEN}1A`, border: `1px solid ${p.risk === "مرتفع" ? RED : p.risk === "متوسط" ? GOLD : GREEN}` }}>خطورة {p.risk}</span>
+            </div>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function CriticalScreen() {
+  return (
+    <>
+      <TopBar title="الحالات الحرجة" subtitle="تحتاج متابعة فورية" />
+      <div className="grid grid-cols-2 gap-5">
+        {critical.map((c) => (
+          <Card key={c.name} className="p-6" style={{ borderColor: RED }}>
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center mb-4" style={{ background: RED_SOFT }}><AlertTriangle size={17} style={{ color: RED }} /></div>
+            <div className="text-sm font-medium">{c.name}</div>
+            <div className="text-xs mt-2" style={{ color: MUTED }}>{c.note}</div>
+            <span className="inline-block mt-4 text-xs px-3 py-1.5 rounded-full" style={{ color: RED, background: RED_SOFT, border: `1px solid ${RED}` }}>{c.level}</span>
+          </Card>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function AppointmentsScreen() {
+  return (
+    <>
+      <TopBar title="المواعيد" subtitle="مواعيد اليوم" />
+      <Card className="p-2">
+        {appointments.map((a, i) => (
+          <div key={i} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== appointments.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div><div className="text-sm font-medium">{a.patient}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{a.type}</div></div>
+            <span className="text-xs" style={{ color: RED }}>{a.time}</span>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function DrElFermawyCardiology() {
+  const [nav, setNav] = useState(0);
+  const [patients, setPatients] = useState(initialPatients);
+  const [showModal, setShowModal] = useState(false);
+
+  const screens = [
+    <OverviewScreen onAdd={() => setShowModal(true)} />,
+    <PatientsScreen patients={patients} onAdd={() => setShowModal(true)} />,
+    <CriticalScreen />, <AppointmentsScreen />,
+  ];
+
+  return (
+    <div dir="rtl" className="w-full min-h-screen flex font-sans" style={{ background: BG, color: TEXT }}>
+      <aside className="w-64 shrink-0 flex flex-col border-l" style={{ background: PANEL, borderColor: BORDER }}>
+        <div className="px-6 py-7 flex items-center gap-3 border-b" style={{ borderColor: BORDER }}>
+          <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: RED_SOFT, border: `1px solid ${RED}` }}><HeartPulse size={19} style={{ color: RED }} /></div>
+          <div><div className="text-base font-semibold tracking-tight">عيادة القلب VIP</div><div className="text-xs" style={{ color: MUTED }}>د. أحمد الفرماوي</div></div>
+        </div>
+        <nav className="flex-1 px-3 py-5 flex flex-col gap-1">
+          {NAV.map((item, i) => {
+            const Icon = item.icon; const isActive = i === nav;
+            return (
+              <button key={item.label} onClick={() => setNav(i)} className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-colors text-right"
+                style={{ background: isActive ? RED_SOFT : "transparent", color: isActive ? RED : MUTED, border: isActive ? `1px solid ${RED}` : "1px solid transparent" }}>
+                <Icon size={17} /><span className="flex-1">{item.label}</span>{isActive && <ChevronRight size={14} />}
+              </button>
+            );
+          })}
+        </nav>
+      </aside>
+      <main className="flex-1 px-10 py-8 overflow-y-auto">{screens[nav]}</main>
+      {showModal && <NewPatientModal onClose={() => setShowModal(false)} onCreate={(p) => { setPatients((prev) => [p, ...prev]); setShowModal(false); }} />}
+    </div>
+  );
+}
+
+
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+root.render(<DrElFermawyCardiology />);
+const loading = document.getElementById("vip-loading");
+if (loading) { loading.style.opacity = "0"; setTimeout(() => loading.remove(), 400); }
+</script>
+</body>
+</html>

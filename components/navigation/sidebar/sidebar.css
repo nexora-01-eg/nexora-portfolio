@@ -1,0 +1,49 @@
+/* ============================================================
+   NEXORA — Sidebar
+   Persistent vertical navigation for section/library browsing.
+   ============================================================ */
+
+.nx-sidebar {
+  width: 260px;
+  flex-shrink: 0;
+  padding: var(--nx-space-6) 0;
+  border-right: 1px solid var(--nx-border-subtle);
+  height: 100%;
+  overflow-y: auto;
+}
+
+.nx-sidebar__list {
+  display: flex;
+  flex-direction: column;
+}
+
+.nx-sidebar__link {
+  display: block;
+  padding: var(--nx-space-2) var(--nx-space-4);
+  font-size: var(--nx-fs-200);
+  color: var(--nx-text-secondary);
+  border-left: 2px solid transparent;
+  transition: var(--nx-transition-base);
+}
+
+.nx-sidebar__link:hover {
+  color: var(--nx-text-primary);
+  background: var(--nx-bg-elevated);
+}
+
+.nx-sidebar__link--active,
+.nx-sidebar__link[aria-current="page"] {
+  color: var(--nx-accent-primary);
+  border-left-color: var(--nx-accent-primary);
+  background: var(--nx-accent-muted);
+  font-weight: var(--nx-fw-medium);
+}
+
+@media (max-width: 1024px) {
+  .nx-sidebar {
+    width: 100%;
+    border-right: none;
+    border-bottom: 1px solid var(--nx-border-subtle);
+    height: auto;
+  }
+}

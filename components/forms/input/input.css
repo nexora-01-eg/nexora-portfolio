@@ -1,0 +1,74 @@
+/* ============================================================
+   NEXORA — Input (text field)
+   ============================================================ */
+
+.nx-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nx-space-2);
+  margin-bottom: var(--nx-space-4);
+}
+
+.nx-field__label {
+  font-size: var(--nx-fs-200);
+  font-weight: var(--nx-fw-medium);
+  color: var(--nx-text-secondary);
+}
+
+.nx-field__hint {
+  font-size: var(--nx-fs-100);
+  color: var(--nx-text-muted);
+}
+
+.nx-field__error {
+  font-size: var(--nx-fs-100);
+  color: var(--nx-color-danger);
+}
+
+.nx-input {
+  width: 100%;
+  padding: var(--nx-space-3) var(--nx-space-4);
+  font-size: var(--nx-fs-300);
+  color: var(--nx-text-primary);
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+  transition: var(--nx-transition-base);
+}
+
+.nx-input::placeholder { color: var(--nx-text-muted); }
+
+.nx-input:hover:not(:disabled) { border-color: var(--nx-border-strong); }
+
+.nx-input:focus-visible {
+  outline: none;
+  border-color: var(--nx-accent-primary);
+  box-shadow: var(--nx-shadow-gold-glow);
+}
+
+.nx-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.nx-input--error {
+  border-color: var(--nx-color-danger);
+}
+.nx-input--error:focus-visible {
+  box-shadow: 0 0 0 3px rgba(179, 69, 63, 0.2);
+}
+
+.nx-input-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nx-input-group__icon {
+  position: absolute;
+  left: var(--nx-space-4);
+  color: var(--nx-text-muted);
+  pointer-events: none;
+}
+
+.nx-input--with-icon { padding-left: var(--nx-space-8); }

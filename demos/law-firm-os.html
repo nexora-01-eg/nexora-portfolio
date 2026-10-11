@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>نظام إدارة مكتب المحاماة</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%E2%9A%96%EF%B8%8F%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Cairo', 'ui-sans-serif', 'system-ui'] },
+      }
+    }
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root { --accent: #B08D57; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    opacity: 0;
+    animation: vip-fade-in .5s ease forwards;
+  }
+  @keyframes vip-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent; }
+  button, a, [role="button"] { transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+  button:active { transform: scale(0.97); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #root { min-height: 100vh; }
+  #vip-loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: #0a0a0a; z-index: 9999; transition: opacity .4s ease;
+  }
+  #vip-loading .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-top-color: var(--accent);
+    animation: vip-spin .8s linear infinite;
+  }
+  @keyframes vip-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="vip-loading"><div class="spinner"></div></div>
+<div id="root"></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import * as ReactDOM from "react-dom/client";
+import React, { useState } from "react";
+import {
+  Scale, FolderClosed, Users, FileClock, Search, Bell, Receipt, FileText,
+  AlertTriangle, CheckCircle2, Clock3, ArrowUpLeft, Plus, X,
+} from "lucide-react";
+
+const BG = "#0C0B0D";
+const PANEL = "#141315";
+const CARD = "#1A181B";
+const BORDER = "#2A2729";
+const TEXT = "#EDEAE3";
+const MUTED = "#9A9490";
+const BRONZE = "#B08D57";
+const BRONZE_SOFT = "rgba(176,141,87,0.14)";
+const BURGUNDY = "#7A2E33";
+const SAGE = "#5C7A63";
+
+const NAV = ["نظرة عامة", "القضايا", "العملاء", "الجلسات", "المستندات", "الفواتير"];
+
+const stats = [
+  { label: "قضايا نشطة", value: "34", accent: BRONZE }, { label: "جلسات هذا الأسبوع", value: "7", accent: SAGE },
+  { label: "مستحقات معلقة", value: "218,000 ج.م", accent: BRONZE }, { label: "قضايا عاجلة", value: "3", accent: BURGUNDY },
+];
+
+const timeline = [
+  { time: "٩:٠٠ ص", title: "جلسة استئناف — قضية عقارية", desc: "محكمة استئناف القاهرة — قاعة ٥", tag: "عاجل", icon: AlertTriangle, color: BURGUNDY },
+  { time: "١١:٣٠ ص", title: "مراجعة عقد شراكة تجارية", desc: "مع العميل: شركة النيل للاستثمار", tag: "قيد المراجعة", icon: Clock3, color: BRONZE },
+  { time: "١:٠٠ م", title: "توقيع تسوية نزاع عمالي", desc: "مكتب المحاماة — الدور الثالث", tag: "جاهز للتوقيع", icon: CheckCircle2, color: SAGE },
+  { time: "٤:١٥ م", title: "استشارة قانونية — تأسيس شركة", desc: "عميل جديد: مصنع الدلتا للأثاث", tag: "استشارة أولى", icon: Clock3, color: BRONZE },
+];
+
+const initialCases = [
+  { name: "نزاع ملكية فكرية", client: "استوديو الشرق للإعلان", status: "مرافعة", priority: "أولوية عالية" },
+  { name: "تصفية شركة", client: "مجموعة الفا التجارية", status: "توثيق", priority: "أولوية متوسطة" },
+  { name: "قضية عمالية جماعية", client: "مصنع النسيج الحديث", status: "تحقيق", priority: "أولوية عالية" },
+];
+
+const clients = [
+  { name: "استوديو الشرق للإعلان", type: "شركة إعلانية", cases: 2, since: "٢٠٢٢" },
+  { name: "مجموعة الفا التجارية", type: "شركة استثمار", cases: 1, since: "٢٠٢٣" },
+  { name: "مصنع النسيج الحديث", type: "مصنع صناعي", cases: 3, since: "٢٠٢١" },
+  { name: "شركة النيل للاستثمار", type: "شركة استثمار", cases: 1, since: "٢٠٢٤" },
+];
+
+const documents = [
+  { name: "عقد شراكة — النيل للاستثمار", type: "عقد", date: "٩ يوليو" },
+  { name: "مذكرة دفاع — استئناف عقاري", type: "مذكرة", date: "٨ يوليو" },
+  { name: "محضر تسوية — نزاع عمالي", type: "محضر", date: "٦ يوليو" },
+  { name: "توكيل رسمي — مصنع النسيج", type: "توكيل", date: "٣ يوليو" },
+];
+
+const invoices = [
+  { id: "#LF-771", client: "استوديو الشرق للإعلان", amount: "45,000 ج.م", status: "مدفوعة" },
+  { id: "#LF-770", client: "مجموعة الفا التجارية", amount: "120,000 ج.م", status: "معلقة" },
+  { id: "#LF-768", client: "مصنع النسيج الحديث", amount: "53,000 ج.م", status: "معلقة" },
+];
+
+function Card({ children, className = "", style = {} }) {
+  return <div className={`rounded-2xl border ${className}`} style={{ background: CARD, borderColor: BORDER, ...style }}>{children}</div>;
+}
+function TopBar({ title, subtitle, onAdd, addLabel }) {
+  return (
+    <div className="flex items-center justify-between mb-8">
+      <div><h1 className="font-serif text-2xl tracking-tight">{title}</h1>{subtitle && <p className="text-sm mt-1" style={{ color: MUTED }}>{subtitle}</p>}</div>
+      <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl border" style={{ borderColor: BORDER, background: PANEL }}>
+          <Search size={15} style={{ color: MUTED }} /><span className="text-sm" style={{ color: MUTED }}>بحث...</span>
+        </div>
+        {onAdd && <button onClick={onAdd} className="flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm" style={{ background: BRONZE, color: "#141110" }}><Plus size={15} />{addLabel}</button>}
+        <div className="w-10 h-10 rounded-xl border flex items-center justify-center" style={{ borderColor: BORDER, background: PANEL }}><Bell size={17} style={{ color: MUTED }} /></div>
+      </div>
+    </div>
+  );
+}
+function Modal({ title, note, onClose, children }) {
+  return (
+    <div className="fixed inset-0 z-50 flex items-start justify-center pt-24" style={{ background: "rgba(0,0,0,0.55)" }}>
+      <Card className="w-full max-w-md p-7 relative" style={{ borderColor: BRONZE }}>
+        <button onClick={onClose} className="absolute left-5 top-5" style={{ color: MUTED }}><X size={18} /></button>
+        <div className="font-serif text-lg mb-1">{title}</div>
+        <div className="text-xs mb-6" style={{ color: MUTED }}>{note}</div>
+        {children}
+      </Card>
+    </div>
+  );
+}
+const inputStyle = { background: "#141110", borderColor: BORDER, color: TEXT };
+const Field = ({ label, ...props }) => (
+  <div className="mb-4">
+    <label className="text-xs" style={{ color: MUTED }}>{label}</label>
+    <input {...props} className="w-full mt-1.5 px-3.5 py-2.5 rounded-xl border text-sm outline-none" style={inputStyle} />
+  </div>
+);
+
+function NewCaseModal({ onClose, onCreate }) {
+  const [name, setName] = useState(""); const [client, setClient] = useState(""); const [priority, setPriority] = useState("أولوية متوسطة");
+  return (
+    <Modal title="فتح قضية جديدة" note="بيانات محاكاة أمامية فقط" onClose={onClose}>
+      <Field label="موضوع القضية" value={name} onChange={(e) => setName(e.target.value)} placeholder="مثال: نزاع تجاري" />
+      <Field label="اسم العميل" value={client} onChange={(e) => setClient(e.target.value)} placeholder="مثال: شركة الوفاء للتجارة" />
+      <Field label="الأولوية" value={priority} onChange={(e) => setPriority(e.target.value)} placeholder="أولوية عالية / متوسطة" />
+      <button onClick={() => name.trim() && onCreate({ name, client: client || "—", status: "توثيق", priority: priority || "أولوية متوسطة" })}
+        className="w-full py-3 rounded-xl text-sm font-medium" style={{ background: BRONZE, color: "#141110" }}>فتح القضية</button>
+    </Modal>
+  );
+}
+
+function DashboardScreen({ cases }) {
+  return (
+    <>
+      <div className="flex items-end justify-between mb-8">
+        <div>
+          <div className="text-xs mb-2" style={{ color: BRONZE }}>السبت، ١١ يوليو</div>
+          <h1 className="font-serif text-3xl tracking-tight">أجندة اليوم القانونية</h1>
+          <p className="text-sm mt-2" style={{ color: MUTED }}>٤ جلسات ومراجعات مجدولة، منها قضية واحدة عاجلة</p>
+        </div>
+        <div className="flex items-center gap-2 px-4 py-2.5 rounded-xl" style={{ background: `${BURGUNDY}1A`, border: `1px solid ${BURGUNDY}` }}>
+          <AlertTriangle size={14} style={{ color: BURGUNDY }} /><span className="text-xs" style={{ color: BURGUNDY }}>قضية استئناف تحتاج مراجعة قبل الساعة ٩</span>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-4 gap-5 mb-8">
+        <Card className="col-span-2 p-7 flex items-center justify-between">
+          <div>
+            <div className="text-xs mb-2" style={{ color: MUTED }}>إجمالي القضايا النشطة</div>
+            <div className="font-serif text-4xl">34</div>
+            <div className="text-xs mt-2" style={{ color: SAGE }}>+5 قضايا جديدة هذا الشهر</div>
+          </div>
+          <div className="w-16 h-16 rounded-2xl flex items-center justify-center" style={{ background: BRONZE_SOFT, border: `1px solid ${BRONZE}` }}><FolderClosed size={26} style={{ color: BRONZE }} /></div>
+        </Card>
+        {stats.slice(1).map((s) => (
+          <Card key={s.label} className="p-6"><div className="text-xs mb-3" style={{ color: MUTED }}>{s.label}</div><div className="font-serif text-2xl" style={{ color: s.accent }}>{s.value}</div></Card>
+        ))}
+      </div>
+
+      <div className="grid grid-cols-3 gap-6">
+        <Card className="col-span-2 p-7">
+          <div className="font-serif text-lg mb-6">جدول الجلسات والمراجعات</div>
+          <div className="relative">
+            <div className="absolute top-0 bottom-0 w-px" style={{ right: "19px", background: BORDER }} />
+            <div className="flex flex-col gap-7">
+              {timeline.map((t, i) => {
+                const Icon = t.icon;
+                return (
+                  <div key={i} className="flex gap-4 relative">
+                    <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 z-10" style={{ background: CARD, border: `1.5px solid ${t.color}` }}><Icon size={16} style={{ color: t.color }} /></div>
+                    <div className="flex-1 pb-1">
+                      <div className="flex items-center justify-between"><span className="text-sm font-medium">{t.title}</span><span className="text-xs" style={{ color: MUTED }}>{t.time}</span></div>
+                      <div className="text-xs mt-1" style={{ color: MUTED }}>{t.desc}</div>
+                      <span className="inline-block mt-2 text-xs px-2.5 py-1 rounded-full" style={{ color: t.color, background: `${t.color}1A`, border: `1px solid ${t.color}` }}>{t.tag}</span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+        </Card>
+        <Card className="p-7">
+          <div className="font-serif text-lg mb-6">قضايا ذات أولوية</div>
+          <div className="flex flex-col gap-5">
+            {cases.map((c) => (
+              <div key={c.name} className="pb-5" style={{ borderBottom: `1px solid ${BORDER}` }}>
+                <div className="flex items-center justify-between"><span className="text-sm font-medium">{c.name}</span><ArrowUpLeft size={13} style={{ color: MUTED }} /></div>
+                <div className="text-xs mt-1" style={{ color: MUTED }}>{c.client}</div>
+                <div className="flex items-center gap-2 mt-2">
+                  <span className="text-xs px-2.5 py-1 rounded-full" style={{ color: BRONZE, background: BRONZE_SOFT, border: `1px solid ${BRONZE}` }}>{c.status}</span>
+                  <span className="text-xs" style={{ color: MUTED }}>{c.priority}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+      </div>
+    </>
+  );
+}
+
+function CasesScreen({ cases, onAdd }) {
+  return (
+    <>
+      <TopBar title="القضايا" subtitle={`${cases.length} قضية مسجّلة`} onAdd={onAdd} addLabel="قضية جديدة" />
+      <Card className="p-2">
+        {cases.map((c, i) => (
+          <div key={c.name} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== cases.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div><div className="text-sm font-medium">{c.name}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{c.client}</div></div>
+            <div className="flex items-center gap-4">
+              <span className="text-xs" style={{ color: MUTED }}>{c.priority}</span>
+              <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: BRONZE, background: BRONZE_SOFT, border: `1px solid ${BRONZE}` }}>{c.status}</span>
+            </div>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function ClientsScreen() {
+  return (
+    <>
+      <TopBar title="العملاء" subtitle={`${clients.length} عملاء مسجّلين`} />
+      <div className="grid grid-cols-3 gap-5">
+        {clients.map((c) => (
+          <Card key={c.name} className="p-6">
+            <div className="w-11 h-11 rounded-full mb-4" style={{ background: BRONZE_SOFT, border: `1px solid ${BRONZE}` }} />
+            <div className="text-sm font-medium">{c.name}</div>
+            <div className="text-xs mt-1" style={{ color: MUTED }}>{c.type} · موكّل منذ {c.since}</div>
+            <div className="text-xs mt-3" style={{ color: BRONZE }}>{c.cases} قضية مع المكتب</div>
+          </Card>
+        ))}
+      </div>
+    </>
+  );
+}
+
+function HearingsScreen() {
+  return (
+    <>
+      <TopBar title="الجلسات" subtitle="الجلسات المجدولة هذا الأسبوع" />
+      <Card className="p-7">
+        <div className="relative">
+          <div className="absolute top-0 bottom-0 w-px" style={{ right: "19px", background: BORDER }} />
+          <div className="flex flex-col gap-7">
+            {timeline.map((t, i) => {
+              const Icon = t.icon;
+              return (
+                <div key={i} className="flex gap-4 relative">
+                  <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0 z-10" style={{ background: CARD, border: `1.5px solid ${t.color}` }}><Icon size={16} style={{ color: t.color }} /></div>
+                  <div className="flex-1 pb-1">
+                    <div className="flex items-center justify-between"><span className="text-sm font-medium">{t.title}</span><span className="text-xs" style={{ color: MUTED }}>{t.time}</span></div>
+                    <div className="text-xs mt-1" style={{ color: MUTED }}>{t.desc}</div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </Card>
+    </>
+  );
+}
+
+function DocumentsScreen() {
+  return (
+    <>
+      <TopBar title="المستندات" subtitle={`${documents.length} مستندًا محفوظًا`} />
+      <Card className="p-2">
+        {documents.map((d, i) => (
+          <div key={d.name} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== documents.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: BRONZE_SOFT }}><FileText size={16} style={{ color: BRONZE }} /></div>
+              <div><div className="text-sm font-medium">{d.name}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{d.type}</div></div>
+            </div>
+            <span className="text-xs" style={{ color: MUTED }}>{d.date}</span>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function InvoicesScreen() {
+  return (
+    <>
+      <TopBar title="الفواتير" subtitle={`${invoices.length} فاتورة`} />
+      <Card className="p-2">
+        {invoices.map((v, i) => (
+          <div key={v.id} className="flex items-center justify-between px-5 py-4" style={{ borderBottom: i !== invoices.length - 1 ? `1px solid ${BORDER}` : "none" }}>
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: BRONZE_SOFT }}><Receipt size={16} style={{ color: BRONZE }} /></div>
+              <div><div className="text-sm font-medium" style={{ color: BRONZE }}>{v.id}</div><div className="text-xs mt-0.5" style={{ color: MUTED }}>{v.client}</div></div>
+            </div>
+            <div className="flex items-center gap-4">
+              <span className="text-sm">{v.amount}</span>
+              <span className="text-xs px-3 py-1.5 rounded-full" style={{ color: v.status === "مدفوعة" ? SAGE : BRONZE, background: `${v.status === "مدفوعة" ? SAGE : BRONZE}1A`, border: `1px solid ${v.status === "مدفوعة" ? SAGE : BRONZE}` }}>{v.status}</span>
+            </div>
+          </div>
+        ))}
+      </Card>
+    </>
+  );
+}
+
+function LawFirmOS() {
+  const [active, setActive] = useState(0);
+  const [cases, setCases] = useState(initialCases);
+  const [showCaseModal, setShowCaseModal] = useState(false);
+
+  const screens = [
+    <DashboardScreen cases={cases} />,
+    <CasesScreen cases={cases} onAdd={() => setShowCaseModal(true)} />,
+    <ClientsScreen />,
+    <HearingsScreen />,
+    <DocumentsScreen />,
+    <InvoicesScreen />,
+  ];
+
+  return (
+    <div dir="rtl" className="w-full min-h-screen font-sans" style={{ background: BG, color: TEXT }}>
+      <header className="border-b" style={{ borderColor: BORDER, background: PANEL }}>
+        <div className="flex items-center justify-between px-10 py-5">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: BRONZE_SOFT, border: `1px solid ${BRONZE}` }}><Scale size={18} style={{ color: BRONZE }} /></div>
+            <div><div className="font-serif text-lg tracking-tight">مكتب النخبة للمحاماة</div><div className="text-xs" style={{ color: MUTED }}>نظام إدارة القضايا</div></div>
+          </div>
+          <nav className="hidden md:flex items-center gap-1">
+            {NAV.map((l, i) => (
+              <button key={l} onClick={() => setActive(i)} className="px-4 py-2 rounded-lg text-sm transition-colors" style={{ color: active === i ? BRONZE : MUTED, background: active === i ? BRONZE_SOFT : "transparent" }}>{l}</button>
+            ))}
+          </nav>
+          <div className="flex items-center gap-3">
+            <div className="w-9 h-9 rounded-lg border flex items-center justify-center" style={{ borderColor: BORDER }}><Search size={15} style={{ color: MUTED }} /></div>
+            <div className="w-9 h-9 rounded-lg border flex items-center justify-center" style={{ borderColor: BORDER }}><Bell size={15} style={{ color: MUTED }} /></div>
+            <div className="w-9 h-9 rounded-full" style={{ background: BRONZE_SOFT, border: `1px solid ${BRONZE}` }} />
+          </div>
+        </div>
+      </header>
+
+      <main className="px-10 py-9 max-w-7xl mx-auto">{screens[active]}</main>
+
+      {showCaseModal && <NewCaseModal onClose={() => setShowCaseModal(false)} onCreate={(c) => { setCases((p) => [c, ...p]); setShowCaseModal(false); }} />}
+    </div>
+  );
+}
+
+
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+root.render(<LawFirmOS />);
+const loading = document.getElementById("vip-loading");
+if (loading) { loading.style.opacity = "0"; setTimeout(() => loading.remove(), 400); }
+</script>
+</body>
+</html>

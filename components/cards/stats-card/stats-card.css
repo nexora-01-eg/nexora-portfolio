@@ -1,0 +1,37 @@
+/* ============================================================
+   NEXORA — Stats Card
+   Multiple side-by-side numbers within one card (vs. KPI Card's
+   single headline metric). Extends .nx-card.
+   ============================================================ */
+
+.nx-stats-card {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--nx-space-5);
+  text-align: center;
+}
+
+.nx-stats-card__stat {
+  flex: 1;
+  padding-inline: var(--nx-space-2);
+}
+.nx-stats-card__stat + .nx-stats-card__stat {
+  border-left: 1px solid var(--nx-border-subtle);
+}
+
+.nx-stats-card__number {
+  font-family: var(--nx-font-display);
+  font-size: var(--nx-fs-600);
+  font-weight: var(--nx-fw-bold);
+  color: var(--nx-accent-primary);
+  margin-bottom: var(--nx-space-1);
+}
+
+@media (max-width: 480px) {
+  .nx-stats-card { flex-direction: column; text-align: left; }
+  .nx-stats-card__stat + .nx-stats-card__stat {
+    border-left: none;
+    border-top: 1px solid var(--nx-border-subtle);
+    padding-top: var(--nx-space-3);
+  }
+}

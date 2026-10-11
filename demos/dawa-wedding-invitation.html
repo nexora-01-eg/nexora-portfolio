@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>يوسف وملك — دعوة زفاف</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Aref+Ruqaa:wght@400;700&family=Cairo:wght@300;400;500;600;700;800&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#FBF6EF; --surface:#FFFFFF; --line:#E8DCC7;
+  --ink:#332A20; --ink-soft:#7A6B57; --ink-faint:#B3A386;
+  --gold:#B08A45; --gold-deep:#8C6C30; --gold-pale:#F3E7CB;
+  --sage:#7C8863; --sage-pale:#EEF0E5;
+  --wine:#7A3B41;
+  --shadow-sm: 0 2px 10px rgba(51,42,32,0.06);
+  --shadow-md: 0 10px 30px rgba(51,42,32,0.10);
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html{ scroll-behavior:smooth; }
+body{ background:var(--paper); color:var(--ink); font-family:'Cairo', sans-serif; -webkit-font-smoothing:antialiased; }
+.disp{ font-family:'Aref Ruqaa', serif; }
+.amiri{ font-family:'Amiri', serif; }
+.mono{ font-family:'IBM Plex Mono', monospace; direction:ltr; display:inline-block; }
+a{ color:inherit; text-decoration:none; }
+button{ font-family:inherit; cursor:pointer; }
+
+.frame{ max-width:520px; margin:0 auto; background:var(--paper); min-height:100vh; position:relative; overflow:hidden; box-shadow:0 0 60px rgba(0,0,0,0.08);}
+
+/* Decorative corner ornament */
+.ornament{ position:absolute; width:120px; height:120px; opacity:0.5; pointer-events:none; }
+.orn-tl{ top:0; right:0; }
+.orn-br{ bottom:0; left:0; transform:rotate(180deg); }
+
+/* HERO */
+.hero{ min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:60px 30px; position:relative; }
+.hero-eyebrow{ font-size:11px; letter-spacing:4px; color:var(--gold-deep); text-transform:uppercase; font-weight:700; margin-bottom:18px; }
+.hero-names{ font-family:'Aref Ruqaa', serif; font-size:52px; font-weight:700; color:var(--ink); line-height:1.3; }
+.hero-and{ display:flex; align-items:center; gap:14px; margin:10px 0; }
+.hero-and .line{ height:1px; width:36px; background:var(--gold); }
+.hero-and svg{ width:20px; height:20px; color:var(--gold); }
+.hero-date{ margin-top:22px; font-size:14px; color:var(--ink-soft); font-weight:600; letter-spacing:1px; }
+.hero-verse{ font-family:'Amiri', serif; font-size:15px; color:var(--ink-soft); margin-top:26px; max-width:340px; line-height:2; }
+.hero-scroll{ margin-top:40px; font-size:11px; color:var(--ink-faint); display:flex; flex-direction:column; align-items:center; gap:6px; animation:bounce 2s infinite; }
+@keyframes bounce{ 0%,100%{transform:translateY(0);} 50%{transform:translateY(6px);} }
+
+/* COUNTDOWN */
+.section{ padding:50px 30px; text-align:center; }
+.section-label{ font-size:11px; letter-spacing:3px; color:var(--gold-deep); text-transform:uppercase; font-weight:700; margin-bottom:10px; }
+.section-title{ font-family:'Aref Ruqaa', serif; font-size:30px; font-weight:700; margin-bottom:8px; }
+.divider{ width:60px; height:2px; background:var(--gold); margin:18px auto; border-radius:2px; }
+
+.countdown-grid{ display:flex; justify-content:center; gap:14px; margin-top:26px; }
+.cd-box{ background:var(--surface); border:1px solid var(--line); border-radius:16px; padding:16px 12px; width:72px; box-shadow:var(--shadow-sm); }
+.cd-num{ font-family:'IBM Plex Mono', monospace; font-size:24px; font-weight:700; color:var(--wine); }
+.cd-lab{ font-size:10px; color:var(--ink-faint); margin-top:4px; font-weight:600; }
+
+/* STORY */
+.story-timeline{ position:relative; padding-right:26px; text-align:right; margin-top:30px; }
+.story-timeline::before{ content:''; position:absolute; right:6px; top:6px; bottom:6px; width:1.5px; background:var(--line); }
+.story-item{ position:relative; padding-bottom:28px; }
+.story-item:last-child{ padding-bottom:0; }
+.story-dot{ position:absolute; right:-26px; top:2px; width:13px; height:13px; border-radius:50%; background:var(--gold); border:3px solid var(--gold-pale); }
+.story-year{ font-family:'IBM Plex Mono', monospace; direction:ltr; text-align:right; font-size:11px; color:var(--gold-deep); font-weight:700;}
+.story-text{ font-size:13.5px; color:var(--ink-soft); margin-top:4px; line-height:1.6; }
+.story-text b{ color:var(--ink); font-weight:800;}
+
+/* DETAILS CARDS */
+.detail-card{ background:var(--surface); border:1px solid var(--line); border-radius:22px; padding:26px; margin-top:20px; box-shadow:var(--shadow-sm); text-align:center; }
+.detail-icon{ width:48px; height:48px; border-radius:50%; background:var(--gold-pale); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; }
+.detail-icon svg{ width:22px; height:22px; color:var(--gold-deep); }
+.detail-title{ font-weight:800; font-size:16px; }
+.detail-sub{ font-size:12.5px; color:var(--ink-soft); margin-top:6px; line-height:1.6; }
+.map-btn{ display:inline-flex; align-items:center; gap:6px; margin-top:14px; padding:10px 18px; border-radius:12px; background:var(--wine); color:#fff; font-size:12.5px; font-weight:700; }
+.map-btn svg{ width:14px; height:14px; }
+
+/* GALLERY */
+.gallery-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:24px; }
+.gallery-item{ aspect-ratio:1; border-radius:14px; overflow:hidden; }
+.gallery-item svg{ width:100%; height:100%; }
+
+/* RSVP */
+.rsvp-card{ background:var(--surface); border:1px solid var(--line); border-radius:24px; padding:30px 26px; margin-top:24px; box-shadow:var(--shadow-md); text-align:right; }
+.field-label{ font-size:12px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; display:block; }
+.field-input{ width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--line); font-size:13.5px; font-family:inherit; background:var(--paper); outline:none; margin-bottom:14px; }
+.field-input:focus{ border-color:var(--gold); }
+.rsvp-options{ display:flex; gap:10px; margin-bottom:18px; }
+.rsvp-opt{ flex:1; padding:12px; border-radius:12px; border:1.5px solid var(--line); text-align:center; font-size:12.5px; font-weight:700; color:var(--ink-soft); transition:all .15s ease;}
+.rsvp-opt.selected{ border-color:var(--wine); background:var(--wine); color:#fff; }
+.rsvp-submit{ width:100%; background:var(--gold-deep); color:#fff; padding:14px; border-radius:14px; font-weight:800; font-size:14px; }
+
+/* GIFT */
+.gift-card{ background:linear-gradient(135deg, var(--sage-pale), var(--gold-pale)); border-radius:22px; padding:26px; text-align:center; margin-top:20px; }
+
+.footer{ text-align:center; padding:50px 30px 40px; }
+.footer .disp{ font-size:22px; color:var(--gold-deep); }
+.footer p{ font-size:11px; color:var(--ink-faint); margin-top:8px; }
+
+.toast-wrap{ position:fixed; bottom:20px; left:50%; transform:translateX(-50%); z-index:200; }
+.toast{ background:var(--wine); color:#fff; padding:13px 22px; border-radius:30px; box-shadow:var(--shadow-md); font-size:13px; font-weight:700; transform:translateY(14px); opacity:0; transition:all .3s ease; display:flex; align-items:center; gap:8px;}
+.toast.show{ transform:translateY(0); opacity:1; }
+.toast svg{ width:15px; height:15px; }
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <svg class="ornament orn-tl" viewBox="0 0 120 120" fill="none"><path d="M0 40C40 40 40 0 40 0" stroke="#B08A45" stroke-width="1.2"/><path d="M0 60C60 60 60 0 60 0" stroke="#B08A45" stroke-width="1.2" opacity="0.6"/><circle cx="40" cy="40" r="3" fill="#B08A45"/></svg>
+  <svg class="ornament orn-br" viewBox="0 0 120 120" fill="none"><path d="M0 40C40 40 40 0 40 0" stroke="#B08A45" stroke-width="1.2"/><path d="M0 60C60 60 60 0 60 0" stroke="#B08A45" stroke-width="1.2" opacity="0.6"/><circle cx="40" cy="40" r="3" fill="#B08A45"/></svg>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-eyebrow">دعوة زفاف</div>
+    <div class="hero-names">يوسف</div>
+    <div class="hero-and"><div class="line"></div><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 21s-7-5-9.5-9A6 6 0 0 1 12 5a6 6 0 0 1 9.5 7c-2.5 4-9.5 9-9.5 9z"/></svg><div class="line"></div></div>
+    <div class="hero-names">ملك</div>
+    <div class="hero-date">الجمعة، ٢ أكتوبر ٢٠٢٦ · قاعة الأوبرا، القاهرة</div>
+    <p class="hero-verse amiri">"ومن آياته أن خلق لكم من أنفسكم أزواجًا لتسكنوا إليها وجعل بينكم مودة ورحمة"</p>
+    <div class="hero-scroll">↓ مرر لمعرفة التفاصيل</div>
+  </section>
+
+  <!-- COUNTDOWN -->
+  <section class="section" style="background:var(--surface);">
+    <div class="section-label">العد التنازلي</div>
+    <div class="section-title">باقي على الفرحة</div>
+    <div class="countdown-grid" id="countdown"></div>
+  </section>
+
+  <!-- STORY -->
+  <section class="section">
+    <div class="section-label">حكايتنا</div>
+    <div class="section-title">من أول لقاء لـ "قبول"</div>
+    <div class="divider"></div>
+    <div class="story-timeline">
+      <div class="story-item"><div class="story-dot"></div><div class="story-year">٢٠٢١</div><div class="story-text">اتقابلنا أول مرة في <b>الجامعة</b> بمحض الصدفة، وكانت البداية</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-year">٢٠٢٣</div><div class="story-text">يوسف طلب إيد ملك في رحلة على <b>البحر الأحمر</b></div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-year">٢٠٢٥</div><div class="story-text">حفل <b>الخطوبة</b> في حضور الأهل والأحباب</div></div>
+      <div class="story-item"><div class="story-dot"></div><div class="story-year">٢٠٢٦</div><div class="story-text">وأخيرًا يوم <b>الفرح</b> اللي كنا مستنينه</div></div>
+    </div>
+  </section>
+
+  <!-- DETAILS -->
+  <section class="section" style="background:var(--surface);">
+    <div class="section-label">تفاصيل الحفل</div>
+    <div class="section-title">إحنا في انتظاركم</div>
+
+    <div class="detail-card">
+      <div class="detail-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></div>
+      <div class="detail-title">حفل الزفاف</div>
+      <div class="detail-sub">الجمعة، ٢ أكتوبر ٢٠٢٦ — الساعة ٨:٠٠ مساءً<br>قاعة الأوبرا، دار الأوبرا المصرية</div>
+      <a class="map-btn" href="#"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/></svg>افتح الموقع على الخريطة</a>
+    </div>
+
+    <div class="detail-card">
+      <div class="detail-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 21v-7a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v7M9 21V9a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v12"/></svg></div>
+      <div class="detail-title">قواعد اللبس</div>
+      <div class="detail-sub">سواريه رسمي — درجات الذهبي والأخضر الزيتي مفضّلة 🌿</div>
+    </div>
+  </section>
+
+  <!-- GALLERY -->
+  <section class="section">
+    <div class="section-label">لحظاتنا</div>
+    <div class="section-title">صور من رحلتنا</div>
+    <div class="gallery-grid" id="galleryGrid"></div>
+  </section>
+
+  <!-- RSVP -->
+  <section class="section" style="background:var(--surface);">
+    <div class="section-label">تأكيد الحضور</div>
+    <div class="section-title">هتشرّفونا؟</div>
+    <div class="rsvp-card">
+      <label class="field-label">الاسم بالكامل</label>
+      <input class="field-input" placeholder="اكتب اسمك هنا">
+      <label class="field-label">عدد الحضور</label>
+      <input class="field-input" placeholder="مثال: ٢ أفراد">
+      <label class="field-label">هل هتحضروا؟</label>
+      <div class="rsvp-options">
+        <button class="rsvp-opt selected" onclick="selectRsvp(this)">أكيد هنحضر 🎉</button>
+        <button class="rsvp-opt" onclick="selectRsvp(this)">للأسف مش هنقدر</button>
+      </div>
+      <button class="rsvp-submit" onclick="showToast('تم إرسال ردكم بنجاح، شكرًا ليكم 💛')">إرسال التأكيد</button>
+    </div>
+  </section>
+
+  <!-- GIFT -->
+  <section class="section">
+    <div class="gift-card">
+      <div class="section-title" style="font-size:22px;">بدل الهدايا</div>
+      <p style="font-size:13px; color:var(--ink-soft); margin-top:10px; line-height:1.7;">حضوركم هو أجمل هدية ليّنا، وإن حبيتوا تشاركونا فرحتنا بطريقة تانية، تقدروا تساهموا في صندوق العروسين</p>
+      <button class="map-btn" style="margin-top:16px; background:var(--wine);" onclick="showToast('تم نسخ بيانات صندوق العروسين')">تفاصيل التحويل</button>
+    </div>
+  </section>
+
+  <div class="footer">
+    <div class="disp">يوسف &amp; ملك</div>
+    <p>بكل الحب، بنتشرف بحضوركم معانا</p>
+  </div>
+
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+function selectRsvp(btn){
+  document.querySelectorAll('.rsvp-opt').forEach(b=>b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+function showToast(msg){
+  const wrap=document.getElementById('toastWrap'); const t=document.createElement('div'); t.className='toast';
+  t.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>${msg}`;
+  wrap.appendChild(t); requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },3000);
+}
+
+/* Countdown */
+function renderCountdown(){
+  const target = new Date('2026-10-02T20:00:00');
+  function update(){
+    const now=new Date(); let diff=Math.max(0,target-now);
+    const d=Math.floor(diff/86400000); diff-=d*86400000;
+    const h=Math.floor(diff/3600000); diff-=h*3600000;
+    const m=Math.floor(diff/60000); diff-=m*60000;
+    const s=Math.floor(diff/1000);
+    document.getElementById('countdown').innerHTML = [
+      {v:d,l:'يوم'},{v:h,l:'ساعة'},{v:m,l:'دقيقة'},{v:s,l:'ثانية'}
+    ].map(x=>`<div class="cd-box"><div class="cd-num">${String(x.v).padStart(2,'0')}</div><div class="cd-lab">${x.l}</div></div>`).join('');
+  }
+  update(); setInterval(update,1000);
+}
+renderCountdown();
+
+/* Gallery — abstract decorative SVG frames (no real photos) */
+function frameSvg(seed){
+  const cols=[['#F3E7CB','#B08A45'],['#EEF0E5','#7C8863'],['#F6E9E9','#7A3B41']];
+  const c = cols[seed%3];
+  return `<svg viewBox="0 0 100 100" preserveAspectRatio="xMidYMid slice"><rect width="100" height="100" fill="${c[0]}"/><circle cx="50" cy="42" r="18" fill="${c[1]}" opacity="0.5"/><path d="M20 85c10-20 25-30 30-30s20 10 30 30z" fill="${c[1]}" opacity="0.7"/></svg>`;
+}
+document.getElementById('galleryGrid').innerHTML = [0,1,2,3,4,5].map(i=>`<div class="gallery-item">${frameSvg(i)}</div>`).join('');
+</script>
+</body>
+</html>

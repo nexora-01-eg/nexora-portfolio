@@ -1,0 +1,91 @@
+{
+  "version": "0.4.0",
+  "updatedAt": "2026-07-16",
+  "count": 14,
+  "industries": [
+    {
+      "id": "medical",
+      "label": "Medical",
+      "path": "/design-systems/medical/",
+      "projectCount": 1
+    },
+    {
+      "id": "construction",
+      "label": "Construction",
+      "path": "/design-systems/construction/",
+      "projectCount": 1
+    },
+    {
+      "id": "finance",
+      "label": "Finance",
+      "path": "/design-systems/finance/",
+      "projectCount": 1
+    },
+    {
+      "id": "restaurant",
+      "label": "Restaurant",
+      "path": "/design-systems/restaurant/",
+      "projectCount": 1
+    },
+    {
+      "id": "education",
+      "label": "Education",
+      "path": "/design-systems/education/",
+      "projectCount": 1
+    },
+    {
+      "id": "corporate",
+      "label": "Corporate",
+      "path": "/design-systems/corporate/",
+      "projectCount": 2
+    },
+    {
+      "id": "real-estate",
+      "label": "Real Estate",
+      "path": "/design-systems/real-estate/",
+      "projectCount": 1
+    },
+    {
+      "id": "hotel",
+      "label": "Hotel",
+      "path": "/design-systems/hotel/",
+      "projectCount": 1
+    },
+    {
+      "id": "retail",
+      "label": "Retail",
+      "path": "/design-systems/retail/",
+      "projectCount": 0
+    },
+    {
+      "id": "hr",
+      "label": "HR",
+      "path": "/design-systems/hr/",
+      "projectCount": 0
+    },
+    {
+      "id": "legal",
+      "label": "Legal",
+      "path": "/design-systems/legal/",
+      "projectCount": 0
+    },
+    {
+      "id": "technology",
+      "label": "Technology",
+      "path": "/design-systems/technology/",
+      "projectCount": 1
+    },
+    {
+      "id": "automation",
+      "label": "Automation",
+      "path": "/design-systems/automation/",
+      "projectCount": 1
+    },
+    {
+      "id": "ai",
+      "label": "AI",
+      "path": "/design-systems/ai/",
+      "projectCount": 1
+    }
+  ]
+}

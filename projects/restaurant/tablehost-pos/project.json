@@ -1,0 +1,51 @@
+{
+  "id": "tablehost-pos",
+  "slug": "tablehost-pos",
+  "industry": "restaurant",
+  "designSystem": "restaurant",
+  "title": "TableHost POS",
+  "tagline": "Point of sale and table management for restaurants.",
+  "description": "A modern point-of-sale and table management system built for full-service restaurants.",
+  "version": "2.1.0",
+  "status": "live",
+  "tier": "growth",
+  "difficulty": "intermediate",
+  "service": "SaaS Development",
+  "tags": [
+    "restaurant",
+    "pos",
+    "realtime"
+  ],
+  "technologies": [
+    "React",
+    "Supabase"
+  ],
+  "componentsUsed": [
+    "data-table",
+    "toast",
+    "modal"
+  ],
+  "features": [
+    "Live table status board",
+    "Split-check billing",
+    "Kitchen order tickets"
+  ],
+  "timeline": [
+    {
+      "date": "2026-04-11",
+      "label": "Project started",
+      "description": "POS core flow designed."
+    },
+    {
+      "date": "2026-06-25",
+      "label": "v2.1.0 released",
+      "description": "Split-check billing added."
+    }
+  ],
+  "relatedProjects": [],
+  "views": 331,
+  "featured": true,
+  "popular": false,
+  "createdAt": "2026-04-11",
+  "updatedAt": "2026-06-25"
+}

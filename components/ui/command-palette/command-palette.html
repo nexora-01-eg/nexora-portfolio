@@ -1,0 +1,22 @@
+<!-- Trigger anywhere in the page -->
+<button class="nx-btn nx-btn--secondary nx-btn--md" type="button" data-nx-command-trigger>
+  Search <kbd class="nx-search-box__shortcut">⌘K</kbd>
+</button>
+
+<!-- Palette overlay — place once near </body> -->
+<div class="nx-command-overlay" data-nx-command-palette role="dialog" aria-modal="true" aria-label="Command palette" hidden>
+  <div class="nx-command">
+    <div class="nx-command__input-wrap">
+      <span aria-hidden="true">⌕</span>
+      <input class="nx-command__input" type="text" placeholder="Search projects, components, industries…" aria-label="Search" autocomplete="off" role="combobox" aria-expanded="true" aria-controls="nx-command-list" />
+    </div>
+    <ul class="nx-command__list" id="nx-command-list" role="listbox">
+      <li class="nx-command__group-label" role="presentation">Projects</li>
+      <li class="nx-command__option" role="option" tabindex="-1">Aurora CRM</li>
+      <li class="nx-command__option" role="option" tabindex="-1">Meridian Booking</li>
+      <li class="nx-command__group-label" role="presentation">Components</li>
+      <li class="nx-command__option" role="option" tabindex="-1">Button</li>
+      <li class="nx-command__option" role="option" tabindex="-1">Data Table</li>
+    </ul>
+  </div>
+</div>

@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Import Engine Debug — NEXORA</title>
+  <meta name="description" content="Admin dashboard visualizing what the Mass Import Engine and Manifest are actually doing." />
+
+  <link rel="stylesheet" href="../../core/css/tokens.css" />
+  <link rel="stylesheet" href="../../core/css/base.css" />
+  <link rel="stylesheet" href="../../core/css/typography.css" />
+  <link rel="stylesheet" href="../../core/css/layout.css" />
+  <link rel="stylesheet" href="../../core/css/utilities.css" />
+  <link rel="stylesheet" href="../../core/css/animations.css" />
+  <link rel="stylesheet" href="../../core/css/shell.css" />
+
+  <link rel="stylesheet" href="../../components/ui/button/button.css" />
+  <link rel="stylesheet" href="../../components/ui/badge/badge.css" />
+  <link rel="stylesheet" href="../../components/ui/table/table.css" />
+  <link rel="stylesheet" href="../../components/ui/tag/tag.css" />
+  <link rel="stylesheet" href="../../components/cards/card/card.css" />
+  <link rel="stylesheet" href="../../components/cards/kpi-card/kpi-card.css" />
+  <link rel="stylesheet" href="../../components/feedback/alert/alert.css" />
+  <link rel="stylesheet" href="../../components/feedback/empty-state/empty-state.css" />
+  <link rel="stylesheet" href="../../components/feedback/skeleton-loader/skeleton-loader.css" />
+  <link rel="stylesheet" href="../../components/navigation/section-header/section-header.css" />
+
+  <link rel="stylesheet" href="debug.css" />
+</head>
+<body>
+  <main class="nx-container" style="padding-block: var(--nx-space-7);">
+    <p class="nx-caption nx-text-accent">Internal tool — not part of the live site</p>
+    <div class="nx-section-header">
+      <div>
+        <h1 class="nx-h2">Import Engine Debug Dashboard</h1>
+        <p class="nx-body-lg nx-text-secondary">Everything the Mass Import Engine and Manifest are actually doing, visually — not logs.</p>
+      </div>
+      <div class="nx-row nx-gap-3">
+        <button class="nx-btn nx-btn--secondary nx-btn--md" type="button" id="debug-reload-btn">Reload Manifest</button>
+        <a class="nx-btn nx-btn--primary nx-btn--md" href="../../tools/import.html" target="_blank" rel="noopener">Rebuild Catalog</a>
+      </div>
+    </div>
+
+    <!-- ================= OVERVIEW STATS ================= -->
+    <section class="nx-grid nx-grid--4" style="margin-bottom: var(--nx-space-8);" id="debug-kpis">
+      <div class="nx-card nx-kpi-card"><div class="nx-kpi-card__header"><span class="nx-caption">Imported Demos</span></div><p class="nx-kpi-card__value" id="kpi-demos">—</p></div>
+      <div class="nx-card nx-kpi-card"><div class="nx-kpi-card__header"><span class="nx-caption">Real Projects</span></div><p class="nx-kpi-card__value" id="kpi-real">—</p></div>
+      <div class="nx-card nx-kpi-card"><div class="nx-kpi-card__header"><span class="nx-caption">Total After Merge</span></div><p class="nx-kpi-card__value" id="kpi-total">—</p></div>
+      <div class="nx-card nx-kpi-card"><div class="nx-kpi-card__header"><span class="nx-caption">Import Date</span></div><p class="nx-kpi-card__value" id="kpi-import-date" style="font-size: var(--nx-fs-500);">—</p></div>
+    </section>
+
+    <section class="nx-grid nx-grid--3" style="margin-bottom: var(--nx-space-9);">
+      <div class="nx-card">
+        <p class="nx-caption" style="margin-bottom: var(--nx-space-3);">Search Index Status</p>
+        <p class="nx-body" id="debug-search-status">Checking…</p>
+      </div>
+      <div class="nx-card">
+        <p class="nx-caption" style="margin-bottom: var(--nx-space-3);">Manifest Cache Status</p>
+        <div id="debug-cache-status" class="nx-stack nx-gap-2"></div>
+      </div>
+      <div class="nx-card">
+        <p class="nx-caption" style="margin-bottom: var(--nx-space-3);">Statistics Panel</p>
+        <div id="debug-stats-panel" class="nx-stack nx-gap-1"></div>
+      </div>
+    </section>
+
+    <!-- ================= IMPORTED DEMOS TABLE ================= -->
+    <section style="margin-bottom: var(--nx-space-9);">
+      <h2 class="nx-h3" style="margin-bottom: var(--nx-space-4);">Imported Demos</h2>
+      <div class="nx-table-wrap">
+        <table class="nx-table">
+          <thead>
+            <tr>
+              <th scope="col">File Path</th>
+              <th scope="col">Slug</th>
+              <th scope="col">Title</th>
+              <th scope="col">Industry</th>
+              <th scope="col">Collections</th>
+              <th scope="col">Validation</th>
+              <th scope="col">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="debug-demos-table"></tbody>
+        </table>
+      </div>
+      <div class="nx-empty-state" id="debug-demos-empty" hidden>
+        <div class="nx-empty-state__icon" aria-hidden="true">◎</div>
+        <h3 class="nx-h4">No imported demos found</h3>
+        <p class="nx-body nx-text-secondary">Run <code>tools/import.html</code> to generate <code>data/demos-index.json</code>.</p>
+      </div>
+    </section>
+
+    <!-- ================= WARNINGS ================= -->
+    <section style="margin-bottom: var(--nx-space-9);">
+      <h2 class="nx-h3" style="margin-bottom: var(--nx-space-4);">Validation &amp; Warnings</h2>
+      <div id="debug-warnings" class="nx-stack nx-gap-3"></div>
+    </section>
+
+    <!-- ================= TESTING SECTION ================= -->
+    <section style="margin-bottom: var(--nx-space-9);">
+      <h2 class="nx-h3" style="margin-bottom: var(--nx-space-2);">Automated Checks</h2>
+      <p class="nx-small nx-text-muted" style="margin-bottom: var(--nx-space-4);">
+        Checks marked <span class="nx-badge nx-badge--neutral">needs server</span> require fetching files over
+        HTTP — under <code>file://</code> they report an honest "can't verify" status rather than a fake pass.
+        Every other check is real, computed from loaded data, regardless of how this page was opened.
+      </p>
+      <div class="nx-table-wrap">
+        <table class="nx-table">
+          <thead><tr><th scope="col">Check</th><th scope="col">Result</th><th scope="col">Detail</th></tr></thead>
+          <tbody id="debug-tests-table"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- ================= BUILD REPORT ================= -->
+    <section>
+      <h2 class="nx-h3" style="margin-bottom: var(--nx-space-4);">Build Report</h2>
+      <div class="nx-grid nx-grid--4" id="debug-build-report"></div>
+    </section>
+  </main>
+
+  <script src="../../data/fallback-data.js"></script>
+  <script src="../../core/js/core.js"></script>
+  <script src="../../core/js/storage.js"></script>
+  <script src="../../core/js/helpers.js"></script>
+  <script src="../../core/js/theme.js"></script>
+  <script src="../../core/js/manifest.js"></script>
+  <script src="../../core/js/search.js"></script>
+  <script src="../../core/js/filters.js"></script>
+  <script src="../../core/js/sort.js"></script>
+  <script src="../../core/js/pagination.js"></script>
+  <script src="../../core/js/favorites.js"></script>
+  <script src="../../core/js/animations.js"></script>
+  <script src="../../core/js/shell.js"></script>
+  <script src="debug.js"></script>
+</body>
+</html>

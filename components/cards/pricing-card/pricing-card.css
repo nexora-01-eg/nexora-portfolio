@@ -1,0 +1,56 @@
+/* ============================================================
+   NEXORA — Pricing Card
+   Extends .nx-card. --featured modifier for the recommended tier.
+   ============================================================ */
+
+.nx-pricing-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.nx-pricing-card--featured {
+  border-color: var(--nx-accent-primary);
+  box-shadow: var(--nx-shadow-gold-glow);
+}
+
+.nx-pricing-card__badge {
+  position: absolute;
+  top: var(--nx-space-5);
+  right: var(--nx-space-5);
+}
+
+.nx-pricing-card__price {
+  font-family: var(--nx-font-display);
+  font-size: var(--nx-fs-700);
+  font-weight: var(--nx-fw-bold);
+  margin-block: var(--nx-space-2) var(--nx-space-3);
+}
+
+.nx-pricing-card__period {
+  font-size: var(--nx-fs-300);
+  font-weight: var(--nx-fw-regular);
+  color: var(--nx-text-muted);
+}
+
+.nx-pricing-card__features {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nx-space-2);
+  margin-bottom: var(--nx-space-6);
+  font-size: var(--nx-fs-200);
+  color: var(--nx-text-secondary);
+}
+
+.nx-pricing-card__features li {
+  padding-left: var(--nx-space-5);
+  position: relative;
+}
+.nx-pricing-card__features li::before {
+  content: "✓";
+  position: absolute;
+  left: 0;
+  color: var(--nx-accent-primary);
+}
+
+.nx-pricing-card .nx-btn { margin-top: auto; }

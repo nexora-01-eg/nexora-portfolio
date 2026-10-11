@@ -1,0 +1,36 @@
+/* ============================================================
+   NEXORA — Textarea
+   Shares .nx-field wrapper with Input; adds its own resizing
+   and min-height rules.
+   ============================================================ */
+
+.nx-textarea {
+  width: 100%;
+  min-height: 96px;
+  padding: var(--nx-space-3) var(--nx-space-4);
+  font-family: var(--nx-font-body);
+  font-size: var(--nx-fs-300);
+  line-height: var(--nx-lh-normal);
+  color: var(--nx-text-primary);
+  background: var(--nx-bg-elevated);
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+  resize: vertical;
+  transition: var(--nx-transition-base);
+}
+
+.nx-textarea::placeholder { color: var(--nx-text-muted); }
+
+.nx-textarea:hover:not(:disabled) { border-color: var(--nx-border-strong); }
+
+.nx-textarea:focus-visible {
+  outline: none;
+  border-color: var(--nx-accent-primary);
+  box-shadow: var(--nx-shadow-gold-glow);
+}
+
+.nx-textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  resize: none;
+}

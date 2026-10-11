@@ -1,0 +1,122 @@
+/* ============================================================
+   NEXORA — Projects Catalog (page-specific)
+   Only layout concerns not already covered by a component:
+   toolbar row, view-mode toggle, list-view row styling, filter
+   group spacing. Everything else (cards, pagination, drawer,
+   sidebar, badges) is the actual component CSS, linked in
+   index.html — nothing here duplicates it.
+   ============================================================ */
+
+.nx-projects-sidebar {
+  width: 240px;
+}
+
+@media (max-width: 1024px) {
+  #projects-filters-desktop { display: none; }
+}
+
+.nx-projects-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nx-space-4);
+  margin-bottom: var(--nx-space-6);
+}
+
+.nx-projects-toolbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--nx-space-3);
+  flex-shrink: 0;
+}
+
+.nx-projects-toolbar .nx-select {
+  width: auto;
+  min-width: 150px;
+}
+
+.nx-view-toggle {
+  display: flex;
+  border: 1px solid var(--nx-border-subtle);
+  border-radius: var(--nx-radius-md);
+  overflow: hidden;
+}
+
+.nx-view-toggle__btn {
+  width: 38px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--nx-text-secondary);
+  transition: var(--nx-transition-base);
+}
+.nx-view-toggle__btn:hover { background: var(--nx-bg-elevated); }
+.nx-view-toggle__btn--active {
+  background: var(--nx-accent-primary);
+  color: var(--nx-color-black);
+}
+
+/* List view: project cards render as full-width rows */
+#projects-grid.nx-projects-grid--list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nx-space-3);
+}
+.nx-projects-grid--list .nx-project-card {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+}
+.nx-projects-grid--list .nx-project-card__media {
+  width: 200px;
+  flex-shrink: 0;
+  aspect-ratio: auto;
+}
+.nx-projects-grid--list .nx-project-card__body {
+  flex: 1;
+}
+
+@media (max-width: 768px) {
+  .nx-projects-grid--list .nx-project-card { flex-direction: column; }
+  .nx-projects-grid--list .nx-project-card__media { width: 100%; aspect-ratio: 16/10; }
+}
+
+/* Filter groups (shared between desktop sidebar and mobile drawer) */
+.nx-filter-group {
+  margin-bottom: var(--nx-space-6);
+  padding: 0 var(--nx-space-4);
+}
+.nx-filter-group:first-child { padding-top: 0; }
+
+.nx-filter-group__title {
+  margin-bottom: var(--nx-space-3);
+}
+
+.nx-filter-group__options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--nx-space-2);
+}
+
+.nx-quick-preview-modal {
+  max-width: 900px;
+  width: 100%;
+}
+
+.nx-quick-preview-modal__body {
+  padding: 0;
+}
+
+.nx-quick-preview-frame {
+  width: 100%;
+  height: 60vh;
+  border: none;
+  display: block;
+  background: var(--nx-bg-primary);
+}
+
+@media (max-width: 480px) {
+  .nx-projects-toolbar { flex-direction: column; align-items: stretch; }
+  .nx-projects-toolbar__right { justify-content: space-between; }
+}

@@ -1,0 +1,24 @@
+<div class="nx-field">
+  <label class="nx-field__label" for="inp-name">Project name</label>
+  <input class="nx-input" type="text" id="inp-name" name="name" placeholder="e.g. Aurora CRM" />
+</div>
+
+<div class="nx-field">
+  <label class="nx-field__label" for="inp-email">Email</label>
+  <input class="nx-input" type="email" id="inp-email" name="email" />
+  <p class="nx-field__hint">We'll never share your email.</p>
+</div>
+
+<div class="nx-field">
+  <label class="nx-field__label" for="inp-error">API Key</label>
+  <input class="nx-input nx-input--error" type="text" id="inp-error" aria-invalid="true" aria-describedby="inp-error-msg" />
+  <p class="nx-field__error" id="inp-error-msg">This field is required.</p>
+</div>
+
+<input class="nx-input" type="text" placeholder="Disabled" disabled />
+
+<!-- Input with leading icon -->
+<div class="nx-input-group">
+  <span class="nx-input-group__icon" aria-hidden="true">@</span>
+  <input class="nx-input nx-input--with-icon" type="text" placeholder="username" />
+</div>

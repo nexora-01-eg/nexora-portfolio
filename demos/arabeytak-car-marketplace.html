@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>عربيتك — سوق السيارات</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --paper:#F4F4F3; --surface:#FFFFFF; --surface-2:#EBEBE9; --surface-3:#DEDEDB;
+  --ink:#16171A; --ink-soft:#5B5D63; --ink-faint:#96989E;
+  --line:#E3E3E1; --line-soft:#EDEDEB;
+  --charcoal:#16171A; --charcoal-deep:#0A0A0C;
+  --orange:#FF5A1F; --orange-deep:#DB4712; --orange-pale:#FFE7DB;
+  --blue:#2F6FE0; --blue-pale:#E5EDFC;
+  --green:#1FA463; --green-pale:#E1F5EA;
+  --shadow-sm: 0 1px 2px rgba(20,20,22,0.06);
+  --shadow-md: 0 8px 24px rgba(20,20,22,0.10);
+  --shadow-lg: 0 20px 48px rgba(20,20,22,0.18);
+  --radius-md:16px; --radius-lg:22px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ background:var(--paper); color:var(--ink); font-family:'Cairo', sans-serif; -webkit-font-smoothing:antialiased; overflow:hidden; }
+::selection{ background:var(--orange); color:#fff; }
+::-webkit-scrollbar{ width:8px; height:8px; }
+::-webkit-scrollbar-thumb{ background:var(--line); border-radius:8px; }
+.mono{ font-family:'IBM Plex Mono', monospace; direction:ltr; display:inline-block; }
+button{ font-family:inherit; cursor:pointer; }
+a{ color:inherit; text-decoration:none; }
+
+.shell{ display:grid; grid-template-columns:250px 1fr; height:100vh; }
+
+.sidebar{ background:var(--charcoal); border-left:1px solid rgba(255,255,255,.06); display:flex; flex-direction:column; padding:24px 16px; color:#F2F2F0; position:relative; overflow:hidden;}
+.sidebar::before{ content:''; position:absolute; top:-80px; right:-60px; width:220px; height:220px; border-radius:50%; background:radial-gradient(circle, rgba(255,90,31,0.18), transparent 70%); }
+.brand{ display:flex; align-items:center; gap:11px; padding:6px 8px 26px; position:relative; z-index:1;}
+.brand-mark{ width:40px; height:40px; flex-shrink:0; }
+.brand-name{ font-weight:900; font-size:21px; letter-spacing:.3px; color:#fff;}
+.brand-sub{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:9px; letter-spacing:2px; color:var(--orange); text-transform:uppercase; margin-top:2px; font-weight:600;}
+
+.nav-group-label{ font-size:10.5px; letter-spacing:1px; text-transform:uppercase; color:rgba(242,242,240,0.4); padding:16px 12px 7px; font-weight:700; position:relative; z-index:1;}
+.nav-item{ display:flex; align-items:center; gap:11px; padding:11px 13px; border-radius:12px; color:rgba(242,242,240,0.75); font-size:14.5px; font-weight:600; transition:all .18s ease; position:relative; z-index:1; margin-bottom:2px;}
+.nav-item svg{ width:18px; height:18px; flex-shrink:0; opacity:.85; }
+.nav-item:hover{ background:rgba(255,255,255,0.06); color:#fff; }
+.nav-item.active{ background:linear-gradient(90deg, rgba(255,90,31,0.28), rgba(255,90,31,0.05)); color:#fff; }
+.nav-item.active svg{ opacity:1; color:var(--orange); }
+.sidebar-foot{ margin-top:auto; padding-top:14px; border-top:1px solid rgba(255,255,255,.08); position:relative; z-index:1;}
+
+.sell-card{ background:linear-gradient(135deg, var(--orange), #FF8A54); border-radius:18px; padding:16px; color:#fff; margin-top:10px;}
+.sell-card .t{ font-size:14px; font-weight:800; }
+.sell-card .s{ font-size:11px; opacity:.9; margin-top:3px; }
+.sell-card button{ margin-top:12px; background:#fff; color:var(--orange-deep); padding:9px 14px; border-radius:10px; font-weight:800; font-size:12px; width:100%; }
+
+.header{ height:76px; border-bottom:1px solid var(--line); display:flex; align-items:center; justify-content:space-between; padding:0 30px; background:var(--paper); flex-shrink:0;}
+.header-title h1{ font-weight:900; font-size:22px; }
+.header-title span{ font-size:12.5px; color:var(--ink-faint); font-weight:500; }
+.header-right{ display:flex; align-items:center; gap:14px; }
+.search-box{ display:flex; align-items:center; gap:8px; background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:10px 15px; width:290px; }
+.search-box:focus-within{ border-color:var(--orange); box-shadow:0 0 0 3px var(--orange-pale); }
+.search-box svg{ width:16px; height:16px; color:var(--ink-faint); flex-shrink:0; }
+.search-box input{ border:none; outline:none; font-size:13.5px; width:100%; background:transparent; color:var(--ink); font-family:inherit; }
+.icon-btn{ width:40px; height:40px; border-radius:12px; border:1px solid var(--line); background:var(--surface); display:flex; align-items:center; justify-content:center; position:relative; transition:all .15s ease;}
+.icon-btn:hover{ background:var(--surface-2); }
+.icon-btn svg{ width:17px; height:17px; color:var(--ink-soft); }
+.dot-badge{ position:absolute; top:8px; left:9px; width:7px; height:7px; border-radius:50%; background:var(--orange); border:1.5px solid var(--surface); }
+.profile-chip{ display:flex; align-items:center; gap:10px; padding:5px 12px 5px 5px; border-radius:15px; border:1px solid var(--line); background:var(--surface); }
+.avatar{ width:34px; height:34px; border-radius:11px; display:flex; align-items:center; justify-content:center; font-size:12.5px; font-weight:800; color:#fff; flex-shrink:0;}
+.profile-chip .name{ font-size:13px; font-weight:700; }
+.profile-chip .role{ font-size:11px; color:var(--ink-faint); }
+
+.main{ display:flex; flex-direction:column; overflow:hidden; }
+.content{ flex:1; overflow-y:auto; padding:26px 30px 60px; }
+.view{ display:none; animation:fadeUp .4s cubic-bezier(.2,.7,.3,1); }
+.view.active{ display:block; }
+@keyframes fadeUp{ from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);} }
+
+.section-title{ display:flex; align-items:center; gap:10px; margin:32px 0 16px; }
+.section-title h2{ font-weight:800; font-size:17.5px; }
+.section-title:first-child{ margin-top:0; }
+.count-pill{ font-family:'IBM Plex Mono', monospace; direction:ltr; font-size:11px; background:var(--surface-2); color:var(--ink-soft); padding:3px 10px; border-radius:20px; }
+
+.grid{ display:grid; gap:16px; }
+.grid-4{ grid-template-columns:repeat(4,1fr); }
+.grid-3{ grid-template-columns:repeat(3,1fr); }
+.grid-2{ grid-template-columns:repeat(2,1fr); }
+
+.card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); padding:20px; box-shadow:var(--shadow-sm); position:relative; overflow:hidden; transition:all .2s ease; }
+.card.hoverable:hover{ box-shadow:var(--shadow-md); transform:translateY(-2px); border-color:var(--orange); }
+
+.tabs{ display:flex; gap:4px; background:var(--surface-2); padding:4px; border-radius:13px; width:fit-content; }
+.tab{ padding:8px 16px; border-radius:10px; font-size:13px; font-weight:700; color:var(--ink-soft); border:none; background:transparent; transition:all .15s ease; }
+.tab.active{ background:var(--surface); color:var(--charcoal); box-shadow:var(--shadow-sm); }
+
+.btn{ display:inline-flex; align-items:center; gap:7px; padding:11px 18px; border-radius:12px; font-size:13.5px; font-weight:700; border:1px solid transparent; transition:all .16s ease; }
+.btn svg{ width:15px; height:15px; }
+.btn-primary{ background:var(--charcoal); color:#fff; }
+.btn-primary:hover{ background:var(--charcoal-deep); box-shadow:var(--shadow-md); }
+.btn-orange{ background:var(--orange); color:#fff; }
+.btn-orange:hover{ background:var(--orange-deep); }
+.btn-ghost{ background:var(--surface); border-color:var(--line); color:var(--ink); }
+.btn-ghost:hover{ background:var(--surface-2); }
+
+/* Car card */
+.car-img{ aspect-ratio:16/10; border-radius:14px; position:relative; overflow:hidden; }
+.car-img svg{ width:100%; height:100%; }
+.car-badge{ position:absolute; top:10px; right:10px; }
+.fav-btn{ position:absolute; top:10px; left:10px; width:32px; height:32px; border-radius:50%; background:rgba(255,255,255,0.9); display:flex; align-items:center; justify-content:center; }
+.fav-btn svg{ width:15px; height:15px; }
+.car-price{ font-family:'IBM Plex Mono', monospace; font-weight:900; font-size:17px; color:var(--orange-deep); margin-top:12px; }
+.car-title{ font-weight:800; font-size:13.5px; margin-top:2px; }
+.car-meta-row{ display:flex; gap:10px; margin-top:8px; flex-wrap:wrap; }
+.car-meta-chip{ font-size:10.5px; color:var(--ink-faint); background:var(--surface-2); padding:3px 8px; border-radius:8px; font-weight:600; }
+.car-loc{ display:flex; align-items:center; gap:4px; font-size:11px; color:var(--ink-faint); margin-top:10px; padding-top:10px; border-top:1px solid var(--line-soft); }
+.car-loc svg{ width:12px; height:12px; }
+
+.chip{ display:inline-flex; align-items:center; gap:5px; padding:4px 11px; border-radius:20px; font-size:11.5px; font-weight:700; }
+.chip::before{ content:''; width:6px; height:6px; border-radius:50%; }
+.chip-verified{ background:var(--green-pale); color:var(--green); } .chip-verified::before{ background:var(--green); }
+.chip-new{ background:var(--orange-pale); color:var(--orange-deep); } .chip-new::before{ background:var(--orange); }
+.chip-neg{ background:var(--blue-pale); color:var(--blue); } .chip-neg::before{ background:var(--blue); }
+
+/* Sell form */
+.sell-form-card{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-lg); padding:26px; }
+.field-label{ font-size:12.5px; font-weight:700; color:var(--ink-soft); margin-bottom:6px; display:block; }
+.field-input, .field-select{ width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--line); font-size:13.5px; font-family:inherit; background:var(--paper); outline:none; }
+.field-input:focus, .field-select:focus{ border-color:var(--orange); }
+.field-row{ margin-bottom:16px; }
+.upload-zone{ border:2px dashed var(--line); border-radius:16px; padding:30px; text-align:center; color:var(--ink-faint); font-size:13px; margin-bottom:16px; }
+.upload-zone svg{ width:28px; height:28px; margin-bottom:8px; }
+
+.table-wrap{ background:var(--surface); border:1px solid var(--line); border-radius:var(--radius-md); overflow:hidden; box-shadow:var(--shadow-sm); }
+table{ width:100%; border-collapse:collapse; }
+thead th{ text-align:right; font-size:11.5px; letter-spacing:.3px; color:var(--ink-faint); font-weight:700; padding:14px 18px; border-bottom:1px solid var(--line); background:var(--surface-2); }
+tbody td{ padding:14px 18px; font-size:13.5px; border-bottom:1px solid var(--line-soft); font-weight:500;}
+tbody tr{ transition:background .15s ease; }
+tbody tr:hover{ background:var(--surface-2); }
+tbody tr:last-child td{ border-bottom:none; }
+
+.empty-state{ display:flex; flex-direction:column; align-items:center; justify-content:center; text-align:center; padding:54px 20px; color:var(--ink-faint); }
+.empty-state svg{ width:46px; height:46px; margin-bottom:14px; opacity:.5; }
+.empty-state h3{ font-size:15px; color:var(--ink); margin-bottom:4px; font-weight:800; }
+.empty-state p{ font-size:12.5px; max-width:280px; }
+
+.toast-wrap{ position:fixed; bottom:24px; left:24px; z-index:200; display:flex; flex-direction:column; gap:10px; }
+.toast{ display:flex; align-items:center; gap:10px; background:var(--charcoal); color:#fff; padding:14px 19px; border-radius:14px; box-shadow:var(--shadow-lg); font-size:13px; font-weight:600; transform:translateY(12px); opacity:0; transition:all .3s cubic-bezier(.2,.8,.3,1); }
+.toast.show{ transform:translateY(0); opacity:1; }
+.toast svg{ width:16px; height:16px; color:var(--orange); flex-shrink:0; }
+
+@media (max-width:1100px){ .grid-4{grid-template-columns:repeat(2,1fr);} .grid-3{grid-template-columns:repeat(2,1fr);} }
+</style>
+</head>
+<body>
+
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 44 44" fill="none">
+        <circle cx="22" cy="22" r="20" fill="rgba(255,90,31,0.14)"/>
+        <path d="M8 26l3-9c1-2 3-3 5-3h12c2 0 4 1 5 3l3 9" stroke="#FF5A1F" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+        <rect x="6" y="25" width="32" height="8" rx="3" stroke="#FF5A1F" stroke-width="2.2" fill="none"/>
+        <circle cx="14" cy="33" r="2.5" fill="#FF5A1F"/><circle cx="30" cy="33" r="2.5" fill="#FF5A1F"/>
+      </svg>
+      <div><div class="brand-name">عربيتك</div><div class="brand-sub">AUTO MARKET</div></div>
+    </div>
+
+    <div class="nav-group-label">السوق</div>
+    <div class="nav-item active" data-view="browse">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="9" rx="2"/><rect x="14" y="3" width="7" height="5" rx="2"/><rect x="14" y="12" width="7" height="9" rx="2"/><rect x="3" y="16" width="7" height="5" rx="2"/></svg>
+      تصفّح السيارات
+    </div>
+    <div class="nav-item" data-view="sell">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 5v14M5 12h14"/></svg>
+      اعرض عربيتك
+    </div>
+    <div class="nav-item" data-view="myads">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 3h6l3 3v14H6V4z"/><path d="M9 10h6M9 14h4"/></svg>
+      إعلاناتي
+    </div>
+    <div class="nav-item" data-view="favorites">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 21s-7-5-9.5-9A6 6 0 0 1 12 5a6 6 0 0 1 9.5 7c-2.5 4-9.5 9-9.5 9z"/></svg>
+      المفضّلة
+    </div>
+
+    <div class="nav-group-label">الحساب</div>
+    <div class="nav-item" data-view="settings">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="3.2"/><path d="M19 12a7 7 0 0 0-.1-1.2l2-1.5-2-3.4-2.3.9a7 7 0 0 0-2.1-1.2L14 3h-4l-.5 2.6a7 7 0 0 0-2.1 1.2l-2.3-.9-2 3.4 2 1.5A7 7 0 0 0 5 12a7 7 0 0 0 .1 1.2l-2 1.5 2 3.4 2.3-.9a7 7 0 0 0 2.1 1.2L10 21h4l.5-2.6a7 7 0 0 0 2.1-1.2l2.3.9 2-3.4-2-1.5c.067-.396.1-.797.1-1.2z"/></svg>
+      الإعدادات
+    </div>
+
+    <div class="sidebar-foot">
+      <div class="sell-card"><div class="t">هتبيع عربيتك؟</div><div class="s">اعرضها لآلاف المشترين دلوقتي</div><button onclick="document.querySelector('[data-view=sell]').click()">اعرض مجانًا</button></div>
+    </div>
+  </aside>
+
+  <div class="main">
+    <header class="header">
+      <div class="header-title" id="headerTitle">
+        <h1>تصفّح السيارات</h1>
+        <span>٢,٤٠٠ إعلان نشط في القاهرة والجيزة</span>
+      </div>
+      <div class="header-right">
+        <div class="search-box"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><input type="text" placeholder="دوّر على ماركة أو موديل…" oninput="handleSearch(this.value)"></div>
+        <button class="icon-btn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg><span class="dot-badge"></span></button>
+        <div class="profile-chip"><div class="avatar" style="background:linear-gradient(135deg,#16171A,#FF5A1F);">مه</div><div><div class="name">محمد هشام</div><div class="role">عضو موثّق</div></div></div>
+      </div>
+    </header>
+
+    <main class="content">
+
+      <section class="view active" id="view-browse">
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:18px;">
+          <div class="tabs" id="browseFilterTabs"><button class="tab active" data-filter="all">الكل</button><button class="tab" data-filter="sedan">سيدان</button><button class="tab" data-filter="suv">SUV</button><button class="tab" data-filter="hatch">هاتشباك</button></div>
+          <div class="tabs"><button class="tab active">الأحدث</button><button class="tab">الأقل سعرًا</button><button class="tab">الأعلى سعرًا</button></div>
+        </div>
+        <div class="grid grid-3" id="carsGrid"></div>
+      </section>
+
+      <section class="view" id="view-sell">
+        <div class="grid" style="grid-template-columns:1fr 320px;">
+          <div class="sell-form-card">
+            <div style="font-weight:800; font-size:17px; margin-bottom:16px;">بيانات السيارة</div>
+            <div class="upload-zone"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 16V4M6 10l6-6 6 6"/><path d="M4 20h16"/></svg><div>اسحب صور السيارة هنا أو اضغط للرفع</div></div>
+            <div class="grid grid-2" style="gap:14px;">
+              <div class="field-row"><label class="field-label">الماركة</label><select class="field-select"><option>تويوتا</option><option>هيونداي</option><option>كيا</option><option>نيسان</option></select></div>
+              <div class="field-row"><label class="field-label">الموديل</label><input class="field-input" placeholder="مثال: كورولا"></div>
+              <div class="field-row"><label class="field-label">سنة الصنع</label><input class="field-input" placeholder="٢٠٢٢"></div>
+              <div class="field-row"><label class="field-label">الكيلومترات</label><input class="field-input" placeholder="٤٥,٠٠٠ كم"></div>
+              <div class="field-row"><label class="field-label">السعر المطلوب</label><input class="field-input" placeholder="٦٥٠,٠٠٠ ج.م"></div>
+              <div class="field-row"><label class="field-label">المحافظة</label><select class="field-select"><option>القاهرة</option><option>الجيزة</option><option>الإسكندرية</option></select></div>
+            </div>
+            <div class="field-row"><label class="field-label">وصف إضافي</label><input class="field-input" placeholder="حالة السيارة، الإضافات، أسباب البيع…"></div>
+            <button class="btn btn-orange" onclick="showToast('تم نشر إعلانك بنجاح — سيظهر خلال دقائق')">انشر الإعلان</button>
+          </div>
+          <div class="card">
+            <div style="font-weight:800; font-size:14px; margin-bottom:10px;">نصايح لبيع أسرع</div>
+            <div style="font-size:12.5px; color:var(--ink-soft); line-height:2;">✓ صوّر السيارة في ضوء النهار<br>✓ اكتب سعر واقعي قريب من سوق السيارات<br>✓ اذكر كل الإضافات والصيانة الأخيرة<br>✓ رد بسرعة على استفسارات المشترين</div>
+          </div>
+        </div>
+      </section>
+
+      <section class="view" id="view-myads">
+        <div class="table-wrap"><table><thead><tr><th>السيارة</th><th>السعر</th><th>المشاهدات</th><th>الاستفسارات</th><th>الحالة</th></tr></thead><tbody id="myAdsBody"></tbody></table></div>
+      </section>
+
+      <section class="view" id="view-favorites">
+        <div class="grid grid-3" id="favoritesGrid"></div>
+      </section>
+
+      <section class="view" id="view-settings">
+        <div class="grid grid-2">
+          <div class="card"><div style="font-weight:800; font-size:16px; margin-bottom:12px;">بيانات الحساب</div>
+            <div class="field-row"><label class="field-label">الاسم بالكامل</label><input class="field-input" value="محمد هشام"></div>
+            <div class="field-row"><label class="field-label">رقم الموبايل</label><input class="field-input" value="٠١٠٩٨٧٦٥٤٣٢"></div>
+            <button class="btn btn-primary" onclick="showToast('تم حفظ البيانات')">حفظ التعديلات</button>
+          </div>
+          <div class="card"><div style="font-weight:800; font-size:16px; margin-bottom:6px;">إشعارات</div>
+            <div style="display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid var(--line-soft); font-size:13.5px; font-weight:700;">استفسارات جديدة على إعلاناتي<div class="chip chip-verified">مفعّل</div></div>
+            <div style="display:flex; justify-content:space-between; padding:14px 0; font-size:13.5px; font-weight:700;">عروض تنافسية على سيارات مشابهة<div class="chip chip-verified">مفعّل</div></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script>
+function carSvg(seed){
+  const cols=[['#16171A','#3A3B40'],['#FF5A1F','#FF8A54'],['#2F6FE0','#6C9AEF'],['#1FA463','#5CC98F']];
+  const c=cols[seed%4];
+  return `<svg viewBox="0 0 200 120" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="carg${seed}" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="${c[0]}"/><stop offset="100%" stop-color="${c[1]}"/></linearGradient></defs><rect width="200" height="120" fill="#EEEEEC"/><rect y="80" width="200" height="40" fill="url(#carg${seed})" opacity="0.15"/><path d="M20 85 L45 55 Q55 45 75 45 L125 45 Q145 45 155 55 L180 85 Z" fill="url(#carg${seed})"/><rect x="60" y="50" width="20" height="22" rx="3" fill="#EEEEEC" opacity="0.85"/><rect x="85" y="50" width="35" height="22" rx="3" fill="#EEEEEC" opacity="0.85"/><rect x="125" y="50" width="18" height="22" rx="3" fill="#EEEEEC" opacity="0.85"/><circle cx="55" cy="88" r="14" fill="#1A1A1C"/><circle cx="145" cy="88" r="14" fill="#1A1A1C"/><circle cx="55" cy="88" r="6" fill="#888"/><circle cx="145" cy="88" r="6" fill="#888"/></svg>`;
+}
+document.querySelectorAll('.nav-item[data-view]').forEach(item=> item.addEventListener('click', ()=> switchView(item.dataset.view)));
+const headerCopy = {
+  browse:['تصفّح السيارات','٢,٤٠٠ إعلان نشط في القاهرة والجيزة'],
+  sell:['اعرض عربيتك','انشر إعلانك مجانًا في ٣ دقايق'],
+  myads:['إعلاناتي','٣ إعلانات نشطة'],
+  favorites:['المفضّلة','٥ سيارات محفوظة'],
+  settings:['الإعدادات','بيانات الحساب والإشعارات'],
+};
+function switchView(id){
+  document.querySelectorAll('.nav-item[data-view]').forEach(n=>n.classList.toggle('active', n.dataset.view===id));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+  document.getElementById('view-'+id).classList.add('active');
+  const [h,s]=headerCopy[id]; document.getElementById('headerTitle').innerHTML=`<h1>${h}</h1><span>${s}</span>`;
+}
+
+const cars = [
+  {n:'تويوتا كورولا ٢٠٢٢', price:'٦٥٠,٠٠٠ ج.م', km:'٤٥,٠٠٠ كم', trans:'أوتوماتيك', loc:'مدينة نصر، القاهرة', badge:'verified', type:'sedan'},
+  {n:'هيونداي توسان ٢٠٢١', price:'١,١٥٠,٠٠٠ ج.م', km:'٦٠,٠٠٠ كم', trans:'أوتوماتيك', loc:'الشيخ زايد، الجيزة', badge:'new', type:'suv'},
+  {n:'كيا سيراتو ٢٠٢٠', price:'٤٨٠,٠٠٠ ج.م', km:'٨٥,٠٠٠ كم', trans:'مانيوال', loc:'المعادي، القاهرة', badge:null, type:'sedan'},
+  {n:'نيسان صني ٢٠١٩', price:'٣٢٠,٠٠٠ ج.م', km:'١٠٥,٠٠٠ كم', trans:'أوتوماتيك', loc:'الإسكندرية', badge:'neg', type:'sedan'},
+  {n:'شيفروليه كابتيفا ٢٠٢١', price:'٩٨٠,٠٠٠ ج.م', km:'٥٠,٠٠٠ كم', trans:'أوتوماتيك', loc:'التجمع الخامس، القاهرة', badge:'verified', type:'suv'},
+  {n:'بيجو ٢٠٨ ٢٠٢٢', price:'٥٥٠,٠٠٠ ج.م', km:'٣٠,٠٠٠ كم', trans:'أوتوماتيك', loc:'الدقي، الجيزة', badge:null, type:'hatch'},
+];
+const badgeMap = {verified:'<span class="chip chip-verified">موثّق</span>', new:'<span class="chip chip-new">جديد</span>', neg:'<span class="chip chip-neg">قابل للتفاوض</span>'};
+
+function carCard(c,i){
+  return `<div class="card hoverable">
+    <div class="car-img">${carSvg(i)}<div class="fav-btn"><svg viewBox="0 0 24 24" fill="none" stroke="var(--orange)" stroke-width="2"><path d="M12 21s-7-5-9.5-9A6 6 0 0 1 12 5a6 6 0 0 1 9.5 7c-2.5 4-9.5 9-9.5 9z"/></svg></div>${c.badge?`<div class="car-badge">${badgeMap[c.badge]}</div>`:''}</div>
+    <div class="car-price">${c.price}</div>
+    <div class="car-title">${c.n}</div>
+    <div class="car-meta-row"><span class="car-meta-chip">${c.km}</span><span class="car-meta-chip">${c.trans}</span></div>
+    <div class="car-loc"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 21s-7-6.5-7-11a7 7 0 0 1 14 0c0 4.5-7 11-7 11z"/></svg>${c.loc}</div>
+  </div>`;
+}
+function renderCars(filter='all'){
+  const rows = cars.filter(c=> filter==='all'||c.type===filter);
+  document.getElementById('carsGrid').innerHTML = rows.length ? rows.map((c,i)=>carCard(c,i)).join('') : `<div class="card empty-state" style="grid-column:1/-1;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/></svg><h3>لا توجد سيارات مطابقة</h3><p>جرّب فلتر مختلف.</p></div>`;
+}
+document.querySelectorAll('#browseFilterTabs .tab').forEach(t=> t.addEventListener('click', ()=>{ document.querySelectorAll('#browseFilterTabs .tab').forEach(x=>x.classList.remove('active')); t.classList.add('active'); renderCars(t.dataset.filter); }));
+
+function renderFavorites(){ document.getElementById('favoritesGrid').innerHTML = cars.slice(0,5).map((c,i)=>carCard(c,i+2)).join(''); }
+
+function renderMyAds(){
+  const ads = [
+    {n:'تويوتا كورولا ٢٠٢٢', price:'٦٥٠,٠٠٠ ج.م', views:1240, inquiries:18, status:'نشط'},
+    {n:'كيا سيراتو ٢٠٢٠', price:'٤٨٠,٠٠٠ ج.م', views:640, inquiries:7, status:'نشط'},
+    {n:'هيونداي إلنترا ٢٠١٩', price:'٤٢٠,٠٠٠ ج.م', views:2100, inquiries:24, status:'تم البيع'},
+  ];
+  document.getElementById('myAdsBody').innerHTML = ads.map(a=>`<tr><td style="font-weight:700;">${a.n}</td><td class="mono">${a.price}</td><td class="mono">${a.views}</td><td class="mono">${a.inquiries}</td><td>${a.status==='نشط'?'<span class="chip chip-verified">نشط</span>':'<span class="chip chip-neg">تم البيع</span>'}</td></tr>`).join('');
+}
+
+function showToast(msg){
+  const wrap=document.getElementById('toastWrap'); const t=document.createElement('div'); t.className='toast';
+  t.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 13l4 4L19 7"/></svg>${msg}`;
+  wrap.appendChild(t); requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{ t.classList.remove('show'); setTimeout(()=>t.remove(),300); },3200);
+}
+function handleSearch(q){ if(q.length>1){ switchView('browse'); const results=cars.filter(c=>c.n.includes(q)); document.getElementById('carsGrid').innerHTML = results.length? results.map((c,i)=>carCard(c,i)).join('') : `<div class="card empty-state" style="grid-column:1/-1;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg><h3>لا نتائج لـ"${q}"</h3><p>جرّب اسم سيارة مختلف.</p></div>`; } else if(q.length===0){ renderCars('all'); } }
+
+renderCars(); renderFavorites(); renderMyAds();
+setTimeout(()=> showToast('عندك ٣ استفسارات جديدة على إعلاناتك'), 700);
+</script>
+</body>
+</html>

@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>NEXORA — منصة نمو الأعمال الرقمية</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%20100%20100%22%3E%3Ctext%20y%3D%22.9em%22%20font-size%3D%2290%22%3E%F0%9F%8C%8C%3C/text%3E%3C/svg%3E" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;500;600;700;800;900&family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+  tailwind.config = {
+    theme: {
+      extend: {
+        fontFamily: { sans: ['Cairo', 'ui-sans-serif', 'system-ui'] },
+      }
+    }
+  }
+</script>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://esm.sh/react@18.3.1",
+    "react/": "https://esm.sh/react@18.3.1/",
+    "react-dom": "https://esm.sh/react-dom@18.3.1",
+    "react-dom/": "https://esm.sh/react-dom@18.3.1/",
+    "react-dom/client": "https://esm.sh/react-dom@18.3.1/client",
+    "lucide-react": "https://esm.sh/lucide-react@0.383.0?external=react,react-dom",
+    "recharts": "https://esm.sh/recharts@2.12.7?external=react,react-dom"
+  }
+}
+</script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+<style>
+  :root { --accent: #C9A227; }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: 'Cairo', ui-sans-serif, system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+    opacity: 0;
+    animation: vip-fade-in .5s ease forwards;
+  }
+  @keyframes vip-fade-in {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  ::selection { background: var(--accent); color: #fff; }
+  ::-webkit-scrollbar { width: 10px; height: 10px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--accent) 55%, transparent); border-radius: 999px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+  * { scrollbar-width: thin; scrollbar-color: color-mix(in srgb, var(--accent) 55%, transparent) transparent; }
+  button, a, [role="button"] { transition: transform .15s ease, opacity .15s ease, box-shadow .15s ease, background-color .15s ease, border-color .15s ease; }
+  button:active { transform: scale(0.97); }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  #root { min-height: 100vh; }
+  #vip-loading {
+    position: fixed; inset: 0; display: flex; align-items: center; justify-content: center;
+    background: #0a0a0a; z-index: 9999; transition: opacity .4s ease;
+  }
+  #vip-loading .spinner {
+    width: 40px; height: 40px; border-radius: 50%;
+    border: 3px solid color-mix(in srgb, var(--accent) 30%, transparent);
+    border-top-color: var(--accent);
+    animation: vip-spin .8s linear infinite;
+  }
+  @keyframes vip-spin { to { transform: rotate(360deg); } }
+</style>
+</head>
+<body>
+<div id="vip-loading"><div class="spinner"></div></div>
+<div id="root"></div>
+<script type="text/babel" data-type="module" data-presets="react">
+import * as ReactDOM from "react-dom/client";
+import React, { useState } from "react";
+import { ArrowUpLeft } from "lucide-react";
+
+const BG = "#08080A";
+const PANEL = "#0F0F12";
+const CARD = "#131316";
+const BORDER = "#232327";
+const TEXT = "#F4F3EF";
+const MUTED = "#87868C";
+const GOLD = "#C9A227";
+const GOLD_DIM = "rgba(201,162,39,0.5)";
+
+const PROJECTS = [
+  { name: "عيادتي", tag: "طبي وعناية", desc: "نظام تشغيل متكامل لعيادات الأسنان والعيادات الفردية — مرضى، مواعيد، فواتير.", color: "#C9A227", cat: "الصحة والعناية", x: 8, y: 20, r: 20 },
+  { name: "صيدلية الشفاء", tag: "طبي وعناية", desc: "مخزون أدوية بتنبيهات نفاد وصلاحية تلقائية، ووصفات مرتبطة بالعملاء.", color: "#2E8B82", cat: "الصحة والعناية", x: 22, y: 6, r: 14 },
+  { name: "عيادة الرفيق", tag: "طبي وعناية", desc: "بطاقة هوية لكل حيوان أليف — النوع، المالك، التطعيمات، الحالة الصحية.", color: "#B8763E", cat: "الصحة والعناية", x: 4, y: 55, r: 16 },
+
+  { name: "تجارتي", tag: "تجارة واستهلاك", desc: "غرفة عمليات لتجار السوشيال ميديا — إنستجرام وواتساب وفيسبوك في مكان واحد.", color: "#B8763E", cat: "التجارة والاستهلاك", x: 46, y: 4, r: 22 },
+  { name: "حلواني الأصيل", tag: "تجارة واستهلاك", desc: "طلبات تورتات مخصصة بالمناسبة والنكهة وتاريخ التسليم.", color: "#D68FA0", cat: "التجارة والاستهلاك", x: 62, y: 14, r: 15 },
+  { name: "صالون الأصالة", tag: "تجارة واستهلاك", desc: "طابور انتظار مباشر زي شاشات المطارات، بالزبون الحالي على الكرسي.", color: "#A6332F", cat: "التجارة والاستهلاك", x: 36, y: 24, r: 14 },
+  { name: "مطعم الحضرة", tag: "تجارة واستهلاك", desc: "لوحة تشغيل مطبخ حية — طلبات جديدة، قيد التحضير، جاهزة للتسليم.", color: "#7A2E2E", cat: "التجارة والاستهلاك", x: 52, y: 32, r: 17 },
+
+  { name: "عقاري", tag: "عقارات وتصميم", desc: "مركز قيادة للسمسرة العقارية — وحدات، عملاء محتملون، صفقات، عمولات.", color: "#3E5871", cat: "العقارات والتصميم", x: 74, y: 8, r: 20 },
+  { name: "أتيليه", tag: "عقارات وتصميم", desc: "بورتفوليو تفاعلي لاستوديوهات التصميم الداخلي بشكل معرض فني.", color: "#C97B4A", cat: "العقارات والتصميم", x: 86, y: 22, r: 16 },
+
+  { name: "دعوى", tag: "أعمال ومؤسسات", desc: "إدارة قضايا لمكاتب المحاماة — جدول جلسات، عملاء، مستندات، فواتير.", color: "#B08D57", cat: "أعمال ومؤسسات", x: 14, y: 78, r: 18 },
+  { name: "وكالة أُفق", tag: "أعمال ومؤسسات", desc: "متابعة حملات تسويق رقمي وميزانيات إعلانية عبر كل المنصات.", color: "#8B6FD1", cat: "أعمال ومؤسسات", x: 30, y: 66, r: 16 },
+  { name: "هَب", tag: "أعمال ومؤسسات", desc: "خريطة مقاعد تفاعلية حية لمساحات العمل المشتركة.", color: "#3FB8C9", cat: "أعمال ومؤسسات", x: 4, y: 90, r: 14 },
+
+  { name: "لحظة العمر", tag: "حياة وفعاليات", desc: "تخطيط حفلات زفاف بعدّاد تنازلي ودوائر تقدّم لكل مرحلة.", color: "#C97B93", cat: "حياة وفعاليات", x: 66, y: 58, r: 18 },
+  { name: "استوديو لوسيدا", tag: "حياة وفعاليات", desc: "تقويم حجوزات شهري كامل ومعرض أعمال لاستوديوهات التصوير.", color: "#5B7290", cat: "حياة وفعاليات", x: 80, y: 46, r: 15 },
+  { name: "نادي القوة", tag: "حياة وفعاليات", desc: "جدول حصص أسبوعي تفاعلي وإدارة أعضاء واشتراكات نادٍ رياضي.", color: "#E1562D", cat: "حياة وفعاليات", x: 92, y: 62, r: 16 },
+
+  { name: "ورشة المهندس", tag: "خدمات لوجستية", desc: "خط سير مرئي لحالة كل سيارة من الاستلام حتى التسليم.", color: "#8C97A6", cat: "خدمات لوجستية", x: 46, y: 86, r: 17 },
+  { name: "سريع", tag: "خدمات لوجستية", desc: "تتبع أسطول توصيل لحظي بنسبة تقدّم كل سائق نحو وجهته.", color: "#2E8B9E", cat: "خدمات لوجستية", x: 62, y: 92, r: 16 },
+
+  { name: "مركز التفوق", tag: "تعليم", desc: "متابعة تقدّم كل طالب بالتفصيل بعرض رئيسي وتفصيلي جنبًا إلى جنب.", color: "#6A6FD1", cat: "تعليم", x: 88, y: 84, r: 17 },
+];
+
+const CATS = ["الكل", "الصحة والعناية", "التجارة والاستهلاك", "العقارات والتصميم", "أعمال ومؤسسات", "حياة وفعاليات", "خدمات لوجستية", "تعليم"];
+
+function NexoraShowcase() {
+  const [filter, setFilter] = useState("الكل");
+  const [hover, setHover] = useState(null);
+  const visible = filter === "الكل" ? PROJECTS : PROJECTS.filter((p) => p.cat === filter);
+
+  return (
+    <div dir="rtl" className="w-full min-h-screen font-sans" style={{ background: BG, color: TEXT }}>
+      {/* Header */}
+      <header className="flex items-center justify-between px-10 py-6 border-b" style={{ borderColor: BORDER }}>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-lg flex items-center justify-center" style={{ background: GOLD }}>
+            <span className="text-xs font-bold" style={{ color: "#0A0A0B" }}>N</span>
+          </div>
+          <span className="text-sm tracking-widest" style={{ color: MUTED }}>NEXORA</span>
+        </div>
+        <span className="text-xs" style={{ color: MUTED }}>منصة نمو الأعمال الرقمية</span>
+      </header>
+
+      {/* Hero + constellation */}
+      <section className="px-10 pt-16 pb-10 max-w-7xl mx-auto">
+        <div className="max-w-2xl mb-14">
+          <div className="text-xs tracking-widest mb-4" style={{ color: GOLD }}>محفظة الأنظمة — ١٨ نموذجًا حيًا</div>
+          <h1 className="text-4xl font-semibold tracking-tight leading-tight mb-5">
+            ثمانية عشر نظام تشغيل، كل واحد بشخصية بصرية لا تشبه التانية
+          </h1>
+          <p className="text-sm leading-7" style={{ color: MUTED }}>
+            كل نقطة في الخريطة تحت دي مشروع مستقل بنيناه لصناعة مختلفة — من عيادة سنية لورشة سيارات
+            لصالون حلاقة. نفس مستوى الجودة والدقة، وهوية بصرية مختلفة تناسب طبيعة كل قطاع.
+          </p>
+        </div>
+
+        <div className="relative w-full mb-6" style={{ height: 340 }}>
+          {PROJECTS.map((p) => (
+            <div
+              key={p.name}
+              onMouseEnter={() => setHover(p.name)}
+              onMouseLeave={() => setHover(null)}
+              className="absolute rounded-full transition-transform cursor-pointer"
+              style={{
+                left: `${p.x}%`, top: `${p.y}%`, width: p.r, height: p.r,
+                background: p.color, opacity: hover && hover !== p.name ? 0.25 : 0.9,
+                boxShadow: hover === p.name ? `0 0 0 6px ${p.color}22` : "none",
+                transform: hover === p.name ? "scale(1.15)" : "scale(1)",
+              }}
+            />
+          ))}
+          {hover && (
+            <div
+              className="absolute px-4 py-2.5 rounded-xl text-xs pointer-events-none"
+              style={{
+                left: `${PROJECTS.find((p) => p.name === hover).x}%`,
+                top: `${PROJECTS.find((p) => p.name === hover).y + 8}%`,
+                background: PANEL, border: `1px solid ${BORDER}`, color: TEXT, whiteSpace: "nowrap",
+              }}
+            >
+              {hover}
+            </div>
+          )}
+        </div>
+      </section>
+
+      {/* Filters */}
+      <section className="px-10 max-w-7xl mx-auto mb-8">
+        <div className="flex items-center gap-2 flex-wrap">
+          {CATS.map((c) => (
+            <button
+              key={c}
+              onClick={() => setFilter(c)}
+              className="px-4 py-2 rounded-full text-xs transition-colors"
+              style={{
+                background: filter === c ? GOLD : "transparent",
+                color: filter === c ? "#0A0A0B" : MUTED,
+                border: `1px solid ${filter === c ? GOLD : BORDER}`,
+              }}
+            >
+              {c}
+            </button>
+          ))}
+        </div>
+      </section>
+
+      {/* Grid */}
+      <section className="px-10 max-w-7xl mx-auto pb-20">
+        <div className="grid grid-cols-3 gap-5">
+          {visible.map((p) => (
+            <div
+              key={p.name}
+              className="rounded-2xl border p-6 transition-transform hover:-translate-y-1"
+              style={{ background: CARD, borderColor: BORDER }}
+            >
+              <div className="flex items-center justify-between mb-5">
+                <div className="w-9 h-9 rounded-full" style={{ background: p.color }} />
+                <span className="text-xs" style={{ color: MUTED }}>{p.tag}</span>
+              </div>
+              <div className="text-base font-medium mb-2">{p.name}</div>
+              <p className="text-xs leading-6 mb-5" style={{ color: MUTED }}>{p.desc}</p>
+              <div className="flex items-center gap-1.5 text-xs" style={{ color: GOLD }}>
+                شاهد التفاصيل <ArrowUpLeft size={13} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <footer className="px-10 py-8 border-t flex items-center justify-between" style={{ borderColor: BORDER }}>
+        <span className="text-xs" style={{ color: MUTED }}>© NEXORA — أنظمة أعمال مصممة بدقة</span>
+        <span className="text-xs" style={{ color: GOLD_DIM }}>{PROJECTS.length} نظامًا وعدد لا نهائي من الأفكار القادمة</span>
+      </footer>
+    </div>
+  );
+}
+
+
+const rootEl = document.getElementById("root");
+const root = ReactDOM.createRoot(rootEl);
+root.render(<NexoraShowcase />);
+const loading = document.getElementById("vip-loading");
+if (loading) { loading.style.opacity = "0"; setTimeout(() => loading.remove(), 400); }
+</script>
+</body>
+</html>
